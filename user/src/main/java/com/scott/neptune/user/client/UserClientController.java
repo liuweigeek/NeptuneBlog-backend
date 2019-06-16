@@ -3,8 +3,9 @@ package com.scott.neptune.user.client;
 import com.scott.neptune.common.controller.BaseController;
 import com.scott.neptune.common.dto.UserDto;
 import com.scott.neptune.common.response.ServerResponse;
+import com.scott.neptune.common.util.LocaleUtil;
 import com.scott.neptune.user.component.UserComponent;
-import com.scott.neptune.user.entity.User;
+import com.scott.neptune.user.entity.UserEntity;
 import com.scott.neptune.user.service.IUserService;
 import com.scott.neptune.user.util.UserUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -39,13 +40,13 @@ public class UserClientController extends BaseController {
      */
     @GetMapping(value = "/getUserById/{id}")
     public ServerResponse<UserDto> getUserById(@PathVariable String id) {
-        User user = userService.getUserById(id);
+        UserEntity userEntity = userService.getUserById(id);
 
-        if (user == null) {
+        if (userEntity == null) {
             return ServerResponse.createByErrorMessage(messageSource.getMessage("error.userNotFound", null,
-                    userComponent.getUserLocale(userComponent.getUserFromRequest(request).getId())));
+                    LocaleUtil.getLocaleFromUser(null)));
         }
-        return ServerResponse.createBySuccess(UserUtil.convertToDto(user));
+        return ServerResponse.createBySuccess(UserUtil.convertToDto(userEntity));
     }
 
     /**

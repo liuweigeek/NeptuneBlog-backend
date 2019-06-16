@@ -3,7 +3,7 @@ package com.scott.neptune.user.service.impl;
 import com.google.common.collect.Lists;
 import com.scott.neptune.common.response.ServerResponse;
 import com.scott.neptune.user.entity.FriendRelation;
-import com.scott.neptune.user.entity.User;
+import com.scott.neptune.user.entity.UserEntity;
 import com.scott.neptune.user.repository.FriendRelationRepository;
 import com.scott.neptune.user.service.IFriendRelationService;
 import com.scott.neptune.user.service.IUserService;
@@ -79,13 +79,31 @@ public class FriendRelationServiceImpl implements IFriendRelationService {
     }
 
     /**
+     * 根据关注人和被关注人解除关系
+     *
+     * @param authorId  关注人
+     * @param targetId  被关注人
+     * @return
+     */
+    @Override
+    public boolean deleteByAuthorAndTarget(String authorId, String targetId) {
+        try {
+            friendRelationRepository.deleteByAuthorIdAndTargetId(authorId, targetId);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+
+    }
+
+    /**
      * 获取关注列表
      *
      * @param userId 当前登陆用户Id
      * @return 关注列表
      */
     @Override
-    public List<User> findAllFollowing(String userId) {
+    public List<UserEntity> findAllFollowing(String userId) {
         if (StringUtils.isBlank(userId)) {
             return Lists.newArrayListWithCapacity(0);
         }
@@ -104,7 +122,7 @@ public class FriendRelationServiceImpl implements IFriendRelationService {
      * @return 粉丝列表
      */
     @Override
-    public List<User> findAllFollower(String userId) {
+    public List<UserEntity> findAllFollower(String userId) {
         if (StringUtils.isBlank(userId)) {
             return Lists.newArrayListWithCapacity(0);
         }

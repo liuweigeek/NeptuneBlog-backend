@@ -1,5 +1,7 @@
 package com.scott.neptune.user.entity;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -14,12 +16,14 @@ import java.util.Date;
 @Data
 @Entity
 @Table(name = "t_user")
-public class User implements Serializable {
+@ApiModel(value = "user", description = "user entity")
+public class UserEntity implements Serializable {
 
     @Id
     @Column(length = 32)
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid")
+    @ApiModelProperty(hidden = true)
     private String id;
 
     /**
@@ -27,6 +31,7 @@ public class User implements Serializable {
      */
     @NotEmpty(message = "用户名不可为空")
     @Column(name = "username", unique = true, length = 32)
+    @ApiModelProperty(name = "username", value = "用户名", required = true, dataType = "String")
     private String username;
 
     /**
@@ -34,6 +39,7 @@ public class User implements Serializable {
      */
     @NotEmpty(message = "真实姓名不可为空")
     @Column(name = "real_name", length = 32)
+    @ApiModelProperty(name = "realName", value = "真实姓名", dataType = "String")
     private String realName;
 
     /**
@@ -41,6 +47,7 @@ public class User implements Serializable {
      */
     @NotEmpty(message = "密码不可为空")
     @Column(name = "password", length = 64)
+    @ApiModelProperty(name = "password", value = "密码", required = true, dataType = "String")
     private String password;
 
     /**
@@ -48,6 +55,7 @@ public class User implements Serializable {
      */
     @NotNull(message = "年龄不可为空")
     @Column(name = "age", precision = 3)
+    @ApiModelProperty(name = "age", value = "年龄", dataType = "int")
     private Integer age;
 
     /**
@@ -56,6 +64,7 @@ public class User implements Serializable {
      */
     @NotNull(message = "性别不可为空")
     @Column(name = "sex", columnDefinition = "tinyint", precision = 1)
+    @ApiModelProperty(name = "sex", value = "性别", dataType = "int")
     private Integer sex;
 
     /**
@@ -63,6 +72,7 @@ public class User implements Serializable {
      */
     @Column(name = "register_date")
     @Temporal(TemporalType.TIMESTAMP)
+    @ApiModelProperty(hidden = true)
     private Date registerDate;
 
     /**
@@ -70,12 +80,21 @@ public class User implements Serializable {
      */
     @Column(name = "login_date")
     @Temporal(TemporalType.TIMESTAMP)
+    @ApiModelProperty(hidden = true)
     private Date loginDate;
+
+    /**
+     * 语言
+     */
+    @Column(name = "lang_key", length = 6)
+    @ApiModelProperty(name = "langKey", value = "语言", dataType = "String")
+    private String langKey;
 
     /**
      * 登录token信息
      */
     @Column(name = "token", length = 256)
+    @ApiModelProperty(hidden = true)
     private String token;
 
     /**

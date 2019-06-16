@@ -1,6 +1,6 @@
 package com.scott.neptune.post.entity;
 
-import com.scott.neptune.common.dto.PageDto;
+import com.scott.neptune.common.dto.BaseDto;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -15,7 +15,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Entity
 @Table(name = "t_post")
-public class Post extends PageDto {
+public class PostEntity extends BaseDto {
 
     @Id
     @Column(length = 32)

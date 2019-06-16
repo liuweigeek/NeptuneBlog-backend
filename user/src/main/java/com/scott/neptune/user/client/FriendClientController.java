@@ -4,7 +4,7 @@ import com.scott.neptune.common.controller.BaseController;
 import com.scott.neptune.common.dto.UserDto;
 import com.scott.neptune.common.response.ServerResponse;
 import com.scott.neptune.user.component.UserComponent;
-import com.scott.neptune.user.entity.User;
+import com.scott.neptune.user.entity.UserEntity;
 import com.scott.neptune.user.service.IFriendRelationService;
 import com.scott.neptune.user.service.IUserService;
 import com.scott.neptune.user.util.UserUtil;
@@ -59,7 +59,7 @@ public class FriendClientController extends BaseController {
 
         UserDto currentUser = userComponent.getUserFromRequest(request);
         List<String> followingUserIds = friendRelationService.findAllFollowing(currentUser.getId()).stream()
-                .map(User::getId)
+                .map(UserEntity::getId)
                 .collect(toList());
 
         return ServerResponse.createBySuccess(followingUserIds);

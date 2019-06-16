@@ -1,7 +1,7 @@
 package com.scott.neptune.user.service;
 
 import com.scott.neptune.common.response.ServerResponse;
-import com.scott.neptune.user.entity.User;
+import com.scott.neptune.user.entity.UserEntity;
 
 import java.util.List;
 
@@ -9,13 +9,15 @@ public interface IUserService {
 
     boolean existByUsername(String username);
 
-    ServerResponse<User> login(String username, String password);
+    ServerResponse<UserEntity> login(String username, String password);
 
-    ServerResponse<User> save(User user);
+    ServerResponse<UserEntity> save(UserEntity userEntity);
 
-    User getUserById(String id);
+    UserEntity getUserById(String id);
 
-    List<User> findUserList();
+    UserEntity getUserByUsername(String username);
 
-    List<User> findAllUserByIdList(List<String> idList);
+    List<UserEntity> findUserList();
+
+    List<UserEntity> findAllUserByIdList(List<String> idList);
 }

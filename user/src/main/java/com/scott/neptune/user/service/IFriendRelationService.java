@@ -2,7 +2,7 @@ package com.scott.neptune.user.service;
 
 import com.scott.neptune.common.response.ServerResponse;
 import com.scott.neptune.user.entity.FriendRelation;
-import com.scott.neptune.user.entity.User;
+import com.scott.neptune.user.entity.UserEntity;
 
 import java.util.List;
 
@@ -14,7 +14,9 @@ public interface IFriendRelationService {
 
     boolean delete(FriendRelation friendRelation);
 
-    List<User> findAllFollowing(String userId);
+    boolean deleteByAuthorAndTarget(String authorId, String targetId);
 
-    List<User> findAllFollower(String userId);
+    List<UserEntity> findAllFollowing(String userId);
+
+    List<UserEntity> findAllFollower(String userId);
 }

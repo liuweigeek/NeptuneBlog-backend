@@ -5,6 +5,7 @@ import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;
 import com.scott.neptune.common.constant.Constant;
 import com.scott.neptune.common.response.ServerResponse;
+import com.scott.neptune.common.util.LocaleUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
@@ -72,7 +73,8 @@ public class LoginFilter extends ZuulFilter {
                 HttpServletResponse response = requestContext.getResponse();
                 ObjectMapper mapper = new ObjectMapper();
                 response.setContentType("application/json;charset=utf-8");
-                ServerResponse noLoginResponse = ServerResponse.createByErrorMessage(messageSource.getMessage("error.notLoggedIn", null, Locale.getDefault()));
+                String errorMsg = messageSource.getMessage("error.notLoggedIn", null, LocaleUtil.getLocaleFromUser(null));
+                ServerResponse noLoginResponse = ServerResponse.createByErrorMessage(errorMsg);
                 response.getWriter().println(mapper.writeValueAsString(noLoginResponse));
             } catch (Exception e) {
                 logger.error(messageSource.getMessage("exception.filter", null, Locale.getDefault()), e);

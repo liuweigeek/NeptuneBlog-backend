@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Locale;
 
 /**
  * 用户相关工具类
@@ -35,7 +34,4 @@ public class UserComponent {
         return (UserDto) redisTemplate.opsForValue().get(token);
     }
 
-    public Locale getUserLocale(String userId) {
-        return Locale.getDefault();
-    }
 }

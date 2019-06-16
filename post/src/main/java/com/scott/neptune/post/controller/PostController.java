@@ -2,13 +2,16 @@ package com.scott.neptune.post.controller;
 
 import com.scott.neptune.common.dto.UserDto;
 import com.scott.neptune.common.response.ServerResponse;
-import com.scott.neptune.post.entity.Post;
+import com.scott.neptune.post.entity.PostEntity;
 import com.scott.neptune.post.feignclient.UserClient;
 import com.scott.neptune.post.service.IPostService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,7 +43,7 @@ public class PostController {
     private MessageSource messageSource;
 
     @PostMapping(value = "/sendPost")
-    public ServerResponse sendPost(@Valid @RequestBody Post post, BindingResult bindingResult) {
+    public ServerResponse sendPost(@Valid @RequestBody PostEntity postEntity, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             List<String> errorMsgList = bindingResult.getAllErrors().stream()
@@ -56,15 +59,16 @@ public class PostController {
         }
 
         UserDto loginUser = loginUserResponse.getData();
-        post.setUserId(loginUser.getId());
-        post.setCreateDate(new Date());
-        post.setUpdateDate(post.getCreateDate());
+        postEntity.setUserId(loginUser.getId());
+        postEntity.setCreateDate(new Date());
+        postEntity.setUpdateDate(postEntity.getCreateDate());
 
-        return postService.save(post);
+        return postService.save(postEntity);
     }
 
     @PostMapping(value = "/getFollowingPosts")
-    public ServerResponse<Page<Post>> getFollowingPosts(@RequestBody Post post) {
+    public ServerResponse<Page<PostEntity>> getFollowingPosts(@PageableDefault(sort = {"createDate"}, direction = Sort.Direction.DESC) Pageable pageable,
+                                                              PostEntity postEntity) {
 
         ServerResponse<List<String>> followingUserResponse = userClient.getFollowingUserIds();
         if (!followingUserResponse.isSuccess()) {
@@ -75,6 +79,6 @@ public class PostController {
             return ServerResponse.createByErrorMessage(messageSource.getMessage("msg.noFollowingUser", null, Locale.getDefault()));
         }
 
-        return ServerResponse.createBySuccess(postService.findByUserIdList(followingUserIds, post.getPageNumber(), post.getPageSize()));
+        return ServerResponse.createBySuccess(postService.findByUserIdList(followingUserIds, pageable.getPageNumber(), pageable.getPageSize()));
     }
 }

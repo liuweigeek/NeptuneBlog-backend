@@ -3,11 +3,13 @@ package com.scott.neptune.user.service.impl;
 import com.google.common.collect.Lists;
 import com.scott.neptune.common.dto.UserDto;
 import com.scott.neptune.common.response.ServerResponse;
-import com.scott.neptune.user.entity.User;
+import com.scott.neptune.common.util.LocaleUtil;
+import com.scott.neptune.user.entity.UserEntity;
 import com.scott.neptune.user.repository.UserRepository;
 import com.scott.neptune.user.service.IUserService;
 import com.scott.neptune.user.util.UserUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.MessageSource;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,8 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class UserServiceImpl implements IUserService {
 
+    @Resource
+    private MessageSource messageSource;
     @Resource
     private UserRepository userRepository;
     @Resource
@@ -43,41 +47,45 @@ public class UserServiceImpl implements IUserService {
      * @return
      */
     @Override
-    public ServerResponse<User> login(String username, String password) {
+    public ServerResponse<UserEntity> login(String username, String password) {
 
-        boolean userExist = userRepository.existsByUsername(username);
-        if (!userExist) {
-            return ServerResponse.createByErrorMessage("用户名不存在");
+        UserEntity userEntity = userRepository.getByUsername(username);
+        if (userEntity == null) {
+            return ServerResponse.createByErrorMessage(messageSource.getMessage("error.userNotExist", null,
+                    LocaleUtil.getLocaleFromUser(null)));
         }
 
         //TODO 加密
         String md5Password = password;
-        User user = userRepository.findByUsernameAndPassword(username, md5Password);
-        if (user == null) {
+        if (!StringUtils.equals(userEntity.getPassword(), md5Password)) {
             return ServerResponse.createByErrorMessage("密码错误");
         }
-        user.setLoginDate(new Date());
-        user.setToken(UserUtil.generateTokenByUser(user));
-        userRepository.save(user);
+        userEntity.setLoginDate(new Date());
+        userEntity.setToken(UserUtil.generateTokenByUser(userEntity));
+        userRepository.save(userEntity);
 
-        UserDto userDto = UserUtil.convertToDto(user);
-        redisTemplate.opsForValue().set(user.getToken(), userDto);
-        redisTemplate.expire(user.getToken(), 30, TimeUnit.MINUTES);
-        user.setPassword(StringUtils.EMPTY);
+        UserDto userDto = UserUtil.convertToDto(userEntity);
+        redisTemplate.opsForValue().set(userEntity.getToken(), userDto);
+        redisTemplate.expire(userEntity.getToken(), 30, TimeUnit.MINUTES);
+        userEntity.setPassword(StringUtils.EMPTY);
 
-        return ServerResponse.createBySuccess("登录成功", user);
+        return ServerResponse.createBySuccess(messageSource.getMessage("success.loginSuccess", null, LocaleUtil.getLocaleFromUser(userDto)), userEntity);
     }
 
     /**
      * 保存用户
      *
-     * @param user 用户对象
+     * @param userEntity 用户对象
      * @return 保存结果
      */
     @Override
-    public ServerResponse<User> save(User user) {
-        user.setRegisterDate(new Date());
-        return ServerResponse.createBySuccess(userRepository.save(user));
+    public ServerResponse<UserEntity> save(UserEntity userEntity) {
+        userEntity.setRegisterDate(new Date());
+        try {
+            return ServerResponse.createBySuccess(userRepository.save(userEntity));
+        } catch (Exception e) {
+            return ServerResponse.createByErrorMessage(messageSource.getMessage("error.saveUserError", null, LocaleUtil.getLocaleFromUser(null)));
+        }
     }
 
     /**
@@ -87,8 +95,19 @@ public class UserServiceImpl implements IUserService {
      * @return 用户对象
      */
     @Override
-    public User getUserById(String id) {
+    public UserEntity getUserById(String id) {
         return userRepository.getOne(id);
+    }
+
+    /**
+     * 通过用户名获取用户
+     *
+     * @param username 用户名
+     * @return 用户对象
+     */
+    @Override
+    public UserEntity getUserByUsername(String username) {
+        return userRepository.getByUsername(username);
     }
 
     /**
@@ -97,7 +116,7 @@ public class UserServiceImpl implements IUserService {
      * @return 用户列表
      */
     @Override
-    public List<User> findUserList() {
+    public List<UserEntity> findUserList() {
         return userRepository.findAll();
     }
 
@@ -108,11 +127,10 @@ public class UserServiceImpl implements IUserService {
      * @return 用户对象列表
      */
     @Override
-    public List<User> findAllUserByIdList(List<String> idList) {
+    public List<UserEntity> findAllUserByIdList(List<String> idList) {
         if (idList == null || idList.size() <= 0) {
             return Lists.newArrayListWithCapacity(0);
         }
-
         return userRepository.findAllByIdIn(idList);
     }
 }

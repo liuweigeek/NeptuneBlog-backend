@@ -4,11 +4,14 @@ import com.scott.neptune.common.constant.Constant;
 import com.scott.neptune.common.controller.BaseController;
 import com.scott.neptune.common.dto.UserDto;
 import com.scott.neptune.common.response.ServerResponse;
+import com.scott.neptune.common.util.LocaleUtil;
 import com.scott.neptune.user.component.UserComponent;
-import com.scott.neptune.user.entity.User;
+import com.scott.neptune.user.entity.UserEntity;
 import com.scott.neptune.user.service.IUserService;
 import com.scott.neptune.user.util.HeaderUtil;
 import com.scott.neptune.user.util.UserUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -26,6 +29,7 @@ import static java.util.stream.Collectors.toList;
  * 用户接口
  */
 @Slf4j
+@Api(tags = "用户接口")
 @RestController
 @RefreshScope
 @RequestMapping("/user")
@@ -41,12 +45,13 @@ public class UserController extends BaseController {
     /**
      * 注册
      *
-     * @param user          用户对象
+     * @param userEntity    用户对象
      * @param bindingResult 校验结果
      * @return 注册结果
      */
+    @ApiOperation(value = "用户注册")
     @PostMapping(value = "/register")
-    public ServerResponse register(@Valid @RequestBody User user, BindingResult bindingResult) {
+    public ServerResponse register(@Valid @RequestBody UserEntity userEntity, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             List<String> errorMsgList = bindingResult.getAllErrors().stream()
@@ -56,11 +61,12 @@ public class UserController extends BaseController {
             return ServerResponse.createByErrorMessage(errorMsgList.toString());
         }
 
-        if (userService.existByUsername(user.getUsername())) {
-            String errorMessage = String.format(messageSource.getMessage("error.userExist", null, userComponent.getUserLocale(null)), user.getUsername());
+        if (userService.existByUsername(userEntity.getUsername())) {
+            String errorMessage = String.format(messageSource.getMessage("error.userExist", null, LocaleUtil.getLocaleFromUser(null)),
+                    userEntity.getUsername());
             return ServerResponse.createByErrorMessage(errorMessage);
         }
-        ServerResponse registerResponse = userService.save(user);
+        ServerResponse registerResponse = userService.save(userEntity);
         if (registerResponse.isSuccess()) {
             return ServerResponse.createBySuccess();
         } else {
@@ -79,18 +85,19 @@ public class UserController extends BaseController {
     public ServerResponse login(String username, String password) {
 
         if (!userService.existByUsername(username)) {
-            return ServerResponse.createByErrorMessage(messageSource.getMessage("error.userNotFound", null, userComponent.getUserLocale(null)));
+            return ServerResponse.createByErrorMessage(messageSource.getMessage("error.userNotFound", null,
+                    LocaleUtil.getLocaleFromUser(null)));
         }
 
         //TODO 密码加密
-        ServerResponse<User> loginResponse = userService.login(username, password);
+        ServerResponse<UserEntity> loginResponse = userService.login(username, password);
         if (!loginResponse.isSuccess()) {
             return loginResponse;
         }
 
-        User loginUser = loginResponse.getData();
-        HeaderUtil.set(response, Constant.Login.CURRENT_USER, loginUser.getToken());
-        return ServerResponse.createBySuccess(UserUtil.convertToDto(loginUser));
+        UserEntity loginUserEntity = loginResponse.getData();
+        HeaderUtil.set(response, Constant.Login.CURRENT_USER, loginUserEntity.getToken());
+        return ServerResponse.createBySuccess(UserUtil.convertToDto(loginUserEntity));
     }
 
     /**
@@ -112,7 +119,6 @@ public class UserController extends BaseController {
      */
     @GetMapping(value = "/getUserInfo")
     public ServerResponse<UserDto> getUserInfo() {
-
         UserDto userDto = userComponent.getUserFromRequest(request);
         return ServerResponse.createBySuccess(userDto);
     }
@@ -124,7 +130,6 @@ public class UserController extends BaseController {
      */
     @GetMapping(value = "/list")
     public ServerResponse list() {
-
         List<UserDto> userDtoList = userService.findUserList()
                 .stream()
                 .map(UserUtil::convertToDto)

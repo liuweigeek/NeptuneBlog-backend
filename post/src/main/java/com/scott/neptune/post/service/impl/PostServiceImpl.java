@@ -1,7 +1,7 @@
 package com.scott.neptune.post.service.impl;
 
 import com.scott.neptune.common.response.ServerResponse;
-import com.scott.neptune.post.entity.Post;
+import com.scott.neptune.post.entity.PostEntity;
 import com.scott.neptune.post.feignclient.UserClient;
 import com.scott.neptune.post.repository.PostRepository;
 import com.scott.neptune.post.service.IPostService;
@@ -27,14 +27,14 @@ public class PostServiceImpl implements IPostService {
     /**
      * 保存推文
      *
-     * @param post 推文
+     * @param postEntity 推文
      * @return 保存结果
      */
     @Override
-    public ServerResponse save(Post post) {
+    public ServerResponse save(PostEntity postEntity) {
 
         try {
-            postRepository.save(post);
+            postRepository.save(postEntity);
             return ServerResponse.createBySuccess();
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -45,14 +45,14 @@ public class PostServiceImpl implements IPostService {
     /**
      * 删除推文
      *
-     * @param post 推文
+     * @param postEntity 推文
      * @return 删除结果
      */
     @Override
-    public boolean delete(Post post) {
+    public boolean delete(PostEntity postEntity) {
 
         try {
-            postRepository.delete(post);
+            postRepository.delete(postEntity);
             return true;
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -62,13 +62,13 @@ public class PostServiceImpl implements IPostService {
     }
 
     @Override
-    public Page<Post> findByUserId(String userId, int pageNumber, int pageSize) {
+    public Page<PostEntity> findByUserId(String userId, int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, Sort.by(Sort.Direction.DESC, "createDate"));
         return postRepository.findAllByUserId(userId, pageable);
     }
 
     @Override
-    public Page<Post> findByUserIdList(List<String> userIdList, int pageNumber, int pageSize) {
+    public Page<PostEntity> findByUserIdList(List<String> userIdList, int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, Sort.by(Sort.Direction.DESC, "createDate"));
         return postRepository.findAllByUserIdIn(userIdList, pageable);
     }

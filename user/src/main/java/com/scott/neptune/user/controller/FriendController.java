@@ -3,9 +3,10 @@ package com.scott.neptune.user.controller;
 import com.scott.neptune.common.controller.BaseController;
 import com.scott.neptune.common.dto.UserDto;
 import com.scott.neptune.common.response.ServerResponse;
+import com.scott.neptune.common.util.LocaleUtil;
 import com.scott.neptune.user.component.UserComponent;
 import com.scott.neptune.user.entity.FriendRelation;
-import com.scott.neptune.user.entity.User;
+import com.scott.neptune.user.entity.UserEntity;
 import com.scott.neptune.user.service.IFriendRelationService;
 import com.scott.neptune.user.service.IUserService;
 import lombok.extern.slf4j.Slf4j;
@@ -39,22 +40,23 @@ public class FriendController extends BaseController {
 
         UserDto loginUser = userComponent.getUserFromRequest(request);
 
-        User targetUser = userService.getUserById(userId);
-        if (targetUser == null) {
-            return ServerResponse.createByErrorMessage(messageSource.getMessage("error.userNotFound", null, userComponent.getUserLocale(loginUser.getId())));
+        UserEntity targetUserEntity = userService.getUserById(userId);
+        if (targetUserEntity == null) {
+            return ServerResponse.createByErrorMessage(messageSource.getMessage("error.userNotFound", null, LocaleUtil.getLocaleFromUser(loginUser)));
         }
 
         //TODO get follow from device
         FriendRelation friendRelation = FriendRelation.builder()
                 .authorId(loginUser.getId())
-                .targetId(targetUser.getId())
+                .targetId(targetUserEntity.getId())
                 .followFrom("web")
                 .build();
 
         if (friendRelationService.save(friendRelation).isSuccess()) {
             return ServerResponse.createBySuccess();
         } else {
-            return ServerResponse.createByErrorMessage(messageSource.getMessage("error.followFailed", null, userComponent.getUserLocale(loginUser.getId())));
+            return ServerResponse.createByErrorMessage(messageSource.getMessage("error.followFailed",
+                    null, LocaleUtil.getLocaleFromUser(loginUser)));
         }
     }
 
@@ -68,15 +70,17 @@ public class FriendController extends BaseController {
     public ServerResponse cancelFollow(@PathVariable("userId") String userId) {
 
         UserDto loginUser = userComponent.getUserFromRequest(request);
-        User targetUser = userService.getUserById(userId);
-        if (targetUser == null) {
-            return ServerResponse.createByErrorMessage(messageSource.getMessage("error.userNotFound", null, userComponent.getUserLocale(loginUser.getId())));
+        UserEntity targetUserEntity = userService.getUserById(userId);
+        if (targetUserEntity == null) {
+            return ServerResponse.createByErrorMessage(messageSource.getMessage("error.userNotFound",
+                    null, LocaleUtil.getLocaleFromUser(loginUser)));
         }
-        FriendRelation friendRelation = friendRelationService.getRelation(loginUser.getId(), targetUser.getId());
-        if (friendRelationService.delete(friendRelation)) {
+
+        if (friendRelationService.deleteByAuthorAndTarget(loginUser.getId(), targetUserEntity.getId())) {
             return ServerResponse.createBySuccess();
         } else {
-            return ServerResponse.createByErrorMessage(messageSource.getMessage("error.cancelFollowFailed", null, userComponent.getUserLocale(loginUser.getId())));
+            return ServerResponse.createByErrorMessage(messageSource.getMessage("error.cancelFollowFailed",
+                    null, LocaleUtil.getLocaleFromUser(loginUser)));
         }
     }
 
@@ -87,7 +91,6 @@ public class FriendController extends BaseController {
      */
     @GetMapping(value = "/findAllFollowing")
     public ServerResponse findAllFollowing() {
-
         UserDto loginUser = userComponent.getUserFromRequest(request);
         return ServerResponse.createBySuccess(friendRelationService.findAllFollowing(loginUser.getId()));
     }
@@ -99,7 +102,6 @@ public class FriendController extends BaseController {
      */
     @GetMapping(value = "/findAllFollower")
     public ServerResponse findAllFollower() {
-
         UserDto loginUser = userComponent.getUserFromRequest(request);
         return ServerResponse.createBySuccess(friendRelationService.findAllFollower(loginUser.getId()));
     }

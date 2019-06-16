@@ -7,8 +7,8 @@
         <module>common</module>
         <module>eureka-server</module>
         <module>api-gateway</module>
-        <module>user</module>
-        <module>post</module>
+        <module>userEntity</module>
+        <module>postEntity</module>
     </modules>
 
     <parent>
