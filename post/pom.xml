@@ -9,8 +9,8 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <name>postEntity</name>
-    <artifactId>postEntity</artifactId>
+    <name>post</name>
+    <artifactId>post</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>
@@ -55,13 +55,13 @@
     </dependencies>
 
     <build>
-        <finalName>postEntity</finalName>
+        <finalName>post</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.scott.neptune.postEntity.PostApplication</mainClass>
+                    <mainClass>com.scott.neptune.post.PostApplication</mainClass>
                     <includeSystemScope>true</includeSystemScope>
                 </configuration>
                 <executions>

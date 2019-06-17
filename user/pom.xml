@@ -9,8 +9,8 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <name>userEntity</name>
-    <artifactId>userEntity</artifactId>
+    <name>user</name>
+    <artifactId>user</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>
@@ -50,13 +50,13 @@
     </dependencies>
 
     <build>
-        <finalName>userEntity</finalName>
+        <finalName>user</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.scott.neptune.userEntity.UserApplication</mainClass>
+                    <mainClass>com.scott.neptune.user.UserApplication</mainClass>
                     <includeSystemScope>true</includeSystemScope>
                 </configuration>
                 <executions>
