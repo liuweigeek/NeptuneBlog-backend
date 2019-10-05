@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scott.neptune.user.mapper.UserMapper">
+
+    <resultMap id="BaseResultMap" type="com.scott.neptune.userapi.entity.UserEntity">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="email" property="email"/>
+        <result column="username" property="username"/>
+        <result column="real_name" property="realName"/>
+        <result column="password" property="password"/>
+        <result column="birthday" property="birthday"/>
+        <result column="sex" property="sex"/>
+        <result column="register_date" property="registerDate"/>
+        <result column="login_date" property="loginDate"/>
+        <result column="lang_key" property="langKey"/>
+        <result column="token" property="token"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, email, username, real_name, `password`, birthday,
+        sex, register_date, login_date, lang_key, token
+    </sql>
+
+    <!-- 判断指定用户是否存在 -->
+    <select id="exists" parameterType="com.scott.neptune.userapi.entity.UserEntity"
+            resultType="boolean">
+        select count(id)
+        from t_user
+        <where>
+            <if test="user != null">
+                <if test="user.id != null and user.id != ''">
+                    and id = #{user.id}
+                </if>
+                <if test="user.email != null and user.email != ''">
+                    and email = #{user.email}
+                </if>
+                <if test="user.username != null and user.username != ''">
+                    and username = #{user.username}
+                </if>
+                <if test="user.realName != null and user.realName != ''">
+                    and real_name = #{user.realName}
+                </if>
+                <if test="user.password != null and user.password != ''">
+                    and password = #{user.password}
+                </if>
+                <if test="user.sex != null">
+                    and sex = #{sex}
+                </if>
+                <if test="user.langKey != null and user.langKey != ''">
+                    and lang_key = #{user.langKey}
+                </if>
+                <if test="user.token != null and user.token != ''">
+                    and token = #{user.token}
+                </if>
+            </if>
+        </where>
+    </select>
+
+    <!-- 获取指定用户 -->
+    <select id="getOne" parameterType="com.scott.neptune.userapi.entity.UserEntity"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_user
+        <where>
+            <if test="user != null">
+                <if test="user.id != null and user.id != ''">
+                    and id = #{user.id}
+                </if>
+                <if test="user.email != null and user.email != ''">
+                    and email = #{user.email}
+                </if>
+                <if test="user.username != null and user.username != ''">
+                    and username = #{user.username}
+                </if>
+                <if test="user.realName != null and user.realName != ''">
+                    and real_name = #{user.realName}
+                </if>
+                <if test="user.password != null and user.password != ''">
+                    and password = #{user.password}
+                </if>
+                <if test="user.sex != null">
+                    and sex = #{sex}
+                </if>
+                <if test="user.langKey != null and user.langKey != ''">
+                    and lang_key = #{user.langKey}
+                </if>
+                <if test="user.token != null and user.token != ''">
+                    and token = #{user.token}
+                </if>
+            </if>
+        </where>
+        limit 1
+    </select>
+
+    <!-- 查找符合条件的用户 -->
+    <select id="findAll" parameterType="com.scott.neptune.userapi.entity.UserEntity"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_user
+        <where>
+            <if test="user != null">
+                <if test="user.id != null and user.id != ''">
+                    and id = #{user.id}
+                </if>
+                <if test="user.email != null and user.email != ''">
+                    and email = #{user.email}
+                </if>
+                <if test="user.username != null and user.username != ''">
+                    and username = #{user.username}
+                </if>
+                <if test="user.realName != null and user.realName != ''">
+                    and real_name = #{user.realName}
+                </if>
+                <if test="user.password != null and user.password != ''">
+                    and password = #{user.password}
+                </if>
+                <if test="user.sex != null">
+                    and sex = #{sex}
+                </if>
+                <if test="user.langKey != null and user.langKey != ''">
+                    and lang_key = #{user.langKey}
+                </if>
+                <if test="user.token != null and user.token != ''">
+                    and token = #{user.token}
+                </if>
+            </if>
+        </where>
+        order by register_date asc
+    </select>
+
+    <!-- 根据用户ID列表获取全部用户 -->
+    <select id="findAllInUserIds" parameterType="list"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_user
+        where id in
+        <foreach item="item" index="index" open="(" separator="," close=")" collection="idList">
+            #{item}
+        </foreach>
+        order by register_date asc
+    </select>
+
+</mapper>

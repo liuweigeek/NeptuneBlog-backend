@@ -11,7 +11,6 @@ import java.io.Serializable;
  */
 @NoArgsConstructor
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-//保证序列化json的时候,如果是null的对象,key也会消失
 public class ServerResponse<T> implements Serializable {
 
     private int status;
@@ -38,10 +37,20 @@ public class ServerResponse<T> implements Serializable {
         this.msg = msg;
     }
 
+    /**
+     * 使之不在Json序列化结果当中
+     */
     @JsonIgnore
-    //使之不在json序列化结果当中
     public boolean isSuccess() {
         return this.status == ResponseCode.SUCCESS.getCode();
+    }
+
+    /**
+     * 使之不在Json序列化结果当中
+     */
+    @JsonIgnore
+    public boolean isFailed() {
+        return this.status != ResponseCode.SUCCESS.getCode();
     }
 
     public int getStatus() {

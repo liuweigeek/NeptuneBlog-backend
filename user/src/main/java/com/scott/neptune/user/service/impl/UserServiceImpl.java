@@ -1,30 +1,42 @@
 package com.scott.neptune.user.service.impl;
 
 import com.google.common.collect.Lists;
-import com.scott.neptune.common.dto.UserDto;
 import com.scott.neptune.common.response.ServerResponse;
-import com.scott.neptune.common.util.LocaleUtil;
-import com.scott.neptune.user.entity.UserEntity;
-import com.scott.neptune.user.repository.UserRepository;
+import com.scott.neptune.common.util.MD5Utils;
+import com.scott.neptune.user.mapper.UserMapper;
 import com.scott.neptune.user.service.IUserService;
 import com.scott.neptune.user.util.UserUtil;
+import com.scott.neptune.userapi.dto.UserDto;
+import com.scott.neptune.userapi.entity.UserEntity;
+import com.scott.neptune.userapi.mapping.UserModelMapping;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.context.MessageSource;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * @Author: scott
+ * @Email: <a href="mailto:wliu@fleetup.com">scott</a>
+ * @Date: 2019/9/23 09:44
+ * @Description:
+ */
+@Slf4j
+@Transactional
 @Service
 public class UserServiceImpl implements IUserService {
 
     @Resource
-    private MessageSource messageSource;
+    private UserMapper userMapper;
     @Resource
-    private UserRepository userRepository;
+    private UserModelMapping userModelMapping;
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
 
@@ -35,41 +47,48 @@ public class UserServiceImpl implements IUserService {
      * @return 判断结果
      */
     @Override
-    public boolean existByUsername(String username) {
-        return userRepository.existsByUsername(username);
+    public boolean existsByUsername(String username) {
+        return userMapper.exists(UserEntity.builder().username(username).build());
+    }
+
+    /**
+     * 判断指定用户邮箱是否存在
+     *
+     * @param email 邮箱地址
+     * @return 判断结果
+     */
+    @Override
+    public boolean existsByEmail(String email) {
+        return userMapper.exists(UserEntity.builder().email(email).build());
     }
 
     /**
      * 用户登录
      *
-     * @param username 用户名
+     * @param email    邮箱地址
      * @param password 密码
      * @return
      */
     @Override
-    public ServerResponse<UserEntity> login(String username, String password) {
+    public ServerResponse<UserDto> login(String email, String password) {
 
-        UserEntity userEntity = userRepository.getByUsername(username);
-        if (userEntity == null) {
-            return ServerResponse.createByErrorMessage(messageSource.getMessage("error.userNotExist", null,
-                    LocaleUtil.getLocaleFromUser(null)));
+        UserEntity userEntity = userMapper.getOne(UserEntity.builder().email(email).build());
+        if (Objects.isNull(userEntity)) {
+            return ServerResponse.createByErrorMessage("用户不存在，请检查邮箱地址是否正确");
         }
 
-        //TODO 加密
-        String md5Password = password;
+        String md5Password = MD5Utils.MD5EncodeUtf8(password);
         if (!StringUtils.equals(userEntity.getPassword(), md5Password)) {
             return ServerResponse.createByErrorMessage("密码错误");
         }
         userEntity.setLoginDate(new Date());
         userEntity.setToken(UserUtil.generateTokenByUser(userEntity));
-        userRepository.save(userEntity);
+        userMapper.insert(userEntity);
 
-        UserDto userDto = UserUtil.convertToDto(userEntity);
-        redisTemplate.opsForValue().set(userEntity.getToken(), userDto);
-        redisTemplate.expire(userEntity.getToken(), 30, TimeUnit.MINUTES);
-        userEntity.setPassword(StringUtils.EMPTY);
+        UserDto userDto = userModelMapping.convertToDto(userEntity);
+        redisTemplate.opsForValue().set(userEntity.getToken(), userDto, 30, TimeUnit.MINUTES);
 
-        return ServerResponse.createBySuccess(messageSource.getMessage("success.loginSuccess", null, LocaleUtil.getLocaleFromUser(userDto)), userEntity);
+        return ServerResponse.createBySuccess("登录成功", userDto);
     }
 
     /**
@@ -80,11 +99,19 @@ public class UserServiceImpl implements IUserService {
      */
     @Override
     public ServerResponse<UserEntity> save(UserEntity userEntity) {
+        if (this.existsByEmail(userEntity.getEmail())) {
+            return ServerResponse.createByErrorMessage("用户邮箱已存在");
+        }
+        if (this.existsByUsername(userEntity.getUsername())) {
+            return ServerResponse.createByErrorMessage("用户名已存在,请更换后重试");
+        }
         userEntity.setRegisterDate(new Date());
+        userEntity.setPassword(MD5Utils.MD5EncodeUtf8(userEntity.getPassword()));
         try {
-            return ServerResponse.createBySuccess(userRepository.save(userEntity));
+            userMapper.insert(userEntity);
+            return ServerResponse.createBySuccess(userEntity);
         } catch (Exception e) {
-            return ServerResponse.createByErrorMessage(messageSource.getMessage("error.saveUserError", null, LocaleUtil.getLocaleFromUser(null)));
+            return ServerResponse.createByErrorMessage("新建用户失败");
         }
     }
 
@@ -96,7 +123,7 @@ public class UserServiceImpl implements IUserService {
      */
     @Override
     public UserEntity getUserById(String id) {
-        return userRepository.getOne(id);
+        return userMapper.getOne(UserEntity.builder().id(id).build());
     }
 
     /**
@@ -107,7 +134,7 @@ public class UserServiceImpl implements IUserService {
      */
     @Override
     public UserEntity getUserByUsername(String username) {
-        return userRepository.getByUsername(username);
+        return userMapper.getOne(UserEntity.builder().username(username).build());
     }
 
     /**
@@ -117,7 +144,7 @@ public class UserServiceImpl implements IUserService {
      */
     @Override
     public List<UserEntity> findUserList() {
-        return userRepository.findAll();
+        return userMapper.findAll(null);
     }
 
     /**
@@ -128,9 +155,9 @@ public class UserServiceImpl implements IUserService {
      */
     @Override
     public List<UserEntity> findAllUserByIdList(List<String> idList) {
-        if (idList == null || idList.size() <= 0) {
+        if (CollectionUtils.isEmpty(idList)) {
             return Lists.newArrayListWithCapacity(0);
         }
-        return userRepository.findAllByIdIn(idList);
+        return userMapper.findAllInUserIds(idList);
     }
 }

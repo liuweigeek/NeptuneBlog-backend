@@ -18,7 +18,7 @@ public class BaseController {
     protected HttpServletResponse response;
     @Resource
     protected HttpSession session;
-    @Resource
-    protected MessageSource messageSource;
+    /*@Resource
+    protected MessageSource messageSource;*/
 
 }

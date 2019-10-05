@@ -1,0 +1,23 @@
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+server:
+  port: 8765
+spring:
+  application:
+    name: @project.name@
+  jackson:
+    serialization:
+      FAIL_ON_EMPTY_BEANS: false
+minio:
+  endpoint: http://127.0.0.1:9000
+  access-key: liuweigeek
+  secret-key: liu762327610
+  bucket: neptune-blog
+
+folders:
+  userAvatarSm: /userAvatar/sm
+  userAvatarMd: /userAvatar/md
+  postImageSm: /post/sm
+  postImageOrigin: /post/origin

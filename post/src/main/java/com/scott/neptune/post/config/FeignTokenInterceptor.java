@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Enumeration;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Feign统一Token拦截器
@@ -20,7 +21,7 @@ public class FeignTokenInterceptor implements RequestInterceptor {
 
     @Override
     public void apply(RequestTemplate requestTemplate) {
-        if (null == getHttpServletRequest()) {
+        if (Objects.isNull(getHttpServletRequest())) {
             //此处省略日志记录
             return;
         }

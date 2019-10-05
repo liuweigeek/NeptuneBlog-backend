@@ -2,28 +2,31 @@ package com.scott.neptune.user.service.impl;
 
 import com.google.common.collect.Lists;
 import com.scott.neptune.common.response.ServerResponse;
-import com.scott.neptune.user.entity.FriendRelation;
-import com.scott.neptune.user.entity.UserEntity;
-import com.scott.neptune.user.repository.FriendRelationRepository;
+import com.scott.neptune.user.mapper.FriendRelationMapper;
 import com.scott.neptune.user.service.IFriendRelationService;
 import com.scott.neptune.user.service.IUserService;
+import com.scott.neptune.userapi.entity.FriendRelation;
+import com.scott.neptune.userapi.entity.UserEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
-@Service
 @Slf4j
+@Transactional
+@Service
 public class FriendRelationServiceImpl implements IFriendRelationService {
 
     @Resource
     private IUserService userService;
     @Resource
-    private FriendRelationRepository friendRelationRepository;
+    private FriendRelationMapper friendRelationMapper;
 
     /**
      * 保存好友关系
@@ -34,11 +37,12 @@ public class FriendRelationServiceImpl implements IFriendRelationService {
     @Override
     public ServerResponse save(FriendRelation friendRelation) {
 
-        if (friendRelationRepository.existsByAuthorIdAndTargetId(friendRelation.getAuthorId(), friendRelation.getTargetId())) {
+        if (friendRelationMapper.exists(friendRelation)) {
             return ServerResponse.createBySuccess();
         }
         try {
-            friendRelationRepository.save(friendRelation);
+            friendRelation.setFollowDate(new Date());
+            friendRelationMapper.insert(friendRelation);
             return ServerResponse.createBySuccess();
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -50,13 +54,13 @@ public class FriendRelationServiceImpl implements IFriendRelationService {
     /**
      * 获取好友关系
      *
-     * @param authorId
-     * @param targetId
+     * @param fromId
+     * @param toId
      * @return
      */
     @Override
-    public FriendRelation getRelation(String authorId, String targetId) {
-        return friendRelationRepository.getByAuthorIdAndTargetId(authorId, targetId);
+    public FriendRelation getRelation(String fromId, String toId) {
+        return friendRelationMapper.getOne(FriendRelation.builder().fromId(fromId).toId(toId).build());
     }
 
     /**
@@ -69,7 +73,7 @@ public class FriendRelationServiceImpl implements IFriendRelationService {
     public boolean delete(FriendRelation friendRelation) {
 
         try {
-            friendRelationRepository.delete(friendRelation);
+            friendRelationMapper.delete(friendRelation);
             return true;
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -81,14 +85,14 @@ public class FriendRelationServiceImpl implements IFriendRelationService {
     /**
      * 根据关注人和被关注人解除关系
      *
-     * @param authorId  关注人
-     * @param targetId  被关注人
+     * @param fromId  关注人
+     * @param toId  被关注人
      * @return
      */
     @Override
-    public boolean deleteByAuthorAndTarget(String authorId, String targetId) {
+    public boolean deleteByFromIdAndToId(String fromId, String toId) {
         try {
-            friendRelationRepository.deleteByAuthorIdAndTargetId(authorId, targetId);
+            friendRelationMapper.delete(FriendRelation.builder().fromId(fromId).toId(toId).build());
             return true;
         } catch (Exception e) {
             return false;
@@ -107,9 +111,9 @@ public class FriendRelationServiceImpl implements IFriendRelationService {
         if (StringUtils.isBlank(userId)) {
             return Lists.newArrayListWithCapacity(0);
         }
-        List<String> followingIdList = friendRelationRepository.findAllByAuthorId(userId)
+        List<String> followingIdList = friendRelationMapper.findAll(FriendRelation.builder().fromId(userId).build())
                 .stream()
-                .map(FriendRelation::getTargetId)
+                .map(FriendRelation::getToId)
                 .collect(toList());
 
         return userService.findAllUserByIdList(followingIdList);
@@ -127,11 +131,11 @@ public class FriendRelationServiceImpl implements IFriendRelationService {
             return Lists.newArrayListWithCapacity(0);
         }
 
-        List<String> followingIdList = friendRelationRepository.findAllByTargetId(userId)
+        List<String> followerIdList = friendRelationMapper.findAll(FriendRelation.builder().fromId(userId).build())
                 .stream()
-                .map(FriendRelation::getTargetId)
+                .map(FriendRelation::getFromId)
                 .collect(toList());
 
-        return userService.findAllUserByIdList(followingIdList);
+        return userService.findAllUserByIdList(followerIdList);
     }
 }

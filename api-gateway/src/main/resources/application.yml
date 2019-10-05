@@ -2,7 +2,7 @@ server:
   port: 8080
 spring:
   application:
-    name: api-gateway
+    name: @project.name@
   messages:
     basename: i18n/messages
   redis:
@@ -21,6 +21,7 @@ zuul:
   host:
     connect-timeout-millis: 20000
     socket-timeout-millis: 20000
+    connection-request-timeout-millis: 20000
 eureka:
   client:
     service-url:
@@ -31,10 +32,12 @@ hystrix:
   command:
     default:
       execution:
-        isolation:
-          thread:
-            timeoutInMilliseconds: 20000
+        timeout:
+          enable: falsee
   shareSecurityContext: true
+ribbon:
+  ReadTimeout: 20000
+  ConnectTimeout: 20000
 
 loginFilter:
   ignoreUris: /user/user/login, /user/user/register

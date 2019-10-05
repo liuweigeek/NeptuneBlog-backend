@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scott.neptune.post.mapper.PostMapper">
+
+    <resultMap id="BaseResultMap" type="com.scott.neptune.postapi.entity.PostEntity">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="content" property="content"/>
+        <result column="device" property="device"/>
+        <result column="create_date" property="createDate"/>
+        <result column="update_date" property="updateDate"/>
+        <association property="author" javaType="com.scott.neptune.userapi.entity.UserEntity">
+            <id column="nid" property="id"/>
+            <result column="sex" property="sex"/>
+            <result column="username" property="username"/>
+        </association>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, user_id, content, device, create_date, update_date
+    </sql>
+
+    <!-- 判断指定条件的推文 -->
+    <select id="findAll" parameterType="map"
+            resultMap="BaseResultMap">
+        select
+            p.id, p.user_id, p.content, p.device, p.create_date, p.update_date,
+            u.id uid, u.sex, u.username
+        from t_user u
+        left join t_post p on u.id = p.user_id
+        <where>
+            <if test="post != null">
+                <if test="post.userId != null and post.userId != ''">
+                    and u.id = #{post.userId}
+                </if>
+                <if test="post.content != null and post.content != ''">
+                    and p.content like concat('%',#{post.content},'%')
+                </if>
+                <if test="post.userId != null and post.userId != ''">
+                    and u.id = #{post.userId}
+                </if>
+            </if>
+        </where>
+    </select>
+
+    <!-- 获取关注用户的推文 -->
+    <select id="findAllOfFollowing" parameterType="com.scott.neptune.userapi.entity.UserEntity"
+            resultMap="BaseResultMap">
+        select
+        p.id, p.user_id, p.content, p.device, p.create_date, p.update_date,
+        u.id uid, u.sex, u.username
+        from t_friend_relation fr
+        left join t_user u on u.id = fr.to_id
+        left join t_post p on u.id = p.user_id
+        <where>
+            <if test="post != null">
+                <if test="post.userId != null and post.userId != ''">
+                    and u.id = #{post.userId}
+                </if>
+                <if test="post.content != null and post.content != ''">
+                    and p.content like concat('%',#{post.content},'%')
+                </if>
+            </if>
+            and fr.from_id = #{fromId}
+        </where>
+    </select>
+
+    <!-- 获取指定用户的推文 -->
+    <select id="findAllInUserIds" parameterType="com.scott.neptune.userapi.entity.UserEntity"
+            resultMap="BaseResultMap">
+        select
+        p.id, p.user_id, p.content, p.device, p.create_date, p.update_date,
+        u.id uid, u.sex, u.username
+        from t_user u
+        left join t_post p on u.id = p.user_id
+        where u.id in
+        <foreach item="item" index="index" open="(" separator="," close=")" collection="userIdList">
+            #{item}
+        </foreach>
+    </select>
+</mapper>

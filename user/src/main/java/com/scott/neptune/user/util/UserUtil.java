@@ -1,30 +1,18 @@
 package com.scott.neptune.user.util;
 
 import com.scott.neptune.common.constant.Constant;
-import com.scott.neptune.common.dto.UserDto;
-import com.scott.neptune.user.entity.UserEntity;
-import org.springframework.beans.BeanUtils;
+import com.scott.neptune.common.util.UUIDUtils;
+import com.scott.neptune.userapi.entity.UserEntity;
 
 import java.util.Calendar;
-import java.util.UUID;
 
 /**
- * 用户工具类
+ * @Author: scott
+ * @Email: <a href="mailto:wliu@fleetup.com">scott</a>
+ * @Date: 2019/9/23 09:14
+ * @Description: 用户工具类
  */
 public class UserUtil {
-
-    /**
-     * 将User实体转换为UserDto
-     *
-     * @param userEntity 用户对象
-     * @return DTO对象
-     */
-    public static UserDto convertToDto(UserEntity userEntity) {
-        UserDto userDto = new UserDto();
-        BeanUtils.copyProperties(userEntity, userDto);
-        userDto.setPassword(null);
-        return userDto;
-    }
 
     /**
      * 生成token信息
@@ -36,6 +24,6 @@ public class UserUtil {
         return String.format("%s:%s-%s-%s", Constant.Login.CURRENT_USER,
                 userEntity.getId(),
                 Calendar.getInstance().getTimeInMillis(),
-                UUID.randomUUID());
+                UUIDUtils.generateUUID());
     }
 }

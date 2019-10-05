@@ -1,8 +1,8 @@
 package com.scott.neptune.user.component;
 
 import com.scott.neptune.common.constant.Constant;
-import com.scott.neptune.common.dto.UserDto;
 import com.scott.neptune.user.util.HeaderUtil;
+import com.scott.neptune.userapi.dto.UserDto;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -11,7 +11,10 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * 用户相关工具类
+ * @Author: scott
+ * @Email: <a href="mailto:wliu@fleetup.com">scott</a>
+ * @Date: 2019/9/23 13:58
+ * @Description: 用户相关组件
  */
 @Component
 public class UserComponent {
