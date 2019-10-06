@@ -38,6 +38,5 @@ hystrix:
 ribbon:
   ReadTimeout: 20000
   ConnectTimeout: 20000
-
 loginFilter:
   ignoreUris: /user/user/login, /user/user/register

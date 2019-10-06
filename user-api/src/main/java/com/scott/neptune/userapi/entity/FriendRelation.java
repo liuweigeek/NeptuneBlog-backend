@@ -8,7 +8,10 @@ import org.apache.ibatis.type.JdbcType;
 import java.util.Date;
 
 /**
- * @author scott
+ * @Author: scott
+ * @Email: <a href="mailto:wliu@fleetup.com">scott</a>
+ * @Date: 2019/10/6 15:59
+ * @Description: 关注关系
  */
 @Data
 @Builder

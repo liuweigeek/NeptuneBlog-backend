@@ -55,8 +55,3 @@ mybatis-plus:
     map-underscore-to-camel-case: false
     cache-enabled: false
   pageSize: 30
-#  devtools:
-#    restart:
-#      enabled: true
-#    livereload:
-#      enabled: true

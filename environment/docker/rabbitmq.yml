@@ -1,0 +1,19 @@
+version: '3.1'
+services:
+  rabbitmq:
+    image: rabbitmq:3.7.16-management-alpine
+    container_name: local_rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=liuweigeek
+      - RABBITMQ_DEFAULT_PASS=12345678
+    #restart: always
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    volumes:
+      - /root/docker/rabbitmq/data:/var/lib/rabbitmq
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"

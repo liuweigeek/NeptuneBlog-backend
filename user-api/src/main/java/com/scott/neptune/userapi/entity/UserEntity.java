@@ -18,7 +18,7 @@ import java.util.Date;
  * @Author: scott
  * @Email: <a href="mailto:wliu@fleetup.com">scott</a>
  * @Date: 2019/9/23 09:03
- * @Description:
+ * @Description: 用户
  */
 @Data
 @Builder

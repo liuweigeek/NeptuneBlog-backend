@@ -83,7 +83,7 @@ public class UserServiceImpl implements IUserService {
         }
         userEntity.setLoginDate(new Date());
         userEntity.setToken(UserUtil.generateTokenByUser(userEntity));
-        userMapper.insert(userEntity);
+        userMapper.updateById(userEntity);
 
         UserDto userDto = userModelMapping.convertToDto(userEntity);
         redisTemplate.opsForValue().set(userEntity.getToken(), userDto, 30, TimeUnit.MINUTES);
