@@ -3,10 +3,10 @@
 <mapper namespace="com.scott.neptune.user.mapper.UserMapper">
 
     <resultMap id="BaseResultMap" type="com.scott.neptune.userapi.entity.UserEntity">
-        <id column="id" jdbcType="INTEGER" property="id"/>
+        <id column="id" property="id"/>
         <result column="email" property="email"/>
         <result column="username" property="username"/>
-        <result column="real_name" property="realName"/>
+        <result column="nickname" property="nickname"/>
         <result column="password" property="password"/>
         <result column="birthday" property="birthday"/>
         <result column="sex" property="sex"/>
@@ -14,10 +14,13 @@
         <result column="login_date" property="loginDate"/>
         <result column="lang_key" property="langKey"/>
         <result column="token" property="token"/>
+        <collection property="avatarList" column="id"
+                    ofType="com.scott.neptune.userapi.entity.UserAvatarEntity"
+                    select="com.scott.neptune.user.mapper.UserAvatarMapper.findAllByUserId"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, email, username, real_name, `password`, birthday,
+        id, email, username, nickname, password, birthday,
         sex, register_date, login_date, lang_key, token
     </sql>
 
@@ -37,8 +40,8 @@
                 <if test="user.username != null and user.username != ''">
                     and username = #{user.username}
                 </if>
-                <if test="user.realName != null and user.realName != ''">
-                    and real_name = #{user.realName}
+                <if test="user.nickname != null and user.nickname != ''">
+                    and nickname = #{user.nickname}
                 </if>
                 <if test="user.password != null and user.password != ''">
                     and password = #{user.password}
@@ -73,8 +76,8 @@
                 <if test="user.username != null and user.username != ''">
                     and username = #{user.username}
                 </if>
-                <if test="user.realName != null and user.realName != ''">
-                    and real_name = #{user.realName}
+                <if test="user.nickname != null and user.nickname != ''">
+                    and nickname = #{user.nickname}
                 </if>
                 <if test="user.password != null and user.password != ''">
                     and password = #{user.password}
@@ -110,8 +113,8 @@
                 <if test="user.username != null and user.username != ''">
                     and username = #{user.username}
                 </if>
-                <if test="user.realName != null and user.realName != ''">
-                    and real_name = #{user.realName}
+                <if test="user.nickname != null and user.nickname != ''">
+                    and nickname = #{user.nickname}
                 </if>
                 <if test="user.password != null and user.password != ''">
                     and password = #{user.password}

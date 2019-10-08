@@ -1,6 +1,7 @@
 package com.scott.neptune.postapi.dto;
 
 import com.scott.neptune.common.dto.BaseDto;
+import com.scott.neptune.common.util.UUIDUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -17,7 +18,7 @@ import java.util.Date;
 public class PostDto extends BaseDto {
 
     /**
-     * Id
+     * ID
      */
     private String id;
 
@@ -57,8 +58,18 @@ public class PostDto extends BaseDto {
     private String authorUsername;
 
     /**
+     * 昵称
+     */
+    private String authorNickname;
+
+    /**
      * 性别
      */
     private Integer authorSex;
+
+    /**
+     * 头像
+     */
+    private Integer authorAvatar;
 
 }

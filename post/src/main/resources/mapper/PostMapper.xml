@@ -3,7 +3,7 @@
 <mapper namespace="com.scott.neptune.post.mapper.PostMapper">
 
     <resultMap id="BaseResultMap" type="com.scott.neptune.postapi.entity.PostEntity">
-        <id column="id" jdbcType="INTEGER" property="id"/>
+        <id column="id" property="id"/>
         <result column="user_id" property="userId"/>
         <result column="content" property="content"/>
         <result column="device" property="device"/>
@@ -51,7 +51,7 @@
         u.id uid, u.sex, u.username
         from t_friend_relation fr
         left join t_user u on u.id = fr.to_id
-        left join t_post p on u.id = p.user_id
+        left join t_post p on p.user_id = u.id
         <where>
             <if test="post != null">
                 <if test="post.userId != null and post.userId != ''">

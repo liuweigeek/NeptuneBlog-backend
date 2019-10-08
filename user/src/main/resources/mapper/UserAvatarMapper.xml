@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scott.neptune.user.mapper.UserAvatarMapper">
+
+    <resultMap id="BaseResultMap" type="com.scott.neptune.userapi.entity.UserAvatarEntity">
+        <result column="user_id" property="userId"/>
+        <result column="size" property="size"/>
+        <result column="url" property="url"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        user_id, size, url
+    </sql>
+
+    <!-- 根据用户ID获取全部头像 -->
+    <select id="findAllByUserId" parameterType="string"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_user_avatar
+        where user_id = #{userId}
+    </select>
+
+    <!-- 通过UserId删除全部头像 -->
+    <delete id="delete" parameterType="com.scott.neptune.userapi.entity.UserAvatarEntity">
+        delete from t_user_avatar
+        where user_id = #{avatar.userId}
+        <if test="avatar.size != null">
+            and size = #{size}
+        </if>
+    </delete>
+
+</mapper>

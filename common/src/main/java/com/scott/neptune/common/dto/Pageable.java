@@ -3,6 +3,8 @@ package com.scott.neptune.common.dto;
 import lombok.Data;
 import lombok.ToString;
 
+import java.io.Serializable;
+
 /**
  * @Author: scott
  * @Email: <a href="mailto:wliu@fleetup.com">scott</a>
@@ -11,7 +13,7 @@ import lombok.ToString;
  */
 @Data
 @ToString
-public class Pageable {
+public class Pageable implements Serializable {
 
     private int pageNumber = 1;
     private int pageSize = 30;

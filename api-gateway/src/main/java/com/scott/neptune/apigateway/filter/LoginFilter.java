@@ -5,6 +5,7 @@ import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;
 import com.scott.neptune.common.constant.Constant;
 import com.scott.neptune.common.response.ServerResponse;
+import com.scott.neptune.common.util.UUIDUtils;
 import com.scott.neptune.userapi.util.UserUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 登录拦截器
@@ -80,6 +82,8 @@ public class LoginFilter extends ZuulFilter {
                 logger.error("拦截器异常");
             }
         }
+        redisTemplate.expire(token, 30, TimeUnit.MINUTES);
         return null;
     }
+
 }

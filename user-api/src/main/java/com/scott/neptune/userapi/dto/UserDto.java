@@ -32,9 +32,9 @@ public class UserDto extends BaseDto {
     private String username;
 
     /**
-     * 真实姓名
+     * 昵称
      */
-    private String realName;
+    private String nickname;
 
     /**
      * 出生日期
@@ -65,5 +65,20 @@ public class UserDto extends BaseDto {
      * 登录Token信息
      */
     private String token;
+
+    /**
+     * 小尺寸头像
+     */
+    private String smallAvatar;
+
+    /**
+     * 正常尺寸头像
+     */
+    private String normalAvatar;
+
+    /**
+     * 大尺寸头像
+     */
+    private String largeAvatar;
 
 }

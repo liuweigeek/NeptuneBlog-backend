@@ -11,14 +11,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Objects;
 
 import static java.util.stream.Collectors.toList;
 
@@ -57,23 +55,27 @@ public class PostController {
         return postService.save(postEntity, loginUser);
     }
 
-    @PostMapping(value = "/getFollowingPosts")
-    public ServerResponse<IPage<PostEntity>> getFollowingPosts(Pageable pageable, PostEntity postEntity) {
+    @GetMapping(value = "/getFollowingPosts")
+    public ServerResponse<IPage<PostEntity>> getFollowingPosts(PostEntity postEntity) {
+
+        if (Objects.isNull(postEntity)) {
+            postEntity = new PostEntity();
+        }
 
         ServerResponse<UserDto> loginUserResponse = userServer.getLoginUser();
         if (!loginUserResponse.isSuccess()) {
             return ServerResponse.createByErrorMessage(loginUserResponse.getMsg());
         }
 
-        ServerResponse<List<String>> followingUserResponse = userServer.getFollowingUserIds();
+        /*ServerResponse<List<String>> followingUserResponse = userServer.getFollowingUserIds();
         if (!followingUserResponse.isSuccess()) {
             return ServerResponse.createByErrorMessage(followingUserResponse.getMsg());
         }
         List<String> followingUserIds = followingUserResponse.getData();
         if (CollectionUtils.isEmpty(followingUserIds)) {
             return ServerResponse.createByErrorMessage("未关注任何用户");
-        }
+        }*/
 
-        return ServerResponse.createBySuccess(postService.findByUserIdList(followingUserIds, pageable.getPageNumber(), pageable.getPageSize()));
+        return ServerResponse.createBySuccess(postService.findByFollowerId(loginUserResponse.getData().getId(), postEntity.getPageNumber(), postEntity.getPageSize()));
     }
 }

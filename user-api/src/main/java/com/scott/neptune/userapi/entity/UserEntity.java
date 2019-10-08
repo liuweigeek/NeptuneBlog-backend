@@ -12,7 +12,9 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.groups.Default;
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @Author: scott
@@ -58,12 +60,19 @@ public class UserEntity implements Serializable {
     private String username;
 
     /**
-     * 真实姓名
+     * 用户昵称
      */
-    //@NotEmpty(message = "真实姓名不可为空", groups = Register.class)
-    @TableField(value = "real_name")
-    @ApiModelProperty(name = "realName", value = "真实姓名")
-    private String realName;
+    @NotEmpty(message = "昵称不可为空", groups = Register.class)
+    @TableField(value = "nickname")
+    @ApiModelProperty(name = "nickname", value = "昵称")
+    private String nickname;
+
+    /**
+     * 头像列表
+     */
+    @TableField(exist = false)
+    @ApiModelProperty(name = "avatarList", value = "头像列表")
+    private List<UserAvatarEntity> avatarList = Collections.emptyList();
 
     /**
      * 密码

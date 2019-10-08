@@ -8,5 +8,5 @@ import java.io.Serializable;
  * @Date: 2019/9/23 09:39
  * @Description: 
  */
-public abstract class BaseDto implements Serializable {
+public abstract class BaseDto extends Pageable implements Serializable {
 }
