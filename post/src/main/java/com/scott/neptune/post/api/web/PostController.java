@@ -76,6 +76,7 @@ public class PostController {
             return ServerResponse.createByErrorMessage("未关注任何用户");
         }*/
 
-        return ServerResponse.createBySuccess(postService.findByFollowerId(loginUserResponse.getData().getId(), postEntity.getPageNumber(), postEntity.getPageSize()));
+        IPage<PostEntity> postList = postService.findByFollowerId(loginUserResponse.getData().getId(), postEntity.getCurrent(), postEntity.getSize());
+        return ServerResponse.createBySuccess(postList);
     }
 }

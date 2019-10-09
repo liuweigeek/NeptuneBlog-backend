@@ -15,6 +15,6 @@ import java.io.Serializable;
 @ToString
 public class Pageable implements Serializable {
 
-    private int pageNumber = 1;
-    private int pageSize = 30;
+    private int current = 1;
+    private int size = 30;
 }
