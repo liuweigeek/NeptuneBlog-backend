@@ -29,7 +29,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @TableName(value = "t_user")
-@ApiModel(value = "user", description = "user entity")
+@ApiModel(value = "user", description = "用户对象")
 public class UserEntity implements Serializable {
 
     @Version

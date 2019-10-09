@@ -17,7 +17,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @TableName(value = "t_user_avatar")
-@ApiModel(value = "userAvatar", description = "user avatar entity")
+@ApiModel(value = "userAvatar", description = "用户头像")
 public class UserAvatarEntity {
 
     private String userId;

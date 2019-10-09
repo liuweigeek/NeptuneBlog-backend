@@ -1,7 +1,11 @@
 package com.scott.neptune.file.util;
 
 import com.scott.neptune.common.util.UUIDUtils;
+import com.scott.neptune.file.enumerate.FileUseTypeEnum;
 import org.apache.commons.lang3.StringUtils;
+import org.bouncycastle.crypto.tls.UserMappingType;
+
+import java.util.Objects;
 
 /**
  * @Author: scott
@@ -48,6 +52,12 @@ public class FileUtils {
         return folder;
     }
 
+    /**
+     * 生成随机文件名
+     *
+     * @param extensionName 扩展名
+     * @return
+     */
     public static String getRandomFileName(String extensionName) {
         if (StringUtils.isBlank(extensionName)) {
             extensionName = "";
@@ -57,6 +67,20 @@ public class FileUtils {
             }
         }
         return UUIDUtils.generateUUID() + extensionName;
+    }
+
+    /**
+     * 根据原文件名生成新的随机文件名
+     *
+     * @param originFileName
+     * @return
+     */
+    public static String getRandomNameByOriginName(String originFileName) {
+        String extensionName = "";
+        if (StringUtils.contains(originFileName, ".")) {
+            extensionName = getExtensionName(originFileName);
+        }
+        return getRandomFileName(extensionName);
     }
 
     /**
@@ -71,4 +95,23 @@ public class FileUtils {
         }
         return fileName.substring(fileName.lastIndexOf(".") + 1);
     }
+
+    public static String getFolderNameByType(int code) {
+        FileUseTypeEnum useTypeEnum = FileUseTypeEnum.getEnum(code);
+        if (Objects.isNull(useTypeEnum)) {
+            return DEFAULT_DIR;
+        }
+        return useTypeEnum.getFolder();
+    }
+
+    /**
+     * 根据文件使用业务类型获取对应文件夹
+     *
+     * @param fileUseTypeEnum
+     * @return
+     */
+    public static String getFolderNameByType(FileUseTypeEnum fileUseTypeEnum) {
+        return fileUseTypeEnum.getFolder();
+    }
+
 }

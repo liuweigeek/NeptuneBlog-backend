@@ -1,5 +1,11 @@
 package com.scott.neptune.file.service;
 
+import com.scott.neptune.common.response.ServerResponse;
+import com.scott.neptune.file.enumerate.FileUseTypeEnum;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+
 /**
  * @Author: scott
  * @Email: <a href="mailto:wliu@fleetup.com">scott</a>
@@ -8,4 +14,40 @@ package com.scott.neptune.file.service;
  */
 public interface IFileService {
 
+    /**
+     * 上传文件
+     *
+     * @param fileUseTypeEnum
+     * @param file
+     * @param useRandomName
+     * @return
+     */
+    ServerResponse saveFile(FileUseTypeEnum fileUseTypeEnum, MultipartFile file, boolean useRandomName);
+
+    /**
+     * 上传文件
+     *
+     * @param fileUseTypeEnum
+     * @param fileList
+     * @param useRandomName
+     * @return
+     */
+    ServerResponse saveBatchFile(FileUseTypeEnum fileUseTypeEnum, List<MultipartFile> fileList, boolean useRandomName);
+
+    /**
+     * 删除文件
+     *
+     * @param objectName 文件对象名称(路径加文件名)
+     * @return
+     */
+    ServerResponse deleteFile(String objectName);
+
+    /**
+     * 删除文件
+     *
+     * @param folder   所在文件夹
+     * @param fileName 文件名
+     * @return
+     */
+    ServerResponse deleteFile(String folder, String fileName);
 }
