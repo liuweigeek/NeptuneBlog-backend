@@ -9,10 +9,12 @@
         <result column="device" property="device"/>
         <result column="create_date" property="createDate"/>
         <result column="update_date" property="updateDate"/>
-        <association property="author" javaType="com.scott.neptune.userapi.entity.UserEntity">
-            <id column="nid" property="id"/>
+        <association property="author" javaType="com.scott.neptune.userapi.dto.UserDto">
+            <id column="uid" property="id"/>
             <result column="sex" property="sex"/>
             <result column="username" property="username"/>
+            <result column="nickname" property="nickname"/>
+            <result column="small_avatar" property="smallAvatar"/>
         </association>
     </resultMap>
 
@@ -25,9 +27,10 @@
             resultMap="BaseResultMap">
         select
             p.id, p.user_id, p.content, p.device, p.create_date, p.update_date,
-            u.id uid, u.sex, u.username
+            u.id uid, u.sex, u.username, u.nickname, ua.url small_avatar
         from t_user u
         left join t_post p on u.id = p.user_id
+        left join t_user_avatar ua on ua.user_id = u.id and ua.size = 1
         <where>
             <if test="post != null">
                 <if test="post.userId != null and post.userId != ''">
@@ -48,10 +51,11 @@
             resultMap="BaseResultMap">
         select
         p.id, p.user_id, p.content, p.device, p.create_date, p.update_date,
-        u.id uid, u.sex, u.username
+        u.id uid, u.sex, u.username, u.nickname, ua.url small_avatar
         from t_friend_relation fr
         left join t_user u on u.id = fr.to_id
         left join t_post p on p.user_id = u.id
+        left join t_user_avatar ua on ua.user_id = u.id and ua.size = 1
         <where>
             <if test="post != null">
                 <if test="post.userId != null and post.userId != ''">
@@ -70,9 +74,10 @@
             resultMap="BaseResultMap">
         select
         p.id, p.user_id, p.content, p.device, p.create_date, p.update_date,
-        u.id uid, u.sex, u.username
+        u.id uid, u.sex, u.username, u.nickname, ua.url small_avatar
         from t_user u
         left join t_post p on u.id = p.user_id
+        left join t_user_avatar ua on ua.user_id = u.id and ua.size = 1
         where u.id in
         <foreach item="item" index="index" open="(" separator="," close=")" collection="userIdList">
             #{item}

@@ -1,14 +1,14 @@
 package com.scott.neptune.post.api.web;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.scott.neptune.common.dto.Pageable;
 import com.scott.neptune.common.response.ServerResponse;
 import com.scott.neptune.post.remote.client.UserServer;
 import com.scott.neptune.post.service.IPostService;
+import com.scott.neptune.postapi.dto.PostDto;
 import com.scott.neptune.postapi.entity.PostEntity;
+import com.scott.neptune.postapi.mapping.PostModelMapping;
 import com.scott.neptune.userapi.dto.UserDto;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +34,8 @@ public class PostController {
     private UserServer userServer;
     @Resource
     private IPostService postService;
+    @Resource
+    private PostModelMapping postModelMapping;
 
     @PostMapping(value = "/sendPost")
     public ServerResponse sendPost(@Valid @RequestBody PostEntity postEntity, BindingResult bindingResult) {
@@ -56,7 +58,7 @@ public class PostController {
     }
 
     @GetMapping(value = "/getFollowingPosts")
-    public ServerResponse<IPage<PostEntity>> getFollowingPosts(PostEntity postEntity) {
+    public ServerResponse<IPage<PostDto>> getFollowingPosts(PostEntity postEntity) {
 
         if (Objects.isNull(postEntity)) {
             postEntity = new PostEntity();
@@ -67,16 +69,8 @@ public class PostController {
             return ServerResponse.createByErrorMessage(loginUserResponse.getMsg());
         }
 
-        /*ServerResponse<List<String>> followingUserResponse = userServer.getFollowingUserIds();
-        if (!followingUserResponse.isSuccess()) {
-            return ServerResponse.createByErrorMessage(followingUserResponse.getMsg());
-        }
-        List<String> followingUserIds = followingUserResponse.getData();
-        if (CollectionUtils.isEmpty(followingUserIds)) {
-            return ServerResponse.createByErrorMessage("未关注任何用户");
-        }*/
-
-        IPage<PostEntity> postList = postService.findByFollowerId(loginUserResponse.getData().getId(), postEntity.getCurrent(), postEntity.getSize());
+        IPage<PostDto> postList = postService.findByFollowerId(loginUserResponse.getData().getId(), postEntity.getCurrent(), postEntity.getSize())
+                .convert(postModelMapping::convertToDto);
         return ServerResponse.createBySuccess(postList);
     }
 }

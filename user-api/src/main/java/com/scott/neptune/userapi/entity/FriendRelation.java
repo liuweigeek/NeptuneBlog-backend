@@ -2,6 +2,7 @@ package com.scott.neptune.userapi.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.scott.neptune.common.dto.BaseDto;
 import lombok.*;
 import org.apache.ibatis.type.JdbcType;
 
@@ -16,11 +17,11 @@ import java.util.Date;
 @Data
 @Builder
 @ToString
-@EqualsAndHashCode(of = {"fromId", "toId"})
+@EqualsAndHashCode(callSuper = false, of = {"fromId", "toId"})
 @NoArgsConstructor
 @AllArgsConstructor
 @TableName(value = "t_friend_relation")
-public class FriendRelation {
+public class FriendRelation extends BaseDto {
 
     /**
      * 关注人

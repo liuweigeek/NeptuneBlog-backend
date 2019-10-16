@@ -1,5 +1,6 @@
 package com.scott.neptune.userapi.mapping;
 
+import com.scott.neptune.common.mapping.BaseModelMapping;
 import com.scott.neptune.userapi.dto.UserDto;
 import com.scott.neptune.userapi.entity.UserAvatarEntity;
 import com.scott.neptune.userapi.entity.UserEntity;
@@ -17,30 +18,70 @@ import java.util.stream.Collectors;
  * @Description: NeptuneBlog
  */
 @Component
-public class UserModelMapping {
+public class UserModelMapping extends BaseModelMapping<UserEntity, UserDto> {
 
-    public UserDto convertToDto(UserEntity userEntity) {
-        UserDto userDto = new UserDto();
-        BeanUtils.copyProperties(userEntity, userDto);
-        if (CollectionUtils.isNotEmpty(userEntity.getAvatarList())) {
-            for (UserAvatarEntity avatar : userEntity.getAvatarList()) {
+    /**
+     * convert entity to dto
+     *
+     * @param entity
+     * @return
+     */
+    @Override
+    public UserDto convertToDto(UserEntity entity) {
+        UserDto dto = new UserDto();
+        BeanUtils.copyProperties(entity, dto);
+        if (CollectionUtils.isNotEmpty(entity.getAvatarList())) {
+            for (UserAvatarEntity avatar : entity.getAvatarList()) {
                 int size = avatar.getSize();
                 if (UserAvatarEntity.SizeEnum.SMALL.getCode() == size) {
-                    userDto.setSmallAvatar(avatar.getUrl());
+                    dto.setSmallAvatar(avatar.getUrl());
                 } else if (UserAvatarEntity.SizeEnum.NORMAL.getCode() == size) {
-                    userDto.setNormalAvatar(avatar.getUrl());
+                    dto.setNormalAvatar(avatar.getUrl());
                 } else if (UserAvatarEntity.SizeEnum.LARGE.getCode() == size) {
-                    userDto.setLargeAvatar(avatar.getUrl());
+                    dto.setLargeAvatar(avatar.getUrl());
                 }
             }
         }
 
-        return userDto;
+        return dto;
     }
 
-    public List<UserDto> convertToDtoList(List<UserEntity> userEntityList) {
-        return userEntityList.stream()
+    /**
+     * convert entity list to dto list
+     *
+     * @param entityList
+     * @return
+     */
+    @Override
+    public List<UserDto> convertToDtoList(List<UserEntity> entityList) {
+        return entityList.stream()
                 .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * convert dto to entity
+     *
+     * @param dto
+     * @return
+     */
+    @Override
+    public UserEntity convertToEntity(UserDto dto) {
+        UserEntity entity = new UserEntity();
+        BeanUtils.copyProperties(dto, entity);
+        return entity;
+    }
+
+    /**
+     * convert dto list to entity list
+     *
+     * @param dtoList
+     * @return
+     */
+    @Override
+    public List<UserEntity> convertToEntityList(List<UserDto> dtoList) {
+        return dtoList.stream()
+                .map(this::convertToEntity)
                 .collect(Collectors.toList());
     }
 }

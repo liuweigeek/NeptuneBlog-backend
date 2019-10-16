@@ -1,12 +1,14 @@
 package com.scott.neptune.user.service.impl;
 
-import com.google.common.collect.Lists;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.scott.neptune.common.response.ServerResponse;
 import com.scott.neptune.user.mapper.FriendRelationMapper;
 import com.scott.neptune.user.service.IFriendRelationService;
 import com.scott.neptune.user.service.IUserService;
+import com.scott.neptune.userapi.dto.UserDto;
 import com.scott.neptune.userapi.entity.FriendRelation;
-import com.scott.neptune.userapi.entity.UserEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
@@ -15,8 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
-
-import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @Transactional
@@ -85,8 +85,8 @@ public class FriendRelationServiceImpl implements IFriendRelationService {
     /**
      * 根据关注人和被关注人解除关系
      *
-     * @param fromId  关注人
-     * @param toId  被关注人
+     * @param fromId 关注人
+     * @param toId   被关注人
      * @return
      */
     @Override
@@ -107,16 +107,13 @@ public class FriendRelationServiceImpl implements IFriendRelationService {
      * @return 关注列表
      */
     @Override
-    public List<UserEntity> findAllFollowing(String userId) {
+    public IPage<UserDto> findFollowing(String userId, int pageNumber, int pageSize) {
         if (StringUtils.isBlank(userId)) {
-            return Lists.newArrayListWithCapacity(0);
+            return new Page<>(pageNumber, pageSize);
         }
-        List<String> followingIdList = friendRelationMapper.findAll(FriendRelation.builder().fromId(userId).build())
-                .stream()
-                .map(FriendRelation::getToId)
-                .collect(toList());
-
-        return userService.findAllUserByIdList(followingIdList);
+        Page<UserDto> page = new Page<UserDto>(pageNumber - 1, pageSize)
+                .addOrder(OrderItem.desc("follow_date"));
+        return friendRelationMapper.findFollowing(page, FriendRelation.builder().fromId(userId).build());
     }
 
     /**
@@ -126,16 +123,22 @@ public class FriendRelationServiceImpl implements IFriendRelationService {
      * @return 粉丝列表
      */
     @Override
-    public List<UserEntity> findAllFollower(String userId) {
+    public IPage<UserDto> findFollower(String userId, int pageNumber, int pageSize) {
         if (StringUtils.isBlank(userId)) {
-            return Lists.newArrayListWithCapacity(0);
+            return new Page<>(pageNumber, pageSize);
         }
+        Page<UserDto> page = new Page<UserDto>(pageNumber - 1, pageSize)
+                .addOrder(OrderItem.desc("follow_date"));
+        return friendRelationMapper.findFollower(page, FriendRelation.builder().toId(userId).build());
+    }
 
-        List<String> followerIdList = friendRelationMapper.findAll(FriendRelation.builder().fromId(userId).build())
-                .stream()
-                .map(FriendRelation::getFromId)
-                .collect(toList());
+    @Override
+    public List<UserDto> findAllFollowing(String userId) {
+        return friendRelationMapper.findAllFollowing(FriendRelation.builder().fromId(userId).build());
+    }
 
-        return userService.findAllUserByIdList(followerIdList);
+    @Override
+    public List<UserDto> findAllFollower(String userId) {
+        return friendRelationMapper.findAllFollower(FriendRelation.builder().toId(userId).build());
     }
 }

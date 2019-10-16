@@ -4,6 +4,7 @@ import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;
 import com.scott.neptune.common.constant.Constant;
+import com.scott.neptune.common.response.ResponseCode;
 import com.scott.neptune.common.response.ServerResponse;
 import com.scott.neptune.userapi.util.UserUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -22,6 +23,8 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 登录拦截器
+ *
+ * @author scott
  */
 @Component
 public class LoginFilter extends ZuulFilter {
@@ -75,7 +78,8 @@ public class LoginFilter extends ZuulFilter {
                 HttpServletResponse response = requestContext.getResponse();
                 ObjectMapper mapper = new ObjectMapper();
                 response.setContentType("application/json;charset=utf-8");
-                ServerResponse noLoginResponse = ServerResponse.createByErrorMessage("用户未登录，请先登录后重试");
+                ServerResponse noLoginResponse = ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),
+                        "用户未登录，请先登录后重试");
                 response.getWriter().println(mapper.writeValueAsString(noLoginResponse));
             } catch (Exception e) {
                 logger.error("拦截器异常");

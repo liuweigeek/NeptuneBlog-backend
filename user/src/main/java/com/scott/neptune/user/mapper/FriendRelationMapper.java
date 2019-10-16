@@ -1,6 +1,9 @@
 package com.scott.neptune.user.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.scott.neptune.userapi.dto.UserDto;
 import com.scott.neptune.userapi.entity.FriendRelation;
 import org.apache.ibatis.annotations.Param;
 
@@ -41,9 +44,44 @@ public interface FriendRelationMapper extends BaseMapper<FriendRelation> {
     /**
      * 查找符合条件的关系
      *
+     * @param page
      * @param friendRelation
      * @return
      */
-    List<FriendRelation> findAll(@Param("relation") FriendRelation friendRelation);
+    IPage<FriendRelation> findAll(Page page, @Param("relation") FriendRelation friendRelation);
+
+    /**
+     * 查看全部关注的用户
+     *
+     * @param page
+     * @param friendRelation
+     * @return
+     */
+    IPage<UserDto> findFollowing(Page page, @Param("relation") FriendRelation friendRelation);
+
+    /**
+     * 查看全部粉丝
+     *
+     * @param page
+     * @param friendRelation
+     * @return
+     */
+    IPage<UserDto> findFollower(Page page, @Param("relation") FriendRelation friendRelation);
+
+    /**
+     * 查看全部关注的用户
+     *
+     * @param friendRelation
+     * @return
+     */
+    List<UserDto> findAllFollowing(@Param("relation") FriendRelation friendRelation);
+
+    /**
+     * 查看全部粉丝
+     *
+     * @param friendRelation
+     * @return
+     */
+    List<UserDto> findAllFollower(@Param("relation") FriendRelation friendRelation);
 
 }

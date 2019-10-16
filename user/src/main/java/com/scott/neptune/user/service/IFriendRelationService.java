@@ -1,6 +1,8 @@
 package com.scott.neptune.user.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.scott.neptune.common.response.ServerResponse;
+import com.scott.neptune.userapi.dto.UserDto;
 import com.scott.neptune.userapi.entity.FriendRelation;
 import com.scott.neptune.userapi.entity.UserEntity;
 
@@ -22,7 +24,13 @@ public interface IFriendRelationService {
 
     boolean deleteByFromIdAndToId(String fromId, String toId);
 
-    List<UserEntity> findAllFollowing(String userId);
+    IPage<UserDto> findFollowing(String userId, int pageNumber, int pageSize);
 
-    List<UserEntity> findAllFollower(String userId);
+    IPage<UserDto> findFollower(String userId, int pageNumber, int pageSize);
+
+    List<UserDto> findAllFollowing(String userId);
+
+    List<UserDto> findAllFollower(String userId);
+
+
 }

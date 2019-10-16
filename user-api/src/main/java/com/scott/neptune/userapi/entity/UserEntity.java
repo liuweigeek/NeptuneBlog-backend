@@ -71,6 +71,7 @@ public class UserEntity implements Serializable {
      * 头像列表
      */
     @TableField(exist = false)
+    @Builder.Default
     @ApiModelProperty(name = "avatarList", value = "头像列表")
     private List<UserAvatarEntity> avatarList = Collections.emptyList();
 

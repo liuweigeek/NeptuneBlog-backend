@@ -70,6 +70,6 @@ public class PostDto extends BaseDto {
     /**
      * 头像
      */
-    private Integer authorAvatar;
+    private String authorAvatar;
 
 }

@@ -1,12 +1,12 @@
 package com.scott.neptune.user.api.server;
 
 import com.scott.neptune.common.controller.BaseController;
+import com.scott.neptune.common.mapping.BaseModelMapping;
 import com.scott.neptune.common.response.ServerResponse;
 import com.scott.neptune.user.component.UserComponent;
 import com.scott.neptune.user.service.IFriendRelationService;
 import com.scott.neptune.userapi.dto.UserDto;
-import com.scott.neptune.userapi.entity.UserEntity;
-import com.scott.neptune.userapi.mapping.UserModelMapping;
+import com.scott.neptune.userapi.entity.FriendRelation;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,7 +33,7 @@ public class FriendServerController extends BaseController {
     @Resource
     private UserComponent userComponent;
     @Resource
-    private UserModelMapping userModelMapping;
+    private BaseModelMapping userModelMapping;
     @Resource
     private IFriendRelationService friendRelationService;
 
@@ -43,12 +43,10 @@ public class FriendServerController extends BaseController {
      * @return 用户对象
      */
     @GetMapping(value = "/getFollowingUsers")
-    public ServerResponse getFollowingUsers() {
+    public ServerResponse getFollowingUsers(FriendRelation friendRelation) {
 
         UserDto currentUser = userComponent.getUserFromRequest(request);
-        List<UserDto> followingUsers = friendRelationService.findAllFollowing(currentUser.getId()).stream()
-                .map(userModelMapping::convertToDto)
-                .collect(toList());
+        List<UserDto> followingUsers = friendRelationService.findAllFollowing(currentUser.getId());
 
         return ServerResponse.createBySuccess(followingUsers);
     }
@@ -63,7 +61,7 @@ public class FriendServerController extends BaseController {
 
         UserDto currentUser = userComponent.getUserFromRequest(request);
         List<String> followingUserIds = friendRelationService.findAllFollowing(currentUser.getId()).stream()
-                .map(UserEntity::getId)
+                .map(UserDto::getId)
                 .collect(toList());
 
         return ServerResponse.createBySuccess(followingUserIds);

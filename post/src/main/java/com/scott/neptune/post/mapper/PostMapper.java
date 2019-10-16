@@ -19,28 +19,28 @@ public interface PostMapper extends BaseMapper<PostEntity> {
     /**
      * 判断指定条件的推文
      *
-     * @param pageable
+     * @param page
      * @param postEntity
      * @return
      */
-    IPage<PostEntity> findAll(Page<PostEntity> pageable, @Param("post") PostEntity postEntity);
+    IPage<PostEntity> findAll(Page page, @Param("post") PostEntity postEntity);
 
     /**
      * 获取关注用户的推文
      *
-     * @param pageable
+     * @param page
      * @param postEntity
      * @param fromId
      * @return
      */
-    IPage<PostEntity> findAllOfFollowing(Page<PostEntity> pageable, @Param("post") PostEntity postEntity, @Param("fromId") String fromId);
+    IPage<PostEntity> findAllOfFollowing(Page page, @Param("post") PostEntity postEntity, @Param("fromId") String fromId);
 
     /**
      * 获取指定用户的推文
      *
      * @param userIdList
-     * @param pageable
+     * @param page
      * @return
      */
-    IPage<PostEntity> findAllInUserIds(Page<PostEntity> pageable, List<String> userIdList);
+    IPage<PostEntity> findAllInUserIds(Page page, @Param("userIdList") List<String> userIdList);
 }

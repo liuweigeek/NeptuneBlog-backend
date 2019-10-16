@@ -2,7 +2,7 @@ package com.scott.neptune.postapi.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.scott.neptune.common.dto.BaseDto;
-import com.scott.neptune.userapi.entity.UserEntity;
+import com.scott.neptune.userapi.dto.UserDto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.apache.ibatis.type.JdbcType;
@@ -17,7 +17,7 @@ import java.util.Date;
  * @Description: 推文
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 @ToString
 @Builder
 @NoArgsConstructor
@@ -75,6 +75,6 @@ public class PostEntity extends BaseDto {
      * 发送人信息
      */
     @TableField(exist = false)
-    private UserEntity author;
+    private UserDto author;
 
 }

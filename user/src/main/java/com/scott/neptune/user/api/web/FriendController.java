@@ -3,11 +3,11 @@ package com.scott.neptune.user.api.web;
 import com.scott.neptune.common.controller.BaseController;
 import com.scott.neptune.common.response.ServerResponse;
 import com.scott.neptune.user.component.UserComponent;
+import com.scott.neptune.user.service.IFriendRelationService;
+import com.scott.neptune.user.service.IUserService;
 import com.scott.neptune.userapi.dto.UserDto;
 import com.scott.neptune.userapi.entity.FriendRelation;
 import com.scott.neptune.userapi.entity.UserEntity;
-import com.scott.neptune.user.service.IFriendRelationService;
-import com.scott.neptune.user.service.IUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -94,10 +94,11 @@ public class FriendController extends BaseController {
      * @return 关注列表
      */
     @ApiOperation(value = "查看正在关注的用户")
-    @GetMapping(value = "/findAllFollowing")
-    public ServerResponse findAllFollowing() {
+    @GetMapping(value = "/findFollowing")
+    public ServerResponse findAllFollowing(FriendRelation friendRelation) {
         UserDto loginUser = userComponent.getUserFromRequest(request);
-        return ServerResponse.createBySuccess(friendRelationService.findAllFollowing(loginUser.getId()));
+        return ServerResponse.createBySuccess(friendRelationService.findFollowing(loginUser.getId(),
+                friendRelation.getCurrent(), friendRelation.getSize()));
     }
 
     /**
@@ -106,9 +107,10 @@ public class FriendController extends BaseController {
      * @return 粉丝列表
      */
     @ApiOperation(value = "查看关注我的人")
-    @GetMapping(value = "/findAllFollower")
-    public ServerResponse findAllFollower() {
+    @GetMapping(value = "/findFollower")
+    public ServerResponse findAllFollower(FriendRelation friendRelation) {
         UserDto loginUser = userComponent.getUserFromRequest(request);
-        return ServerResponse.createBySuccess(friendRelationService.findAllFollower(loginUser.getId()));
+        return ServerResponse.createBySuccess(friendRelationService.findFollower(loginUser.getId(),
+                friendRelation.getCurrent(), friendRelation.getSize()));
     }
 }
