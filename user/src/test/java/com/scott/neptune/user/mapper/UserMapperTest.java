@@ -1,7 +1,7 @@
 package com.scott.neptune.user.mapper;
 
 import com.scott.neptune.user.UserApplicationTests;
-import com.scott.neptune.userapi.entity.UserEntity;
+import com.scott.neptune.user.entity.UserEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Assert;

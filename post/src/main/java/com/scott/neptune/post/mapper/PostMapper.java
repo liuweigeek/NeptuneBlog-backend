@@ -3,7 +3,7 @@ package com.scott.neptune.post.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.scott.neptune.postapi.entity.PostEntity;
+import com.scott.neptune.post.entity.PostEntity;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

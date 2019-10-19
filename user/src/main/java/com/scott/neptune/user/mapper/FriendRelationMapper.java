@@ -3,8 +3,8 @@ package com.scott.neptune.user.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.scott.neptune.user.entity.FriendRelation;
 import com.scott.neptune.userapi.dto.UserDto;
-import com.scott.neptune.userapi.entity.FriendRelation;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

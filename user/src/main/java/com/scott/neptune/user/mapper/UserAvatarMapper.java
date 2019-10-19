@@ -1,7 +1,7 @@
 package com.scott.neptune.user.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.scott.neptune.userapi.entity.UserAvatarEntity;
+import com.scott.neptune.user.entity.UserAvatarEntity;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

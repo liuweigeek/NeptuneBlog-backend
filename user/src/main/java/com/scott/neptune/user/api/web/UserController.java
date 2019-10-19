@@ -4,11 +4,11 @@ import com.scott.neptune.common.constant.Constant;
 import com.scott.neptune.common.controller.BaseController;
 import com.scott.neptune.common.response.ServerResponse;
 import com.scott.neptune.user.component.UserComponent;
+import com.scott.neptune.user.entity.UserEntity;
+import com.scott.neptune.user.mapping.UserModelMapping;
 import com.scott.neptune.user.service.IUserService;
 import com.scott.neptune.user.util.HeaderUtil;
 import com.scott.neptune.userapi.dto.UserDto;
-import com.scott.neptune.userapi.entity.UserEntity;
-import com.scott.neptune.userapi.mapping.UserModelMapping;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -50,13 +50,13 @@ public class UserController extends BaseController {
     /**
      * 注册
      *
-     * @param userEntity    用户对象
+     * @param userDto       用户对象
      * @param bindingResult 校验结果
      * @return 注册结果
      */
     @ApiOperation(value = "用户注册")
     @PostMapping(value = "/register")
-    public ServerResponse register(@Validated(UserEntity.Register.class) @RequestBody UserEntity userEntity,
+    public ServerResponse register(@Validated(UserDto.Register.class) @RequestBody UserDto userDto,
                                    BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
@@ -66,18 +66,19 @@ public class UserController extends BaseController {
 
             return ServerResponse.createByErrorMessage(errorMsgList.toString());
         }
+        UserEntity userEntity = userModelMapping.convertToEntity(userDto);
         return userService.save(userEntity);
     }
 
     /**
      * 用户登录
      *
-     * @param userEntity 用户信息
+     * @param userDto 用户信息
      * @return 登录结果
      */
     @ApiOperation(value = "用户登录")
     @PostMapping(value = "/login")
-    public ServerResponse login(@Validated(UserEntity.Login.class) @RequestBody UserEntity userEntity,
+    public ServerResponse login(@Validated(UserDto.Login.class) @RequestBody UserDto userDto,
                                 BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
@@ -88,11 +89,11 @@ public class UserController extends BaseController {
             return ServerResponse.createByErrorMessage(errorMsgList.toString());
         }
 
-        if (!userService.existsByEmail(userEntity.getEmail())) {
+        if (!userService.existsByEmail(userDto.getEmail())) {
             return ServerResponse.createByErrorMessage("用户不存在");
         }
 
-        ServerResponse<UserDto> loginResponse = userService.login(userEntity.getEmail(), userEntity.getPassword());
+        ServerResponse<UserDto> loginResponse = userService.login(userDto.getEmail(), userDto.getPassword());
         if (!loginResponse.isSuccess()) {
             return loginResponse;
         }

@@ -1,9 +1,9 @@
-package com.scott.neptune.userapi.mapping;
+package com.scott.neptune.user.mapping;
 
 import com.scott.neptune.common.mapping.BaseModelMapping;
+import com.scott.neptune.user.entity.UserAvatarEntity;
+import com.scott.neptune.user.entity.UserEntity;
 import com.scott.neptune.userapi.dto.UserDto;
-import com.scott.neptune.userapi.entity.UserAvatarEntity;
-import com.scott.neptune.userapi.entity.UserEntity;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;

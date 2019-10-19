@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.scott.neptune.user.mapper.UserMapper">
 
-    <resultMap id="BaseResultMap" type="com.scott.neptune.userapi.entity.UserEntity">
+    <resultMap id="BaseResultMap" type="com.scott.neptune.user.entity.UserEntity">
         <id column="id" property="id"/>
         <result column="email" property="email"/>
         <result column="username" property="username"/>
@@ -15,7 +15,7 @@
         <result column="lang_key" property="langKey"/>
         <result column="token" property="token"/>
         <collection property="avatarList" column="id"
-                    ofType="com.scott.neptune.userapi.entity.UserAvatarEntity"
+                    ofType="com.scott.neptune.user.entity.UserAvatarEntity"
                     select="com.scott.neptune.user.mapper.UserAvatarMapper.findAllByUserId"/>
     </resultMap>
 
@@ -25,7 +25,7 @@
     </sql>
 
     <!-- 判断指定用户是否存在 -->
-    <select id="exists" parameterType="com.scott.neptune.userapi.entity.UserEntity"
+    <select id="exists" parameterType="com.scott.neptune.user.entity.UserEntity"
             resultType="boolean">
         select count(id)
         from t_user
@@ -60,7 +60,7 @@
     </select>
 
     <!-- 获取指定用户 -->
-    <select id="getOne" parameterType="com.scott.neptune.userapi.entity.UserEntity"
+    <select id="getOne" parameterType="com.scott.neptune.user.entity.UserEntity"
             resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
@@ -97,7 +97,7 @@
     </select>
 
     <!-- 查找符合条件的用户 -->
-    <select id="findAll" parameterType="com.scott.neptune.userapi.entity.UserEntity"
+    <select id="findAll" parameterType="com.scott.neptune.user.entity.UserEntity"
             resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>

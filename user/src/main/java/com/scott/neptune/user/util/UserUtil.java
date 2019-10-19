@@ -2,7 +2,7 @@ package com.scott.neptune.user.util;
 
 import com.scott.neptune.common.constant.Constant;
 import com.scott.neptune.common.util.UUIDUtils;
-import com.scott.neptune.userapi.entity.UserEntity;
+import com.scott.neptune.user.entity.UserEntity;
 
 import java.util.Calendar;
 

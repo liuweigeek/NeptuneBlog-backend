@@ -2,11 +2,11 @@ package com.scott.neptune.post.api.web;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.scott.neptune.common.response.ServerResponse;
+import com.scott.neptune.post.entity.PostEntity;
+import com.scott.neptune.post.mapping.PostModelMapping;
 import com.scott.neptune.post.remote.server.UserServer;
 import com.scott.neptune.post.service.IPostService;
 import com.scott.neptune.postapi.dto.PostDto;
-import com.scott.neptune.postapi.entity.PostEntity;
-import com.scott.neptune.postapi.mapping.PostModelMapping;
 import com.scott.neptune.userapi.dto.UserDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindingResult;
@@ -38,7 +38,7 @@ public class PostController {
     private PostModelMapping postModelMapping;
 
     @PostMapping(value = "/sendPost")
-    public ServerResponse sendPost(@Valid @RequestBody PostEntity postEntity, BindingResult bindingResult) {
+    public ServerResponse sendPost(@Valid @RequestBody PostDto postDto, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             List<String> errorMsgList = bindingResult.getAllErrors().stream()
@@ -54,14 +54,15 @@ public class PostController {
         }
 
         UserDto loginUser = loginUserResponse.getData();
+        PostEntity postEntity = postModelMapping.convertToEntity(postDto);
         return postService.save(postEntity, loginUser);
     }
 
     @GetMapping(value = "/getFollowingPosts")
-    public ServerResponse<IPage<PostDto>> getFollowingPosts(PostEntity postEntity) {
+    public ServerResponse<IPage<PostDto>> getFollowingPosts(PostDto postDto) {
 
-        if (Objects.isNull(postEntity)) {
-            postEntity = new PostEntity();
+        if (Objects.isNull(postDto)) {
+            postDto = new PostDto();
         }
 
         ServerResponse<UserDto> loginUserResponse = userServer.getLoginUser();
@@ -69,7 +70,7 @@ public class PostController {
             return ServerResponse.createByErrorMessage(loginUserResponse.getMsg());
         }
 
-        IPage<PostDto> postList = postService.findByFollowerId(loginUserResponse.getData().getId(), postEntity.getCurrent(), postEntity.getSize())
+        IPage<PostDto> postList = postService.findByFollowerId(loginUserResponse.getData().getId(), postDto.getCurrent(), postDto.getSize())
                 .convert(postModelMapping::convertToDto);
         return ServerResponse.createBySuccess(postList);
     }

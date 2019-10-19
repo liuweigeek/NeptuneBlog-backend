@@ -1,13 +1,12 @@
-package com.scott.neptune.postapi.mapping;
+package com.scott.neptune.user.mapping;
 
 import com.scott.neptune.common.mapping.BaseModelMapping;
-import com.scott.neptune.postapi.dto.PostDto;
-import com.scott.neptune.postapi.entity.PostEntity;
+import com.scott.neptune.user.entity.UserAvatarEntity;
+import com.scott.neptune.userapi.dto.UserAvatarDto;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -17,7 +16,7 @@ import java.util.stream.Collectors;
  * @Description: NeptuneBlog
  */
 @Component
-public class PostModelMapping extends BaseModelMapping<PostEntity, PostDto> {
+public class UserAvatarModelMapping extends BaseModelMapping<UserAvatarEntity, UserAvatarDto> {
 
     /**
      * convert entity to dto
@@ -26,16 +25,9 @@ public class PostModelMapping extends BaseModelMapping<PostEntity, PostDto> {
      * @return
      */
     @Override
-    public PostDto convertToDto(PostEntity entity) {
-        PostDto dto = new PostDto();
+    public UserAvatarDto convertToDto(UserAvatarEntity entity) {
+        UserAvatarDto dto = new UserAvatarDto();
         BeanUtils.copyProperties(entity, dto);
-        if (!Objects.isNull(entity.getAuthor())) {
-            dto.setAuthorId(entity.getAuthor().getId());
-            dto.setAuthorSex(entity.getAuthor().getSex());
-            dto.setAuthorUsername(entity.getAuthor().getUsername());
-            dto.setAuthorNickname(entity.getAuthor().getNickname());
-            dto.setAuthorAvatar(entity.getAuthor().getSmallAvatar());
-        }
         return dto;
     }
 
@@ -46,7 +38,7 @@ public class PostModelMapping extends BaseModelMapping<PostEntity, PostDto> {
      * @return
      */
     @Override
-    public List<PostDto> convertToDtoList(List<PostEntity> entityList) {
+    public List<UserAvatarDto> convertToDtoList(List<UserAvatarEntity> entityList) {
         return entityList.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
@@ -59,8 +51,8 @@ public class PostModelMapping extends BaseModelMapping<PostEntity, PostDto> {
      * @return
      */
     @Override
-    public PostEntity convertToEntity(PostDto dto) {
-        PostEntity entity = new PostEntity();
+    public UserAvatarEntity convertToEntity(UserAvatarDto dto) {
+        UserAvatarEntity entity = new UserAvatarEntity();
         BeanUtils.copyProperties(dto, entity);
         return entity;
     }
@@ -72,7 +64,7 @@ public class PostModelMapping extends BaseModelMapping<PostEntity, PostDto> {
      * @return
      */
     @Override
-    public List<PostEntity> convertToEntityList(List<PostDto> dtoList) {
+    public List<UserAvatarEntity> convertToEntityList(List<UserAvatarDto> dtoList) {
         return dtoList.stream()
                 .map(this::convertToEntity)
                 .collect(Collectors.toList());

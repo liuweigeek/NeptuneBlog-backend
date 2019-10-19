@@ -1,8 +1,8 @@
-package com.scott.neptune.userapi.entity;
+package com.scott.neptune.user.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.scott.neptune.common.dto.BaseDto;
+import com.scott.neptune.common.dto.Pageable;
 import lombok.*;
 import org.apache.ibatis.type.JdbcType;
 
@@ -21,7 +21,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @TableName(value = "t_friend_relation")
-public class FriendRelation extends BaseDto {
+public class FriendRelation extends Pageable {
 
     /**
      * 关注人

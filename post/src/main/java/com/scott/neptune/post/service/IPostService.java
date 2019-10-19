@@ -2,7 +2,7 @@ package com.scott.neptune.post.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.scott.neptune.common.response.ServerResponse;
-import com.scott.neptune.postapi.entity.PostEntity;
+import com.scott.neptune.post.entity.PostEntity;
 import com.scott.neptune.userapi.dto.UserDto;
 
 import java.util.List;

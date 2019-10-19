@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.scott.neptune.user.mapper.FriendRelationMapper">
 
-    <resultMap id="BaseResultMap" type="com.scott.neptune.userapi.entity.FriendRelation">
+    <resultMap id="BaseResultMap" type="com.scott.neptune.user.entity.FriendRelation">
         <result column="from_id" property="fromId"/>
         <result column="to_id" property="toId"/>
         <result column="follow_date" property="followDate"/>
@@ -24,7 +24,7 @@
     </sql>
 
     <!-- 判断指定关系是否存在 -->
-    <select id="exists" parameterType="com.scott.neptune.userapi.entity.FriendRelation"
+    <select id="exists" parameterType="com.scott.neptune.user.entity.FriendRelation"
             resultType="boolean">
         select count(1)
         from t_friend_relation
@@ -41,7 +41,7 @@
     </select>
 
     <!-- 删除指定关系 -->
-    <delete id="delete" parameterType="com.scott.neptune.userapi.entity.FriendRelation">
+    <delete id="delete" parameterType="com.scott.neptune.user.entity.FriendRelation">
         delete
         from t_friend_relation
         where from_id = #{relation.fromId}
@@ -49,7 +49,7 @@
     </delete>
 
     <!-- 获取指定关系 -->
-    <select id="getOne" parameterType="com.scott.neptune.userapi.entity.FriendRelation"
+    <select id="getOne" parameterType="com.scott.neptune.user.entity.FriendRelation"
             resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
@@ -68,7 +68,7 @@
     </select>
 
     <!-- 查找符合条件的关系 -->
-    <select id="findAll" parameterType="com.scott.neptune.userapi.entity.FriendRelation"
+    <select id="findAll" parameterType="com.scott.neptune.user.entity.FriendRelation"
             resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
@@ -86,7 +86,7 @@
     </select>
 
     <!-- 查看关注的用户 -->
-    <select id="findFollowing" parameterType="com.scott.neptune.userapi.entity.FriendRelation"
+    <select id="findFollowing" parameterType="com.scott.neptune.user.entity.FriendRelation"
             resultMap="UserResultMap">
         select
         u.id, u.email, u.username, u.nickname,
@@ -107,7 +107,7 @@
     </select>
 
     <!-- 查看粉丝 -->
-    <select id="findFollower" parameterType="com.scott.neptune.userapi.entity.FriendRelation"
+    <select id="findFollower" parameterType="com.scott.neptune.user.entity.FriendRelation"
             resultMap="UserResultMap">
         select
         u.id, u.email, u.username, u.nickname,
@@ -128,7 +128,7 @@
     </select>
 
     <!-- 查看全部关注的用户 -->
-    <select id="findAllFollowing" parameterType="com.scott.neptune.userapi.entity.FriendRelation"
+    <select id="findAllFollowing" parameterType="com.scott.neptune.user.entity.FriendRelation"
             resultMap="UserResultMap">
         select
         u.id, u.email, u.username, u.nickname,
@@ -149,7 +149,7 @@
     </select>
 
     <!-- 查看粉丝 -->
-    <select id="findAllFollower" parameterType="com.scott.neptune.userapi.entity.FriendRelation"
+    <select id="findAllFollower" parameterType="com.scott.neptune.user.entity.FriendRelation"
             resultMap="UserResultMap">
         select
         u.id, u.email, u.username, u.nickname,

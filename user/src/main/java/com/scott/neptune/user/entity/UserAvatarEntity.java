@@ -1,7 +1,6 @@
-package com.scott.neptune.userapi.entity;
+package com.scott.neptune.user.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
 import lombok.*;
 
 /**
@@ -17,13 +16,21 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @TableName(value = "t_user_avatar")
-@ApiModel(value = "userAvatar", description = "用户头像")
 public class UserAvatarEntity {
 
+    /**
+     * 用户ID
+     */
     private String userId;
 
+    /**
+     * 图片尺寸
+     */
     private Integer size;
 
+    /**
+     * 图片URL
+     */
     private String url;
 
     @Getter
