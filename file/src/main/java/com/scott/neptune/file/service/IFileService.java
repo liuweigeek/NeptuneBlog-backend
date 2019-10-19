@@ -22,7 +22,7 @@ public interface IFileService {
      * @param useRandomName
      * @return
      */
-    ServerResponse saveFile(FileUseTypeEnum fileUseTypeEnum, MultipartFile file, boolean useRandomName);
+    ServerResponse<String> saveFile(FileUseTypeEnum fileUseTypeEnum, MultipartFile file, boolean useRandomName);
 
     /**
      * 上传文件
@@ -32,7 +32,7 @@ public interface IFileService {
      * @param useRandomName
      * @return
      */
-    ServerResponse saveBatchFile(FileUseTypeEnum fileUseTypeEnum, List<MultipartFile> fileList, boolean useRandomName);
+    ServerResponse<List<String>> saveBatchFile(FileUseTypeEnum fileUseTypeEnum, List<MultipartFile> fileList, boolean useRandomName);
 
     /**
      * 删除文件

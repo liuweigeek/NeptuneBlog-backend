@@ -1,5 +1,6 @@
 package com.scott.neptune.file.component;
 
+import com.google.common.collect.Lists;
 import com.scott.neptune.common.response.ServerResponse;
 import com.scott.neptune.file.property.MinioProperties;
 import com.scott.neptune.file.util.FileUtils;
@@ -20,6 +21,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @Author: scott
@@ -106,7 +108,7 @@ public class MinioComponent {
      * @param file   文件
      * @return 保存结果
      */
-    public ServerResponse saveMultipartFile(String bucket, String folder, MultipartFile file) {
+    public ServerResponse<String> saveMultipartFile(String bucket, String folder, MultipartFile file) {
         return saveMultipartFile(bucket, folder, file, file.getOriginalFilename());
     }
 
@@ -119,7 +121,7 @@ public class MinioComponent {
      * @param filename 保存的文件名
      * @return 保存结果
      */
-    public ServerResponse saveMultipartFile(String bucket, String folder, MultipartFile file, String filename) {
+    public ServerResponse<String> saveMultipartFile(String bucket, String folder, MultipartFile file, String filename) {
         if (StringUtils.isBlank(bucket)) {
             bucket = minioProperties.getBucket();
         }
@@ -143,13 +145,16 @@ public class MinioComponent {
      * @param filenames 保存的文件名列表
      * @return 保存结果
      */
-    public ServerResponse saveMultipartFiles(String bucket, String folder, List<MultipartFile> files, List<String> filenames) {
+    public ServerResponse<List<String>> saveMultipartFiles(String bucket, String folder, List<MultipartFile> files, List<String> filenames) {
+        List<String> urlList = Lists.newArrayListWithExpectedSize(files.size());
         for (int i = 0; i < files.size(); i++) {
-            if (saveMultipartFile(bucket, folder, files.get(i), filenames.get(i)).isFailed()) {
+            ServerResponse<String> saveResponse = saveMultipartFile(bucket, folder, files.get(i), filenames.get(i));
+            if (saveResponse.isFailed()) {
                 return ServerResponse.createByErrorMessage("保存失败");
             }
+            urlList.add(saveResponse.getData());
         }
-        return ServerResponse.createBySuccess();
+        return ServerResponse.createBySuccess(urlList);
     }
 
     /**
@@ -160,13 +165,11 @@ public class MinioComponent {
      * @param files  文件列表
      * @return 保存结果
      */
-    public ServerResponse saveMultipartFiles(String bucket, String folder, List<MultipartFile> files) {
-        for (MultipartFile file : files) {
-            if (saveMultipartFile(bucket, folder, file, file.getOriginalFilename()).isFailed()) {
-                return ServerResponse.createByErrorMessage("保存失败");
-            }
-        }
-        return ServerResponse.createBySuccess();
+    public ServerResponse<List<String>> saveMultipartFiles(String bucket, String folder, List<MultipartFile> files) {
+        List<String> filenames = files.stream()
+                .map(MultipartFile::getOriginalFilename)
+                .collect(Collectors.toList());
+        return this.saveMultipartFiles(bucket, folder, files, filenames);
     }
 
     /**
@@ -177,7 +180,7 @@ public class MinioComponent {
      * @param file   文件
      * @return 保存结果
      */
-    public ServerResponse saveFile(String bucket, String folder, File file) {
+    public ServerResponse<String> saveFile(String bucket, String folder, File file) {
         return saveFile(bucket, folder, file, file.getName());
     }
 
@@ -190,7 +193,7 @@ public class MinioComponent {
      * @param filename 保存的文件名
      * @return 保存结果
      */
-    public ServerResponse saveFile(String bucket, String folder, File file, String filename) {
+    public ServerResponse<String> saveFile(String bucket, String folder, File file, String filename) {
         if (file == null || !file.exists()) {
             return ServerResponse.createByErrorMessage("请传入文件");
         }
@@ -200,7 +203,8 @@ public class MinioComponent {
             minioClient.putObject(StringUtils.isNotBlank(bucket) ? bucket : minioProperties.getBucket(),
                     FileUtils.getPathByFolderAndName(folder, filename), fileInputStream,
                     file.length(), null, null, Files.probeContentType(Paths.get(file.getPath())));
-            return ServerResponse.createBySuccess();
+            String url = this.getFileUrl(bucket, folder, filename);
+            return ServerResponse.createBySuccess(url);
         } catch (Exception e) {
             e.printStackTrace();
             return ServerResponse.createByErrorMessage("保存失败");
@@ -216,13 +220,16 @@ public class MinioComponent {
      * @param filenames 保存的文件名列表
      * @return 保存结果
      */
-    public ServerResponse saveFiles(String bucket, String folder, List<File> files, List<String> filenames) {
+    public ServerResponse<List<String>> saveFiles(String bucket, String folder, List<File> files, List<String> filenames) {
+        List<String> urlList = Lists.newArrayListWithExpectedSize(files.size());
         for (int i = 0; i < files.size(); i++) {
-            if (saveFile(bucket, folder, files.get(i), filenames.get(i)).isFailed()) {
+            ServerResponse<String> saveResponse = saveFile(bucket, folder, files.get(i), filenames.get(i));
+            if (saveResponse.isFailed()) {
                 return ServerResponse.createByErrorMessage("保存失败");
             }
+            urlList.add(saveResponse.getData());
         }
-        return ServerResponse.createBySuccess();
+        return ServerResponse.createBySuccess(urlList);
     }
 
     /**
@@ -233,13 +240,11 @@ public class MinioComponent {
      * @param files  文件列表
      * @return 保存结果
      */
-    public ServerResponse saveFiles(String bucket, String folder, List<File> files) {
-        for (File file : files) {
-            if (saveFile(bucket, folder, file, file.getName()).isFailed()) {
-                return ServerResponse.createByErrorMessage("保存失败");
-            }
-        }
-        return ServerResponse.createBySuccess();
+    public ServerResponse<List<String>> saveFiles(String bucket, String folder, List<File> files) {
+        List<String> filenames = files.stream()
+                .map(File::getName)
+                .collect(Collectors.toList());
+        return this.saveFiles(bucket, folder, files, filenames);
     }
 
     /**

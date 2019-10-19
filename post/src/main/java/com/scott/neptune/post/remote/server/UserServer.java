@@ -1,4 +1,4 @@
-package com.scott.neptune.post.remote.client;
+package com.scott.neptune.post.remote.server;
 
 import com.scott.neptune.common.response.ServerResponse;
 import com.scott.neptune.post.remote.hystric.UserServerHystrix;

@@ -5,6 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <modules>
         <module>eureka-server</module>
+        <module>config-server</module>
         <module>api-gateway</module>
         <module>common</module>
         <module>user-api</module>

@@ -1,0 +1,35 @@
+server:
+  port: 8090
+spring:
+  application:
+    name: @project.name@
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/liuweigeek/NeptuneBlog-config-repo.git
+          search-paths: repo
+          basedir: config-server/target/config
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: scott
+    password: 12345678
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+management:
+  server:
+    servlet:
+      context-path: /admin
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+logging:
+  level:
+    web: TRACE
+    org.springframework.web: TRACE

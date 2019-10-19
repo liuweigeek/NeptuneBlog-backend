@@ -38,7 +38,7 @@ public class FileServiceImpl implements IFileService {
      * @return
      */
     @Override
-    public ServerResponse saveFile(FileUseTypeEnum fileUseTypeEnum, MultipartFile file, boolean useRandomName) {
+    public ServerResponse<String> saveFile(FileUseTypeEnum fileUseTypeEnum, MultipartFile file, boolean useRandomName) {
         fileUseTypeEnum = FileUseTypeEnum.getDefaultIfNull(fileUseTypeEnum);
         String fileName = useRandomName ?
                 FileUtils.getRandomNameByOriginName(file.getOriginalFilename())
@@ -57,7 +57,7 @@ public class FileServiceImpl implements IFileService {
      * @return
      */
     @Override
-    public ServerResponse saveBatchFile(FileUseTypeEnum fileUseTypeEnum, List<MultipartFile> fileList, boolean useRandomName) {
+    public ServerResponse<List<String>> saveBatchFile(FileUseTypeEnum fileUseTypeEnum, List<MultipartFile> fileList, boolean useRandomName) {
         fileUseTypeEnum = FileUseTypeEnum.getDefaultIfNull(fileUseTypeEnum);
         List<String> filenameList;
         if (useRandomName) {

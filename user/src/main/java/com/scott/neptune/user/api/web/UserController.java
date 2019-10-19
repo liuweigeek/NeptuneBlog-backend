@@ -4,12 +4,13 @@ import com.scott.neptune.common.constant.Constant;
 import com.scott.neptune.common.controller.BaseController;
 import com.scott.neptune.common.response.ServerResponse;
 import com.scott.neptune.user.component.UserComponent;
-import com.scott.neptune.userapi.dto.UserDto;
-import com.scott.neptune.userapi.entity.UserEntity;
 import com.scott.neptune.user.service.IUserService;
 import com.scott.neptune.user.util.HeaderUtil;
+import com.scott.neptune.userapi.dto.UserDto;
+import com.scott.neptune.userapi.entity.UserEntity;
 import com.scott.neptune.userapi.mapping.UserModelMapping;
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Objects;
 
 import static java.util.stream.Collectors.toList;
 
@@ -119,10 +121,25 @@ public class UserController extends BaseController {
      * @return 用户信息
      */
     @ApiOperation(value = "获取当前登录用户信息")
-    @GetMapping(value = "/getUserInfo")
-    public ServerResponse<UserDto> getUserInfo() {
+    @GetMapping(value = "/getLoginUserInfo")
+    public ServerResponse<UserDto> getLoginUserInfo() {
         UserDto userDto = userComponent.getUserFromRequest(request);
         return ServerResponse.createBySuccess(userDto);
+    }
+
+    /**
+     * 获取指定用户信息
+     *
+     * @return 用户信息
+     */
+    @ApiOperation(value = "获取当前登录用户信息")
+    @GetMapping(value = "/getUserInfo/{userId}")
+    public ServerResponse<UserDto> getUserInfo(@PathVariable("userId") String userId) {
+        UserEntity userEntity = userService.getUserById(userId);
+        if (Objects.isNull(userEntity)) {
+            return ServerResponse.createByErrorMessage("用户不存在");
+        }
+        return ServerResponse.createBySuccess(userModelMapping.convertToDto(userEntity));
     }
 
     /**

@@ -1,7 +1,6 @@
 package com.scott.neptune.postapi.dto;
 
 import com.scott.neptune.common.dto.BaseDto;
-import com.scott.neptune.common.util.UUIDUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

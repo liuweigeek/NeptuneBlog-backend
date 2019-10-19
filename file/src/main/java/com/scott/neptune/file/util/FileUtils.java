@@ -3,7 +3,6 @@ package com.scott.neptune.file.util;
 import com.scott.neptune.common.util.UUIDUtils;
 import com.scott.neptune.file.enumerate.FileUseTypeEnum;
 import org.apache.commons.lang3.StringUtils;
-import org.bouncycastle.crypto.tls.UserMappingType;
 
 import java.util.Objects;
 

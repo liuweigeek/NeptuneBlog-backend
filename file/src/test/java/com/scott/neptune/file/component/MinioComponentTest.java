@@ -1,15 +1,12 @@
 package com.scott.neptune.file.component;
 
 import com.scott.neptune.file.FileApplicationTests;
-import com.scott.neptune.file.config.MinioConfig;
 import com.scott.neptune.file.property.MinioProperties;
 import io.minio.MinioClient;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
 import javax.annotation.Resource;
-
-import static org.junit.Assert.*;
 
 /**
  * @Author: scott

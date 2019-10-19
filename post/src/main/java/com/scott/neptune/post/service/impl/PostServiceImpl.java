@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.scott.neptune.common.response.ServerResponse;
 import com.scott.neptune.post.mapper.PostMapper;
-import com.scott.neptune.post.remote.client.UserServer;
+import com.scott.neptune.post.remote.server.UserServer;
 import com.scott.neptune.post.service.IPostService;
 import com.scott.neptune.postapi.entity.PostEntity;
 import com.scott.neptune.userapi.dto.UserDto;

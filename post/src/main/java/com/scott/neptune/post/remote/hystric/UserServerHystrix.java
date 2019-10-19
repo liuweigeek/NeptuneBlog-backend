@@ -2,7 +2,7 @@ package com.scott.neptune.post.remote.hystric;
 
 import com.google.common.collect.Lists;
 import com.scott.neptune.common.response.ServerResponse;
-import com.scott.neptune.post.remote.client.UserServer;
+import com.scott.neptune.post.remote.server.UserServer;
 import com.scott.neptune.userapi.dto.UserDto;
 import org.springframework.stereotype.Component;
 

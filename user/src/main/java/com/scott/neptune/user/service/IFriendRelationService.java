@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.scott.neptune.common.response.ServerResponse;
 import com.scott.neptune.userapi.dto.UserDto;
 import com.scott.neptune.userapi.entity.FriendRelation;
-import com.scott.neptune.userapi.entity.UserEntity;
 
 import java.util.List;
 
