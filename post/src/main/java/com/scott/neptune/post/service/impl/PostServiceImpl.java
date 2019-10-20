@@ -1,7 +1,6 @@
 package com.scott.neptune.post.service.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.scott.neptune.common.response.ServerResponse;
 import com.scott.neptune.post.entity.PostEntity;
@@ -35,7 +34,7 @@ public class PostServiceImpl implements IPostService {
      * @return 保存结果
      */
     @Override
-    public ServerResponse save(PostEntity postEntity, UserDto loginUser) {
+    public ServerResponse<PostEntity> save(PostEntity postEntity, UserDto loginUser) {
 
         try {
             postEntity.setUserId(loginUser.getId());
@@ -43,10 +42,10 @@ public class PostServiceImpl implements IPostService {
             postEntity.setUpdateDate(postEntity.getCreateDate());
 
             postMapper.insert(postEntity);
-            return ServerResponse.createBySuccess();
+            return ServerResponse.createBySuccess(postEntity);
         } catch (Exception e) {
             log.error(e.getMessage());
-            return ServerResponse.createByErrorMessage(e.getMessage());
+            return ServerResponse.createByErrorMessage("发送失败");
         }
     }
 
@@ -71,22 +70,19 @@ public class PostServiceImpl implements IPostService {
 
     @Override
     public IPage<PostEntity> findByUserId(String userId, int pageNumber, int pageSize) {
-        Page<PostEntity> page = new Page<PostEntity>(pageNumber - 1, pageSize)
-                .addOrder(OrderItem.desc("create_date"));
+        Page<PostEntity> page = new Page<PostEntity>(pageNumber - 1, pageSize);
         return postMapper.findAll(page, PostEntity.builder().userId(userId).build());
     }
 
     @Override
     public IPage<PostEntity> findByUserIdList(List<String> userIdList, int pageNumber, int pageSize) {
-        Page<PostEntity> page = new Page<PostEntity>(pageNumber - 1, pageSize)
-                .addOrder(OrderItem.desc("create_date"));
+        Page<PostEntity> page = new Page<PostEntity>(pageNumber - 1, pageSize);
         return postMapper.findAllInUserIds(page, userIdList);
     }
 
     @Override
     public IPage<PostEntity> findByFollowerId(String followerId, int pageNumber, int pageSize) {
-        Page<PostEntity> page = new Page<PostEntity>(pageNumber - 1, pageSize)
-                .addOrder(OrderItem.desc("create_date"));
+        Page<PostEntity> page = new Page<PostEntity>(pageNumber - 1, pageSize);
         return postMapper.findAllOfFollowing(page, null, followerId);
     }
 

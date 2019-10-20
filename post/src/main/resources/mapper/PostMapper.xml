@@ -44,6 +44,7 @@
                 </if>
             </if>
         </where>
+        order by p.create_date desc
     </select>
 
     <!-- 获取关注用户的推文 -->
@@ -67,6 +68,7 @@
             </if>
             and fr.from_id = #{fromId}
         </where>
+        order by p.create_date desc
     </select>
 
     <!-- 获取指定用户的推文 -->
@@ -82,5 +84,6 @@
         <foreach item="item" index="index" open="(" separator="," close=")" collection="userIdList">
             #{item}
         </foreach>
+        order by p.create_date desc
     </select>
 </mapper>

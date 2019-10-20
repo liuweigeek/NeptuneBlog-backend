@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface IPostService {
 
-    ServerResponse save(PostEntity postEntity, UserDto loginUser);
+    ServerResponse<PostEntity> save(PostEntity postEntity, UserDto loginUser);
 
     boolean delete(PostEntity postEntity);
 

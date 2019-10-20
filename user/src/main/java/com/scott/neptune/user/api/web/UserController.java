@@ -133,7 +133,7 @@ public class UserController extends BaseController {
      *
      * @return 用户信息
      */
-    @ApiOperation(value = "获取当前登录用户信息")
+    @ApiOperation(value = "获取指定用户信息")
     @GetMapping(value = "/getUserInfo/{userId}")
     public ServerResponse<UserDto> getUserInfo(@PathVariable("userId") String userId) {
         UserEntity userEntity = userService.getUserById(userId);

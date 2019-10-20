@@ -1,11 +1,11 @@
 package com.scott.neptune.post.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
-import com.scott.neptune.common.dto.Pageable;
 import com.scott.neptune.userapi.dto.UserDto;
 import lombok.*;
 import org.apache.ibatis.type.JdbcType;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -21,7 +21,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @TableName(value = "t_post")
-public class PostEntity extends Pageable {
+public class PostEntity implements Serializable {
 
     @Version
     private static final long serialVersionUID = 1L;

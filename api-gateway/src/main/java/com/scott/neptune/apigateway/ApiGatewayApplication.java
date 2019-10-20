@@ -11,7 +11,7 @@ import org.springframework.context.annotation.ComponentScan;
  * @Author: scott
  * @Email: <a href="mailto:wliu@fleetup.com">scott</a>
  * @Date: 2019/10/20 10:30
- * @Description: 
+ * @Description:
  */
 @ComponentScan(basePackages = "com.scott.neptune")
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})

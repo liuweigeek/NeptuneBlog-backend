@@ -9,6 +9,7 @@ import com.scott.neptune.post.service.IPostService;
 import com.scott.neptune.postapi.dto.PostDto;
 import com.scott.neptune.userapi.dto.UserDto;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
@@ -55,7 +56,12 @@ public class PostController {
 
         UserDto loginUser = loginUserResponse.getData();
         PostEntity postEntity = postModelMapping.convertToEntity(postDto);
-        return postService.save(postEntity, loginUser);
+        ServerResponse<PostEntity> sendResponse = postService.save(postEntity, loginUser);
+        if (sendResponse.isSuccess()) {
+            return ServerResponse.createBySuccess(postModelMapping.convertToDto(sendResponse.getData()));
+        } else {
+            return sendResponse;
+        }
     }
 
     @GetMapping(value = "/getFollowingPosts")
@@ -71,6 +77,18 @@ public class PostController {
         }
 
         IPage<PostDto> postList = postService.findByFollowerId(loginUserResponse.getData().getId(), postDto.getCurrent(), postDto.getSize())
+                .convert(postModelMapping::convertToDto);
+        return ServerResponse.createBySuccess(postList);
+    }
+
+    @GetMapping(value = "/getPostsByUserId")
+    public ServerResponse<IPage<PostDto>> getPostsByUserId(PostDto postDto) {
+
+        if (Objects.isNull(postDto) || StringUtils.isBlank(postDto.getAuthorId())) {
+            return ServerResponse.createByErrorMessage("请指定用户");
+        }
+
+        IPage<PostDto> postList = postService.findByUserId(postDto.getAuthorId(), postDto.getCurrent(), postDto.getSize())
                 .convert(postModelMapping::convertToDto);
         return ServerResponse.createBySuccess(postList);
     }

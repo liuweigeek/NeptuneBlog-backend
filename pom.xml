@@ -13,6 +13,7 @@
         <module>post-api</module>
         <module>post</module>
         <module>file</module>
+        <module>mail</module>
     </modules>
 
     <parent>

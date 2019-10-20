@@ -1,7 +1,6 @@
 package com.scott.neptune.user.service.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.scott.neptune.common.response.ServerResponse;
 import com.scott.neptune.user.entity.FriendRelation;
@@ -46,7 +45,7 @@ public class FriendRelationServiceImpl implements IFriendRelationService {
             return ServerResponse.createBySuccess();
         } catch (Exception e) {
             log.error(e.getMessage());
-            return ServerResponse.createByErrorMessage(e.getMessage());
+            return ServerResponse.createByErrorMessage("关注失败");
         }
 
     }
@@ -111,8 +110,7 @@ public class FriendRelationServiceImpl implements IFriendRelationService {
         if (StringUtils.isBlank(userId)) {
             return new Page<>(pageNumber, pageSize);
         }
-        Page<UserDto> page = new Page<UserDto>(pageNumber - 1, pageSize)
-                .addOrder(OrderItem.desc("follow_date"));
+        Page<UserDto> page = new Page<UserDto>(pageNumber - 1, pageSize);
         return friendRelationMapper.findFollowing(page, FriendRelation.builder().fromId(userId).build());
     }
 
@@ -127,8 +125,7 @@ public class FriendRelationServiceImpl implements IFriendRelationService {
         if (StringUtils.isBlank(userId)) {
             return new Page<>(pageNumber, pageSize);
         }
-        Page<UserDto> page = new Page<UserDto>(pageNumber - 1, pageSize)
-                .addOrder(OrderItem.desc("follow_date"));
+        Page<UserDto> page = new Page<UserDto>(pageNumber - 1, pageSize);
         return friendRelationMapper.findFollower(page, FriendRelation.builder().toId(userId).build());
     }
 
