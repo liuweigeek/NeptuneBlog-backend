@@ -47,7 +47,7 @@
     </select>
 
     <!-- 获取关注用户的推文 -->
-    <select id="findAllOfFollowing" parameterType="com.scott.neptune.user.entity.UserEntity"
+    <select id="findAllOfFollowing" parameterType="com.scott.neptune.post.entity.PostEntity"
             resultMap="BaseResultMap">
         select
         p.id, p.user_id, p.content, p.device, p.create_date, p.update_date,
@@ -70,7 +70,7 @@
     </select>
 
     <!-- 获取指定用户的推文 -->
-    <select id="findAllInUserIds" parameterType="com.scott.neptune.user.entity.UserEntity"
+    <select id="findAllInUserIds" parameterType="com.scott.neptune.post.entity.PostEntity"
             resultMap="BaseResultMap">
         select
         p.id, p.user_id, p.content, p.device, p.create_date, p.update_date,
