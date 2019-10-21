@@ -146,4 +146,16 @@
         order by register_date asc
     </select>
 
+    <!-- 根据关键字查找全部用户 -->
+    <select id="findByKeyword" parameterType="string" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_user
+        where id like concat('%',#{keyword},'%')
+        or email like concat('%',#{keyword},'%')
+        or username like concat('%',#{keyword},'%')
+        or nickname like concat('%',#{keyword},'%')
+        order by register_date asc
+    </select>
+
 </mapper>

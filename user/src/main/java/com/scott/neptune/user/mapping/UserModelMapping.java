@@ -8,6 +8,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,6 +55,9 @@ public class UserModelMapping extends BaseModelMapping<UserEntity, UserDto> {
      */
     @Override
     public List<UserDto> convertToDtoList(List<UserEntity> entityList) {
+        if (CollectionUtils.isEmpty(entityList)) {
+            return Collections.emptyList();
+        }
         return entityList.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
@@ -80,6 +84,9 @@ public class UserModelMapping extends BaseModelMapping<UserEntity, UserDto> {
      */
     @Override
     public List<UserEntity> convertToEntityList(List<UserDto> dtoList) {
+        if (CollectionUtils.isEmpty(dtoList)) {
+            return Collections.emptyList();
+        }
         return dtoList.stream()
                 .map(this::convertToEntity)
                 .collect(Collectors.toList());

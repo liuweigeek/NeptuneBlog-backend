@@ -1,6 +1,5 @@
 package com.scott.neptune.postapi.dto;
 
-import com.scott.neptune.common.dto.BaseDto;
 import com.scott.neptune.common.dto.Pageable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -22,7 +21,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel(value = "post", description = "推文对象")
-public class PostDto extends Pageable implements BaseDto {
+public class PostDto extends Pageable {
 
     /**
      * ID

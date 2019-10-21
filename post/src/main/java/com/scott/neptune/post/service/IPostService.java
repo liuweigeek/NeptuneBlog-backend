@@ -19,4 +19,6 @@ public interface IPostService {
 
     IPage<PostEntity> findByFollowerId(String followerId, int pageNumber, int pageSize);
 
+    List<PostEntity> findByKeyword(String keyword);
+
 }

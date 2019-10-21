@@ -16,9 +16,9 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @MapperScan("com.scott.neptune.post.mapper")
 @EntityScan(basePackages = "com.scott.neptune")
 @ComponentScan(basePackages = "com.scott.neptune")
-@SpringBootApplication
-@EnableFeignClients
 @EnableDiscoveryClient
+@EnableFeignClients
+@SpringBootApplication
 public class PostApplication {
 
     public static void main(String[] args) {

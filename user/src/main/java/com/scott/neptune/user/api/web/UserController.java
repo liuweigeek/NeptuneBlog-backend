@@ -6,6 +6,7 @@ import com.scott.neptune.common.response.ServerResponse;
 import com.scott.neptune.user.component.UserComponent;
 import com.scott.neptune.user.entity.UserEntity;
 import com.scott.neptune.user.mapping.UserModelMapping;
+import com.scott.neptune.user.service.IFriendRelationService;
 import com.scott.neptune.user.service.IUserService;
 import com.scott.neptune.user.util.HeaderUtil;
 import com.scott.neptune.userapi.dto.UserDto;
@@ -33,13 +34,15 @@ import static java.util.stream.Collectors.toList;
  */
 @Slf4j
 @Api(tags = "用户接口 - 面向前端")
-@RestController
 @RefreshScope
+@RestController
 @RequestMapping("/user")
 public class UserController extends BaseController {
 
     @Resource
     private IUserService userService;
+    @Resource
+    private IFriendRelationService friendRelationService;
     @Resource
     private UserComponent userComponent;
     @Resource
@@ -109,7 +112,7 @@ public class UserController extends BaseController {
      * @return 退出登录结果
      */
     @ApiOperation(value = "用户退出登录")
-    @RequestMapping(value = "/logout", method = {RequestMethod.GET, RequestMethod.POST})
+    @PostMapping(value = "/logout")
     public ServerResponse<String> logout() {
         UserDto loginUser = userComponent.getUserFromRequest(request);
         redisTemplate.delete(loginUser.getToken());
@@ -140,7 +143,10 @@ public class UserController extends BaseController {
         if (Objects.isNull(userEntity)) {
             return ServerResponse.createByErrorMessage("用户不存在");
         }
-        return ServerResponse.createBySuccess(userModelMapping.convertToDto(userEntity));
+        UserDto loginUser = userComponent.getUserFromRequest(request);
+        UserDto userDto = userModelMapping.convertToDto(userEntity);
+        userDto.setRelationState(friendRelationService.getRelationState(loginUser.getId(), userDto.getId()).getCode());
+        return ServerResponse.createBySuccess(userDto);
     }
 
     /**

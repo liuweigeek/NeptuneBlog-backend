@@ -3,9 +3,11 @@ package com.scott.neptune.post.mapping;
 import com.scott.neptune.common.mapping.BaseModelMapping;
 import com.scott.neptune.post.entity.PostEntity;
 import com.scott.neptune.postapi.dto.PostDto;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -47,6 +49,9 @@ public class PostModelMapping extends BaseModelMapping<PostEntity, PostDto> {
      */
     @Override
     public List<PostDto> convertToDtoList(List<PostEntity> entityList) {
+        if (CollectionUtils.isEmpty(entityList)) {
+            return Collections.emptyList();
+        }
         return entityList.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
@@ -73,6 +78,9 @@ public class PostModelMapping extends BaseModelMapping<PostEntity, PostDto> {
      */
     @Override
     public List<PostEntity> convertToEntityList(List<PostDto> dtoList) {
+        if (CollectionUtils.isEmpty(dtoList)) {
+            return Collections.emptyList();
+        }
         return dtoList.stream()
                 .map(this::convertToEntity)
                 .collect(Collectors.toList());

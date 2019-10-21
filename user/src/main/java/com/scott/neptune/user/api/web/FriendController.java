@@ -3,15 +3,18 @@ package com.scott.neptune.user.api.web;
 import com.scott.neptune.common.controller.BaseController;
 import com.scott.neptune.common.response.ServerResponse;
 import com.scott.neptune.user.component.UserComponent;
-import com.scott.neptune.user.entity.FriendRelation;
+import com.scott.neptune.user.entity.FriendRelationEntity;
 import com.scott.neptune.user.entity.UserEntity;
+import com.scott.neptune.user.mapping.FriendRelationModelMapping;
 import com.scott.neptune.user.service.IFriendRelationService;
 import com.scott.neptune.user.service.IUserService;
+import com.scott.neptune.userapi.dto.FriendRelationDto;
 import com.scott.neptune.userapi.dto.UserDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -25,6 +28,7 @@ import java.util.Objects;
  */
 @Api(tags = "好友关系接口 - 面向前端")
 @Slf4j
+@RefreshScope
 @RestController
 @RequestMapping("/friend")
 public class FriendController extends BaseController {
@@ -35,6 +39,8 @@ public class FriendController extends BaseController {
     private IUserService userService;
     @Resource
     private IFriendRelationService friendRelationService;
+    @Resource
+    private FriendRelationModelMapping friendRelationModelMapping;
 
     /**
      * 关注指定用户
@@ -45,7 +51,7 @@ public class FriendController extends BaseController {
     @ApiOperation(value = "关注指定用户")
     @ApiImplicitParam(name = "userId", value = "要关注的用户ID", required = true, paramType = "form", dataType = "string")
     @PostMapping(value = "/follow")
-    public ServerResponse follow(String userId) {
+    public ServerResponse follow(@RequestBody String userId) {
 
         UserDto loginUser = userComponent.getUserFromRequest(request);
 
@@ -55,13 +61,13 @@ public class FriendController extends BaseController {
         }
 
         //TODO get follow from device
-        FriendRelation friendRelation = FriendRelation.builder()
+        FriendRelationEntity friendRelationEntity = FriendRelationEntity.builder()
                 .fromId(loginUser.getId())
                 .toId(targetUserEntity.getId())
                 .followFrom("web")
                 .build();
 
-        if (friendRelationService.save(friendRelation).isSuccess()) {
+        if (friendRelationService.save(friendRelationEntity).isSuccess()) {
             return ServerResponse.createBySuccess();
         } else {
             return ServerResponse.createByErrorMessage("关注失败，请稍后再试");
@@ -95,10 +101,10 @@ public class FriendController extends BaseController {
      */
     @ApiOperation(value = "查看正在关注的用户")
     @GetMapping(value = "/findFollowing")
-    public ServerResponse findAllFollowing(FriendRelation friendRelation) {
+    public ServerResponse findAllFollowing(FriendRelationDto friendRelationDto) {
         UserDto loginUser = userComponent.getUserFromRequest(request);
         return ServerResponse.createBySuccess(friendRelationService.findFollowing(loginUser.getId(),
-                friendRelation.getCurrent(), friendRelation.getSize()));
+                friendRelationDto.getCurrent(), friendRelationDto.getSize()));
     }
 
     /**
@@ -108,9 +114,9 @@ public class FriendController extends BaseController {
      */
     @ApiOperation(value = "查看关注我的人")
     @GetMapping(value = "/findFollower")
-    public ServerResponse findAllFollower(FriendRelation friendRelation) {
+    public ServerResponse findAllFollower(FriendRelationDto friendRelationDto) {
         UserDto loginUser = userComponent.getUserFromRequest(request);
         return ServerResponse.createBySuccess(friendRelationService.findFollower(loginUser.getId(),
-                friendRelation.getCurrent(), friendRelation.getSize()));
+                friendRelationDto.getCurrent(), friendRelationDto.getSize()));
     }
 }

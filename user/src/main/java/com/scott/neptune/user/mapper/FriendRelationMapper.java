@@ -3,7 +3,7 @@ package com.scott.neptune.user.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.scott.neptune.user.entity.FriendRelation;
+import com.scott.neptune.user.entity.FriendRelationEntity;
 import com.scott.neptune.userapi.dto.UserDto;
 import org.apache.ibatis.annotations.Param;
 
@@ -15,73 +15,73 @@ import java.util.List;
  * @Date: 2019/10/5 21:53
  * @Description: NeptuneBlog
  */
-public interface FriendRelationMapper extends BaseMapper<FriendRelation> {
+public interface FriendRelationMapper extends BaseMapper<FriendRelationEntity> {
 
     /**
      * 判断指定关系是否存在
      *
-     * @param friendRelation
+     * @param friendRelationEntity
      * @return
      */
-    boolean exists(@Param("relation") FriendRelation friendRelation);
+    boolean exists(@Param("relation") FriendRelationEntity friendRelationEntity);
 
     /**
      * 删除指定关系
      *
-     * @param friendRelation
+     * @param friendRelationEntity
      * @return
      */
-    boolean delete(@Param("relation") FriendRelation friendRelation);
+    boolean delete(@Param("relation") FriendRelationEntity friendRelationEntity);
 
     /**
      * 获取指定关系
      *
-     * @param friendRelation
+     * @param friendRelationEntity
      * @return
      */
-    FriendRelation getOne(@Param("relation") FriendRelation friendRelation);
+    FriendRelationEntity getOne(@Param("relation") FriendRelationEntity friendRelationEntity);
 
     /**
      * 查找符合条件的关系
      *
      * @param page
-     * @param friendRelation
+     * @param friendRelationEntity
      * @return
      */
-    IPage<FriendRelation> findAll(Page page, @Param("relation") FriendRelation friendRelation);
+    IPage<FriendRelationEntity> findAll(Page page, @Param("relation") FriendRelationEntity friendRelationEntity);
 
     /**
      * 查看全部关注的用户
      *
      * @param page
-     * @param friendRelation
+     * @param friendRelationEntity
      * @return
      */
-    IPage<UserDto> findFollowing(Page page, @Param("relation") FriendRelation friendRelation);
+    IPage<UserDto> findFollowing(Page page, @Param("relation") FriendRelationEntity friendRelationEntity);
 
     /**
      * 查看全部粉丝
      *
      * @param page
-     * @param friendRelation
+     * @param friendRelationEntity
      * @return
      */
-    IPage<UserDto> findFollower(Page page, @Param("relation") FriendRelation friendRelation);
+    IPage<UserDto> findFollower(Page page, @Param("relation") FriendRelationEntity friendRelationEntity);
 
     /**
      * 查看全部关注的用户
      *
-     * @param friendRelation
+     * @param friendRelationEntity
      * @return
      */
-    List<UserDto> findAllFollowing(@Param("relation") FriendRelation friendRelation);
+    List<UserDto> findAllFollowing(@Param("relation") FriendRelationEntity friendRelationEntity);
 
     /**
      * 查看全部粉丝
      *
-     * @param friendRelation
+     * @param friendRelationEntity
      * @return
      */
-    List<UserDto> findAllFollower(@Param("relation") FriendRelation friendRelation);
+    List<UserDto> findAllFollower(@Param("relation") FriendRelationEntity friendRelationEntity);
 
 }

@@ -120,9 +120,52 @@ public class UserDto extends Pageable implements BaseDto {
     @ApiModelProperty(name = "largeAvatar", value = "大尺寸头像")
     private String largeAvatar;
 
+    /**
+     * 关系状态
+     * {@link RelationStateEnum}
+     */
+    @ApiModelProperty(hidden = true)
+    private Integer relationState;
+
     public interface Register extends Default {
     }
 
     public interface Login extends Default {
+    }
+
+    /**
+     * 关系类型
+     */
+    @Getter
+    @AllArgsConstructor
+    public enum RelationStateEnum {
+
+        /**
+         * 自己
+         */
+        SELF(0, "self"),
+
+        /**
+         * 正在关注
+         */
+        FOLLOWING(1, "following"),
+
+        /**
+         * 未关注
+         */
+        UN_FOLLOW(2, "not following");
+
+        private int code;
+        private String value;
+
+        public static RelationStateEnum getEnum(int code) {
+            for (RelationStateEnum relationStateEnum : RelationStateEnum.values()) {
+                if (relationStateEnum.getCode() == code) {
+                    return relationStateEnum;
+                }
+            }
+
+            return null;
+        }
     }
 }

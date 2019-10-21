@@ -4,12 +4,15 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.scott.neptune.common.response.ServerResponse;
 import com.scott.neptune.post.entity.PostEntity;
 import com.scott.neptune.post.mapping.PostModelMapping;
-import com.scott.neptune.post.remote.server.UserServer;
+import com.scott.neptune.post.remote.client.UserClient;
 import com.scott.neptune.post.service.IPostService;
 import com.scott.neptune.postapi.dto.PostDto;
 import com.scott.neptune.userapi.dto.UserDto;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
@@ -27,17 +30,27 @@ import static java.util.stream.Collectors.toList;
  * @author scott
  */
 @Slf4j
+@Api(tags = "推文接口 - 面向前端")
+@RefreshScope
 @RestController
 @RequestMapping("/post")
 public class PostController {
 
     @Resource
-    private UserServer userServer;
+    private UserClient userClient;
     @Resource
     private IPostService postService;
     @Resource
     private PostModelMapping postModelMapping;
 
+    /**
+     * 发送推文
+     *
+     * @param postDto
+     * @param bindingResult
+     * @return
+     */
+    @ApiOperation(value = "发送推文")
     @PostMapping(value = "/sendPost")
     public ServerResponse sendPost(@Valid @RequestBody PostDto postDto, BindingResult bindingResult) {
 
@@ -49,7 +62,7 @@ public class PostController {
             return ServerResponse.createByErrorMessage(errorMsgList.toString());
         }
 
-        ServerResponse<UserDto> loginUserResponse = userServer.getLoginUser();
+        ServerResponse<UserDto> loginUserResponse = userClient.getLoginUser();
         if (!loginUserResponse.isSuccess()) {
             return loginUserResponse;
         }
@@ -64,6 +77,13 @@ public class PostController {
         }
     }
 
+    /**
+     * 获取关注用户的推文
+     *
+     * @param postDto
+     * @return
+     */
+    @ApiOperation(value = "获取关注用户的推文")
     @GetMapping(value = "/getFollowingPosts")
     public ServerResponse<IPage<PostDto>> getFollowingPosts(PostDto postDto) {
 
@@ -71,7 +91,7 @@ public class PostController {
             postDto = new PostDto();
         }
 
-        ServerResponse<UserDto> loginUserResponse = userServer.getLoginUser();
+        ServerResponse<UserDto> loginUserResponse = userClient.getLoginUser();
         if (!loginUserResponse.isSuccess()) {
             return ServerResponse.createByErrorMessage(loginUserResponse.getMsg());
         }
@@ -81,6 +101,13 @@ public class PostController {
         return ServerResponse.createBySuccess(postList);
     }
 
+    /**
+     * 获取指定用户的推文
+     *
+     * @param postDto
+     * @return
+     */
+    @ApiOperation(value = "获取指定用户的推文")
     @GetMapping(value = "/getPostsByUserId")
     public ServerResponse<IPage<PostDto>> getPostsByUserId(PostDto postDto) {
 

@@ -43,4 +43,12 @@ public interface PostMapper extends BaseMapper<PostEntity> {
      * @return
      */
     IPage<PostEntity> findAllInUserIds(Page page, @Param("userIdList") List<String> userIdList);
+
+    /**
+     * 根据关键字搜索推文
+     *
+     * @param keyword
+     * @return
+     */
+    List<PostEntity> findByKeyword(String keyword);
 }

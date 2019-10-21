@@ -1,7 +1,7 @@
 package com.scott.neptune.post.remote.hystric;
 
 import com.scott.neptune.common.response.ServerResponse;
-import com.scott.neptune.post.remote.server.FileServer;
+import com.scott.neptune.post.remote.client.FileClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @author scott
  */
 @Component
-public class FileServerHystrix implements FileServer {
+public class FileClientHystrix implements FileClient {
 
     /**
      * 上传文件

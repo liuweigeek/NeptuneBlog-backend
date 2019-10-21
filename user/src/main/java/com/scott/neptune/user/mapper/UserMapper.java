@@ -45,4 +45,12 @@ public interface UserMapper extends BaseMapper<UserEntity> {
      * @return 用户列表
      */
     List<UserEntity> findAllInUserIds(@Param("idList") List<String> idList);
+
+    /**
+     * 根据关键字查找全部用户
+     *
+     * @param keyword
+     * @return
+     */
+    List<UserEntity> findByKeyword(@Param("keyword") String keyword);
 }

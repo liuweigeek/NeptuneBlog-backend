@@ -50,7 +50,7 @@ public class PropertiesUtils {
     }
 
     /**
-     * get properties, is not found, return default value
+     * get properties, if not found, return default value
      *
      * @param fileName
      * @param key

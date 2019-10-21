@@ -86,4 +86,26 @@
         </foreach>
         order by p.create_date desc
     </select>
+
+    <!-- 判断指定条件的推文 -->
+    <select id="findByKeyword" parameterType="string"
+            resultMap="BaseResultMap">
+        select p.id,
+               p.user_id,
+               p.content,
+               p.device,
+               p.create_date,
+               p.update_date,
+               u.id   uid,
+               u.sex,
+               u.username,
+               u.nickname,
+               ua.url small_avatar
+        from t_user u
+                 left join t_post p on u.id = p.user_id
+                 left join t_user_avatar ua on ua.user_id = u.id and ua.size = 1
+        where p.content like concat('%', #{keyword}, '%')
+        order by p.create_date desc
+    </select>
+
 </mapper>

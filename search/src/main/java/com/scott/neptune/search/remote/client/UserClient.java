@@ -1,7 +1,7 @@
-package com.scott.neptune.post.remote.server;
+package com.scott.neptune.search.remote.client;
 
 import com.scott.neptune.common.response.ServerResponse;
-import com.scott.neptune.post.remote.hystric.UserServerHystrix;
+import com.scott.neptune.search.remote.hystric.UserClientHystrix;
 import com.scott.neptune.userapi.dto.UserDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,8 +14,8 @@ import java.util.List;
  *
  * @author scott
  */
-@FeignClient(name = "user", fallback = UserServerHystrix.class)
-public interface UserServer {
+@FeignClient(name = "user", fallback = UserClientHystrix.class)
+public interface UserClient {
 
     /**
      * 获取指定用户
@@ -50,4 +50,13 @@ public interface UserServer {
      */
     @GetMapping(value = "/friendServer/getFollowingUserIds")
     ServerResponse<List<String>> getFollowingUserIds();
+
+    /**
+     * 通过关键字搜索用户
+     *
+     * @param keyword 关键字
+     * @return 用户列表
+     */
+    @GetMapping(value = "/userServer/findByKeyword/{keyword}")
+    ServerResponse<List<UserDto>> findByKeyword(@PathVariable String keyword);
 }

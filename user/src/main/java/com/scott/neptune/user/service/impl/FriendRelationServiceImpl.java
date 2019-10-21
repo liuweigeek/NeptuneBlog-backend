@@ -3,10 +3,9 @@ package com.scott.neptune.user.service.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.scott.neptune.common.response.ServerResponse;
-import com.scott.neptune.user.entity.FriendRelation;
+import com.scott.neptune.user.entity.FriendRelationEntity;
 import com.scott.neptune.user.mapper.FriendRelationMapper;
 import com.scott.neptune.user.service.IFriendRelationService;
-import com.scott.neptune.user.service.IUserService;
 import com.scott.neptune.userapi.dto.UserDto;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -14,8 +13,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Transactional
@@ -23,25 +24,23 @@ import java.util.List;
 public class FriendRelationServiceImpl implements IFriendRelationService {
 
     @Resource
-    private IUserService userService;
-    @Resource
     private FriendRelationMapper friendRelationMapper;
 
     /**
      * 保存好友关系
      *
-     * @param friendRelation 单向好友关系
+     * @param friendRelationEntity 单向好友关系
      * @return 保存结果
      */
     @Override
-    public ServerResponse save(FriendRelation friendRelation) {
+    public ServerResponse save(FriendRelationEntity friendRelationEntity) {
 
-        if (friendRelationMapper.exists(friendRelation)) {
+        if (friendRelationMapper.exists(friendRelationEntity)) {
             return ServerResponse.createBySuccess();
         }
         try {
-            friendRelation.setFollowDate(new Date());
-            friendRelationMapper.insert(friendRelation);
+            friendRelationEntity.setFollowDate(new Date());
+            friendRelationMapper.insert(friendRelationEntity);
             return ServerResponse.createBySuccess();
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -58,21 +57,21 @@ public class FriendRelationServiceImpl implements IFriendRelationService {
      * @return
      */
     @Override
-    public FriendRelation getRelation(String fromId, String toId) {
-        return friendRelationMapper.getOne(FriendRelation.builder().fromId(fromId).toId(toId).build());
+    public FriendRelationEntity getRelation(String fromId, String toId) {
+        return friendRelationMapper.getOne(FriendRelationEntity.builder().fromId(fromId).toId(toId).build());
     }
 
     /**
      * 删除好友关系
      *
-     * @param friendRelation 单向好友关系
+     * @param friendRelationEntity 单向好友关系
      * @return 删除结果
      */
     @Override
-    public boolean delete(FriendRelation friendRelation) {
+    public boolean delete(FriendRelationEntity friendRelationEntity) {
 
         try {
-            friendRelationMapper.delete(friendRelation);
+            friendRelationMapper.delete(friendRelationEntity);
             return true;
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -91,7 +90,7 @@ public class FriendRelationServiceImpl implements IFriendRelationService {
     @Override
     public boolean deleteByFromIdAndToId(String fromId, String toId) {
         try {
-            friendRelationMapper.delete(FriendRelation.builder().fromId(fromId).toId(toId).build());
+            friendRelationMapper.delete(FriendRelationEntity.builder().fromId(fromId).toId(toId).build());
             return true;
         } catch (Exception e) {
             return false;
@@ -111,7 +110,7 @@ public class FriendRelationServiceImpl implements IFriendRelationService {
             return new Page<>(pageNumber, pageSize);
         }
         Page<UserDto> page = new Page<UserDto>(pageNumber - 1, pageSize);
-        return friendRelationMapper.findFollowing(page, FriendRelation.builder().fromId(userId).build());
+        return friendRelationMapper.findFollowing(page, FriendRelationEntity.builder().fromId(userId).build());
     }
 
     /**
@@ -126,16 +125,58 @@ public class FriendRelationServiceImpl implements IFriendRelationService {
             return new Page<>(pageNumber, pageSize);
         }
         Page<UserDto> page = new Page<UserDto>(pageNumber - 1, pageSize);
-        return friendRelationMapper.findFollower(page, FriendRelation.builder().toId(userId).build());
+        return friendRelationMapper.findFollower(page, FriendRelationEntity.builder().toId(userId).build());
     }
 
+    /**
+     * 获取全部已关注用户
+     *
+     * @param userId
+     * @return
+     */
     @Override
     public List<UserDto> findAllFollowing(String userId) {
-        return friendRelationMapper.findAllFollowing(FriendRelation.builder().fromId(userId).build());
+        try {
+            return friendRelationMapper.findAllFollowing(FriendRelationEntity.builder().fromId(userId).build());
+        } catch (Exception e) {
+            log.error("findAllFollowing exception: ", e);
+            return Collections.emptyList();
+        }
+
     }
 
+    /**
+     * 获取全部粉丝
+     *
+     * @param userId
+     * @return
+     */
     @Override
     public List<UserDto> findAllFollower(String userId) {
-        return friendRelationMapper.findAllFollower(FriendRelation.builder().toId(userId).build());
+        try {
+            return friendRelationMapper.findAllFollower(FriendRelationEntity.builder().toId(userId).build());
+        } catch (Exception e) {
+            log.error("findAllFollower exception: ", e);
+            return Collections.emptyList();
+        }
+    }
+
+    /**
+     * 获取用户关系
+     *
+     * @param fromUserId
+     * @param toUserId
+     * @return
+     */
+    @Override
+    public UserDto.RelationStateEnum getRelationState(String fromUserId, String toUserId) {
+        if (StringUtils.equals(fromUserId, toUserId)) {
+            return UserDto.RelationStateEnum.SELF;
+        }
+        FriendRelationEntity friendRelationEntity = this.getRelation(fromUserId, toUserId);
+        if (Objects.isNull(friendRelationEntity)) {
+            return UserDto.RelationStateEnum.UN_FOLLOW;
+        }
+        return UserDto.RelationStateEnum.FOLLOWING;
     }
 }

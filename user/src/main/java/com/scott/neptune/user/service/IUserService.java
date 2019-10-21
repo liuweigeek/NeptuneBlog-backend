@@ -26,6 +26,8 @@ public interface IUserService {
 
     UserEntity getUserByUsername(String username);
 
+    List<UserEntity> findByKeyword(String keyword);
+
     List<UserEntity> findUserList();
 
     List<UserEntity> findAllUserByIdList(List<String> idList);

@@ -2,7 +2,7 @@ package com.scott.neptune.post.remote.hystric;
 
 import com.google.common.collect.Lists;
 import com.scott.neptune.common.response.ServerResponse;
-import com.scott.neptune.post.remote.server.UserServer;
+import com.scott.neptune.post.remote.client.UserClient;
 import com.scott.neptune.userapi.dto.UserDto;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +12,7 @@ import java.util.List;
  * @author scott
  */
 @Component
-public class UserServerHystrix implements UserServer {
+public class UserClientHystrix implements UserClient {
 
     /**
      * 获取指定用户

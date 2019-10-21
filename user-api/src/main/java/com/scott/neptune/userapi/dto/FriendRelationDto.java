@@ -1,10 +1,9 @@
-package com.scott.neptune.user.entity;
+package com.scott.neptune.userapi.dto;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.scott.neptune.common.dto.Pageable;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
-import org.apache.ibatis.type.JdbcType;
 
 import java.util.Date;
 
@@ -20,31 +19,31 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = false, of = {"fromId", "toId"})
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName(value = "t_friend_relation")
-public class FriendRelation extends Pageable {
+@ApiModel(value = "friendRelation", description = "关注关系")
+public class FriendRelationDto extends Pageable {
 
     /**
      * 关注人
      */
-    @TableField(value = "from_id")
+    @ApiModelProperty(name = "fromId", value = "关注人")
     private String fromId;
 
     /**
      * 被关注人
      */
-    @TableField(value = "to_id")
+    @ApiModelProperty(name = "toId", value = "被关注人")
     private String toId;
 
     /**
      * 关注时间
      */
-    @TableField(value = "follow_date", jdbcType = JdbcType.TIMESTAMP)
+    @ApiModelProperty(name = "followDate", value = "关注时间")
     private Date followDate;
 
     /**
      * 关注来源
      */
-    @TableField(value = "follow_from")
+    @ApiModelProperty(name = "followFrom", value = "关注来源")
     private String followFrom;
 
 }

@@ -11,6 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +31,7 @@ import static java.util.stream.Collectors.toList;
  */
 @Api(tags = "用户接口 - 面向其他服务")
 @Slf4j
+@RefreshScope
 @RestController
 @RequestMapping("/userServer")
 public class UserServerController extends BaseController {
@@ -84,5 +86,21 @@ public class UserServerController extends BaseController {
     public ServerResponse<UserDto> getLoginUser() {
         UserDto userDto = userComponent.getUserFromRequest(request);
         return ServerResponse.createBySuccess(userDto);
+    }
+
+    /**
+     * 通过关键字搜索用户
+     *
+     * @param keyword 关键字
+     * @return 用户列表
+     */
+    @ApiOperation(value = "通过关键字搜索用户")
+    @ApiImplicitParam(name = "keyword", value = "关键字", required = true, paramType = "path", dataType = "String")
+    @GetMapping(value = "/findByKeyword/{keyword}")
+    public ServerResponse<List<UserDto>> findByKeyword(@PathVariable String keyword) {
+        List<UserEntity> userEntityList = userService.findByKeyword(keyword);
+        List<UserDto> userDtoList = userModelMapping.convertToDtoList(userEntityList);
+        //TODO add relation state
+        return ServerResponse.createBySuccess(userDtoList);
     }
 }

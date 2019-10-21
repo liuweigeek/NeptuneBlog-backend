@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -123,7 +124,12 @@ public class UserServiceImpl implements IUserService {
      */
     @Override
     public UserEntity getUserById(String id) {
-        return userMapper.getOne(UserEntity.builder().id(id).build());
+        try {
+            return userMapper.getOne(UserEntity.builder().id(id).build());
+        } catch (Exception e) {
+            log.error("getUserByUsername exception: ", e);
+            return null;
+        }
     }
 
     /**
@@ -134,7 +140,28 @@ public class UserServiceImpl implements IUserService {
      */
     @Override
     public UserEntity getUserByUsername(String username) {
-        return userMapper.getOne(UserEntity.builder().username(username).build());
+        try {
+            return userMapper.getOne(UserEntity.builder().username(username).build());
+        } catch (Exception e) {
+            log.error("getUserByUsername exception: ", e);
+            return null;
+        }
+    }
+
+    /**
+     * 通过关键字搜索用户
+     *
+     * @param keyword
+     * @return
+     */
+    @Override
+    public List<UserEntity> findByKeyword(String keyword) {
+        try {
+            return userMapper.findByKeyword(keyword);
+        } catch (Exception e) {
+            log.error("getUserByKeyword exception: ", e);
+            return Collections.emptyList();
+        }
     }
 
     /**
@@ -144,7 +171,12 @@ public class UserServiceImpl implements IUserService {
      */
     @Override
     public List<UserEntity> findUserList() {
-        return userMapper.findAll(null);
+        try {
+            return userMapper.findAll(null);
+        } catch (Exception e) {
+            log.error("findUserList exception: ", e);
+            return Collections.emptyList();
+        }
     }
 
     /**
@@ -158,6 +190,11 @@ public class UserServiceImpl implements IUserService {
         if (CollectionUtils.isEmpty(idList)) {
             return Lists.newArrayListWithCapacity(0);
         }
-        return userMapper.findAllInUserIds(idList);
+        try {
+            return userMapper.findAllInUserIds(idList);
+        } catch (Exception e) {
+            log.error("findAllUserByIdList exception: ", e);
+            return Collections.emptyList();
+        }
     }
 }

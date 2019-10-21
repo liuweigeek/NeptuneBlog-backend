@@ -4,11 +4,12 @@ import com.scott.neptune.common.controller.BaseController;
 import com.scott.neptune.common.mapping.BaseModelMapping;
 import com.scott.neptune.common.response.ServerResponse;
 import com.scott.neptune.user.component.UserComponent;
-import com.scott.neptune.user.entity.FriendRelation;
+import com.scott.neptune.user.entity.FriendRelationEntity;
 import com.scott.neptune.user.service.IFriendRelationService;
 import com.scott.neptune.userapi.dto.UserDto;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,6 +27,7 @@ import static java.util.stream.Collectors.toList;
  */
 @Api(tags = "好友关系接口 - 面向其他服务")
 @Slf4j
+@RefreshScope
 @RestController
 @RequestMapping("/friendServer")
 public class FriendServerController extends BaseController {
@@ -43,7 +45,7 @@ public class FriendServerController extends BaseController {
      * @return 用户对象
      */
     @GetMapping(value = "/getFollowingUsers")
-    public ServerResponse getFollowingUsers(FriendRelation friendRelation) {
+    public ServerResponse getFollowingUsers(FriendRelationEntity friendRelationEntity) {
 
         UserDto currentUser = userComponent.getUserFromRequest(request);
         List<UserDto> followingUsers = friendRelationService.findAllFollowing(currentUser.getId());
