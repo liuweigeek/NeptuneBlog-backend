@@ -1,8 +1,8 @@
 spring:
   application:
-    name: file
+    name: @project.name@
   profiles:
-    active: dev
+    active: @profiles.active@
   cloud:
     config:
       discovery:

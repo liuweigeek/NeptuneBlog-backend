@@ -9,8 +9,8 @@ services:
       - RABBITMQ_DEFAULT_PASS=12345678
     #restart: always
     ports:
-      - "15672:15672"
-      - "5672:5672"
+      - 15672:15672
+      - 5672:5672
     volumes:
       - /Users/scott/Data/docker/rabbitmq/data:/var/lib/rabbitmq
     logging:

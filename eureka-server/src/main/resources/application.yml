@@ -3,6 +3,8 @@ server:
 spring:
   application:
     name: @project.name@
+  profiles:
+    active: @profiles.active@
 eureka:
   instance:
     hostname: localhost

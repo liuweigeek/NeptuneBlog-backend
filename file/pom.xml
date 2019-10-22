@@ -20,6 +20,7 @@
     </properties>
 
     <dependencies>
+
         <dependency>
             <groupId>com.scott.neptune</groupId>
             <artifactId>common</artifactId>
@@ -90,6 +91,12 @@
 
     <build>
         <finalName>file</finalName>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -105,6 +112,30 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>${dockerfile-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>default</id>
+                        <goals>
+                            <goal>build</goal>
+                            <goal>push</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <contextDirectory>${project.basedir}</contextDirectory>
+                    <repository>${docker.registry}/${docker.namespace}/${project.name}</repository>
+                    <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
+                    <tag>${project.version}</tag>
+                    <buildArgs>
+                        <JAR_FILE>${project.build.finalName}-${project.version}.${project.packaging}</JAR_FILE>
+                        <PROFILE>${profiles.active}</PROFILE>
+                    </buildArgs>
+                </configuration>
             </plugin>
         </plugins>
     </build>
