@@ -69,7 +69,7 @@
                     <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
                     <tag>${project.version}</tag>
                     <buildArgs>
-                        <JAR_FILE>${project.build.finalName}-${project.version}.${project.packaging}</JAR_FILE>
+                        <JAR_FILE>${project.build.finalName}.${project.packaging}</JAR_FILE>
                         <PROFILE>${profiles.active}</PROFILE>
                     </buildArgs>
                 </configuration>
