@@ -1,0 +1,14 @@
+server:
+  port: 8080
+spring:
+  rabbitmq:
+    host: 192.168.8.101
+    port: 5672
+    username: scott
+    password: 12345678
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://eureka-server:8761/eureka/
+  instance:
+    prefer-ip-address: true

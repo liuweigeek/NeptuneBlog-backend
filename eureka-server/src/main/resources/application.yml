@@ -4,7 +4,7 @@ spring:
   application:
     name: @project.name@
   profiles:
-    active: @profiles.active@
+    active: dev
 eureka:
   instance:
     hostname: localhost

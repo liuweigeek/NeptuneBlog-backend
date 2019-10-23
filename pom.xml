@@ -26,7 +26,7 @@
 
     <groupId>com.scott.neptune</groupId>
     <artifactId>blog</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <packaging>pom</packaging>
 
     <properties>
@@ -39,8 +39,8 @@
         <mybatis.version>2.1.0</mybatis.version>
         <mybatis-plus.version>3.2.0</mybatis-plus.version>
         <dockerfile-maven-plugin.version>1.4.12</dockerfile-maven-plugin.version>
-        <docker.registry>registry.cn-shenzhen.aliyuncs.com</docker.registry>
-        <docker.namespace>neptune-blog</docker.namespace>
+        <docker.image.prefix>registry.cn-shenzhen.aliyuncs.com/neptune-blog</docker.image.prefix>
+        <docker.tag>latest</docker.tag>
     </properties>
 
     <dependencies>
@@ -71,9 +71,6 @@
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
-            <properties>
-                <profiles.active>dev</profiles.active>
-            </properties>
             <build>
                 <plugins>
                     <plugin>
@@ -89,9 +86,6 @@
         </profile>
         <profile>
             <id>prod</id>
-            <properties>
-                <profiles.active>prod</profiles.active>
-            </properties>
         </profile>
     </profiles>
 

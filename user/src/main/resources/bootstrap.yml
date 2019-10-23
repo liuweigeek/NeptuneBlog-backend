@@ -2,7 +2,7 @@ spring:
   application:
     name: @project.name@
   profiles:
-    active: @profiles.active@
+    active: dev
   cloud:
     config:
       discovery:
@@ -13,8 +13,5 @@ spring:
       name: ${spring.application.name}
       profile: ${spring.profiles.active}
 eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
   instance:
     prefer-ip-address: true

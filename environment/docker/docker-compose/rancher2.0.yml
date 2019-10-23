@@ -3,9 +3,9 @@ version: '3'
 services:
   rancher:
     image: rancher/rancher
-    container_name: rancher
+    container_name: rancher2.0
     ports:
       - 10080:80
       - 10443:443
     volumes:
-      - /Users/scott/Data/docker/rancher/data:/var/lib/rancher/
+      - /Users/scott/Data/docker/rancher2.0/data:/var/lib/rancher/

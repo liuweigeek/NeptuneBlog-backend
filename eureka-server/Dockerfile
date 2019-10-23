@@ -11,5 +11,4 @@ ADD target/${JAR_FILE} app.jar
 
 EXPOSE 8761
 
-ARG PROFILE
-ENTRYPOINT ["java", "-jar", "/app.jar", "--spring.profiles.active=${PROFILE}"]
+ENTRYPOINT ["java", "-jar", "/app.jar"]
