@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo 'starting all containers for NeptuneBlog'
+
 echo 'starting MySQL...'
 docker start mysql
 

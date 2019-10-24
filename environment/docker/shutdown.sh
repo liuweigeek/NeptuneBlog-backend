@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo 'stoping all containers for NeptuneBlog'
+
 echo 'stoping MySQL...'
 docker stop mysql
 
