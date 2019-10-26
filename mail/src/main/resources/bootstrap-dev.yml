@@ -2,3 +2,10 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
+spring:
+  mail:
+    protocol: smtp
+    host: smtp.163.com
+    username: xxxxxxxx@163.com
+    password: 12345678
+    default-encoding: UTF-8
