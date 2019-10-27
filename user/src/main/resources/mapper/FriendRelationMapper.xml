@@ -16,6 +16,7 @@
         <result column="nickname" property="nickname"/>
         <result column="birthday" property="birthday"/>
         <result column="sex" property="sex"/>
+        <result column="relation" property="relation"/>
         <result column="small_avatar" property="smallAvatar"/>
     </resultMap>
 
@@ -33,8 +34,8 @@
                 <if test="relation.fromId != null and relation.fromId != ''">
                     and from_id = #{relation.fromId}
                 </if>
-                <if test="relation.fromId != null and relation.fromId != ''">
-                    and from_id = #{relation.fromId}
+                <if test="relation.toId != null and relation.toId != ''">
+                    and to_id = #{relation.toId}
                 </if>
             </if>
         </where>
@@ -83,7 +84,7 @@
                 </if>
             </if>
         </where>
-        order fr.follow_date desc
+        order by fr.follow_date desc
     </select>
 
     <!-- 查看关注的用户 -->
@@ -91,7 +92,7 @@
             resultMap="UserResultMap">
         select
         u.id, u.email, u.username, u.nickname,
-        u.birthday, u.sex, ua.url small_avatar
+        u.birthday, u.sex, ua.url small_avatar, 1 relation
         from t_friend_relation fr
         left join t_user u on u.id = fr.to_id
         left join t_user_avatar ua on ua.user_id = u.id and ua.size = 1
@@ -105,7 +106,7 @@
                 </if>
             </if>
         </where>
-        order fr.follow_date desc
+        order by fr.follow_date desc
     </select>
 
     <!-- 查看粉丝 -->
@@ -113,10 +114,15 @@
             resultMap="UserResultMap">
         select
         u.id, u.email, u.username, u.nickname,
-        u.birthday, u.sex, ua.url small_avatar
+        u.birthday, u.sex, ua.url small_avatar, ifnull(rfr.relation, 0) relation
         from t_friend_relation fr
         left join t_user u on u.id = fr.from_id
         left join t_user_avatar ua on ua.user_id = u.id and ua.size = 1
+        left join (
+        select from_id, to_id, count(1) relation
+        from t_friend_relation
+        group by from_id, to_id) rfr
+        on rfr.from_id = fr.to_id and rfr.to_id = fr.from_id
         <where>
             <if test="relation != null">
                 <if test="relation.fromId != null and relation.fromId != ''">
@@ -127,7 +133,7 @@
                 </if>
             </if>
         </where>
-        order fr.follow_date desc
+        order by fr.follow_date desc
     </select>
 
     <!-- 查看全部关注的用户 -->
@@ -135,7 +141,7 @@
             resultMap="UserResultMap">
         select
         u.id, u.email, u.username, u.nickname,
-        u.birthday, u.sex, ua.url small_avatar
+        u.birthday, u.sex, ua.url small_avatar, 1 relation
         from t_friend_relation fr
         left join t_user u on u.id = fr.to_id
         left join t_user_avatar ua on ua.user_id = u.id and ua.size = 1
@@ -149,7 +155,7 @@
                 </if>
             </if>
         </where>
-        order fr.follow_date desc
+        order by fr.follow_date desc
     </select>
 
     <!-- 查看粉丝 -->
@@ -157,10 +163,15 @@
             resultMap="UserResultMap">
         select
         u.id, u.email, u.username, u.nickname,
-        u.birthday, u.sex, ua.url small_avatar
+        u.birthday, u.sex, ua.url small_avatar, ifnull(rfr.relation, 0) relation
         from t_friend_relation fr
         left join t_user u on u.id = fr.from_id
         left join t_user_avatar ua on ua.user_id = u.id and ua.size = 1
+        left join (
+        select from_id, to_id, count(1) relation
+        from t_friend_relation
+        group by from_id, to_id) rfr
+        on rfr.from_id = fr.to_id and rfr.to_id = fr.from_id
         <where>
             <if test="relation != null">
                 <if test="relation.fromId != null and relation.fromId != ''">
@@ -171,7 +182,7 @@
                 </if>
             </if>
         </where>
-        order fr.follow_date desc
+        order by fr.follow_date desc
     </select>
 
 </mapper>

@@ -53,8 +53,8 @@ public class UserServerController extends BaseController {
     @ApiImplicitParam(name = "id", value = "用户ID", required = true, paramType = "path", dataType = "String")
     @GetMapping(value = "/getUserById/{id}")
     public ServerResponse<UserDto> getUserById(@PathVariable String id) {
-        UserEntity userEntity = userService.getUserById(id);
-
+        UserDto loginUser = userComponent.getUserFromRequest(request);
+        UserEntity userEntity = userService.getUserById(id, loginUser.getId());
         if (Objects.isNull(userEntity)) {
             return ServerResponse.createByErrorMessage("用户不存在");
         }
@@ -70,7 +70,8 @@ public class UserServerController extends BaseController {
     @ApiOperation(value = "通过ID列表获取全部用户")
     @GetMapping(value = "/findAllUserByIdList")
     public List<UserDto> findAllUserByIdList(List<String> idList) {
-        return userService.findAllUserByIdList(idList)
+        UserDto loginUser = userComponent.getUserFromRequest(request);
+        return userService.findAllUserByIdList(idList, loginUser.getId())
                 .stream()
                 .map(userModelMapping::convertToDto)
                 .collect(toList());
@@ -98,7 +99,8 @@ public class UserServerController extends BaseController {
     @ApiImplicitParam(name = "keyword", value = "关键字", required = true, paramType = "path", dataType = "String")
     @GetMapping(value = "/findByKeyword/{keyword}")
     public ServerResponse<List<UserDto>> findByKeyword(@PathVariable String keyword) {
-        List<UserEntity> userEntityList = userService.findByKeyword(keyword);
+        UserDto loginUser = userComponent.getUserFromRequest(request);
+        List<UserEntity> userEntityList = userService.findByKeyword(keyword, loginUser.getId());
         List<UserDto> userDtoList = userModelMapping.convertToDtoList(userEntityList);
         //TODO add relation state
         return ServerResponse.createBySuccess(userDtoList);

@@ -22,13 +22,13 @@ public interface IUserService {
 
     ServerResponse<UserEntity> save(UserEntity userEntity);
 
-    UserEntity getUserById(String id);
+    UserEntity getUserById(String id, String loginUserId);
 
-    UserEntity getUserByUsername(String username);
+    UserEntity getUserByUsername(String username, String loginUserId);
 
-    List<UserEntity> findByKeyword(String keyword);
+    List<UserEntity> findByKeyword(String keyword, String loginUserId);
 
-    List<UserEntity> findUserList();
+    List<UserEntity> findUserList(String loginUserId);
 
-    List<UserEntity> findAllUserByIdList(List<String> idList);
+    List<UserEntity> findAllUserByIdList(List<String> idList, String loginUserId);
 }

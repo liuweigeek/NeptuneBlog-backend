@@ -55,7 +55,7 @@ public class FriendController extends BaseController {
 
         UserDto loginUser = userComponent.getUserFromRequest(request);
 
-        UserEntity targetUserEntity = userService.getUserById(userId);
+        UserEntity targetUserEntity = userService.getUserById(userId, loginUser.getId());
         if (Objects.isNull(targetUserEntity)) {
             return ServerResponse.createByErrorMessage("用户不存在");
         }

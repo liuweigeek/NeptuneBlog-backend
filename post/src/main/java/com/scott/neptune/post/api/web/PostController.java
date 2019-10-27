@@ -1,6 +1,7 @@
 package com.scott.neptune.post.api.web;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.scott.neptune.common.controller.BaseController;
 import com.scott.neptune.common.response.ServerResponse;
 import com.scott.neptune.post.entity.PostEntity;
 import com.scott.neptune.post.mapping.PostModelMapping;
@@ -34,7 +35,7 @@ import static java.util.stream.Collectors.toList;
 @RefreshScope
 @RestController
 @RequestMapping("/post")
-public class PostController {
+public class PostController extends BaseController {
 
     @Resource
     private UserClient userClient;

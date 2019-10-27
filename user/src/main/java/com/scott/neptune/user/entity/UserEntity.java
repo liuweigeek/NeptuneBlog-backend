@@ -1,6 +1,7 @@
 package com.scott.neptune.user.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.scott.neptune.userapi.dto.UserDto;
 import lombok.*;
 import org.apache.ibatis.type.JdbcType;
 
@@ -74,7 +75,7 @@ public class UserEntity implements Serializable {
 
     /**
      * 性别
-     * {@link SexEnum}
+     * {@link UserDto.SexEnum}
      */
     @TableField(value = "sex")
     private Integer sex;
@@ -104,32 +105,22 @@ public class UserEntity implements Serializable {
     private String token;
 
     /**
-     * 性别
+     * 关系状态
+     * {@link UserDto.RelationEnum}
      */
-    @AllArgsConstructor
-    public enum SexEnum {
+    @TableField(exist = false)
+    private Integer relation;
 
-        /**
-         * 男
-         */
-        MALE(1),
+    /**
+     * 正在关注用户数量
+     */
+    @TableField(exist = false)
+    private Integer followingCount;
 
-        /**
-         * 女
-         */
-        FEMALE(2);
-
-        @Getter
-        private int code;
-
-        public SexEnum getEnum(int code) {
-            for (SexEnum sexEnum : SexEnum.values()) {
-                if (sexEnum.getCode() == code) {
-                    return sexEnum;
-                }
-            }
-            return null;
-        }
-    }
+    /**
+     * 粉丝数量
+     */
+    @TableField(exist = false)
+    private Integer followerCount;
 
 }

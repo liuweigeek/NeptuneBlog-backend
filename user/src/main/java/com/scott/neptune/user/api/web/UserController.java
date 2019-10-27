@@ -139,13 +139,12 @@ public class UserController extends BaseController {
     @ApiOperation(value = "获取指定用户信息")
     @GetMapping(value = "/getUserInfo/{userId}")
     public ServerResponse<UserDto> getUserInfo(@PathVariable("userId") String userId) {
-        UserEntity userEntity = userService.getUserById(userId);
+        UserDto loginUser = userComponent.getUserFromRequest(request);
+        UserEntity userEntity = userService.getUserById(userId, loginUser.getId());
         if (Objects.isNull(userEntity)) {
             return ServerResponse.createByErrorMessage("用户不存在");
         }
-        UserDto loginUser = userComponent.getUserFromRequest(request);
         UserDto userDto = userModelMapping.convertToDto(userEntity);
-        userDto.setRelationState(friendRelationService.getRelationState(loginUser.getId(), userDto.getId()).getCode());
         return ServerResponse.createBySuccess(userDto);
     }
 
@@ -157,7 +156,8 @@ public class UserController extends BaseController {
     @ApiOperation(value = "查询用户列表")
     @GetMapping(value = "/list")
     public ServerResponse list() {
-        List<UserDto> userDtoList = userService.findUserList()
+        UserDto loginUser = userComponent.getUserFromRequest(request);
+        List<UserDto> userDtoList = userService.findUserList(loginUser.getId())
                 .stream()
                 .map(userModelMapping::convertToDto)
                 .collect(toList());

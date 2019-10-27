@@ -122,10 +122,22 @@ public class UserDto extends Pageable implements BaseDto {
 
     /**
      * 关系状态
-     * {@link RelationStateEnum}
+     * {@link }
      */
     @ApiModelProperty(hidden = true)
-    private Integer relationState;
+    private Integer relation;
+
+    /**
+     * 正在关注用户数量
+     */
+    @ApiModelProperty(hidden = true)
+    private Integer followingCount;
+
+    /**
+     * 粉丝数量
+     */
+    @ApiModelProperty(hidden = true)
+    private Integer followerCount;
 
     public interface Register extends Default {
     }
@@ -134,38 +146,63 @@ public class UserDto extends Pageable implements BaseDto {
     }
 
     /**
+     * 性别
+     */
+    @AllArgsConstructor
+    public enum SexEnum {
+
+        /**
+         * 男
+         */
+        MALE(1),
+
+        /**
+         * 女
+         */
+        FEMALE(2);
+
+        @Getter
+        private int code;
+
+        public SexEnum getEnum(int code) {
+            for (SexEnum sexEnum : SexEnum.values()) {
+                if (sexEnum.getCode() == code) {
+                    return sexEnum;
+                }
+            }
+            return null;
+        }
+    }
+
+    /**
      * 关系类型
      */
     @Getter
     @AllArgsConstructor
-    public enum RelationStateEnum {
-
-        /**
-         * 自己
-         */
-        SELF(0, "self"),
-
-        /**
-         * 正在关注
-         */
-        FOLLOWING(1, "following"),
+    public enum RelationEnum {
 
         /**
          * 未关注
          */
-        UN_FOLLOW(2, "not following");
+        UN_FOLLOW(0, "not following"),
+
+        /**
+         * 正在关注
+         */
+        FOLLOWING(1, "following");
 
         private int code;
         private String value;
 
-        public static RelationStateEnum getEnum(int code) {
-            for (RelationStateEnum relationStateEnum : RelationStateEnum.values()) {
-                if (relationStateEnum.getCode() == code) {
-                    return relationStateEnum;
+        public static RelationEnum getEnum(int code) {
+            for (RelationEnum relationEnum : RelationEnum.values()) {
+                if (relationEnum.getCode() == code) {
+                    return relationEnum;
                 }
             }
 
             return null;
         }
     }
+
 }

@@ -73,7 +73,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     public ServerResponse<UserDto> login(String email, String password) {
 
-        UserEntity userEntity = userMapper.getOne(UserEntity.builder().email(email).build());
+        UserEntity userEntity = userMapper.getOne(UserEntity.builder().email(email).build(), null);
         if (Objects.isNull(userEntity)) {
             return ServerResponse.createByErrorMessage("用户不存在，请检查邮箱地址是否正确");
         }
@@ -123,9 +123,9 @@ public class UserServiceImpl implements IUserService {
      * @return 用户对象
      */
     @Override
-    public UserEntity getUserById(String id) {
+    public UserEntity getUserById(String id, String loginUserId) {
         try {
-            return userMapper.getOne(UserEntity.builder().id(id).build());
+            return userMapper.getOne(UserEntity.builder().id(id).build(), loginUserId);
         } catch (Exception e) {
             log.error("getUserByUsername exception: ", e);
             return null;
@@ -139,9 +139,9 @@ public class UserServiceImpl implements IUserService {
      * @return 用户对象
      */
     @Override
-    public UserEntity getUserByUsername(String username) {
+    public UserEntity getUserByUsername(String username, String loginUserId) {
         try {
-            return userMapper.getOne(UserEntity.builder().username(username).build());
+            return userMapper.getOne(UserEntity.builder().username(username).build(), loginUserId);
         } catch (Exception e) {
             log.error("getUserByUsername exception: ", e);
             return null;
@@ -155,9 +155,9 @@ public class UserServiceImpl implements IUserService {
      * @return
      */
     @Override
-    public List<UserEntity> findByKeyword(String keyword) {
+    public List<UserEntity> findByKeyword(String keyword, String loginUserId) {
         try {
-            return userMapper.findByKeyword(keyword);
+            return userMapper.findByKeyword(keyword, loginUserId);
         } catch (Exception e) {
             log.error("getUserByKeyword exception: ", e);
             return Collections.emptyList();
@@ -170,9 +170,9 @@ public class UserServiceImpl implements IUserService {
      * @return 用户列表
      */
     @Override
-    public List<UserEntity> findUserList() {
+    public List<UserEntity> findUserList(String loginUserId) {
         try {
-            return userMapper.findAll(null);
+            return userMapper.findAll(null, loginUserId);
         } catch (Exception e) {
             log.error("findUserList exception: ", e);
             return Collections.emptyList();
@@ -186,12 +186,12 @@ public class UserServiceImpl implements IUserService {
      * @return 用户对象列表
      */
     @Override
-    public List<UserEntity> findAllUserByIdList(List<String> idList) {
+    public List<UserEntity> findAllUserByIdList(List<String> idList, String loginUserId) {
         if (CollectionUtils.isEmpty(idList)) {
             return Lists.newArrayListWithCapacity(0);
         }
         try {
-            return userMapper.findAllInUserIds(idList);
+            return userMapper.findAllInUserIds(idList, loginUserId);
         } catch (Exception e) {
             log.error("findAllUserByIdList exception: ", e);
             return Collections.emptyList();

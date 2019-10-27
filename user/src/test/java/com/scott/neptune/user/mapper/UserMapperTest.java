@@ -32,7 +32,7 @@ public class UserMapperTest extends UserApplicationTests {
 
     @Test
     public void getOne() {
-        UserEntity userEntity = userMapper.getOne(UserEntity.builder().email("liuweigeek@163.com").build());
+        UserEntity userEntity = userMapper.getOne(UserEntity.builder().email("liuweigeek@163.com").build(), null);
         if (Objects.isNull(userEntity)) {
             assert false;
         } else {
@@ -43,17 +43,17 @@ public class UserMapperTest extends UserApplicationTests {
 
     @Test
     public void findAll() {
-        List<UserEntity> userEntityList = userMapper.findAll(null);
+        List<UserEntity> userEntityList = userMapper.findAll(null, null);
         Assert.assertTrue(CollectionUtils.isNotEmpty(userEntityList));
     }
 
     @Test
     public void findAllInUserIds() {
-        List<String> userIdList = userMapper.findAll(null).stream()
+        List<String> userIdList = userMapper.findAll(null, null).stream()
                 .map(UserEntity::getId)
                 .collect(Collectors.toList());
         if (CollectionUtils.isNotEmpty(userIdList)) {
-            List<UserEntity> userEntityList = userMapper.findAllInUserIds(userIdList);
+            List<UserEntity> userEntityList = userMapper.findAllInUserIds(userIdList, null);
             Assert.assertTrue(CollectionUtils.isNotEmpty(userEntityList));
         } else {
             assert false;

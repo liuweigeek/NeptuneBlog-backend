@@ -57,7 +57,7 @@ public class FriendRelationServiceImpl implements IFriendRelationService {
      * @return
      */
     @Override
-    public FriendRelationEntity getRelation(String fromId, String toId) {
+    public FriendRelationEntity getRelationByFromIdAndToId(String fromId, String toId) {
         return friendRelationMapper.getOne(FriendRelationEntity.builder().fromId(fromId).toId(toId).build());
     }
 
@@ -168,15 +168,15 @@ public class FriendRelationServiceImpl implements IFriendRelationService {
      * @param toUserId
      * @return
      */
-    @Override
-    public UserDto.RelationStateEnum getRelationState(String fromUserId, String toUserId) {
+    /*@Override
+    public UserDto.RelationEnum getRelation(String fromUserId, String toUserId) {
         if (StringUtils.equals(fromUserId, toUserId)) {
-            return UserDto.RelationStateEnum.SELF;
+            return null;
         }
-        FriendRelationEntity friendRelationEntity = this.getRelation(fromUserId, toUserId);
+        FriendRelationEntity friendRelationEntity = this.getRelationByFromIdAndToId(fromUserId, toUserId);
         if (Objects.isNull(friendRelationEntity)) {
-            return UserDto.RelationStateEnum.UN_FOLLOW;
+            return UserDto.RelationEnum.UN_FOLLOW;
         }
-        return UserDto.RelationStateEnum.FOLLOWING;
-    }
+        return UserDto.RelationEnum.FOLLOWING;
+    }*/
 }

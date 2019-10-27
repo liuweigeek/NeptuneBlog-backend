@@ -1,6 +1,7 @@
 package com.scott.neptune.search.api.web;
 
 import com.google.common.collect.Lists;
+import com.scott.neptune.common.controller.BaseController;
 import com.scott.neptune.common.response.ServerResponse;
 import com.scott.neptune.postapi.dto.PostDto;
 import com.scott.neptune.search.remote.client.PostClient;
@@ -32,7 +33,7 @@ import java.util.Map;
 @RestController
 @RefreshScope
 @RequestMapping("/search")
-public class SearchController {
+public class SearchController extends BaseController {
 
     @Resource
     private UserClient userClient;
@@ -45,14 +46,13 @@ public class SearchController {
     @GetMapping(value = "/{keyword}")
     public ServerResponse<Map<String, ServerResponse>> searchByKeyword(@PathVariable("keyword") String keyword) {
 
-        List<String> errorMessage = Lists.newArrayListWithExpectedSize(2);
         ServerResponse<List<UserDto>> userResponse = userClient.findByKeyword(keyword);
         ServerResponse<List<PostDto>> postResponse = postClient.findByKeyword(keyword);
 
         Map<String, ServerResponse> searchResultMap = new HashMap<String, ServerResponse>() {
             {
-                put("userList", userResponse);
-                put("postList", postResponse);
+                put("userRes", userResponse);
+                put("postRes", postResponse);
             }
         };
         return ServerResponse.createBySuccess(searchResultMap);

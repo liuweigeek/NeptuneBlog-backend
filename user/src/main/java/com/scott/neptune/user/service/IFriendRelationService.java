@@ -17,7 +17,7 @@ public interface IFriendRelationService {
 
     ServerResponse save(FriendRelationEntity friendRelationEntity);
 
-    FriendRelationEntity getRelation(String fromId, String toId);
+    FriendRelationEntity getRelationByFromIdAndToId(String fromId, String toId);
 
     boolean delete(FriendRelationEntity friendRelationEntity);
 
@@ -31,5 +31,5 @@ public interface IFriendRelationService {
 
     List<UserDto> findAllFollower(String userId);
 
-    UserDto.RelationStateEnum getRelationState(String fromUserId, String toUserId);
+    /*UserDto.RelationEnum getRelation(String fromUserId, String toUserId);*/
 }

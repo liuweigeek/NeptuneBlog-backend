@@ -28,7 +28,7 @@ public interface UserMapper extends BaseMapper<UserEntity> {
      * @param userEntity
      * @return
      */
-    UserEntity getOne(@Param("user") UserEntity userEntity);
+    UserEntity getOne(@Param("user") UserEntity userEntity, @Param("fromId") String fromUserId);
 
     /**
      * 查找符合条件的用户
@@ -36,7 +36,7 @@ public interface UserMapper extends BaseMapper<UserEntity> {
      * @param userEntity
      * @return
      */
-    List<UserEntity> findAll(@Param("user") UserEntity userEntity);
+    List<UserEntity> findAll(@Param("user") UserEntity userEntity, @Param("fromId") String fromUserId);
 
     /**
      * 根据用户ID列表获取全部用户
@@ -44,7 +44,7 @@ public interface UserMapper extends BaseMapper<UserEntity> {
      * @param idList 用户ID列表
      * @return 用户列表
      */
-    List<UserEntity> findAllInUserIds(@Param("idList") List<String> idList);
+    List<UserEntity> findAllInUserIds(@Param("idList") List<String> idList, @Param("fromId") String fromUserId);
 
     /**
      * 根据关键字查找全部用户
@@ -52,5 +52,5 @@ public interface UserMapper extends BaseMapper<UserEntity> {
      * @param keyword
      * @return
      */
-    List<UserEntity> findByKeyword(@Param("keyword") String keyword);
+    List<UserEntity> findByKeyword(@Param("keyword") String keyword, @Param("fromId") String fromUserId);
 }
