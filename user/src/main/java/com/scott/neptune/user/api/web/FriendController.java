@@ -14,6 +14,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.*;
 
@@ -99,24 +100,32 @@ public class FriendController extends BaseController {
      *
      * @return 关注列表
      */
-    @ApiOperation(value = "查看正在关注的用户")
+    @ApiOperation(value = "获取关注列表")
     @GetMapping(value = "/findFollowing")
     public ServerResponse findAllFollowing(FriendRelationDto friendRelationDto) {
-        UserDto loginUser = userComponent.getUserFromRequest(request);
-        return ServerResponse.createBySuccess(friendRelationService.findFollowing(loginUser.getId(),
+        String fromId = friendRelationDto.getFromId();
+        if (StringUtils.isBlank(fromId)) {
+            UserDto loginUser = userComponent.getUserFromRequest(request);
+            fromId = loginUser.getId();
+        }
+        return ServerResponse.createBySuccess(friendRelationService.findFollowing(fromId,
                 friendRelationDto.getCurrent(), friendRelationDto.getSize()));
     }
 
     /**
-     * 获取粉丝列表
+     * 获取关注者列表
      *
-     * @return 粉丝列表
+     * @return 关注者列表
      */
-    @ApiOperation(value = "查看关注我的人")
+    @ApiOperation(value = "获取关注者列表")
     @GetMapping(value = "/findFollower")
     public ServerResponse findAllFollower(FriendRelationDto friendRelationDto) {
-        UserDto loginUser = userComponent.getUserFromRequest(request);
-        return ServerResponse.createBySuccess(friendRelationService.findFollower(loginUser.getId(),
+        String toId = friendRelationDto.getToId();
+        if (StringUtils.isBlank(toId)) {
+            UserDto loginUser = userComponent.getUserFromRequest(request);
+            toId = loginUser.getId();
+        }
+        return ServerResponse.createBySuccess(friendRelationService.findFollower(toId,
                 friendRelationDto.getCurrent(), friendRelationDto.getSize()));
     }
 }

@@ -1,6 +1,5 @@
 package com.scott.neptune.search.api.web;
 
-import com.google.common.collect.Lists;
 import com.scott.neptune.common.controller.BaseController;
 import com.scott.neptune.common.response.ServerResponse;
 import com.scott.neptune.postapi.dto.PostDto;

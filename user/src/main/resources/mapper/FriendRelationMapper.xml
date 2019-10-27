@@ -109,7 +109,7 @@
         order by fr.follow_date desc
     </select>
 
-    <!-- 查看粉丝 -->
+    <!-- 查看关注者 -->
     <select id="findFollower" parameterType="com.scott.neptune.user.entity.FriendRelationEntity"
             resultMap="UserResultMap">
         select
@@ -158,7 +158,7 @@
         order by fr.follow_date desc
     </select>
 
-    <!-- 查看粉丝 -->
+    <!-- 查看关注者 -->
     <select id="findAllFollower" parameterType="com.scott.neptune.user.entity.FriendRelationEntity"
             resultMap="UserResultMap">
         select

@@ -2,7 +2,6 @@ package com.scott.neptune.user.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.scott.neptune.common.dto.Pageable;
 import lombok.*;
 import org.apache.ibatis.type.JdbcType;
 

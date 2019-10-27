@@ -118,7 +118,7 @@ public class UserEntity implements Serializable {
     private Integer followingCount;
 
     /**
-     * 粉丝数量
+     * 关注者数量
      */
     @TableField(exist = false)
     private Integer followerCount;

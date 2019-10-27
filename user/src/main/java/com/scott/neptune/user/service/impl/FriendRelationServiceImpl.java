@@ -16,7 +16,6 @@ import javax.annotation.Resource;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 @Slf4j
 @Transactional
@@ -109,22 +108,22 @@ public class FriendRelationServiceImpl implements IFriendRelationService {
         if (StringUtils.isBlank(userId)) {
             return new Page<>(pageNumber, pageSize);
         }
-        Page<UserDto> page = new Page<UserDto>(pageNumber - 1, pageSize);
+        Page<UserDto> page = new Page<>(pageNumber - 1, pageSize);
         return friendRelationMapper.findFollowing(page, FriendRelationEntity.builder().fromId(userId).build());
     }
 
     /**
-     * 获取粉丝列表
+     * 获取关注者列表
      *
      * @param userId 当前登陆用户Id
-     * @return 粉丝列表
+     * @return 关注者列表
      */
     @Override
     public IPage<UserDto> findFollower(String userId, int pageNumber, int pageSize) {
         if (StringUtils.isBlank(userId)) {
             return new Page<>(pageNumber, pageSize);
         }
-        Page<UserDto> page = new Page<UserDto>(pageNumber - 1, pageSize);
+        Page<UserDto> page = new Page<>(pageNumber - 1, pageSize);
         return friendRelationMapper.findFollower(page, FriendRelationEntity.builder().toId(userId).build());
     }
 
@@ -146,7 +145,7 @@ public class FriendRelationServiceImpl implements IFriendRelationService {
     }
 
     /**
-     * 获取全部粉丝
+     * 获取全部关注者
      *
      * @param userId
      * @return

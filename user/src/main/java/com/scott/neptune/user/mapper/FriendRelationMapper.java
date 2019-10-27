@@ -60,7 +60,7 @@ public interface FriendRelationMapper extends BaseMapper<FriendRelationEntity> {
     IPage<UserDto> findFollowing(Page page, @Param("relation") FriendRelationEntity friendRelationEntity);
 
     /**
-     * 查看全部粉丝
+     * 查看全部关注者
      *
      * @param page
      * @param friendRelationEntity
@@ -77,7 +77,7 @@ public interface FriendRelationMapper extends BaseMapper<FriendRelationEntity> {
     List<UserDto> findAllFollowing(@Param("relation") FriendRelationEntity friendRelationEntity);
 
     /**
-     * 查看全部粉丝
+     * 查看全部关注者
      *
      * @param friendRelationEntity
      * @return

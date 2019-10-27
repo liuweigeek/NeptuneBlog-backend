@@ -134,7 +134,7 @@ public class UserDto extends Pageable implements BaseDto {
     private Integer followingCount;
 
     /**
-     * 粉丝数量
+     * 关注者数量
      */
     @ApiModelProperty(hidden = true)
     private Integer followerCount;

@@ -4,6 +4,6 @@
     <title>NeptuneBlog</title>
 </head>
 <body>
-    ${username}, There is NeptuneBlog!
+${username}, There is NeptuneBlog!
 </body>
 </html>

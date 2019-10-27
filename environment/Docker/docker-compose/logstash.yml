@@ -3,4 +3,4 @@ services:
   kibana:
     image: docker.elastic.co/logstash/logstash:7.4.1
 
-docker pull docker.elastic.co/logstash/logstash:7.4.1
+  docker pull docker.elastic.co/logstash/logstash:7.4.1
