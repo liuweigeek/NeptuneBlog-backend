@@ -78,7 +78,7 @@ public class PostServiceImpl implements IPostService {
      */
     @Override
     public IPage<PostEntity> findByUserId(String userId, int pageNumber, int pageSize) {
-        Page<PostEntity> page = new Page<PostEntity>(pageNumber - 1, pageSize);
+        Page<PostEntity> page = new Page<>(pageNumber - 1, pageSize);
         return postMapper.findAll(page, PostEntity.builder().userId(userId).build());
     }
 
@@ -92,7 +92,7 @@ public class PostServiceImpl implements IPostService {
      */
     @Override
     public IPage<PostEntity> findByUserIdList(List<String> userIdList, int pageNumber, int pageSize) {
-        Page<PostEntity> page = new Page<PostEntity>(pageNumber - 1, pageSize);
+        Page<PostEntity> page = new Page<>(pageNumber - 1, pageSize);
         return postMapper.findAllInUserIds(page, userIdList);
     }
 
@@ -106,7 +106,7 @@ public class PostServiceImpl implements IPostService {
      */
     @Override
     public IPage<PostEntity> findByFollowerId(String followerId, int pageNumber, int pageSize) {
-        Page<PostEntity> page = new Page<PostEntity>(pageNumber - 1, pageSize);
+        Page<PostEntity> page = new Page<>(pageNumber - 1, pageSize);
         return postMapper.findAllOfFollowing(page, null, followerId);
     }
 
