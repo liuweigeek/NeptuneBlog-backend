@@ -1,6 +1,7 @@
+### Maven ###
+.mvn
 target/
 out/
-filemanager-deloy.sh
 META-INF/
 
 ### NOT MAVEN PROJECT ###
@@ -30,5 +31,6 @@ nbbuild/
 nbdist/
 .nb-gradle/
 
-### Maven ###
-.mvn
+### macOS ###
+.DS_Store
+Thumbs.db
