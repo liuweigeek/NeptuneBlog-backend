@@ -87,7 +87,7 @@
         u.token
         from t_user u
         left join t_friend_relation following on following.from_id = u.id
-        left join t_friend_relation follower on following.to_id = u.id
+        left join t_friend_relation follower on follower.to_id = u.id
         <if test="fromId != null and fromId != ''">
             left join (select to_id, count(from_id) relation
             from t_friend_relation
