@@ -4,12 +4,12 @@
 
     <resultMap id="BaseResultMap" type="com.scott.neptune.user.entity.UserAvatarEntity">
         <result column="user_id" property="userId"/>
-        <result column="size" property="size"/>
+        <result column="size_type" property="sizeType"/>
         <result column="url" property="url"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        user_id, size, url
+        user_id, size_type, url
     </sql>
 
     <!-- 根据用户ID获取全部头像 -->
@@ -25,8 +25,8 @@
     <delete id="delete" parameterType="com.scott.neptune.user.entity.UserAvatarEntity">
         delete from t_user_avatar
         where user_id = #{avatar.userId}
-        <if test="avatar.size != null">
-            and size = #{size}
+        <if test="avatar.sizeType != null">
+            and size_type = #{sizeType}
         </if>
     </delete>
 

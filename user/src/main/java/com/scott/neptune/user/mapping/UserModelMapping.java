@@ -3,6 +3,7 @@ package com.scott.neptune.user.mapping;
 import com.scott.neptune.common.mapping.BaseModelMapping;
 import com.scott.neptune.user.entity.UserAvatarEntity;
 import com.scott.neptune.user.entity.UserEntity;
+import com.scott.neptune.userapi.dto.UserAvatarDto;
 import com.scott.neptune.userapi.dto.UserDto;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.BeanUtils;
@@ -33,12 +34,12 @@ public class UserModelMapping extends BaseModelMapping<UserEntity, UserDto> {
         BeanUtils.copyProperties(entity, dto);
         if (CollectionUtils.isNotEmpty(entity.getAvatarList())) {
             for (UserAvatarEntity avatar : entity.getAvatarList()) {
-                int size = avatar.getSize();
-                if (UserAvatarEntity.SizeEnum.SMALL.getCode() == size) {
+                int sizeType = avatar.getSizeType();
+                if (UserAvatarDto.SizeTypeEnum.SMALL.getCode() == sizeType) {
                     dto.setSmallAvatar(avatar.getUrl());
-                } else if (UserAvatarEntity.SizeEnum.NORMAL.getCode() == size) {
+                } else if (UserAvatarDto.SizeTypeEnum.NORMAL.getCode() == sizeType) {
                     dto.setNormalAvatar(avatar.getUrl());
-                } else if (UserAvatarEntity.SizeEnum.LARGE.getCode() == size) {
+                } else if (UserAvatarDto.SizeTypeEnum.LARGE.getCode() == sizeType) {
                     dto.setLargeAvatar(avatar.getUrl());
                 }
             }

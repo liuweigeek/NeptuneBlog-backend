@@ -14,7 +14,7 @@ import lombok.*;
 @Data
 @Builder
 @ToString
-@EqualsAndHashCode(callSuper = false, of = {"userId", "size"})
+@EqualsAndHashCode(callSuper = false, of = {"userId", "sizeType"})
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel(value = "userAvatar", description = "用户头像")
@@ -28,14 +28,54 @@ public class UserAvatarDto implements BaseDto {
 
     /**
      * 图片尺寸
+     * {@link SizeTypeEnum}
      */
-    @ApiModelProperty(name = "size", value = "图片尺寸")
-    private Integer size;
+    @ApiModelProperty(name = "sizeType", value = "图片尺寸")
+    private Integer sizeType;
 
     /**
      * 图片URL
      */
     @ApiModelProperty(name = "url", value = "图片URL")
     private String url;
+
+    @Getter
+    @AllArgsConstructor
+    public enum SizeTypeEnum {
+
+        /**
+         * small size
+         */
+        SMALL(1, "small"),
+
+        /**
+         * normal size
+         */
+        NORMAL(2, "normal"),
+        /**
+         * large size
+         */
+        LARGE(3, "large");
+
+        private int code;
+
+        private String name;
+
+        /**
+         * get enum instance from code
+         *
+         * @param code
+         * @return
+         */
+        public SizeTypeEnum getEnum(int code) {
+            for (SizeTypeEnum sizeTypeEnum : SizeTypeEnum.values()) {
+                if (sizeTypeEnum.getCode() == code) {
+                    return sizeTypeEnum;
+                }
+            }
+            return null;
+        }
+
+    }
 
 }

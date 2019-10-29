@@ -95,7 +95,7 @@
         u.birthday, u.sex, ua.url small_avatar, 1 relation
         from t_friend_relation fr
         left join t_user u on u.id = fr.to_id
-        left join t_user_avatar ua on ua.user_id = u.id and ua.size = 1
+        left join t_user_avatar ua on ua.user_id = u.id and ua.size_type = 1
         <where>
             <if test="relation != null">
                 <if test="relation.fromId != null and relation.fromId != ''">
@@ -117,7 +117,7 @@
         u.birthday, u.sex, ua.url small_avatar, ifnull(rfr.relation, 0) relation
         from t_friend_relation fr
         left join t_user u on u.id = fr.from_id
-        left join t_user_avatar ua on ua.user_id = u.id and ua.size = 1
+        left join t_user_avatar ua on ua.user_id = u.id and ua.size_type = 1
         left join (
         select from_id, to_id, count(1) relation
         from t_friend_relation
@@ -144,7 +144,7 @@
         u.birthday, u.sex, ua.url small_avatar, 1 relation
         from t_friend_relation fr
         left join t_user u on u.id = fr.to_id
-        left join t_user_avatar ua on ua.user_id = u.id and ua.size = 1
+        left join t_user_avatar ua on ua.user_id = u.id and ua.size_type = 1
         <where>
             <if test="relation != null">
                 <if test="relation.fromId != null and relation.fromId != ''">
@@ -166,7 +166,7 @@
         u.birthday, u.sex, ua.url small_avatar, ifnull(rfr.relation, 0) relation
         from t_friend_relation fr
         left join t_user u on u.id = fr.from_id
-        left join t_user_avatar ua on ua.user_id = u.id and ua.size = 1
+        left join t_user_avatar ua on ua.user_id = u.id and ua.size_type = 1
         left join (
         select from_id, to_id, count(1) relation
         from t_friend_relation

@@ -25,50 +25,13 @@ public class UserAvatarEntity {
 
     /**
      * 图片尺寸
+     * {@link com.scott.neptune.userapi.dto.UserAvatarDto.SizeTypeEnum}
      */
-    private Integer size;
+    private Integer sizeType;
 
     /**
      * 图片URL
      */
     private String url;
 
-    @Getter
-    @AllArgsConstructor
-    public enum SizeEnum {
-
-        /**
-         * small size
-         */
-        SMALL(1, "small"),
-
-        /**
-         * normal size
-         */
-        NORMAL(2, "normal"),
-        /**
-         * large size
-         */
-        LARGE(3, "large");
-
-        private int code;
-
-        private String name;
-
-        /**
-         * get enum instance from code
-         *
-         * @param code
-         * @return
-         */
-        public SizeEnum getEnum(int code) {
-            for (SizeEnum sizeEnum : SizeEnum.values()) {
-                if (sizeEnum.getCode() == code) {
-                    return sizeEnum;
-                }
-            }
-            return null;
-        }
-
-    }
 }
