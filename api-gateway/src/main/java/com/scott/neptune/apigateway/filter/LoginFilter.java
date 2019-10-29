@@ -7,6 +7,7 @@ import com.scott.neptune.common.constant.Constant;
 import com.scott.neptune.common.response.ResponseCode;
 import com.scott.neptune.common.response.ServerResponse;
 import com.scott.neptune.userapi.util.UserUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
@@ -21,15 +22,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.concurrent.TimeUnit;
 
+import static org.springframework.cloud.netflix.zuul.filters.support.FilterConstants.PRE_TYPE;
+import static org.springframework.cloud.netflix.zuul.filters.support.FilterConstants.SERVLET_DETECTION_FILTER_ORDER;
+
 /**
  * 登录拦截器
  *
  * @author scott
  */
+@Slf4j
 @Component
 public class LoginFilter extends ZuulFilter {
-
-    private static final Logger logger = LoggerFactory.getLogger(LoginFilter.class);
 
     @Value("${loginFilter.ignoreUris}")
     private String[] ignoreUris;
@@ -43,12 +46,12 @@ public class LoginFilter extends ZuulFilter {
 
     @Override
     public String filterType() {
-        return "pre";
+        return PRE_TYPE;
     }
 
     @Override
     public int filterOrder() {
-        return 0;
+        return SERVLET_DETECTION_FILTER_ORDER;
     }
 
     @Override
@@ -82,7 +85,7 @@ public class LoginFilter extends ZuulFilter {
                         "用户未登录，请先登录后重试");
                 response.getWriter().println(mapper.writeValueAsString(noLoginResponse));
             } catch (Exception e) {
-                logger.error("拦截器异常");
+                log.error("拦截器异常", e);
             }
         } else {
             redisTemplate.expire(token, 30, TimeUnit.MINUTES);

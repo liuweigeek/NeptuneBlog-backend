@@ -31,19 +31,18 @@
         from t_user u
         left join t_post p on u.id = p.user_id
         left join t_user_avatar ua on ua.user_id = u.id and ua.size = 1
-        <where>
-            <if test="post != null">
-                <if test="post.userId != null and post.userId != ''">
-                    and u.id = #{post.userId}
-                </if>
-                <if test="post.content != null and post.content != ''">
-                    and p.content like concat('%',#{post.content},'%')
-                </if>
-                <if test="post.userId != null and post.userId != ''">
-                    and u.id = #{post.userId}
-                </if>
+        where p.id is not null
+        <if test="post != null">
+            <if test="post.userId != null and post.userId != ''">
+                and u.id = #{post.userId}
             </if>
-        </where>
+            <if test="post.content != null and post.content != ''">
+                and p.content like concat('%',#{post.content},'%')
+            </if>
+            <if test="post.userId != null and post.userId != ''">
+                and u.id = #{post.userId}
+            </if>
+        </if>
         order by p.create_date desc
     </select>
 
@@ -66,17 +65,16 @@
         left join t_friend_relation fr on fr.from_id = u.id
         left join t_post p on (p.user_id = fr.to_id or p.user_id = u.id)
         left join t_user_avatar ua on ua.user_id = p.user_id and ua.size = 1
-        <where>
-            <if test="post != null">
-                <if test="post.userId != null and post.userId != ''">
-                    and u.id = #{post.userId}
-                </if>
-                <if test="post.content != null and post.content != ''">
-                    and p.content like concat('%',#{post.content},'%')
-                </if>
+        where p.id is not null
+        <if test="post != null">
+            <if test="post.userId != null and post.userId != ''">
+                and u.id = #{post.userId}
             </if>
+            <if test="post.content != null and post.content != ''">
+                and p.content like concat('%',#{post.content},'%')
+            </if>
+        </if>
             and u.id = #{fromId}
-        </where>
         order by p.create_date desc
     </select>
 
@@ -93,6 +91,7 @@
         <foreach item="item" index="index" open="(" separator="," close=")" collection="userIdList">
             #{item}
         </foreach>
+        and p.id is not null
         order by p.create_date desc
     </select>
 
@@ -114,6 +113,7 @@
                  left join t_post p on u.id = p.user_id
                  left join t_user_avatar ua on ua.user_id = u.id and ua.size = 1
         where p.content like concat('%', #{keyword}, '%')
+            and p.id is not null
         order by p.create_date desc
     </select>
 
