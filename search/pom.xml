@@ -88,7 +88,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.scott.neptune.user.UserApplication</mainClass>
+                    <mainClass>com.scott.neptune.search.SearchApplication</mainClass>
                     <includeSystemScope>true</includeSystemScope>
                 </configuration>
                 <executions>

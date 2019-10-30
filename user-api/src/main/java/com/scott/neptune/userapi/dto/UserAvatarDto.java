@@ -1,9 +1,10 @@
 package com.scott.neptune.userapi.dto;
 
-import com.scott.neptune.common.dto.BaseDto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+
+import java.io.Serializable;
 
 /**
  * @Author: scott
@@ -18,7 +19,9 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel(value = "userAvatar", description = "用户头像")
-public class UserAvatarDto implements BaseDto {
+public class UserAvatarDto implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * 用户ID

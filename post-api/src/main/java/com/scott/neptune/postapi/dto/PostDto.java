@@ -23,6 +23,8 @@ import java.util.Date;
 @ApiModel(value = "post", description = "推文对象")
 public class PostDto extends Pageable {
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * ID
      */

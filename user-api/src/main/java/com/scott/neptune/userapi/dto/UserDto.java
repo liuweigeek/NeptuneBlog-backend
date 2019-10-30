@@ -1,6 +1,5 @@
 package com.scott.neptune.userapi.dto;
 
-import com.scott.neptune.common.dto.BaseDto;
 import com.scott.neptune.common.dto.Pageable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -26,7 +25,9 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel(value = "user", description = "用户对象")
-public class UserDto extends Pageable implements BaseDto {
+public class UserDto extends Pageable {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * Id

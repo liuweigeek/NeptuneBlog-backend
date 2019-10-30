@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -22,7 +23,9 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel(value = "searchResultMap", description = "搜索结果")
-public class SearchResultMap {
+public class SearchResultMap implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * 用户列表

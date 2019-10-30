@@ -22,6 +22,8 @@ import java.util.Date;
 @ApiModel(value = "friendRelation", description = "关注关系")
 public class FriendRelationDto extends Pageable {
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * 关注人
      */

@@ -3,6 +3,8 @@ package com.scott.neptune.user.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.*;
 
+import java.io.Serializable;
+
 /**
  * @Author: scott
  * @Email: <a href="mailto:wliu@fleetup.com">scott</a>
@@ -16,7 +18,9 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @TableName(value = "t_user_avatar")
-public class UserAvatarEntity {
+public class UserAvatarEntity implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * 用户ID
