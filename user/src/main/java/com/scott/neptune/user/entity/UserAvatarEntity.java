@@ -14,7 +14,7 @@ import java.io.Serializable;
 @Data
 @Builder
 @ToString
-@EqualsAndHashCode(of = {"userId", "size"})
+@EqualsAndHashCode(of = {"userId", "sizeType"})
 @AllArgsConstructor
 @NoArgsConstructor
 @TableName(value = "t_user_avatar")

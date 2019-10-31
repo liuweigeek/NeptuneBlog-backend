@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,7 +39,26 @@ public class FileServiceImpl implements IFileService {
      * @return
      */
     @Override
-    public ServerResponse<String> saveFile(FileUseTypeEnum fileUseTypeEnum, MultipartFile file, boolean useRandomName) {
+    public ServerResponse<String> saveFile(FileUseTypeEnum fileUseTypeEnum, File file, boolean useRandomName) {
+        fileUseTypeEnum = FileUseTypeEnum.getDefaultIfNull(fileUseTypeEnum);
+        String fileName = useRandomName ?
+                FileUtils.getRandomNameByOriginName(file.getName())
+                : file.getName();
+        return minioComponent.saveFile(minioProperties.getBucket(),
+                fileUseTypeEnum.getFolder(),
+                file, fileName);
+    }
+
+    /**
+     * 上传文件
+     *
+     * @param fileUseTypeEnum
+     * @param file
+     * @param useRandomName
+     * @return
+     */
+    @Override
+    public ServerResponse<String> saveMultipartFile(FileUseTypeEnum fileUseTypeEnum, MultipartFile file, boolean useRandomName) {
         fileUseTypeEnum = FileUseTypeEnum.getDefaultIfNull(fileUseTypeEnum);
         String fileName = useRandomName ?
                 FileUtils.getRandomNameByOriginName(file.getOriginalFilename())
@@ -57,7 +77,32 @@ public class FileServiceImpl implements IFileService {
      * @return
      */
     @Override
-    public ServerResponse<List<String>> saveBatchFile(FileUseTypeEnum fileUseTypeEnum, List<MultipartFile> fileList, boolean useRandomName) {
+    public ServerResponse<List<String>> saveBatchFile(FileUseTypeEnum fileUseTypeEnum, List<File> fileList, boolean useRandomName) {
+        fileUseTypeEnum = FileUseTypeEnum.getDefaultIfNull(fileUseTypeEnum);
+        List<String> filenameList;
+        if (useRandomName) {
+            filenameList = fileList.stream()
+                    .map(file -> FileUtils.getRandomNameByOriginName(file.getName()))
+                    .collect(Collectors.toList());
+        } else {
+            filenameList = fileList.stream()
+                    .map(File::getName)
+                    .collect(Collectors.toList());
+        }
+        return minioComponent.saveFiles(minioProperties.getBucket(),
+                fileUseTypeEnum.getFolder(), fileList, filenameList);
+    }
+
+    /**
+     * 上传文件
+     *
+     * @param fileUseTypeEnum
+     * @param fileList
+     * @param useRandomName
+     * @return
+     */
+    @Override
+    public ServerResponse<List<String>> saveBatchMultipartFile(FileUseTypeEnum fileUseTypeEnum, List<MultipartFile> fileList, boolean useRandomName) {
         fileUseTypeEnum = FileUseTypeEnum.getDefaultIfNull(fileUseTypeEnum);
         List<String> filenameList;
         if (useRandomName) {

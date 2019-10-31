@@ -4,6 +4,7 @@ import com.scott.neptune.common.response.ServerResponse;
 import com.scott.neptune.file.enumerate.FileUseTypeEnum;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -22,7 +23,17 @@ public interface IFileService {
      * @param useRandomName
      * @return
      */
-    ServerResponse<String> saveFile(FileUseTypeEnum fileUseTypeEnum, MultipartFile file, boolean useRandomName);
+    ServerResponse<String> saveFile(FileUseTypeEnum fileUseTypeEnum, File file, boolean useRandomName);
+
+    /**
+     * 上传文件
+     *
+     * @param fileUseTypeEnum
+     * @param file
+     * @param useRandomName
+     * @return
+     */
+    ServerResponse<String> saveMultipartFile(FileUseTypeEnum fileUseTypeEnum, MultipartFile file, boolean useRandomName);
 
     /**
      * 上传文件
@@ -32,7 +43,17 @@ public interface IFileService {
      * @param useRandomName
      * @return
      */
-    ServerResponse<List<String>> saveBatchFile(FileUseTypeEnum fileUseTypeEnum, List<MultipartFile> fileList, boolean useRandomName);
+    ServerResponse<List<String>> saveBatchFile(FileUseTypeEnum fileUseTypeEnum, List<File> fileList, boolean useRandomName);
+
+    /**
+     * 上传文件
+     *
+     * @param fileUseTypeEnum
+     * @param fileList
+     * @param useRandomName
+     * @return
+     */
+    ServerResponse<List<String>> saveBatchMultipartFile(FileUseTypeEnum fileUseTypeEnum, List<MultipartFile> fileList, boolean useRandomName);
 
     /**
      * 删除文件

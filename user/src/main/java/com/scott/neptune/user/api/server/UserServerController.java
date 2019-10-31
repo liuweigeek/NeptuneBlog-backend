@@ -86,6 +86,9 @@ public class UserServerController extends BaseController {
     @GetMapping(value = "/getLoginUser")
     public ServerResponse<UserDto> getLoginUser() {
         UserDto userDto = userComponent.getUserFromRequest(request);
+        if (Objects.isNull(userDto)) {
+            return ServerResponse.createByErrorMessage("用户未登录");
+        }
         return ServerResponse.createBySuccess(userDto);
     }
 
