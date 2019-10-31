@@ -7,7 +7,6 @@ import com.scott.neptune.file.enumerate.FileUseTypeEnum;
 import com.scott.neptune.file.remote.client.UserClient;
 import com.scott.neptune.file.service.IAvatarService;
 import com.scott.neptune.file.service.IFileService;
-import com.scott.neptune.userapi.dto.UserAvatarDto;
 import com.scott.neptune.userapi.dto.UserDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -23,7 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
+import java.util.Objects;
 
 /**
  * @Author: scott
@@ -77,22 +76,24 @@ public class FileServerController extends BaseController {
     @ApiOperation(value = "上传头像")
     @ApiImplicitParam(name = "file", value = "文件", required = true, paramType = "form", dataTypeClass = MultipartFile.class)
     @PostMapping(value = "/uploadAvatar")
-    public ServerResponse<List<UserAvatarDto>> uploadAvatar(@RequestParam("file") MultipartFile file) {
+    public ServerResponse uploadAvatar(@RequestParam("file") MultipartFile file) {
 
         ServerResponse<UserDto> loginUserResponse = userClient.getLoginUser();
         if (!loginUserResponse.isSuccess()) {
             return ServerResponse.createByErrorMessage(loginUserResponse.getMsg());
         }
         UserDto loginUser = loginUserResponse.getData();
-        File tempFile;
+        File tempFile = null;
         try {
             tempFile = fileComponent.transferToFile(file);
+            return avatarService.generateAvatar(loginUser, tempFile);
         } catch (IOException e) {
             return ServerResponse.createByErrorMessage("头像上传失败");
+        } finally {
+            if (!Objects.isNull(tempFile) && tempFile.exists()) {
+                tempFile.delete();
+            }
         }
 
-        ServerResponse generateRes = avatarService.generateAvatar(loginUser, tempFile);
-        tempFile.delete();
-        return generateRes;
     }
 }

@@ -5,7 +5,6 @@ import com.scott.neptune.common.response.ServerResponse;
 import com.scott.neptune.file.component.FileComponent;
 import com.scott.neptune.file.component.ImageComponent;
 import com.scott.neptune.file.config.AvatarProps;
-import com.scott.neptune.file.config.FileProps;
 import com.scott.neptune.file.enumerate.FileUseTypeEnum;
 import com.scott.neptune.file.model.AvatarProp;
 import com.scott.neptune.file.model.ImageSize;
@@ -20,6 +19,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.io.File;
 import java.util.List;
+import java.util.Objects;
 
 import static com.scott.neptune.common.response.ServerResponse.createByErrorMessage;
 
@@ -33,8 +33,6 @@ import static com.scott.neptune.common.response.ServerResponse.createByErrorMess
 @RefreshScope
 public class AvatarServiceImpl implements IAvatarService {
 
-    @Resource
-    private FileProps fileProps;
     @Resource
     private AvatarProps avatarProps;
     @Resource
@@ -70,11 +68,13 @@ public class AvatarServiceImpl implements IAvatarService {
                 return createByErrorMessage("生成头像缩略图失败");
             }
             ServerResponse<String> uploadRes = fileService.saveFile(FileUseTypeEnum.AVATAR, targetFile, false);
+            if (!Objects.isNull(targetFile) && targetFile.exists()) {
+                targetFile.delete();
+            }
             if (!uploadRes.isSuccess()) {
                 return ServerResponse.createByErrorMessage("上传头像缩略图失败");
             }
             avatarDtoList.add(new UserAvatarDto(userDto.getId(), avatarProp.getSizeType(), uploadRes.getData()));
-            targetFile.delete();
         }
         return ServerResponse.createBySuccess(avatarDtoList);
     }
