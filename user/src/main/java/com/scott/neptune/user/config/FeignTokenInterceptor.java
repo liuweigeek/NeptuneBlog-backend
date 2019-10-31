@@ -3,6 +3,7 @@ package com.scott.neptune.user.config;
 import com.scott.neptune.common.constant.Constant;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -14,19 +15,24 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * Feign统一Token拦截器
+ * @Author: scott
+ * @Email: <a href="mailto:wliu@fleetup.com">scott</a>
+ * @Date: 2019/10/31 08:25
+ * @Description: Feign统一Token拦截器
  */
+@Slf4j
 @Component
 public class FeignTokenInterceptor implements RequestInterceptor {
 
     @Override
     public void apply(RequestTemplate requestTemplate) {
-        if (Objects.isNull(getHttpServletRequest())) {
-            //此处省略日志记录
+        HttpServletRequest request = getHttpServletRequest();
+        if (Objects.isNull(request)) {
+            log.warn("cannot get request from RequestContextHolder");
             return;
         }
-        String currentUserId = getHeaders(getHttpServletRequest()).get(Constant.Login.CURRENT_USER);
-        //将获取Token对应的值往下面传
+        String currentUserId = getHeaders(request).get(Constant.Login.CURRENT_USER);
+        //将获取Token对应的值往下一个服务传递
         requestTemplate.header(Constant.Login.CURRENT_USER, currentUserId);
     }
 

@@ -74,7 +74,7 @@
                 and p.content like concat('%',#{post.content},'%')
             </if>
         </if>
-            and u.id = #{fromId}
+        and u.id = #{fromId}
         order by p.create_date desc
     </select>
 
@@ -113,7 +113,7 @@
                  left join t_post p on u.id = p.user_id
                  left join t_user_avatar ua on ua.user_id = u.id and ua.size_type = 1
         where p.content like concat('%', #{keyword}, '%')
-            and p.id is not null
+          and p.id is not null
         order by p.create_date desc
     </select>
 
