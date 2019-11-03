@@ -149,6 +149,23 @@ public class UserController extends BaseController {
     }
 
     /**
+     * 获取指定用户信息
+     *
+     * @return 用户信息
+     */
+    @ApiOperation(value = "获取指定用户信息")
+    @GetMapping(value = "/getByUsername/{username}")
+    public ServerResponse<UserDto> getByUsername(@PathVariable("username") String username) {
+        UserDto loginUser = userComponent.getUserFromRequest(request);
+        UserEntity userEntity = userService.getUserByUsername(username, loginUser.getId());
+        if (Objects.isNull(userEntity)) {
+            return ServerResponse.createByErrorMessage("用户不存在");
+        }
+        UserDto userDto = userModelMapping.convertToDto(userEntity);
+        return ServerResponse.createBySuccess(userDto);
+    }
+
+    /**
      * 获取全部用户列表
      *
      * @return 用户列表

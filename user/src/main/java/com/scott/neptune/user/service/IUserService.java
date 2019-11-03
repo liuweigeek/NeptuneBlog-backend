@@ -1,8 +1,10 @@
 package com.scott.neptune.user.service;
 
 import com.scott.neptune.common.response.ServerResponse;
+import com.scott.neptune.user.entity.UserAvatarEntity;
 import com.scott.neptune.user.entity.UserEntity;
 import com.scott.neptune.userapi.dto.UserDto;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -31,4 +33,6 @@ public interface IUserService {
     List<UserEntity> findUserList(String loginUserId);
 
     List<UserEntity> findAllUserByIdList(List<String> idList, String loginUserId);
+
+    ServerResponse<List<UserAvatarEntity>> uploadAvatar(MultipartFile avatarFile, UserDto userDto);
 }

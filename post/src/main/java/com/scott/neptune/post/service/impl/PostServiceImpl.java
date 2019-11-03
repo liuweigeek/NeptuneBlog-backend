@@ -79,7 +79,21 @@ public class PostServiceImpl implements IPostService {
     @Override
     public IPage<PostEntity> findByUserId(String userId, int pageNumber, int pageSize) {
         Page<PostEntity> page = new Page<>(pageNumber - 1, pageSize);
-        return postMapper.findAll(page, PostEntity.builder().userId(userId).build());
+        return postMapper.findAll(page, UserDto.builder().id(userId).build(), null);
+    }
+
+    /**
+     * 获取指定用户的推文
+     *
+     * @param username
+     * @param pageNumber
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public IPage<PostEntity> findByUsername(String username, int pageNumber, int pageSize) {
+        Page<PostEntity> page = new Page<>(pageNumber - 1, pageSize);
+        return postMapper.findAll(page, UserDto.builder().username(username).build(), null);
     }
 
     /**

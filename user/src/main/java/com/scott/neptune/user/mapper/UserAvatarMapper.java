@@ -15,6 +15,14 @@ import java.util.List;
 public interface UserAvatarMapper extends BaseMapper<UserAvatarEntity> {
 
     /**
+     * 批量保存
+     *
+     * @param avatarEntityList
+     * @return
+     */
+    int insertBatch(@Param("avatarList") List<UserAvatarEntity> avatarEntityList);
+
+    /**
      * 根据用户ID获取全部头像
      *
      * @param userId 用户ID

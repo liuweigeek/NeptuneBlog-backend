@@ -15,6 +15,8 @@ public interface IPostService {
 
     IPage<PostEntity> findByUserId(String userId, int pageNumber, int pageSize);
 
+    IPage<PostEntity> findByUsername(String username, int pageNumber, int pageSize);
+
     IPage<PostEntity> findByUserIdList(List<String> userIdList, int pageNumber, int pageSize);
 
     IPage<PostEntity> findByFollowerId(String followerId, int pageNumber, int pageSize);

@@ -82,12 +82,14 @@
                 null relation,
             </otherwise>
         </choose>
-        count(following.from_id) followingCount,
-        count(follower.from_id) followerCount,
+        following.count followingCount,
+        follower.count followerCount,
         u.token
         from t_user u
-        left join t_friend_relation following on following.from_id = u.id
-        left join t_friend_relation follower on follower.to_id = u.id
+        left join (select from_id, count(to_id) count from t_friend_relation group by from_id) following on
+        following.from_id = u.id
+        left join (select to_id, count(from_id) count from t_friend_relation group by to_id) follower on
+        follower.to_id = u.id
         <if test="fromId != null and fromId != ''">
             left join (select to_id, count(from_id) relation
             from t_friend_relation

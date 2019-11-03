@@ -39,8 +39,13 @@
             <if test="post.content != null and post.content != ''">
                 and p.content like concat('%',#{post.content},'%')
             </if>
-            <if test="post.userId != null and post.userId != ''">
-                and u.id = #{post.userId}
+        </if>
+        <if test="user != null">
+            <if test="user.id != null and user.id != ''">
+                and u.id = #{user.id}
+            </if>
+            <if test="user.username != null and user.username != ''">
+                and u.username = #{user.username}
             </if>
         </if>
         order by p.create_date desc

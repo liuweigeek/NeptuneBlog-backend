@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.scott.neptune.post.entity.PostEntity;
+import com.scott.neptune.userapi.dto.UserDto;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -20,10 +21,12 @@ public interface PostMapper extends BaseMapper<PostEntity> {
      * 判断指定条件的推文
      *
      * @param page
+     * @param userDto
      * @param postEntity
      * @return
      */
-    IPage<PostEntity> findAll(Page page, @Param("post") PostEntity postEntity);
+    IPage<PostEntity> findAll(Page page, @Param("user") UserDto userDto,
+                              @Param("post") PostEntity postEntity);
 
     /**
      * 获取关注用户的推文

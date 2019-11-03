@@ -1,7 +1,7 @@
 package com.scott.neptune.post.remote.client;
 
 import com.scott.neptune.common.response.ServerResponse;
-import com.scott.neptune.post.remote.hystric.UserClientHystrix;
+import com.scott.neptune.post.remote.hystric.UserClientFallbackFactory;
 import com.scott.neptune.userapi.dto.UserDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author scott
  */
-@FeignClient(name = "user", fallback = UserClientHystrix.class)
+@FeignClient(name = "user", fallbackFactory = UserClientFallbackFactory.class)
 public interface UserClient {
 
     /**

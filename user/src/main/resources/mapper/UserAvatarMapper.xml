@@ -12,6 +12,15 @@
         user_id, size_type, url
     </sql>
 
+    <!-- 批量保存 -->
+    <insert id="insertBatch" parameterType="com.scott.neptune.user.entity.UserAvatarEntity">
+        INSERT INTO t_user_avatar(user_id, size_type, url)
+        VALUES
+        <foreach collection="avatarList" item="item" separator=",">
+            (#{item.userId},#{item.sizeType},#{item.url})
+        </foreach>
+    </insert>
+
     <!-- 根据用户ID获取全部头像 -->
     <select id="findAllByUserId" parameterType="string"
             resultMap="BaseResultMap">
@@ -26,7 +35,7 @@
         delete from t_user_avatar
         where user_id = #{avatar.userId}
         <if test="avatar.sizeType != null">
-            and size_type = #{sizeType}
+            and size_type = #{avatar.sizeType}
         </if>
     </delete>
 

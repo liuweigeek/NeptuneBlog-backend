@@ -120,4 +120,24 @@ public class PostController extends BaseController {
                 .convert(postModelMapping::convertToDto);
         return ServerResponse.createBySuccess(postList);
     }
+
+    /**
+     * 获取指定用户的推文
+     *
+     * @param userDto
+     * @return
+     */
+    @ApiOperation(value = "获取指定用户的推文")
+    @GetMapping(value = "/getPostsByUsername")
+    public ServerResponse<IPage<PostDto>> getPostsByUsername(UserDto userDto) {
+
+        if (Objects.isNull(userDto) || StringUtils.isBlank(userDto.getUsername())) {
+            return ServerResponse.createByErrorMessage("请指定用户");
+        }
+
+        IPage<PostDto> postList = postService.findByUsername(userDto.getUsername(), userDto.getCurrent(), userDto.getSize())
+                .convert(postModelMapping::convertToDto);
+        return ServerResponse.createBySuccess(postList);
+    }
+
 }

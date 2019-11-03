@@ -8,7 +8,6 @@ import com.scott.neptune.user.entity.UserEntity;
 import com.scott.neptune.user.mapping.FriendRelationModelMapping;
 import com.scott.neptune.user.service.IFriendRelationService;
 import com.scott.neptune.user.service.IUserService;
-import com.scott.neptune.userapi.dto.FriendRelationDto;
 import com.scott.neptune.userapi.dto.UserDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -102,14 +101,21 @@ public class FriendController extends BaseController {
      */
     @ApiOperation(value = "获取关注列表")
     @GetMapping(value = "/findFollowing")
-    public ServerResponse findAllFollowing(FriendRelationDto friendRelationDto) {
-        String fromId = friendRelationDto.getFromId();
-        if (StringUtils.isBlank(fromId)) {
+    public ServerResponse findAllFollowing(UserDto userDto) {
+
+        String fromUserId;
+        if (Objects.isNull(userDto) || StringUtils.isBlank(userDto.getUsername())) {
             UserDto loginUser = userComponent.getUserFromRequest(request);
-            fromId = loginUser.getId();
+            fromUserId = loginUser.getId();
+        } else {
+            UserEntity fromUser = userService.getUserByUsername(userDto.getUsername(), null);
+            if (Objects.isNull(fromUser)) {
+                return ServerResponse.createByErrorMessage("指定用户不存在");
+            }
+            fromUserId = fromUser.getId();
         }
-        return ServerResponse.createBySuccess(friendRelationService.findFollowing(fromId,
-                friendRelationDto.getCurrent(), friendRelationDto.getSize()));
+        return ServerResponse.createBySuccess(friendRelationService.findFollowing(fromUserId,
+                userDto.getCurrent(), userDto.getSize()));
     }
 
     /**
@@ -119,13 +125,19 @@ public class FriendController extends BaseController {
      */
     @ApiOperation(value = "获取关注者列表")
     @GetMapping(value = "/findFollower")
-    public ServerResponse findAllFollower(FriendRelationDto friendRelationDto) {
-        String toId = friendRelationDto.getToId();
-        if (StringUtils.isBlank(toId)) {
+    public ServerResponse findAllFollower(UserDto userDto) {
+        String toUserId;
+        if (Objects.isNull(userDto) || StringUtils.isBlank(userDto.getUsername())) {
             UserDto loginUser = userComponent.getUserFromRequest(request);
-            toId = loginUser.getId();
+            toUserId = loginUser.getId();
+        } else {
+            UserEntity toUser = userService.getUserByUsername(userDto.getUsername(), null);
+            if (Objects.isNull(toUser)) {
+                return ServerResponse.createByErrorMessage("指定用户不存在");
+            }
+            toUserId = toUser.getId();
         }
-        return ServerResponse.createBySuccess(friendRelationService.findFollower(toId,
-                friendRelationDto.getCurrent(), friendRelationDto.getSize()));
+        return ServerResponse.createBySuccess(friendRelationService.findFollower(toUserId,
+                userDto.getCurrent(), userDto.getSize()));
     }
 }

@@ -12,7 +12,6 @@ import com.scott.neptune.file.service.IAvatarService;
 import com.scott.neptune.file.service.IFileService;
 import com.scott.neptune.file.util.VerifyFileTypeUtil;
 import com.scott.neptune.userapi.dto.UserAvatarDto;
-import com.scott.neptune.userapi.dto.UserDto;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Service;
 
@@ -45,12 +44,11 @@ public class AvatarServiceImpl implements IAvatarService {
     /**
      * generateAvatar
      *
-     * @param userDto
      * @param imageFile
      * @return
      */
     @Override
-    public ServerResponse<List<UserAvatarDto>> generateAvatar(UserDto userDto, File imageFile) {
+    public ServerResponse<List<UserAvatarDto>> generateAvatar(File imageFile) {
 
         if (!VerifyFileTypeUtil.isImageFile(imageFile)) {
             return createByErrorMessage("请传入支持的图片文件");
@@ -74,7 +72,7 @@ public class AvatarServiceImpl implements IAvatarService {
             if (!uploadRes.isSuccess()) {
                 return ServerResponse.createByErrorMessage("上传头像缩略图失败");
             }
-            avatarDtoList.add(new UserAvatarDto(userDto.getId(), avatarProp.getSizeType(), uploadRes.getData()));
+            avatarDtoList.add(new UserAvatarDto(null, avatarProp.getSizeType(), uploadRes.getData()));
         }
         return ServerResponse.createBySuccess(avatarDtoList);
     }

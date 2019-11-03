@@ -36,6 +36,7 @@
         <spring-cloud.version>Greenwich.SR3</spring-cloud.version>
         <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
         <hibernate.version>5.3.11.Final</hibernate.version>
+        <openfeign.form.version>3.8.0</openfeign.form.version>
         <mybatis.version>2.1.0</mybatis.version>
         <mybatis-plus.version>3.2.0</mybatis-plus.version>
         <dockerfile-maven-plugin.version>1.4.12</dockerfile-maven-plugin.version>

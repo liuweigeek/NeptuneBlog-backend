@@ -13,6 +13,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -59,7 +60,7 @@ public class FileServerController extends BaseController {
                     example = "1: default, 2: avatar, 3: user background, 4: post image",
                     paramType = "form", dataType = "String")
     })
-    @PostMapping(value = "/upload")
+    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ServerResponse<String> upload(@RequestParam("file") MultipartFile file,
                                          @RequestParam(defaultValue = "1") Integer useTypeId) {
 
@@ -70,23 +71,24 @@ public class FileServerController extends BaseController {
     /**
      * 上传头像
      *
-     * @param file 头像文件
      * @return
      */
     @ApiOperation(value = "上传头像")
     @ApiImplicitParam(name = "file", value = "文件", required = true, paramType = "form", dataTypeClass = MultipartFile.class)
-    @PostMapping(value = "/uploadAvatar")
-    public ServerResponse uploadAvatar(@RequestParam("file") MultipartFile file) {
+    @PostMapping(value = "/uploadAvatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ServerResponse uploadAvatar(MultipartFile file) {
 
+        if (Objects.isNull(file)) {
+            return ServerResponse.createByErrorMessage("文件不可为空");
+        }
         ServerResponse<UserDto> loginUserResponse = userClient.getLoginUser();
         if (!loginUserResponse.isSuccess()) {
             return ServerResponse.createByErrorMessage(loginUserResponse.getMsg());
         }
-        UserDto loginUser = loginUserResponse.getData();
         File tempFile = null;
         try {
             tempFile = fileComponent.transferToFile(file);
-            return avatarService.generateAvatar(loginUser, tempFile);
+            return avatarService.generateAvatar(tempFile);
         } catch (IOException e) {
             return ServerResponse.createByErrorMessage("头像上传失败");
         } finally {

@@ -3,11 +3,16 @@ package com.scott.neptune.user.service.impl;
 import com.google.common.collect.Lists;
 import com.scott.neptune.common.response.ServerResponse;
 import com.scott.neptune.common.util.MD5Utils;
+import com.scott.neptune.user.entity.UserAvatarEntity;
 import com.scott.neptune.user.entity.UserEntity;
 import com.scott.neptune.user.mapper.UserMapper;
+import com.scott.neptune.user.mapping.UserAvatarModelMapping;
 import com.scott.neptune.user.mapping.UserModelMapping;
+import com.scott.neptune.user.remote.client.FileClient;
+import com.scott.neptune.user.service.IUserAvatarService;
 import com.scott.neptune.user.service.IUserService;
 import com.scott.neptune.user.util.UserUtil;
+import com.scott.neptune.userapi.dto.UserAvatarDto;
 import com.scott.neptune.userapi.dto.UserDto;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
@@ -15,6 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.util.Collections;
@@ -39,7 +45,13 @@ public class UserServiceImpl implements IUserService {
     @Resource
     private UserModelMapping userModelMapping;
     @Resource
+    private UserAvatarModelMapping userAvatarModelMapping;
+    @Resource
     private RedisTemplate<String, Object> redisTemplate;
+    @Resource
+    private FileClient fileClient;
+    @Resource
+    private IUserAvatarService userAvatarService;
 
     /**
      * 判断指定用户名是否存在
@@ -196,5 +208,23 @@ public class UserServiceImpl implements IUserService {
             log.error("findAllUserByIdList exception: ", e);
             return Collections.emptyList();
         }
+    }
+
+    @Override
+    public ServerResponse<List<UserAvatarEntity>> uploadAvatar(MultipartFile avatarFile, UserDto userDto) {
+        ServerResponse<List<UserAvatarDto>> uploadAvatarRes = fileClient.uploadAvatar(avatarFile);
+        if (uploadAvatarRes.isFailed()) {
+            return ServerResponse.createByErrorMessage(uploadAvatarRes.getMsg());
+        }
+        List<UserAvatarDto> avatarDtoList = uploadAvatarRes.getData();
+        List<UserAvatarEntity> avatarEntityList = userAvatarModelMapping.convertToEntityList(avatarDtoList);
+        avatarDtoList.forEach(avatarDto -> avatarDto.setUserId(userDto.getId()));
+
+        userAvatarService.delete(UserAvatarEntity.builder().userId(userDto.getId()).build());
+        ServerResponse<List<UserAvatarEntity>> saveRes = userAvatarService.saveList(avatarEntityList);
+        if (saveRes.isFailed()) {
+            return ServerResponse.createByErrorMessage("保存头像失败");
+        }
+        return ServerResponse.createBySuccess(saveRes.getData());
     }
 }

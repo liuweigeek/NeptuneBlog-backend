@@ -2,7 +2,6 @@ package com.scott.neptune.file.service;
 
 import com.scott.neptune.common.response.ServerResponse;
 import com.scott.neptune.userapi.dto.UserAvatarDto;
-import com.scott.neptune.userapi.dto.UserDto;
 
 import java.io.File;
 import java.util.List;
@@ -15,5 +14,5 @@ import java.util.List;
  */
 public interface IAvatarService {
 
-    ServerResponse<List<UserAvatarDto>> generateAvatar(UserDto userDto, File imageFile);
+    ServerResponse<List<UserAvatarDto>> generateAvatar(File imageFile);
 }

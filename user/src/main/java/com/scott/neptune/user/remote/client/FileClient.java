@@ -1,12 +1,15 @@
 package com.scott.neptune.user.remote.client;
 
 import com.scott.neptune.common.response.ServerResponse;
-import com.scott.neptune.user.remote.hystric.FileClientHystrix;
+import com.scott.neptune.user.config.FeignMultipartSupportConfig;
+import com.scott.neptune.user.remote.hystric.FileClientFallbackFactory;
 import com.scott.neptune.userapi.dto.UserAvatarDto;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -16,7 +19,8 @@ import java.util.List;
  *
  * @author scott
  */
-@FeignClient(name = "file", fallback = FileClientHystrix.class)
+@FeignClient(name = "file", fallbackFactory = FileClientFallbackFactory.class,
+        configuration = FeignMultipartSupportConfig.class)
 public interface FileClient {
 
     /**
@@ -26,8 +30,10 @@ public interface FileClient {
      * @param useTypeId 文件用途标识 [1: default, 2: avatar, 3: user background, 4: post image]
      * @return
      */
-    @GetMapping(value = "/file/fileServer/upload")
-    ServerResponse<String> upload(@RequestParam("file") MultipartFile file,
+    @GetMapping(value = "/fileServer/upload",
+            produces = {MediaType.APPLICATION_JSON_UTF8_VALUE},
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    ServerResponse<String> upload(@RequestPart("file") MultipartFile file,
                                   @RequestParam(defaultValue = "1") Integer useTypeId);
 
     /**
@@ -36,7 +42,9 @@ public interface FileClient {
      * @param file
      * @return
      */
-    @PostMapping(value = "/uploadAvatar")
-    ServerResponse<List<UserAvatarDto>> uploadAvatar(@RequestParam("file") MultipartFile file);
+    @PostMapping(value = "/fileServer/uploadAvatar",
+            produces = {MediaType.APPLICATION_JSON_UTF8_VALUE},
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    ServerResponse<List<UserAvatarDto>> uploadAvatar(@RequestPart("file") MultipartFile file);
 
 }
