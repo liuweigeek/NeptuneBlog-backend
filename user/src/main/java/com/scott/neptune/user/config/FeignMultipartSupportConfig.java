@@ -3,7 +3,6 @@ package com.scott.neptune.user.config;
 import feign.codec.Encoder;
 import feign.form.spring.SpringFormEncoder;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Scope;
 
@@ -13,7 +12,7 @@ import org.springframework.context.annotation.Scope;
  * @Date: 2019/11/3 17:38
  * @Description: NeptuneBlog
  */
-@Configuration
+//@Configuration
 public class FeignMultipartSupportConfig {
 
     @Bean
@@ -21,5 +20,10 @@ public class FeignMultipartSupportConfig {
     @Scope("prototype")
     public Encoder multipartFormEncoder() {
         return new SpringFormEncoder();
+    }
+
+    @Bean
+    public feign.Logger.Level multipartLoggerLevel() {
+        return feign.Logger.Level.FULL;
     }
 }

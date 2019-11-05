@@ -48,7 +48,7 @@ public class UserAvatarController extends BaseController {
      */
     @ApiOperation(value = "上传结果")
     @PostMapping(value = "/uploadAvatar")
-    public ServerResponse<UserDto> uploadAvatar(@RequestParam(value = "avatarFile") MultipartFile avatarFile) {
+    public ServerResponse<UserDto> uploadAvatar(@RequestParam("file") MultipartFile avatarFile) {
 
         if (Objects.isNull(avatarFile)) {
             return ServerResponse.createByErrorMessage("上传头像不可为空");

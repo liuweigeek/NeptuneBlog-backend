@@ -7,15 +7,13 @@ import com.scott.neptune.file.enumerate.FileUseTypeEnum;
 import com.scott.neptune.file.remote.client.UserClient;
 import com.scott.neptune.file.service.IAvatarService;
 import com.scott.neptune.file.service.IFileService;
-import com.scott.neptune.userapi.dto.UserDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -60,7 +58,7 @@ public class FileServerController extends BaseController {
                     example = "1: default, 2: avatar, 3: user background, 4: post image",
                     paramType = "form", dataType = "String")
     })
-    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public ServerResponse<String> upload(@RequestParam("file") MultipartFile file,
                                          @RequestParam(defaultValue = "1") Integer useTypeId) {
 
@@ -75,15 +73,11 @@ public class FileServerController extends BaseController {
      */
     @ApiOperation(value = "上传头像")
     @ApiImplicitParam(name = "file", value = "文件", required = true, paramType = "form", dataTypeClass = MultipartFile.class)
-    @PostMapping(value = "/uploadAvatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ServerResponse uploadAvatar(MultipartFile file) {
+    @RequestMapping(value = "/uploadAvatar", method = RequestMethod.POST)
+    public ServerResponse uploadAvatar(@RequestParam("file") MultipartFile file) {
 
         if (Objects.isNull(file)) {
             return ServerResponse.createByErrorMessage("文件不可为空");
-        }
-        ServerResponse<UserDto> loginUserResponse = userClient.getLoginUser();
-        if (!loginUserResponse.isSuccess()) {
-            return ServerResponse.createByErrorMessage(loginUserResponse.getMsg());
         }
         File tempFile = null;
         try {

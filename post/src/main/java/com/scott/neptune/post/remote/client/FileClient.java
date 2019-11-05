@@ -6,8 +6,8 @@ import com.scott.neptune.post.remote.hystric.FileClientFallbackFactory;
 import com.scott.neptune.userapi.dto.UserAvatarDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,11 +30,10 @@ public interface FileClient {
      * @param useTypeId 文件用途标识 [1: default, 2: avatar, 3: user background, 4: post image]
      * @return
      */
-    @GetMapping(value = "/file/fileServer/upload",
-            produces = {MediaType.APPLICATION_JSON_UTF8_VALUE},
+    @RequestMapping(value = "/file/fileServer/upload", method = RequestMethod.POST,
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     ServerResponse<String> upload(@RequestPart("file") MultipartFile file,
-                                  @RequestParam(defaultValue = "1") Integer useTypeId);
+                                  @RequestParam(value = "useTypeId", defaultValue = "1") Integer useTypeId);
 
     /**
      * 上传头像
@@ -42,8 +41,7 @@ public interface FileClient {
      * @param file
      * @return
      */
-    @PostMapping(value = "/fileServer/uploadAvatar",
-            produces = {MediaType.APPLICATION_JSON_UTF8_VALUE},
+    @RequestMapping(value = "/fileServer/uploadAvatar", method = RequestMethod.POST,
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     ServerResponse<List<UserAvatarDto>> uploadAvatar(@RequestPart("file") MultipartFile file);
 

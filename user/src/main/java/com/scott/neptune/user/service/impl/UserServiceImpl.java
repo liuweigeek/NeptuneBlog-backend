@@ -217,8 +217,8 @@ public class UserServiceImpl implements IUserService {
             return ServerResponse.createByErrorMessage(uploadAvatarRes.getMsg());
         }
         List<UserAvatarDto> avatarDtoList = uploadAvatarRes.getData();
-        List<UserAvatarEntity> avatarEntityList = userAvatarModelMapping.convertToEntityList(avatarDtoList);
         avatarDtoList.forEach(avatarDto -> avatarDto.setUserId(userDto.getId()));
+        List<UserAvatarEntity> avatarEntityList = userAvatarModelMapping.convertToEntityList(avatarDtoList);
 
         userAvatarService.delete(UserAvatarEntity.builder().userId(userDto.getId()).build());
         ServerResponse<List<UserAvatarEntity>> saveRes = userAvatarService.saveList(avatarEntityList);
