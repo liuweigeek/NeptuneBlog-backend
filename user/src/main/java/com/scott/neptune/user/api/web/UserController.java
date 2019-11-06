@@ -70,7 +70,13 @@ public class UserController extends BaseController {
             return ServerResponse.createByErrorMessage(errorMsgList.toString());
         }
         UserEntity userEntity = userModelMapping.convertToEntity(userDto);
-        return userService.save(userEntity);
+        ServerResponse<UserDto> registerRes = userService.save(userEntity);
+        if (registerRes.isFailed()) {
+            return registerRes;
+        }
+        userDto = registerRes.getData();
+        HeaderUtil.set(response, Constant.Login.CURRENT_USER, userDto.getToken());
+        return ServerResponse.createBySuccess(userDto);
     }
 
     /**

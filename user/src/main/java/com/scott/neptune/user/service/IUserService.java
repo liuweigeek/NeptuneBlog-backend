@@ -22,7 +22,7 @@ public interface IUserService {
 
     ServerResponse<UserDto> login(String email, String password);
 
-    ServerResponse<UserEntity> save(UserEntity userEntity);
+    ServerResponse<UserDto> save(UserEntity userEntity);
 
     UserEntity getUserById(String id, String loginUserId);
 

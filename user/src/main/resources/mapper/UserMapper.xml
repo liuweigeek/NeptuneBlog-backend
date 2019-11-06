@@ -82,8 +82,8 @@
                 null relation,
             </otherwise>
         </choose>
-        following.count followingCount,
-        follower.count followerCount,
+        ifnull(following.count,0) followingCount,
+        ifnull(follower.count,0) followerCount,
         u.token
         from t_user u
         left join (select from_id, count(to_id) count from t_friend_relation group by from_id) following on

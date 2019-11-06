@@ -111,7 +111,7 @@ public class UserServiceImpl implements IUserService {
      * @return 保存结果
      */
     @Override
-    public ServerResponse<UserEntity> save(UserEntity userEntity) {
+    public ServerResponse<UserDto> save(UserEntity userEntity) {
         if (this.existsByEmail(userEntity.getEmail())) {
             return ServerResponse.createByErrorMessage("用户邮箱已存在");
         }
@@ -121,8 +121,12 @@ public class UserServiceImpl implements IUserService {
         userEntity.setRegisterDate(new Date());
         userEntity.setPassword(MD5Utils.MD5EncodeUtf8(userEntity.getPassword()));
         try {
+            userEntity.setLoginDate(new Date());
+            userEntity.setToken(UserUtil.generateTokenByUser(userEntity));
             userMapper.insert(userEntity);
-            return ServerResponse.createBySuccess(userEntity);
+            UserDto userDto = userModelMapping.convertToDto(userEntity);
+            redisTemplate.opsForValue().set(userEntity.getToken(), userDto, 30, TimeUnit.MINUTES);
+            return ServerResponse.createBySuccess(userDto);
         } catch (Exception e) {
             return ServerResponse.createByErrorMessage("新建用户失败");
         }
