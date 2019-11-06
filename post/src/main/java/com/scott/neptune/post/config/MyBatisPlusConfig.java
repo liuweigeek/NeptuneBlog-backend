@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  */
 @EnableTransactionManagement
 @Configuration
-@MapperScan("com.scott.neptune.mapper")
+@MapperScan("com.scott.neptune.post.mapper")
 public class MyBatisPlusConfig {
 
     @Getter
