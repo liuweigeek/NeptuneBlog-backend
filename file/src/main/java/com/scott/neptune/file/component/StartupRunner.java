@@ -1,9 +1,9 @@
-package com.scott.neptune.file.config;
+package com.scott.neptune.file.component;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 
@@ -13,14 +13,11 @@ import java.io.File;
  * @Date: 2019/10/17 22:10
  * @Description: NeptuneBlog
  */
-@Configuration
-public class InitializerConfig implements ApplicationRunner {
-
-    private final String SYS_TPM_DIR = System.getProperty("java.io.tmpdir");
-    private final String SEPARATOR = File.separator;
+@Component
+public class StartupRunner implements ApplicationRunner {
 
     @Value("${file.tempFolder}")
-    private String tempFolder = "file.tempFolder";
+    private String tempFolder;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -31,7 +28,7 @@ public class InitializerConfig implements ApplicationRunner {
      * init temp folders on disk
      */
     private void initTempFolder() {
-        File appTmpDir = new File(SYS_TPM_DIR + SEPARATOR + tempFolder);
+        File appTmpDir = new File(tempFolder);
         if (!appTmpDir.exists()) {
             appTmpDir.mkdirs();
         }

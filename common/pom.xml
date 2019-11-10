@@ -21,12 +21,14 @@
         <guava.version>28.1-jre</guava.version>
         <commons-lang.version>2.6</commons-lang.version>
         <commons-lang3.version>3.8.1</commons-lang3.version>
+        <commons-text.version>1.8</commons-text.version>
         <commons-collections.version>3.2.2</commons-collections.version>
         <commons-fileupload.version>1.4</commons-fileupload.version>
         <commons-io.version>2.6</commons-io.version>
         <commons-codec.version>1.13</commons-codec.version>
         <commons-configuration.version>1.10</commons-configuration.version>
         <commons-pool2.version>2.7.0</commons-pool2.version>
+        <jackson-module-jaxb-annotations.version>2.10.0</jackson-module-jaxb-annotations.version>
     </properties>
 
     <dependencies>
@@ -34,6 +36,27 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-jaxb-annotations</artifactId>
+            <version>${jackson-module-jaxb-annotations.version}</version>
         </dependency>
 
         <dependency>
@@ -85,6 +108,12 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>${commons-lang3.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+            <version>${commons-text.version}</version>
         </dependency>
 
         <dependency>
