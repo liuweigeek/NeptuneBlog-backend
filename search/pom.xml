@@ -29,7 +29,19 @@
 
         <dependency>
             <groupId>com.scott.neptune</groupId>
+            <artifactId>user-client</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.scott.neptune</groupId>
             <artifactId>post-api</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.scott.neptune</groupId>
+            <artifactId>post-client</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 
@@ -76,7 +88,7 @@
     </dependencies>
 
     <build>
-        <finalName>user</finalName>
+        <finalName>${project.name}</finalName>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>

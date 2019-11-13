@@ -8,13 +8,12 @@
         <module>config-server</module>
         <module>api-gateway</module>
         <module>common</module>
+        <module>login</module>
+        <module>user</module>
+        <module>post</module>
+        <module>search</module>
         <module>file</module>
         <module>mail</module>
-        <module>search</module>
-        <module>user-api</module>
-        <module>user</module>
-        <module>post-api</module>
-        <module>post</module>
     </modules>
 
     <parent>

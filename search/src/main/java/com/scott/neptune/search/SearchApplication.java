@@ -19,7 +19,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EntityScan(basePackages = "com.scott.neptune")
 @ComponentScan(basePackages = "com.scott.neptune")
 @EnableDiscoveryClient
-@EnableFeignClients
+@EnableFeignClients(basePackages = "com.scott.neptune")
 @EnableHystrix
 @SpringBootApplication
 public class SearchApplication {

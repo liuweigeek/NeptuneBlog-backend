@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scott.neptune.userserver.mapper.UserMapper">
+
+    <resultMap id="BaseResultMap" type="com.scott.neptune.userserver.entity.UserEntity">
+        <id column="id" property="id"/>
+        <result column="email" property="email"/>
+        <result column="username" property="username"/>
+        <result column="nickname" property="nickname"/>
+        <result column="password" property="password"/>
+        <result column="birthday" property="birthday"/>
+        <result column="sex" property="sex"/>
+        <result column="register_date" property="registerDate"/>
+        <result column="login_date" property="loginDate"/>
+        <result column="lang_key" property="langKey"/>
+        <result column="relation" property="relation"/>
+        <result column="token" property="token"/>
+        <collection property="avatarList" column="id"
+                    ofType="com.scott.neptune.userserver.entity.UserAvatarEntity"
+                    select="com.scott.neptune.userserver.mapper.UserAvatarMapper.findAllByUserId"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, email, username, nickname, password, birthday,
+        sex, register_date, login_date, lang_key, relation, token
+    </sql>
+
+    <!-- 判断指定用户是否存在 -->
+    <select id="exists" parameterType="com.scott.neptune.userserver.entity.UserEntity"
+            resultType="boolean">
+        select count(id)
+        from t_user
+        <where>
+            <if test="user != null">
+                <if test="user.id != null and user.id != ''">
+                    and id = #{user.id}
+                </if>
+                <if test="user.email != null and user.email != ''">
+                    and email = #{user.email}
+                </if>
+                <if test="user.username != null and user.username != ''">
+                    and username = #{user.username}
+                </if>
+                <if test="user.nickname != null and user.nickname != ''">
+                    and nickname = #{user.nickname}
+                </if>
+                <if test="user.password != null and user.password != ''">
+                    and password = #{user.password}
+                </if>
+                <if test="user.sex != null">
+                    and sex = #{sex}
+                </if>
+                <if test="user.langKey != null and user.langKey != ''">
+                    and lang_key = #{user.langKey}
+                </if>
+                <if test="user.token != null and user.token != ''">
+                    and token = #{user.token}
+                </if>
+            </if>
+        </where>
+    </select>
+
+    <!-- 获取指定用户 -->
+    <select id="getOne" parameterType="map"
+            resultMap="BaseResultMap">
+        select
+        u.id,
+        u.email,
+        u.username,
+        u.nickname,
+        u.password,
+        u.birthday,
+        u.sex,
+        u.register_date,
+        u.login_date,
+        u.lang_key,
+        <choose>
+            <when test="fromId != null and fromId != ''">
+                ifnull(fr.relation, 0) relation,
+            </when>
+            <otherwise>
+                null relation,
+            </otherwise>
+        </choose>
+        ifnull(following.count,0) followingCount,
+        ifnull(follower.count,0) followerCount,
+        u.token
+        from t_user u
+        left join (select from_id, count(to_id) count from t_friend_relation group by from_id) following on
+        following.from_id = u.id
+        left join (select to_id, count(from_id) count from t_friend_relation group by to_id) follower on
+        follower.to_id = u.id
+        <if test="fromId != null and fromId != ''">
+            left join (select to_id, count(from_id) relation
+            from t_friend_relation
+            where from_id = #{fromId}
+            group by to_id) fr on fr.to_id = u.id
+        </if>
+        <where>
+            <if test="user != null">
+                <if test="user.id != null and user.id != ''">
+                    and u.id = #{user.id}
+                </if>
+                <if test="user.email != null and user.email != ''">
+                    and u.email = #{user.email}
+                </if>
+                <if test="user.username != null and user.username != ''">
+                    and u.username = #{user.username}
+                </if>
+                <if test="user.nickname != null and user.nickname != ''">
+                    and u.nickname = #{user.nickname}
+                </if>
+                <if test="user.password != null and user.password != ''">
+                    and u.password = #{user.password}
+                </if>
+                <if test="user.sex != null">
+                    and u.sex = #{sex}
+                </if>
+                <if test="user.langKey != null and user.langKey != ''">
+                    and u.lang_key = #{user.langKey}
+                </if>
+                <if test="user.token != null and user.token != ''">
+                    and u.token = #{user.token}
+                </if>
+            </if>
+        </where>
+        limit 1
+    </select>
+
+    <!-- 查找符合条件的用户 -->
+    <select id="findAll" parameterType="map"
+            resultMap="BaseResultMap">
+        select
+        u.id,
+        u.email,
+        u.username,
+        u.nickname,
+        u.password,
+        u.birthday,
+        u.sex,
+        u.register_date,
+        u.login_date,
+        u.lang_key,
+        <choose>
+            <when test="fromId != null and fromId != ''">
+                ifnull(fr.relation, 0) relation,
+            </when>
+            <otherwise>
+                null relation,
+            </otherwise>
+        </choose>
+        u.token
+        from t_user u
+        <if test="fromId != null and fromId != ''">
+            left join (select to_id, count(from_id) relation
+            from t_friend_relation
+            where from_id = #{fromId}
+            group by to_id) fr on fr.to_id = u.id
+        </if>
+        <where>
+            <if test="user != null">
+                <if test="user.id != null and user.id != ''">
+                    and u.id = #{user.id}
+                </if>
+                <if test="user.email != null and user.email != ''">
+                    and u.email = #{user.email}
+                </if>
+                <if test="user.username != null and user.username != ''">
+                    and u.username = #{user.username}
+                </if>
+                <if test="user.nickname != null and user.nickname != ''">
+                    and u.nickname = #{user.nickname}
+                </if>
+                <if test="user.password != null and user.password != ''">
+                    and u.password = #{user.password}
+                </if>
+                <if test="user.sex != null">
+                    and u.sex = #{sex}
+                </if>
+                <if test="user.langKey != null and user.langKey != ''">
+                    and u.lang_key = #{user.langKey}
+                </if>
+                <if test="user.token != null and user.token != ''">
+                    and u.token = #{user.token}
+                </if>
+            </if>
+        </where>
+        order by u.register_date asc
+    </select>
+
+    <!-- 根据用户ID列表获取全部用户 -->
+    <select id="findAllInUserIds" parameterType="map"
+            resultMap="BaseResultMap">
+        select
+        u.id,
+        u.email,
+        u.username,
+        u.nickname,
+        u.password,
+        u.birthday,
+        u.sex,
+        u.register_date,
+        u.login_date,
+        u.lang_key,
+        <choose>
+            <when test="fromId != null and fromId != ''">
+                ifnull(fr.relation, 0) relation,
+            </when>
+            <otherwise>
+                null relation,
+            </otherwise>
+        </choose>
+        u.token
+        from t_user u
+        <if test="fromId != null and fromId != ''">
+            left join (select to_id, count(from_id) relation
+            from t_friend_relation
+            where from_id = #{fromId}
+            group by to_id) fr on fr.to_id = u.id
+        </if>
+        where u.id in
+        <foreach item="item" index="index" open="(" separator="," close=")" collection="idList">
+            #{item}
+        </foreach>
+        order by u.register_date asc
+    </select>
+
+    <!-- 根据关键字查找全部用户 -->
+    <select id="findByKeyword" parameterType="map" resultMap="BaseResultMap">
+        select u.id,
+        u.email,
+        u.username,
+        u.nickname,
+        u.password,
+        u.birthday,
+        u.sex,
+        u.register_date,
+        u.login_date,
+        u.lang_key,
+        <choose>
+            <when test="fromId != null and fromId != ''">
+                ifnull(fr.relation, 0) relation,
+            </when>
+            <otherwise>
+                null relation,
+            </otherwise>
+        </choose>
+        u.token
+        from t_user u
+        <if test="fromId != null and fromId != ''">
+            left join (select to_id, count(from_id) relation
+            from t_friend_relation
+            where from_id = #{fromId}
+            group by to_id) fr on fr.to_id = u.id
+        </if>
+        where u.id like concat('%', #{keyword}, '%')
+        or u.email like concat('%', #{keyword}, '%')
+        or u.username like concat('%', #{keyword}, '%')
+        or u.nickname like concat('%', #{keyword}, '%')
+        order by u.register_date asc
+    </select>
+
+</mapper>

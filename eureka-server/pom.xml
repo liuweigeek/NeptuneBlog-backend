@@ -27,7 +27,7 @@
     </dependencies>
 
     <build>
-        <finalName>eureka-server</finalName>
+        <finalName>${project.name}</finalName>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>

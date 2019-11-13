@@ -43,7 +43,7 @@
     </dependencies>
 
     <build>
-        <finalName>config-server</finalName>
+        <finalName>${project.name}</finalName>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>

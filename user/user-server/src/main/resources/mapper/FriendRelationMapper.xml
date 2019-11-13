@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scott.neptune.userserver.mapper.FriendRelationMapper">
+
+    <resultMap id="BaseResultMap" type="com.scott.neptune.userserver.entity.FriendRelationEntity">
+        <result column="from_id" property="fromId"/>
+        <result column="to_id" property="toId"/>
+        <result column="follow_date" property="followDate"/>
+        <result column="follow_from" property="followFrom"/>
+    </resultMap>
+
+    <resultMap id="UserResultMap" type="com.scott.neptune.userapi.dto.UserDto">
+        <id column="id" property="id"/>
+        <result column="email" property="email"/>
+        <result column="username" property="username"/>
+        <result column="nickname" property="nickname"/>
+        <result column="birthday" property="birthday"/>
+        <result column="sex" property="sex"/>
+        <result column="relation" property="relation"/>
+        <result column="small_avatar" property="smallAvatar"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        from_id, to_id, follow_date, follow_from
+    </sql>
+
+    <!-- 判断指定关系是否存在 -->
+    <select id="exists" parameterType="com.scott.neptune.userserver.entity.FriendRelationEntity"
+            resultType="boolean">
+        select count(1)
+        from t_friend_relation
+        <where>
+            <if test="relation != null">
+                <if test="relation.fromId != null and relation.fromId != ''">
+                    and from_id = #{relation.fromId}
+                </if>
+                <if test="relation.toId != null and relation.toId != ''">
+                    and to_id = #{relation.toId}
+                </if>
+            </if>
+        </where>
+    </select>
+
+    <!-- 删除指定关系 -->
+    <delete id="delete" parameterType="com.scott.neptune.userserver.entity.FriendRelationEntity">
+        delete
+        from t_friend_relation
+        where from_id = #{relation.fromId}
+          and to_id = #{relation.toId}
+    </delete>
+
+    <!-- 获取指定关系 -->
+    <select id="getOne" parameterType="com.scott.neptune.userserver.entity.FriendRelationEntity"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_friend_relation
+        <where>
+            <if test="relation != null">
+                <if test="relation.fromId != null and relation.fromId != ''">
+                    and from_id = #{relation.fromId}
+                </if>
+                <if test="relation.toId != null and relation.toId != ''">
+                    and to_id = #{relation.toId}
+                </if>
+            </if>
+        </where>
+        limit 1
+    </select>
+
+    <!-- 查找符合条件的关系 -->
+    <select id="findAll" parameterType="com.scott.neptune.userserver.entity.FriendRelationEntity"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_friend_relation
+        <where>
+            <if test="relation != null">
+                <if test="relation.fromId != null and relation.fromId != ''">
+                    and from_id = #{relation.fromId}
+                </if>
+                <if test="relation.toId != null and relation.toId != ''">
+                    and to_id = #{relation.toId}
+                </if>
+            </if>
+        </where>
+        order by fr.follow_date desc
+    </select>
+
+    <!-- 查看关注的用户 -->
+    <select id="findFollowing" parameterType="com.scott.neptune.userserver.entity.FriendRelationEntity"
+            resultMap="UserResultMap">
+        select
+        u.id, u.email, u.username, u.nickname,
+        u.birthday, u.sex, ua.url small_avatar, 1 relation
+        from t_friend_relation fr
+        left join t_user u on u.id = fr.to_id
+        left join t_user_avatar ua on ua.user_id = u.id and ua.size_type = 1
+        <where>
+            <if test="relation != null">
+                <if test="relation.fromId != null and relation.fromId != ''">
+                    and fr.from_id = #{relation.fromId}
+                </if>
+                <if test="relation.toId != null and relation.toId != ''">
+                    and fr.to_id = #{relation.toId}
+                </if>
+            </if>
+        </where>
+        order by fr.follow_date desc
+    </select>
+
+    <!-- 查看关注者 -->
+    <select id="findFollower" parameterType="com.scott.neptune.userserver.entity.FriendRelationEntity"
+            resultMap="UserResultMap">
+        select
+        u.id, u.email, u.username, u.nickname,
+        u.birthday, u.sex, ua.url small_avatar, ifnull(rfr.relation, 0) relation
+        from t_friend_relation fr
+        left join t_user u on u.id = fr.from_id
+        left join t_user_avatar ua on ua.user_id = u.id and ua.size_type = 1
+        left join (
+        select from_id, to_id, count(1) relation
+        from t_friend_relation
+        group by from_id, to_id) rfr
+        on rfr.from_id = fr.to_id and rfr.to_id = fr.from_id
+        <where>
+            <if test="relation != null">
+                <if test="relation.fromId != null and relation.fromId != ''">
+                    and fr.from_id = #{relation.fromId}
+                </if>
+                <if test="relation.toId != null and relation.toId != ''">
+                    and fr.to_id = #{relation.toId}
+                </if>
+            </if>
+        </where>
+        order by fr.follow_date desc
+    </select>
+
+    <!-- 查看全部关注的用户 -->
+    <select id="findAllFollowing" parameterType="com.scott.neptune.userserver.entity.FriendRelationEntity"
+            resultMap="UserResultMap">
+        select
+        u.id, u.email, u.username, u.nickname,
+        u.birthday, u.sex, ua.url small_avatar, 1 relation
+        from t_friend_relation fr
+        left join t_user u on u.id = fr.to_id
+        left join t_user_avatar ua on ua.user_id = u.id and ua.size_type = 1
+        <where>
+            <if test="relation != null">
+                <if test="relation.fromId != null and relation.fromId != ''">
+                    and fr.from_id = #{relation.fromId}
+                </if>
+                <if test="relation.toId != null and relation.toId != ''">
+                    and fr.to_id = #{relation.toId}
+                </if>
+            </if>
+        </where>
+        order by fr.follow_date desc
+    </select>
+
+    <!-- 查看关注者 -->
+    <select id="findAllFollower" parameterType="com.scott.neptune.userserver.entity.FriendRelationEntity"
+            resultMap="UserResultMap">
+        select
+        u.id, u.email, u.username, u.nickname,
+        u.birthday, u.sex, ua.url small_avatar, ifnull(rfr.relation, 0) relation
+        from t_friend_relation fr
+        left join t_user u on u.id = fr.from_id
+        left join t_user_avatar ua on ua.user_id = u.id and ua.size_type = 1
+        left join (
+        select from_id, to_id, count(1) relation
+        from t_friend_relation
+        group by from_id, to_id) rfr
+        on rfr.from_id = fr.to_id and rfr.to_id = fr.from_id
+        <where>
+            <if test="relation != null">
+                <if test="relation.fromId != null and relation.fromId != ''">
+                    and fr.from_id = #{relation.fromId}
+                </if>
+                <if test="relation.toId != null and relation.toId != ''">
+                    and fr.to_id = #{relation.toId}
+                </if>
+            </if>
+        </where>
+        order by fr.follow_date desc
+    </select>
+
+</mapper>
