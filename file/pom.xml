@@ -10,7 +10,6 @@
     </parent>
 
     <name>file</name>
-    <version>1.0</version>
     <artifactId>file</artifactId>
     <packaging>pom</packaging>
 
