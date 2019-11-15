@@ -9,7 +9,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <name>search-server</name>
+    <name>${project.artifactId}</name>
     <artifactId>search-server</artifactId>
     <packaging>jar</packaging>
 

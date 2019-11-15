@@ -10,7 +10,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <name>common</name>
+    <name>${project.artifactId}</name>
     <artifactId>common</artifactId>
     <packaging>jar</packaging>
 

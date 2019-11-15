@@ -61,14 +61,15 @@
         p.device,
         p.create_date,
         p.update_date,
-        u.id uid,
-        u.sex,
-        u.username,
-        u.nickname,
+        p.user_id uid,
+        a.sex,
+        a.username,
+        a.nickname,
         ua.url small_avatar
         from t_user u
         left join t_friend_relation fr on fr.from_id = u.id
         left join t_post p on (p.user_id = fr.to_id or p.user_id = u.id)
+        left join t_user a on a.id = p.user_id
         left join t_user_avatar ua on ua.user_id = p.user_id and ua.size_type = 1
         where p.id is not null
         <if test="post != null">
@@ -114,8 +115,8 @@
                u.username,
                u.nickname,
                ua.url small_avatar
-        from t_user u
-                 left join t_post p on u.id = p.user_id
+        from t_post p
+                 left join t_user u on p.user_id = u.id
                  left join t_user_avatar ua on ua.user_id = u.id and ua.size_type = 1
         where p.content like concat('%', #{keyword}, '%')
           and p.id is not null

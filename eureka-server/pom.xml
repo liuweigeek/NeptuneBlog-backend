@@ -9,7 +9,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <name>eureka-server</name>
+    <name>${project.artifactId}</name>
     <artifactId>eureka-server</artifactId>
     <packaging>jar</packaging>
 

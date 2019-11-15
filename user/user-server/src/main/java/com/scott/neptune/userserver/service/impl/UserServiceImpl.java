@@ -80,7 +80,7 @@ public class UserServiceImpl implements IUserService {
      *
      * @param email    邮箱地址
      * @param password 密码
-     * @return
+     * @return 登录结果
      */
     @Override
     public ServerResponse<UserDto> login(String email, String password) {
@@ -90,7 +90,7 @@ public class UserServiceImpl implements IUserService {
             return ServerResponse.createByErrorMessage("用户不存在，请检查邮箱地址是否正确");
         }
 
-        String md5Password = MD5Utils.MD5EncodeUtf8(password);
+        String md5Password = MD5Utils.encodeUtf8(password);
         if (!StringUtils.equals(userEntity.getPassword(), md5Password)) {
             return ServerResponse.createByErrorMessage("密码错误");
         }
@@ -119,7 +119,7 @@ public class UserServiceImpl implements IUserService {
             return ServerResponse.createByErrorMessage("用户名已存在,请更换后重试");
         }
         userEntity.setRegisterDate(new Date());
-        userEntity.setPassword(MD5Utils.MD5EncodeUtf8(userEntity.getPassword()));
+        userEntity.setPassword(MD5Utils.encodeUtf8(userEntity.getPassword()));
         try {
             userEntity.setLoginDate(new Date());
             userEntity.setToken(UserUtil.generateTokenByUser(userEntity));
@@ -167,8 +167,8 @@ public class UserServiceImpl implements IUserService {
     /**
      * 通过关键字搜索用户
      *
-     * @param keyword
-     * @return
+     * @param keyword 关键字
+     * @return 用户列表
      */
     @Override
     public List<UserEntity> findByKeyword(String keyword, String loginUserId) {
@@ -214,6 +214,13 @@ public class UserServiceImpl implements IUserService {
         }
     }
 
+    /**
+     * 上传头像
+     *
+     * @param avatarFile 头像文件
+     * @param userDto    用户
+     * @return 上传结果
+     */
     @Override
     public ServerResponse<List<UserAvatarEntity>> uploadAvatar(MultipartFile avatarFile, UserDto userDto) {
         ServerResponse<List<UserAvatarDto>> uploadAvatarRes = fileClient.uploadAvatar(avatarFile);
