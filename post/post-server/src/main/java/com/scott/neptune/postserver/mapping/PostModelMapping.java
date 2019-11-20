@@ -3,14 +3,10 @@ package com.scott.neptune.postserver.mapping;
 import com.scott.neptune.common.mapping.BaseModelMapping;
 import com.scott.neptune.postapi.dto.PostDto;
 import com.scott.neptune.postserver.entity.PostEntity;
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * @Author: scott
@@ -42,22 +38,6 @@ public class PostModelMapping extends BaseModelMapping<PostEntity, PostDto> {
     }
 
     /**
-     * convert entity list to dto list
-     *
-     * @param entityList
-     * @return
-     */
-    @Override
-    public List<PostDto> convertToDtoList(List<PostEntity> entityList) {
-        if (CollectionUtils.isEmpty(entityList)) {
-            return Collections.emptyList();
-        }
-        return entityList.stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
-    }
-
-    /**
      * convert dto to entity
      *
      * @param dto
@@ -68,21 +48,5 @@ public class PostModelMapping extends BaseModelMapping<PostEntity, PostDto> {
         PostEntity entity = new PostEntity();
         BeanUtils.copyProperties(dto, entity);
         return entity;
-    }
-
-    /**
-     * convert dto list to entity list
-     *
-     * @param dtoList
-     * @return
-     */
-    @Override
-    public List<PostEntity> convertToEntityList(List<PostDto> dtoList) {
-        if (CollectionUtils.isEmpty(dtoList)) {
-            return Collections.emptyList();
-        }
-        return dtoList.stream()
-                .map(this::convertToEntity)
-                .collect(Collectors.toList());
     }
 }

@@ -108,7 +108,7 @@ public class FriendRelationServiceImpl implements IFriendRelationService {
         if (StringUtils.isBlank(userId)) {
             return new Page<>(pageNumber, pageSize);
         }
-        Page<UserDto> page = new Page<>(pageNumber - 1, pageSize);
+        Page<UserDto> page = new Page<>(pageNumber, pageSize);
         return friendRelationMapper.findFollowing(page, FriendRelationEntity.builder().fromId(userId).build());
     }
 
@@ -123,7 +123,7 @@ public class FriendRelationServiceImpl implements IFriendRelationService {
         if (StringUtils.isBlank(userId)) {
             return new Page<>(pageNumber, pageSize);
         }
-        Page<UserDto> page = new Page<>(pageNumber - 1, pageSize);
+        Page<UserDto> page = new Page<>(pageNumber, pageSize);
         return friendRelationMapper.findFollower(page, FriendRelationEntity.builder().toId(userId).build());
     }
 

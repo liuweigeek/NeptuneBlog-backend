@@ -38,8 +38,6 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class ControllerAop {
 
-    private static final String KEY_USER = "user";
-
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
 

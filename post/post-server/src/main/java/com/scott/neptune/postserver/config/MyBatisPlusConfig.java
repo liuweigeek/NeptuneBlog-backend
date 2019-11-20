@@ -29,8 +29,6 @@ public class MyBatisPlusConfig {
     @Bean
     public PaginationInterceptor paginationInterceptor() {
         return new PaginationInterceptor()
-                .setCountSqlParser(new JsqlParserCountOptimize(true))
-                .setOverflow(false)
-                .setLimit(pageSize);
+                .setCountSqlParser(new JsqlParserCountOptimize(true));
     }
 }

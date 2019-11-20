@@ -1,6 +1,10 @@
 package com.scott.neptune.common.mapping;
 
+import org.apache.commons.collections.CollectionUtils;
+
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @Author: scott
@@ -24,7 +28,14 @@ public abstract class BaseModelMapping<E, D> {
      * @param entityList
      * @return
      */
-    public abstract List<D> convertToDtoList(List<E> entityList);
+    public List<D> convertToDtoList(List<E> entityList) {
+        if (CollectionUtils.isEmpty(entityList)) {
+            return Collections.emptyList();
+        }
+        return entityList.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
 
     /**
      * convert dto to entity
@@ -40,5 +51,12 @@ public abstract class BaseModelMapping<E, D> {
      * @param dtoList
      * @return
      */
-    public abstract List<E> convertToEntityList(List<D> dtoList);
+    public List<E> convertToEntityList(List<D> dtoList) {
+        if (CollectionUtils.isEmpty(dtoList)) {
+            return Collections.emptyList();
+        }
+        return dtoList.stream()
+                .map(this::convertToEntity)
+                .collect(Collectors.toList());
+    }
 }

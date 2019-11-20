@@ -54,24 +54,25 @@
     <!-- 获取关注用户的推文 -->
     <select id="findAllOfFollowing" parameterType="com.scott.neptune.postserver.entity.PostEntity"
             resultMap="BaseResultMap">
-        select
-        p.id,
+
+        select p.id,
         p.user_id,
         p.content,
         p.device,
         p.create_date,
         p.update_date,
         p.user_id uid,
-        a.sex,
-        a.username,
-        a.nickname,
+        u.sex,
+        u.username,
+        u.nickname,
         ua.url small_avatar
-        from t_user u
-        left join t_friend_relation fr on fr.from_id = u.id
-        left join t_post p on (p.user_id = fr.to_id or p.user_id = u.id)
-        left join t_user a on a.id = p.user_id
+        from t_post p
+        left join t_user u on u.id = p.user_id
         left join t_user_avatar ua on ua.user_id = p.user_id and ua.size_type = 1
-        where p.id is not null
+        where (p.user_id in (select fr.to_id
+        from t_friend_relation fr
+        where fr.from_id = #{fromId})
+        or p.user_id = #{fromId})
         <if test="post != null">
             <if test="post.userId != null and post.userId != ''">
                 and u.id = #{post.userId}
@@ -80,7 +81,6 @@
                 and p.content like concat('%',#{post.content},'%')
             </if>
         </if>
-        and u.id = #{fromId}
         order by p.create_date desc
     </select>
 
