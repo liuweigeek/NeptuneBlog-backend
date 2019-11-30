@@ -1,5 +1,6 @@
 package com.scott.neptune.searchserver.api.web;
 
+import com.scott.neptune.common.annotation.RedisLock;
 import com.scott.neptune.common.controller.BaseController;
 import com.scott.neptune.common.response.ServerResponse;
 import com.scott.neptune.postapi.dto.PostDto;
@@ -40,6 +41,7 @@ public class SearchController extends BaseController {
     @Resource
     private PostClient postClient;
 
+    @RedisLock
     @ApiOperation(value = "搜索用户和推文")
     @ApiImplicitParam(name = "keyword", value = "关键字", required = true, dataType = "string", paramType = "path")
     @GetMapping(value = "/{keyword}")

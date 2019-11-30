@@ -1,4 +1,4 @@
-package com.scott.neptune.fileserver.config;
+package com.scott.neptune.common.config;
 
 import com.scott.neptune.common.constant.Constant;
 import feign.RequestInterceptor;
@@ -17,7 +17,7 @@ import java.util.Objects;
 /**
  * @Author: scott
  * @Email: <a href="mailto:wliu@fleetup.com">scott</a>
- * @Date: 2019/10/30 22:38
+ * @Date: 2019/10/31 08:25
  * @Description: Feign统一Token拦截器
  */
 @Slf4j
