@@ -20,10 +20,6 @@ public class FileComponent {
 
     private static final String SEPARATOR = File.separator;
 
-    public static void main(String[] args) {
-        System.out.println(System.getProperty("java.io.tmpdir"));
-    }
-
     @Resource
     private FileProps fileProps;
 

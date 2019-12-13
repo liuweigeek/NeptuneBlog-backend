@@ -47,7 +47,6 @@ public class RedisConfig extends CachingConfigurerSupport {
         return template;
     }
 
-
     private Jackson2JsonRedisSerializer constructSerializer() {
         @SuppressWarnings({"rawtypes", "unchecked"})
         Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);

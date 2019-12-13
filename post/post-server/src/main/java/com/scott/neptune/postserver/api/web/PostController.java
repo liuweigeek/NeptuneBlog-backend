@@ -72,6 +72,7 @@ public class PostController extends BaseController {
         PostEntity postEntity = postModelMapping.convertToEntity(postDto);
         ServerResponse<PostEntity> sendResponse = postService.save(postEntity, loginUser);
         if (sendResponse.isSuccess()) {
+            sendResponse.getData().setAuthor(loginUser);
             return ServerResponse.createBySuccess(postModelMapping.convertToDto(sendResponse.getData()));
         } else {
             return sendResponse;
