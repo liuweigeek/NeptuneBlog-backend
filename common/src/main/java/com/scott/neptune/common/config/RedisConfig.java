@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -21,11 +22,12 @@ import java.text.SimpleDateFormat;
  * @Author: scott
  * @Email: <a href="mailto:wliu@fleetup.com">scott</a>
  * @Date: 2019/11/10 18:19
- * @Description: 缓存配置
+ * @Description: Redis配置
  */
 @Slf4j
-@EnableCaching
 @Configuration
+@EnableCaching
+@ConditionalOnProperty(prefix = "spring.redis", name = "host")
 public class RedisConfig extends CachingConfigurerSupport {
 
     @Bean
@@ -38,7 +40,7 @@ public class RedisConfig extends CachingConfigurerSupport {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(lettuceConnectionFactory);
         //设置序列化工具
-        Jackson2JsonRedisSerializer serializer = constructSerializer();
+        Jackson2JsonRedisSerializer<Object> serializer = constructSerializer();
         template.setKeySerializer(serializer);
         template.setValueSerializer(serializer);
         template.setHashKeySerializer(serializer);
@@ -47,9 +49,9 @@ public class RedisConfig extends CachingConfigurerSupport {
         return template;
     }
 
-    private Jackson2JsonRedisSerializer constructSerializer() {
+    private Jackson2JsonRedisSerializer<Object> constructSerializer() {
         @SuppressWarnings({"rawtypes", "unchecked"})
-        Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);
+        Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);
         ObjectMapper om = new ObjectMapper();
         om.setVisibility(PropertyAccessor.GETTER, JsonAutoDetect.Visibility.ANY);
         om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);

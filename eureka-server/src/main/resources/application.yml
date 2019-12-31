@@ -1,18 +1,5 @@
-server:
-  port: 8761
 spring:
   application:
     name: @project.name@
   profiles:
     active: dev
-eureka:
-  instance:
-    hostname: localhost
-  client:
-    registerWithEureka: false
-    fetchRegistry: false
-    serviceUrl:
-      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
-#  register-with-eureka: false
-#  client:
-#    enable-self-preservation: false
