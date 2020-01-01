@@ -1,4 +1,4 @@
-package com.scott.neptune.userserver.util;
+package com.scott.neptune.common.util;
 
 import lombok.extern.slf4j.Slf4j;
 

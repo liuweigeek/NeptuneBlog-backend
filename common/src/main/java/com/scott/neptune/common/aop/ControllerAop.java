@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.scott.neptune.common.annotation.RedisLock;
 import com.scott.neptune.common.constant.Constant;
 import com.scott.neptune.common.response.ServerResponse;
+import com.scott.neptune.common.util.HeaderUtil;
 import com.scott.neptune.common.util.JsonMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -112,7 +113,7 @@ public class ControllerAop {
             String uri = request.getRequestURI();
 
             sb.append("-").append(uri);
-            String token = request.getHeader(Constant.Login.CURRENT_USER);
+            String token = HeaderUtil.get(request, Constant.Login.CURRENT_USER);
             sb.append("-").append(token);
         }
         String methodName = pjp.getSignature().getName();

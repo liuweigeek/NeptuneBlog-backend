@@ -1,6 +1,7 @@
 package com.scott.neptune.postserver.api.web;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.scott.neptune.common.constant.Constant;
 import com.scott.neptune.common.controller.BaseController;
 import com.scott.neptune.common.response.ServerResponse;
 import com.scott.neptune.postapi.dto.PostDto;
@@ -13,6 +14,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -110,6 +112,7 @@ public class PostController extends BaseController {
      * @return
      */
     @ApiOperation(value = "获取指定用户的推文")
+    @Cacheable(value = Constant.CacheKey.POST, key = "#postDto.getAuthorId()+'.'+#postDto.getCurrent()+'.'+#postDto.getSize()")
     @GetMapping(value = "/getPostsByUserId")
     public ServerResponse<IPage<PostDto>> getPostsByUserId(PostDto postDto) {
 
@@ -129,6 +132,7 @@ public class PostController extends BaseController {
      * @return
      */
     @ApiOperation(value = "获取指定用户的推文")
+    @Cacheable(value = Constant.CacheKey.POST, key = "#userDto.getUsername()+'.'+#userDto.getCurrent()+'.'+#userDto.getSize()")
     @GetMapping(value = "/getPostsByUsername")
     public ServerResponse<IPage<PostDto>> getPostsByUsername(UserDto userDto) {
 
