@@ -11,6 +11,7 @@
         <module>login</module>
         <module>user</module>
         <module>post</module>
+        <module>social</module>
         <module>search</module>
         <module>file</module>
         <module>mail</module>

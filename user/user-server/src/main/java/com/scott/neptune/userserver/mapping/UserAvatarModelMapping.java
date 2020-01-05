@@ -1,7 +1,7 @@
 package com.scott.neptune.userserver.mapping;
 
 import com.scott.neptune.common.mapping.BaseModelMapping;
-import com.scott.neptune.userapi.dto.UserAvatarDto;
+import com.scott.neptune.userclient.dto.UserAvatarDto;
 import com.scott.neptune.userserver.entity.UserAvatarEntity;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;

@@ -6,7 +6,7 @@ import com.netflix.zuul.exception.ZuulException;
 import com.scott.neptune.common.constant.Constant;
 import com.scott.neptune.common.response.ResponseCode;
 import com.scott.neptune.common.response.ServerResponse;
-import com.scott.neptune.userapi.util.UserUtils;
+import com.scott.neptune.userclient.util.UserUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;

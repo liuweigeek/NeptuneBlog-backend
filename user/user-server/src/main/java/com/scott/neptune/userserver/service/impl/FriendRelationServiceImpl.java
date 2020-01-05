@@ -3,7 +3,7 @@ package com.scott.neptune.userserver.service.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.scott.neptune.common.response.ServerResponse;
-import com.scott.neptune.userapi.dto.UserDto;
+import com.scott.neptune.userclient.dto.UserDto;
 import com.scott.neptune.userserver.entity.FriendRelationEntity;
 import com.scott.neptune.userserver.mapper.FriendRelationMapper;
 import com.scott.neptune.userserver.service.IFriendRelationService;

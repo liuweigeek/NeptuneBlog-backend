@@ -2,7 +2,7 @@ package com.scott.neptune.postserver.api.server;
 
 import com.scott.neptune.common.controller.BaseController;
 import com.scott.neptune.common.response.ServerResponse;
-import com.scott.neptune.postapi.dto.PostDto;
+import com.scott.neptune.postclient.dto.PostDto;
 import com.scott.neptune.postserver.entity.PostEntity;
 import com.scott.neptune.postserver.mapping.PostModelMapping;
 import com.scott.neptune.postserver.service.IPostService;

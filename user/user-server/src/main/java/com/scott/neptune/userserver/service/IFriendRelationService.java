@@ -2,7 +2,7 @@ package com.scott.neptune.userserver.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.scott.neptune.common.response.ServerResponse;
-import com.scott.neptune.userapi.dto.UserDto;
+import com.scott.neptune.userclient.dto.UserDto;
 import com.scott.neptune.userserver.entity.FriendRelationEntity;
 
 import java.util.List;

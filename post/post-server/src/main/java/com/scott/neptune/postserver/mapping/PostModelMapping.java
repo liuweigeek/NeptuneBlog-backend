@@ -1,7 +1,7 @@
 package com.scott.neptune.postserver.mapping;
 
 import com.scott.neptune.common.mapping.BaseModelMapping;
-import com.scott.neptune.postapi.dto.PostDto;
+import com.scott.neptune.postclient.dto.PostDto;
 import com.scott.neptune.postserver.entity.PostEntity;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;

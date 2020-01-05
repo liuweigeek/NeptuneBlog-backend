@@ -1,8 +1,8 @@
 package com.scott.neptune.userserver.mapping;
 
 import com.scott.neptune.common.mapping.BaseModelMapping;
-import com.scott.neptune.userapi.dto.UserAvatarDto;
-import com.scott.neptune.userapi.dto.UserDto;
+import com.scott.neptune.userclient.dto.UserAvatarDto;
+import com.scott.neptune.userclient.dto.UserDto;
 import com.scott.neptune.userserver.entity.UserAvatarEntity;
 import com.scott.neptune.userserver.entity.UserEntity;
 import org.apache.commons.collections.CollectionUtils;

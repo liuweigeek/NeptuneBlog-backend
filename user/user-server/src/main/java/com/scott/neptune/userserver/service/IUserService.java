@@ -1,7 +1,7 @@
 package com.scott.neptune.userserver.service;
 
 import com.scott.neptune.common.response.ServerResponse;
-import com.scott.neptune.userapi.dto.UserDto;
+import com.scott.neptune.userclient.dto.UserDto;
 import com.scott.neptune.userserver.entity.UserAvatarEntity;
 import com.scott.neptune.userserver.entity.UserEntity;
 import org.springframework.web.multipart.MultipartFile;

@@ -1,7 +1,7 @@
 package com.scott.neptune.searchserver.dto;
 
-import com.scott.neptune.postapi.dto.PostDto;
-import com.scott.neptune.userapi.dto.UserDto;
+import com.scott.neptune.postclient.dto.PostDto;
+import com.scott.neptune.userclient.dto.UserDto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;

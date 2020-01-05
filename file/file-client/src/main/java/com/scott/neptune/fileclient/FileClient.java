@@ -3,7 +3,7 @@ package com.scott.neptune.fileclient;
 import com.scott.neptune.common.response.ServerResponse;
 import com.scott.neptune.fileclient.config.FeignMultipartSupportConfig;
 import com.scott.neptune.fileclient.hystric.FileClientFallbackFactory;
-import com.scott.neptune.userapi.dto.UserAvatarDto;
+import com.scott.neptune.userclient.dto.UserAvatarDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -1,4 +1,4 @@
-package com.scott.neptune.userapi.dto;
+package com.scott.neptune.userclient.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

@@ -11,7 +11,7 @@ import com.scott.neptune.fileserver.model.ImageSize;
 import com.scott.neptune.fileserver.service.IAvatarService;
 import com.scott.neptune.fileserver.service.IFileService;
 import com.scott.neptune.fileserver.util.VerifyFileTypeUtil;
-import com.scott.neptune.userapi.dto.UserAvatarDto;
+import com.scott.neptune.userclient.dto.UserAvatarDto;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Service;
 

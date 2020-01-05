@@ -3,7 +3,7 @@ package com.scott.neptune.userserver.api.server;
 import com.scott.neptune.common.controller.BaseController;
 import com.scott.neptune.common.mapping.BaseModelMapping;
 import com.scott.neptune.common.response.ServerResponse;
-import com.scott.neptune.userapi.dto.UserDto;
+import com.scott.neptune.userclient.dto.UserDto;
 import com.scott.neptune.userserver.component.UserComponent;
 import com.scott.neptune.userserver.entity.FriendRelationEntity;
 import com.scott.neptune.userserver.service.IFriendRelationService;

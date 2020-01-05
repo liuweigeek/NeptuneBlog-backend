@@ -29,7 +29,7 @@ public class UserAvatarEntity implements Serializable {
 
     /**
      * 图片尺寸
-     * {@link com.scott.neptune.userapi.dto.UserAvatarDto.SizeTypeEnum}
+     * {@link com.scott.neptune.userclient.dto.UserAvatarDto.SizeTypeEnum}
      */
     private Integer sizeType;
 

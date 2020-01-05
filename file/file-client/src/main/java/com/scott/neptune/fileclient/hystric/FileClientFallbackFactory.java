@@ -2,7 +2,7 @@ package com.scott.neptune.fileclient.hystric;
 
 import com.scott.neptune.common.response.ServerResponse;
 import com.scott.neptune.fileclient.FileClient;
-import com.scott.neptune.userapi.dto.UserAvatarDto;
+import com.scott.neptune.userclient.dto.UserAvatarDto;
 import feign.hystrix.FallbackFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

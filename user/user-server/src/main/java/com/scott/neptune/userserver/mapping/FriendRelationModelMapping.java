@@ -1,7 +1,7 @@
 package com.scott.neptune.userserver.mapping;
 
 import com.scott.neptune.common.mapping.BaseModelMapping;
-import com.scott.neptune.userapi.dto.FriendRelationDto;
+import com.scott.neptune.userclient.dto.FriendRelationDto;
 import com.scott.neptune.userserver.entity.FriendRelationEntity;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;

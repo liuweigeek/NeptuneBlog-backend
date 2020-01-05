@@ -1,7 +1,7 @@
 package com.scott.neptune.userserver.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
-import com.scott.neptune.userapi.dto.UserDto;
+import com.scott.neptune.userclient.dto.UserDto;
 import lombok.*;
 import org.apache.ibatis.type.JdbcType;
 

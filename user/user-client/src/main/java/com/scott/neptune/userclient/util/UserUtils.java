@@ -1,6 +1,6 @@
-package com.scott.neptune.userapi.util;
+package com.scott.neptune.userclient.util;
 
-import com.scott.neptune.userapi.dto.UserDto;
+import com.scott.neptune.userclient.dto.UserDto;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 

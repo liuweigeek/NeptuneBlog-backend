@@ -29,12 +29,6 @@
 
         <dependency>
             <groupId>com.scott.neptune</groupId>
-            <artifactId>user-api</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.scott.neptune</groupId>
             <artifactId>user-client</artifactId>
             <version>${project.parent.version}</version>
         </dependency>

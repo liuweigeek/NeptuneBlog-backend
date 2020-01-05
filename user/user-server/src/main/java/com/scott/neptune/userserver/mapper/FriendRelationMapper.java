@@ -3,7 +3,7 @@ package com.scott.neptune.userserver.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.scott.neptune.userapi.dto.UserDto;
+import com.scott.neptune.userclient.dto.UserDto;
 import com.scott.neptune.userserver.entity.FriendRelationEntity;
 import org.apache.ibatis.annotations.Param;
 

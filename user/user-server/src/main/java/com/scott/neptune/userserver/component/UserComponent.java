@@ -2,7 +2,7 @@ package com.scott.neptune.userserver.component;
 
 import com.scott.neptune.common.constant.Constant;
 import com.scott.neptune.common.util.HeaderUtil;
-import com.scott.neptune.userapi.dto.UserDto;
+import com.scott.neptune.userclient.dto.UserDto;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;

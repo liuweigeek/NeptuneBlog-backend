@@ -1,7 +1,7 @@
 package com.scott.neptune.fileserver.service;
 
 import com.scott.neptune.common.response.ServerResponse;
-import com.scott.neptune.userapi.dto.UserAvatarDto;
+import com.scott.neptune.userclient.dto.UserAvatarDto;
 
 import java.io.File;
 import java.util.List;

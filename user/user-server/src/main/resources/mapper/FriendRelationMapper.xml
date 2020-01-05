@@ -9,7 +9,7 @@
         <result column="follow_from" property="followFrom"/>
     </resultMap>
 
-    <resultMap id="UserResultMap" type="com.scott.neptune.userapi.dto.UserDto">
+    <resultMap id="UserResultMap" type="com.scott.neptune.userclient.dto.UserDto">
         <id column="id" property="id"/>
         <result column="email" property="email"/>
         <result column="username" property="username"/>

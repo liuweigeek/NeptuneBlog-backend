@@ -1,4 +1,4 @@
-package com.scott.neptune.postapi.dto;
+package com.scott.neptune.postclient.dto;
 
 import com.scott.neptune.common.dto.Pageable;
 import io.swagger.annotations.ApiModel;

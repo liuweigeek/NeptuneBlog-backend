@@ -4,7 +4,7 @@ import com.scott.neptune.common.constant.Constant;
 import com.scott.neptune.common.controller.BaseController;
 import com.scott.neptune.common.response.ServerResponse;
 import com.scott.neptune.common.util.HeaderUtil;
-import com.scott.neptune.userapi.dto.UserDto;
+import com.scott.neptune.userclient.dto.UserDto;
 import com.scott.neptune.userserver.component.UserComponent;
 import com.scott.neptune.userserver.entity.UserEntity;
 import com.scott.neptune.userserver.mapping.UserModelMapping;

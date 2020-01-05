@@ -9,7 +9,7 @@
         <result column="device" property="device"/>
         <result column="create_date" property="createDate"/>
         <result column="update_date" property="updateDate"/>
-        <association property="author" javaType="com.scott.neptune.userapi.dto.UserDto">
+        <association property="author" javaType="com.scott.neptune.userclient.dto.UserDto">
             <id column="uid" property="id"/>
             <result column="sex" property="sex"/>
             <result column="username" property="username"/>

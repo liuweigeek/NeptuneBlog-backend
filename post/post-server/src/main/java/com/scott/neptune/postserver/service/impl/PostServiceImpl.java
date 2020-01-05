@@ -6,7 +6,7 @@ import com.scott.neptune.common.response.ServerResponse;
 import com.scott.neptune.postserver.entity.PostEntity;
 import com.scott.neptune.postserver.mapper.PostMapper;
 import com.scott.neptune.postserver.service.IPostService;
-import com.scott.neptune.userapi.dto.UserDto;
+import com.scott.neptune.userclient.dto.UserDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

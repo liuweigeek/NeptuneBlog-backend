@@ -1,7 +1,7 @@
 package com.scott.neptune.postclient;
 
 import com.scott.neptune.common.response.ServerResponse;
-import com.scott.neptune.postapi.dto.PostDto;
+import com.scott.neptune.postclient.dto.PostDto;
 import com.scott.neptune.postclient.hystric.PostClientFallbackFactory;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;

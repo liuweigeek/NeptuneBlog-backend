@@ -1,7 +1,7 @@
 package com.scott.neptune.userclient;
 
 import com.scott.neptune.common.response.ServerResponse;
-import com.scott.neptune.userapi.dto.UserDto;
+import com.scott.neptune.userclient.dto.UserDto;
 import com.scott.neptune.userclient.hystric.UserClientFallbackFactory;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;

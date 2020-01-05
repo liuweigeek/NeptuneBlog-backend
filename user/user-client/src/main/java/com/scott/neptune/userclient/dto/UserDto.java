@@ -1,4 +1,4 @@
-package com.scott.neptune.userapi.dto;
+package com.scott.neptune.userclient.dto;
 
 import com.scott.neptune.common.dto.Pageable;
 import io.swagger.annotations.ApiModel;

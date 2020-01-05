@@ -14,7 +14,6 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>login-api</module>
         <module>login-server</module>
         <module>login-client</module>
     </modules>
