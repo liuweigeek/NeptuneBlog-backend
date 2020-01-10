@@ -9,7 +9,7 @@ import com.scott.neptune.postserver.entity.PostEntity;
 import com.scott.neptune.postserver.mapping.PostModelMapping;
 import com.scott.neptune.postserver.service.IPostService;
 import com.scott.neptune.userclient.dto.UserDto;
-import com.scott.neptune.userclient.UserClient;
+import com.scott.neptune.userclient.client.UserClient;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;

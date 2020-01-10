@@ -6,7 +6,6 @@ import com.scott.neptune.userclient.dto.UserDto;
 import com.scott.neptune.userserver.component.UserComponent;
 import com.scott.neptune.userserver.entity.FriendRelationEntity;
 import com.scott.neptune.userserver.entity.UserEntity;
-import com.scott.neptune.userserver.mapping.FriendRelationModelMapping;
 import com.scott.neptune.userserver.service.IFriendRelationService;
 import com.scott.neptune.userserver.service.IUserService;
 import io.swagger.annotations.Api;
@@ -39,8 +38,6 @@ public class FriendController extends BaseController {
     private IUserService userService;
     @Resource
     private IFriendRelationService friendRelationService;
-    @Resource
-    private FriendRelationModelMapping friendRelationModelMapping;
 
     /**
      * 关注指定用户
@@ -49,7 +46,7 @@ public class FriendController extends BaseController {
      * @return 关注结果
      */
     @ApiOperation(value = "关注指定用户")
-    @ApiImplicitParam(name = "userId", value = "要关注的用户ID", required = true, paramType = "form", dataType = "string")
+    @ApiImplicitParam(name = "userId", value = "要关注的用户ID", required = true, paramType = "body", dataType = "string")
     @PostMapping(value = "/follow")
     public ServerResponse follow(@RequestBody String userId) {
 
@@ -81,7 +78,7 @@ public class FriendController extends BaseController {
      * @return 取消关注结果
      */
     @ApiOperation(value = "取消关注指定用户")
-    @ApiImplicitParam(name = "userId", value = "要取消关注的用户ID", required = true, paramType = "form", dataType = "string")
+    @ApiImplicitParam(name = "userId", value = "要取消关注的用户ID", required = true, paramType = "path", dataType = "string")
     @DeleteMapping(value = "/cancelFollow/{userId}")
     public ServerResponse cancelFollow(@PathVariable("userId") String userId) {
 

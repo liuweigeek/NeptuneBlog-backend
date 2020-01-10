@@ -2,7 +2,7 @@ package com.scott.neptune.postclient.hystric;
 
 import com.scott.neptune.common.response.ServerResponse;
 import com.scott.neptune.postclient.dto.PostDto;
-import com.scott.neptune.postclient.PostClient;
+import com.scott.neptune.postclient.client.PostClient;
 import feign.hystrix.FallbackFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

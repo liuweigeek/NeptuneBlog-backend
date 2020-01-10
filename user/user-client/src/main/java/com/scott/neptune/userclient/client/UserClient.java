@@ -1,4 +1,4 @@
-package com.scott.neptune.userclient;
+package com.scott.neptune.userclient.client;
 
 import com.scott.neptune.common.response.ServerResponse;
 import com.scott.neptune.userclient.dto.UserDto;

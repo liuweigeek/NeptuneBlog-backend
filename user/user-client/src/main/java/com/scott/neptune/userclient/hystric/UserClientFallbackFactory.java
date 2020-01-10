@@ -3,7 +3,7 @@ package com.scott.neptune.userclient.hystric;
 import com.google.common.collect.Lists;
 import com.scott.neptune.common.response.ServerResponse;
 import com.scott.neptune.userclient.dto.UserDto;
-import com.scott.neptune.userclient.UserClient;
+import com.scott.neptune.userclient.client.UserClient;
 import feign.hystrix.FallbackFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

@@ -14,6 +14,7 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>social-client</module>
         <module>social-server</module>
     </modules>
 

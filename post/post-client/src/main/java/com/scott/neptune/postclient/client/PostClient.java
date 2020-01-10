@@ -1,4 +1,4 @@
-package com.scott.neptune.postclient;
+package com.scott.neptune.postclient.client;
 
 import com.scott.neptune.common.response.ServerResponse;
 import com.scott.neptune.postclient.dto.PostDto;
