@@ -1,0 +1,56 @@
+version: '3.1'
+
+services:
+  mysql:
+    image: mysql:8.0.17
+    container_name: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345678
+    volumes:
+      - /Users/scott/Data/docker/mysql/data:/var/lib/mysql
+
+  redis:
+    image: redis
+    container_name: redis
+    ports:
+      - 6379:6379
+    volumes:
+      - /Users/scott/Data/docker/redis/data:/data
+
+  rabbitmq:
+    image: rabbitmq:3.7.16-management-alpine
+    container_name: rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=scott
+      - RABBITMQ_DEFAULT_PASS=12345678
+    ports:
+      - 15672:15672
+      - 5672:5672
+    volumes:
+      - /Users/scott/Data/docker/rabbitmq/data:/var/lib/rabbitmq
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+
+  minio:
+    image: minio/minio
+    container_name: minio
+    command: server /data
+    ports:
+      - 9000:9000
+    environment:
+      MINIO_ACCESS_KEY: scott
+      MINIO_SECRET_KEY: 12345678
+    volumes:
+      - /Users/scott/Data/docker/minio/data:/data
+
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    ports:
+      - 9411:9411
