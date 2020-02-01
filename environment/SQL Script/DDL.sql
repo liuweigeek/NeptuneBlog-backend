@@ -1,5 +1,7 @@
 create schema db_neptune_blog collate utf8mb4_0900_ai_ci;
 
+use db_neptune_blog;
+
 create table t_friend_relation
 (
     follow_date datetime    null,

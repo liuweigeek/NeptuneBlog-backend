@@ -43,7 +43,7 @@ public class RateLimiterFilter extends ZuulFilter {
     }
 
     @Override
-    public Object run() throws ZuulException {
+    public Object run() {
         if (!RATE_LIMITER.tryAcquire()) {
             RequestContext requestContext = RequestContext.getCurrentContext();
             requestContext.setSendZuulResponse(false);

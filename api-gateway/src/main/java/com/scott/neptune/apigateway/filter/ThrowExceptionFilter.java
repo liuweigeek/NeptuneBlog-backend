@@ -1,17 +1,13 @@
 package com.scott.neptune.apigateway.filter;
 
-import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
-import com.netflix.zuul.exception.ZuulException;
 import com.scott.neptune.common.response.ServerResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.springframework.cloud.netflix.zuul.filters.post.SendErrorFilter;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.Objects;
-
-import static org.springframework.cloud.netflix.zuul.filters.support.FilterConstants.POST_TYPE;
-import static org.springframework.cloud.netflix.zuul.filters.support.FilterConstants.SEND_ERROR_FILTER_ORDER;
 
 /**
  * @Author: scott
@@ -20,47 +16,22 @@ import static org.springframework.cloud.netflix.zuul.filters.support.FilterConst
  * @Description: NeptuneBlog
  */
 @Slf4j
-//TODO disabled
-//@Component
-public class ThrowExceptionFilter extends ZuulFilter {
-
-    private static final String ERROR_STATUS_CODE = "error.status_code";
+@Component
+public class ThrowExceptionFilter extends SendErrorFilter {
 
     @Override
-    public String filterType() {
-        return POST_TYPE;
-    }
-
-    @Override
-    public int filterOrder() {
-        return SEND_ERROR_FILTER_ORDER - 1;
-    }
-
-    @Override
-    public boolean shouldFilter() {
-        return RequestContext.getCurrentContext().contains(ERROR_STATUS_CODE);
-    }
-
-    @Override
-    public Object run() throws ZuulException {
+    public Object run() {
 
         try {
             RequestContext requestContext = RequestContext.getCurrentContext();
-            Object exception = requestContext.get("error.exception");
+            ExceptionHolder exception = findZuulException(requestContext.getThrowable());
+            log.error("网关异常: ", exception.getThrowable());
 
-            if (!Objects.isNull(exception) && exception instanceof ZuulException) {
-                ZuulException zuulException = (ZuulException) exception;
-                log.error("网关异常: " + zuulException.getMessage(), zuulException);
-
-                requestContext.remove(ERROR_STATUS_CODE);
-                HttpServletResponse response = requestContext.getResponse();
-                ObjectMapper mapper = new ObjectMapper();
-                response.setContentType("application/json;charset=utf-8");
-                ServerResponse errorResponse = ServerResponse.createByErrorMessage("服务异常，请稍后再试");
-                response.getWriter().println(mapper.writeValueAsString(errorResponse));
-
-                requestContext.setResponseStatusCode(200);
-            }
+            ObjectMapper mapper = new ObjectMapper();
+            ServerResponse<Void> errorResponse = ServerResponse.createByErrorMessage("服务不可用，请稍后再试");
+            HttpServletResponse response = requestContext.getResponse();
+            response.setContentType("application/json;charset=utf-8");
+            response.getWriter().println(mapper.writeValueAsString(errorResponse));
         } catch (Exception e) {
             log.error("拦截器异常", e);
         }

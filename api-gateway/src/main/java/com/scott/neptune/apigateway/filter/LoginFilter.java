@@ -6,12 +6,10 @@ import com.netflix.zuul.exception.ZuulException;
 import com.scott.neptune.common.constant.Constant;
 import com.scott.neptune.common.response.ResponseCode;
 import com.scott.neptune.common.response.ServerResponse;
-import com.scott.neptune.userclient.util.UserUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.MessageSource;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -36,11 +34,7 @@ public class LoginFilter extends ZuulFilter {
     private String[] ignoreUris;
 
     @Resource
-    private UserUtils userUtils;
-    @Resource
     private RedisTemplate<String, Object> redisTemplate;
-    @Resource
-    private MessageSource messageSource;
 
     @Override
     public String filterType() {
@@ -62,10 +56,9 @@ public class LoginFilter extends ZuulFilter {
      * 校验是否包含登录用户信息
      *
      * @return
-     * @throws ZuulException
      */
     @Override
-    public Object run() throws ZuulException {
+    public Object run() {
 
         RequestContext requestContext = RequestContext.getCurrentContext();
         HttpServletRequest request = requestContext.getRequest();
