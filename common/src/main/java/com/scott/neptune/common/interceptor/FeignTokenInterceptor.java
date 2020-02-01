@@ -1,4 +1,4 @@
-package com.scott.neptune.common.config;
+package com.scott.neptune.common.interceptor;
 
 import com.scott.neptune.common.constant.Constant;
 import feign.RequestInterceptor;

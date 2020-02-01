@@ -1,6 +1,7 @@
 version: '3.1'
 
 services:
+
   mysql:
     image: mysql:8.0.17
     container_name: mysql
@@ -8,6 +9,8 @@ services:
     ports:
       - 3306:3306
     environment:
+      MYSQL_USER: scott
+      MYSQL_PASSWORD: 12345678
       MYSQL_ROOT_PASSWORD: 12345678
     volumes:
       - /Users/scott/Data/docker/mysql/data:/var/lib/mysql
