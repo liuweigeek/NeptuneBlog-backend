@@ -2,8 +2,8 @@ package com.scott.neptune.userclient.hystric;
 
 import com.google.common.collect.Lists;
 import com.scott.neptune.common.response.ServerResponse;
-import com.scott.neptune.userclient.dto.UserDto;
 import com.scott.neptune.userclient.client.UserClient;
+import com.scott.neptune.userclient.dto.UserDto;
 import feign.hystrix.FallbackFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -69,7 +69,7 @@ public class UserClientFallbackFactory implements FallbackFactory<UserClient> {
              * @return 用户列表
              */
             @Override
-            public ServerResponse<List<UserDto>> findByKeyword(String keyword) {
+            public ServerResponse<List<UserDto>> search(String keyword) {
                 log.error("feign fallback Exception: ", throwable);
                 return ServerResponse.createByErrorMessage("搜索用户异常，请稍后重试");
             }

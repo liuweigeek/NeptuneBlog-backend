@@ -5,15 +5,14 @@ import com.google.common.collect.Lists;
 import com.scott.neptune.common.annotation.RedisLock;
 import com.scott.neptune.common.constant.Constant;
 import com.scott.neptune.common.response.ServerResponse;
-import com.scott.neptune.common.util.HeaderUtil;
-import com.scott.neptune.common.util.JsonMapper;
+import com.scott.neptune.common.util.HeaderUtils;
+import com.scott.neptune.common.util.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.util.DigestUtils;
@@ -113,7 +112,7 @@ public class ControllerAop {
             String uri = request.getRequestURI();
 
             sb.append("-").append(uri);
-            String token = HeaderUtil.get(request, Constant.Login.CURRENT_USER);
+            String token = HeaderUtils.get(request, Constant.Login.CURRENT_USER);
             sb.append("-").append(token);
         }
         String methodName = pjp.getSignature().getName();
@@ -138,7 +137,7 @@ public class ControllerAop {
                 }
             }
             if (!newArgs.isEmpty()) {
-                sb.append("-").append(Arrays.toString(DigestUtils.md5Digest(JsonMapper.toJsonString(newArgs).getBytes())));
+                sb.append("-").append(Arrays.toString(DigestUtils.md5Digest(JsonUtils.toJsonString(newArgs).getBytes())));
             }
         }
         return sb.toString();

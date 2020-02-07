@@ -43,16 +43,20 @@ public class UserEntity implements Serializable {
     /**
      * 用户名
      */
-
     @TableField(value = "username")
     private String username;
 
     /**
      * 用户昵称
      */
-
     @TableField(value = "nickname")
     private String nickname;
+
+    /**
+     * 用户头像
+     */
+    @TableField(value = "avatar")
+    private String avatar;
 
     /**
      * 头像列表

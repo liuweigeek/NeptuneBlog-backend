@@ -47,8 +47,8 @@ public class SearchController extends BaseController {
     @GetMapping(value = "/{keyword}")
     public ServerResponse<Map<String, ServerResponse>> searchByKeyword(@PathVariable("keyword") String keyword) {
 
-        ServerResponse<List<UserDto>> userResponse = userClient.findByKeyword(keyword);
-        ServerResponse<List<PostDto>> postResponse = postClient.findByKeyword(keyword);
+        ServerResponse<List<UserDto>> userResponse = userClient.search(keyword);
+        ServerResponse<List<PostDto>> postResponse = postClient.search(keyword);
 
         Map<String, ServerResponse> searchResultMap = new HashMap<String, ServerResponse>() {
             {

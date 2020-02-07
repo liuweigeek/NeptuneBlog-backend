@@ -24,7 +24,7 @@ public interface PostClient {
      * @param keyword 关键字
      * @return 用户列表
      */
-    @RequestMapping(value = "/postServer/findByKeyword/{keyword}", method = RequestMethod.GET)
-    ServerResponse<List<PostDto>> findByKeyword(@PathVariable String keyword);
+    @RequestMapping(value = "/server/post/search/{keyword}", method = RequestMethod.GET)
+    ServerResponse<List<PostDto>> search(@PathVariable String keyword);
 
 }

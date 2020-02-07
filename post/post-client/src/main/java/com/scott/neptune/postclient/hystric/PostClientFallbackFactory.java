@@ -27,7 +27,7 @@ public class PostClientFallbackFactory implements FallbackFactory<PostClient> {
              * @return 用户列表
              */
             @Override
-            public ServerResponse<List<PostDto>> findByKeyword(String keyword) {
+            public ServerResponse<List<PostDto>> search(String keyword) {
                 log.error("feign fallback Exception: ", throwable);
                 return ServerResponse.createByErrorMessage("搜索推文异常，请稍后重试");
             }

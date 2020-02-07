@@ -125,7 +125,6 @@ public class UserServiceImpl implements IUserService {
             userEntity.setToken(UserUtil.generateTokenByUser(userEntity));
             userMapper.insert(userEntity);
             UserDto userDto = userModelMapping.convertToDto(userEntity);
-            redisTemplate.opsForValue().set(userEntity.getToken(), userDto, 30, TimeUnit.MINUTES);
             return ServerResponse.createBySuccess(userDto);
         } catch (Exception e) {
             return ServerResponse.createByErrorMessage("新建用户失败");
@@ -228,14 +227,22 @@ public class UserServiceImpl implements IUserService {
             return ServerResponse.createByErrorMessage(uploadAvatarRes.getMsg());
         }
         List<UserAvatarDto> avatarDtoList = uploadAvatarRes.getData();
-        avatarDtoList.forEach(avatarDto -> avatarDto.setUserId(userDto.getId()));
+        String normalAvatar = null;
+        for (UserAvatarDto avatarDto : avatarDtoList) {
+            avatarDto.setUserId(userDto.getId());
+            normalAvatar = avatarDto.getUrl();
+        }
         List<UserAvatarEntity> avatarEntityList = userAvatarModelMapping.convertToEntityList(avatarDtoList);
-
         userAvatarService.delete(UserAvatarEntity.builder().userId(userDto.getId()).build());
-        ServerResponse<List<UserAvatarEntity>> saveRes = userAvatarService.saveList(avatarEntityList);
-        if (saveRes.isFailed()) {
+        try {
+            userAvatarService.saveList(avatarEntityList);
+            UserEntity userEntity = userModelMapping.convertToEntity(userDto);
+            userEntity.setAvatar(normalAvatar);
+            userMapper.updateById(userEntity);
+            return ServerResponse.createBySuccess();
+        } catch (Exception e) {
+            log.error("uploadAvatar exception: ", e);
             return ServerResponse.createByErrorMessage("保存头像失败");
         }
-        return ServerResponse.createBySuccess(saveRes.getData());
     }
 }

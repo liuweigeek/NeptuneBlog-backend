@@ -58,6 +58,12 @@ public class UserDto extends Pageable {
     private String nickname;
 
     /**
+     * 用户头像
+     */
+    @ApiModelProperty(name = "avatar", value = "用户头像")
+    private String avatar;
+
+    /**
      * 密码
      */
     @NotEmpty(message = "密码不可为空", groups = {Login.class, Register.class})

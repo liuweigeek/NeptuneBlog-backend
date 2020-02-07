@@ -29,7 +29,7 @@ import java.util.List;
 @Slf4j
 @RefreshScope
 @RestController
-@RequestMapping("/postServer")
+@RequestMapping("/server/post")
 public class PostServerController extends BaseController {
 
     @Resource
@@ -45,8 +45,8 @@ public class PostServerController extends BaseController {
      */
     @ApiOperation(value = "通过关键字搜索用户")
     @ApiImplicitParam(name = "keyword", value = "关键字", required = true, paramType = "path", dataType = "String")
-    @GetMapping(value = "/findByKeyword/{keyword}")
-    public ServerResponse<List<PostDto>> findByKeyword(@PathVariable String keyword) {
+    @GetMapping(value = "/search/{keyword}")
+    public ServerResponse<List<PostDto>> search(@PathVariable String keyword) {
         List<PostEntity> postEntityList = postService.findByKeyword(keyword);
         List<PostDto> postDtoList = postModelMapping.convertToDtoList(postEntityList);
         return ServerResponse.createBySuccess(postDtoList);

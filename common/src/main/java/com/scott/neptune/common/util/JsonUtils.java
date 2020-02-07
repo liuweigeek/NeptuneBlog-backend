@@ -22,19 +22,19 @@ import java.io.IOException;
  * @Description: 简单封装Jackson，实现JSON String<->Java Object的Mapper.
  * 封装不同的输出风格, 使用不同的builder函数创建实例.
  */
-public class JsonMapper extends ObjectMapper {
+public class JsonUtils extends ObjectMapper {
 
     private static final long serialVersionUID = 1L;
 
-    private static Logger logger = LoggerFactory.getLogger(JsonMapper.class);
+    private static Logger logger = LoggerFactory.getLogger(JsonUtils.class);
 
-    private static JsonMapper mapper;
+    private static JsonUtils mapper;
 
-    public JsonMapper() {
+    public JsonUtils() {
         this(Include.NON_EMPTY);
     }
 
-    public JsonMapper(Include include) {
+    public JsonUtils(Include include) {
         // 设置输出时包含属性的风格
         if (include != null) {
             this.setSerializationInclusion(include);
@@ -66,9 +66,9 @@ public class JsonMapper extends ObjectMapper {
     /**
      * 创建只输出非Null且非Empty(如List.isEmpty)的属性到Json字符串的Mapper,建议在外部接口中使用.
      */
-    public static JsonMapper getInstance() {
+    public static JsonUtils getInstance() {
         if (mapper == null) {
-            mapper = new JsonMapper().enableSimple();
+            mapper = new JsonUtils().enableSimple();
         }
         return mapper;
     }
@@ -76,9 +76,9 @@ public class JsonMapper extends ObjectMapper {
     /**
      * 创建只输出初始值被改变的属性到Json字符串的Mapper, 最节约的存储方式，建议在内部接口中使用。
      */
-    public static JsonMapper nonDefaultMapper() {
+    public static JsonUtils nonDefaultMapper() {
         if (mapper == null) {
-            mapper = new JsonMapper(Include.NON_DEFAULT);
+            mapper = new JsonUtils(Include.NON_DEFAULT);
         }
         return mapper;
     }
@@ -183,7 +183,7 @@ public class JsonMapper extends ObjectMapper {
      * 為False時時使用Enum的name()函數來讀寫Enum, 默認為False.
      * 注意本函數一定要在Mapper創建後, 所有的讀寫動作之前調用.
      */
-    public JsonMapper enableEnumUseToString() {
+    public JsonUtils enableEnumUseToString() {
         this.enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
         this.enable(DeserializationFeature.READ_ENUMS_USING_TO_STRING);
         return this;
@@ -193,7 +193,7 @@ public class JsonMapper extends ObjectMapper {
      * 支持使用Jaxb的Annotation，使得POJO上的annotation不用与Jackson耦合。
      * 默认会先查找jaxb的annotation，如果找不到再找jackson的。
      */
-    public JsonMapper enableJaxbAnnotation() {
+    public JsonUtils enableJaxbAnnotation() {
         JaxbAnnotationModule module = new JaxbAnnotationModule();
         this.registerModule(module);
         return this;
@@ -203,7 +203,7 @@ public class JsonMapper extends ObjectMapper {
      * 允许单引号
      * 允许不带引号的字段名称
      */
-    public JsonMapper enableSimple() {
+    public JsonUtils enableSimple() {
         this.configure(Feature.ALLOW_SINGLE_QUOTES, true);
         this.configure(Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
         return this;
@@ -223,7 +223,7 @@ public class JsonMapper extends ObjectMapper {
      * @return
      */
     public static String toJsonString(Object object) {
-        return JsonMapper.getInstance().toJson(object);
+        return JsonUtils.getInstance().toJson(object);
     }
 
     /**
@@ -233,7 +233,7 @@ public class JsonMapper extends ObjectMapper {
      * @return
      */
     public static String toPrettyJsonString(Object object) {
-        return JsonMapper.getInstance().toPrettyJson(object);
+        return JsonUtils.getInstance().toPrettyJson(object);
     }
 
 
@@ -245,7 +245,7 @@ public class JsonMapper extends ObjectMapper {
      * @return
      */
     public static Object fromJsonString(String jsonString, Class<?> clazz) {
-        return JsonMapper.getInstance().fromJson(jsonString, clazz);
+        return JsonUtils.getInstance().fromJson(jsonString, clazz);
     }
 
 }

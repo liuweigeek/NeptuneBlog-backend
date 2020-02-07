@@ -30,7 +30,7 @@ import static java.util.stream.Collectors.toList;
 @Slf4j
 @RefreshScope
 @RestController
-@RequestMapping("/userServer")
+@RequestMapping("/server/user")
 public class UserServerController extends BaseController {
 
     @Resource
@@ -48,7 +48,7 @@ public class UserServerController extends BaseController {
      */
     @ApiOperation(value = "获取指定用户")
     @ApiImplicitParam(name = "id", value = "用户ID", required = true, paramType = "path", dataType = "String")
-    @GetMapping(value = "/getUserById/{id}")
+    @GetMapping(value = "/{id}")
     public ServerResponse<UserDto> getUserById(@PathVariable String id) {
         UserDto loginUser = userComponent.getUserFromRequest(request);
         UserEntity userEntity = userService.getUserById(id, loginUser.getId());
@@ -97,8 +97,8 @@ public class UserServerController extends BaseController {
      */
     @ApiOperation(value = "通过关键字搜索用户")
     @ApiImplicitParam(name = "keyword", value = "关键字", required = true, paramType = "path", dataType = "String")
-    @GetMapping(value = "/findByKeyword/{keyword}")
-    public ServerResponse<List<UserDto>> findByKeyword(@PathVariable String keyword) {
+    @GetMapping(value = "/search/{keyword}")
+    public ServerResponse<List<UserDto>> search(@PathVariable String keyword) {
         UserDto loginUser = userComponent.getUserFromRequest(request);
         List<UserEntity> userEntityList = userService.findByKeyword(keyword, loginUser.getId());
         List<UserDto> userDtoList = userModelMapping.convertToDtoList(userEntityList);

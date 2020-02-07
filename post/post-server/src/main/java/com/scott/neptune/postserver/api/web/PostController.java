@@ -88,7 +88,7 @@ public class PostController extends BaseController {
      * @return
      */
     @ApiOperation(value = "获取关注用户的推文")
-    @GetMapping(value = "/getFollowingPosts")
+    @GetMapping(value = "/followingPosts")
     public ServerResponse<IPage<PostDto>> getFollowingPosts(PostDto postDto) {
 
         if (Objects.isNull(postDto)) {

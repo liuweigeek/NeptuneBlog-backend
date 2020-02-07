@@ -3,7 +3,7 @@ package com.scott.neptune.userserver.api.web;
 import com.scott.neptune.common.constant.Constant;
 import com.scott.neptune.common.controller.BaseController;
 import com.scott.neptune.common.response.ServerResponse;
-import com.scott.neptune.common.util.HeaderUtil;
+import com.scott.neptune.common.util.HeaderUtils;
 import com.scott.neptune.userclient.dto.UserDto;
 import com.scott.neptune.userserver.component.UserComponent;
 import com.scott.neptune.userserver.entity.UserEntity;
@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 import static java.util.stream.Collectors.toList;
 
@@ -75,7 +76,8 @@ public class UserController extends BaseController {
             return registerRes;
         }
         userDto = registerRes.getData();
-        HeaderUtil.set(response, Constant.Login.CURRENT_USER, userDto.getToken());
+        redisTemplate.opsForValue().set(userEntity.getToken(), userDto, 30, TimeUnit.MINUTES);
+        HeaderUtils.set(response, Constant.Login.CURRENT_USER, userDto.getToken());
         return ServerResponse.createBySuccess(userDto);
     }
 
@@ -108,7 +110,7 @@ public class UserController extends BaseController {
         }
 
         UserDto loginUserDto = loginResponse.getData();
-        HeaderUtil.set(response, Constant.Login.CURRENT_USER, loginUserDto.getToken());
+        HeaderUtils.set(response, Constant.Login.CURRENT_USER, loginUserDto.getToken());
         return ServerResponse.createBySuccess(loginUserDto);
     }
 

@@ -1,7 +1,7 @@
 package com.scott.neptune.userserver.component;
 
 import com.scott.neptune.common.constant.Constant;
-import com.scott.neptune.common.util.HeaderUtil;
+import com.scott.neptune.common.util.HeaderUtils;
 import com.scott.neptune.userclient.dto.UserDto;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -30,7 +30,7 @@ public class UserComponent {
      */
     public UserDto getUserFromRequest(HttpServletRequest request) {
 
-        String token = HeaderUtil.get(request, Constant.Login.CURRENT_USER);
+        String token = HeaderUtils.get(request, Constant.Login.CURRENT_USER);
         if (StringUtils.isBlank(token)) {
             return null;
         }

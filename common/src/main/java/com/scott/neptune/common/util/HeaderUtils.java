@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
  * @Description: Header工具类
  */
 @Slf4j
-public class HeaderUtil {
+public class HeaderUtils {
 
     /**
      * 获取Header

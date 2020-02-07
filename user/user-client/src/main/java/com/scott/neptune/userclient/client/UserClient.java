@@ -26,7 +26,7 @@ public interface UserClient {
      * @param id 用户ID
      * @return 用户对象
      */
-    @RequestMapping(value = "/userServer/getUserById/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/server/user/{id}", method = RequestMethod.GET)
     ServerResponse<UserDto> getUserById(@PathVariable String id);
 
     /**
@@ -34,7 +34,7 @@ public interface UserClient {
      *
      * @return 当前登录用户
      */
-    @RequestMapping(value = "/userServer/getLoginUser", method = RequestMethod.GET)
+    @RequestMapping(value = "/server/user/getLoginUser", method = RequestMethod.GET)
     ServerResponse<UserDto> getLoginUser();
 
     /**
@@ -43,7 +43,7 @@ public interface UserClient {
      * @param idList 用户ID列表
      * @return 用户对象列表
      */
-    @RequestMapping(value = "/userServer/findAllUserByIdList", method = RequestMethod.POST,
+    @RequestMapping(value = "/server/user/findAllUserByIdList", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     List<UserDto> findAllUserByIdList(@RequestBody List<String> idList);
 
@@ -61,6 +61,6 @@ public interface UserClient {
      * @param keyword 关键字
      * @return 用户列表
      */
-    @RequestMapping(value = "/userServer/findByKeyword/{keyword}", method = RequestMethod.GET)
-    ServerResponse<List<UserDto>> findByKeyword(@PathVariable String keyword);
+    @RequestMapping(value = "/server/user/search/{keyword}", method = RequestMethod.GET)
+    ServerResponse<List<UserDto>> search(@PathVariable String keyword);
 }
