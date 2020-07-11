@@ -1,9 +1,9 @@
 package com.scott.neptune.apigateway.filter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netflix.zuul.context.RequestContext;
 import com.scott.neptune.common.response.ServerResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.cloud.netflix.zuul.filters.post.SendErrorFilter;
 import org.springframework.stereotype.Component;
 

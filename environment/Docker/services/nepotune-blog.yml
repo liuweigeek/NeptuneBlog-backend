@@ -23,6 +23,29 @@ services:
     volumes:
       - /Users/scott/Data/docker/redis/data:/data
 
+  mongo:
+    image: mongo:4.0-xenial
+    container_name: mongo
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: scott
+      MONGO_INITDB_ROOT_PASSWORD: 12345678
+    volumes:
+      - /Users/scott/Data/docker/mongo/data:/data/db
+
+  postgres:
+    image: postgres
+    container_name: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: scott
+      POSTGRES_PASSWORD: 12345678
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - /Users/scott/Data/docker/postgres/data:/var/lib/postgresql/data
+
   rabbitmq:
     image: rabbitmq:3.7.16-management-alpine
     container_name: rabbitmq
