@@ -1,0 +1,18 @@
+package com.scott.neptune.authentication.domain;
+
+import lombok.Data;
+import lombok.ToString;
+
+/**
+ * @Author: scott
+ * @Email: <a href="wliu@fleetup.com">scott</a>
+ * @Date: 2020/7/27 10:01
+ * @Description:
+ */
+@Data
+public class AuthRole {
+
+    private Long id;
+
+    private String role;
+}
