@@ -8,7 +8,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import java.io.Serializable;
 
@@ -20,7 +19,6 @@ import java.io.Serializable;
  */
 @Data
 @Builder
-@ToString
 @EqualsAndHashCode(callSuper = false, of = {"userId", "sizeType"})
 @AllArgsConstructor
 @NoArgsConstructor
@@ -32,20 +30,20 @@ public class UserAvatarDto implements Serializable {
     /**
      * 用户ID
      */
-    @ApiModelProperty(name = "userId", value = "用户ID")
+    @ApiModelProperty(value = "用户ID")
     private String userId;
 
     /**
      * 图片尺寸
      * {@link SizeTypeEnum}
      */
-    @ApiModelProperty(name = "sizeType", value = "图片尺寸")
+    @ApiModelProperty(value = "图片尺寸")
     private Integer sizeType;
 
     /**
      * 图片URL
      */
-    @ApiModelProperty(name = "url", value = "图片URL")
+    @ApiModelProperty(value = "图片URL")
     private String url;
 
     @Getter

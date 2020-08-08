@@ -1,17 +1,16 @@
 package com.scott.neptune.userserver.api.server;
 
-import com.scott.neptune.common.controller.BaseController;
-import com.scott.neptune.common.response.ServerResponse;
+import com.scott.neptune.common.base.BaseController;
+import com.scott.neptune.userclient.dto.AuthUserDto;
 import com.scott.neptune.userclient.dto.UserDto;
 import com.scott.neptune.userserver.component.UserComponent;
-import com.scott.neptune.userserver.entity.UserEntity;
-import com.scott.neptune.userserver.mapping.UserModelMapping;
 import com.scott.neptune.userserver.service.IUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,11 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
 import java.util.List;
-import java.util.Objects;
-
-import static java.util.stream.Collectors.toList;
 
 /**
  * @Author: scott
@@ -35,32 +30,81 @@ import static java.util.stream.Collectors.toList;
 @Slf4j
 @RefreshScope
 @RestController
-@RequestMapping("/server/user")
+@RequestMapping("server/user")
 public class UserServerController extends BaseController {
 
-    @Resource
-    private IUserService userService;
-    @Resource
-    private UserComponent userComponent;
-    @Resource
-    private UserModelMapping userModelMapping;
+    private final IUserService userService;
+    private final UserComponent userComponent;
+
+    public UserServerController(IUserService userService, UserComponent userComponent) {
+        this.userService = userService;
+        this.userComponent = userComponent;
+    }
 
     /**
-     * 获取指定用户
+     * 新增用户
+     *
+     * @param userDto 用户对象
+     * @return 保存结果
+     */
+    @ApiOperation(value = "新增用户")
+    @PostMapping
+    public ResponseEntity<UserDto> addUser(UserDto userDto) {
+        UserDto newUser = userService.save(userDto);
+        return ResponseEntity.ok(newUser);
+    }
+
+    /**
+     * 根据ID获取指定用户
      *
      * @param id 用户ID
      * @return 用户对象
      */
-    @ApiOperation(value = "获取指定用户")
-    @ApiImplicitParam(name = "id", value = "用户ID", required = true, paramType = "path", dataType = "String")
-    @GetMapping(value = "/{id}")
-    public ServerResponse<UserDto> getUserById(@PathVariable String id) {
+    @ApiOperation(value = "根据ID获取指定用户")
+    @ApiImplicitParam(value = "用户ID", paramType = "path", required = true)
+    @GetMapping(path = "{id}")
+    public ResponseEntity<UserDto> findUserById(@PathVariable Long id) {
         UserDto loginUser = userComponent.getUserFromRequest(request);
-        UserEntity userEntity = userService.getUserById(id, loginUser.getId());
-        if (Objects.isNull(userEntity)) {
-            return ServerResponse.createByErrorMessage("用户不存在");
-        }
-        return ServerResponse.createBySuccess(userModelMapping.convertToDto(userEntity));
+        UserDto userDto = userService.findUserById(id, loginUser.getId());
+        return ResponseEntity.ok(userDto);
+    }
+
+    /**
+     * 根据用户名获取指定用户
+     *
+     * @param username 用户名
+     * @return 用户对象
+     */
+    @ApiOperation(value = "根据用户名获取指定用户")
+    @ApiImplicitParam(value = "用户名", paramType = "path", required = true)
+    @GetMapping(path = "username/{username}")
+    public ResponseEntity<UserDto> findUserByUsername(@PathVariable String username) {
+        UserDto loginUser = userComponent.getUserFromRequest(request);
+        UserDto userDto = userService.findUserByUsername(username, loginUser.getId());
+        return ResponseEntity.ok(userDto);
+    }
+
+    @ApiOperation(value = "根据用户名获取指定用户,用于授权接口")
+    @ApiImplicitParam(value = "用户名", paramType = "path", required = true)
+    @GetMapping(path = "authenticate/{username}")
+    public ResponseEntity<AuthUserDto> findUserByUsernameForAuthenticate(@PathVariable String username) {
+        AuthUserDto authUserDto = userService.findUserByUsernameForAuthenticate(username);
+        return ResponseEntity.ok(authUserDto);
+    }
+
+    /**
+     * 根据邮箱获取指定用户
+     *
+     * @param email 邮箱
+     * @return 用户对象
+     */
+    @ApiOperation(value = "根据邮箱获取指定用户")
+    @ApiImplicitParam(value = "用户名", paramType = "path", required = true)
+    @GetMapping(path = "email/{email}")
+    public ResponseEntity<UserDto> findUserByEmail(@PathVariable String email) {
+        UserDto loginUser = userComponent.getUserFromRequest(request);
+        UserDto userDto = userService.findUserByEmail(email, loginUser.getId());
+        return ResponseEntity.ok(userDto);
     }
 
     /**
@@ -70,13 +114,11 @@ public class UserServerController extends BaseController {
      * @return 用户对象列表
      */
     @ApiOperation(value = "通过ID列表获取全部用户")
-    @PostMapping(value = "/findAllUserByIdList")
-    public List<UserDto> findAllUserByIdList(@RequestBody List<String> idList) {
+    @PostMapping(path = "findAllUserByIdList")
+    public ResponseEntity<List<UserDto>> findAllUserByIdList(@RequestBody List<Long> idList) {
         UserDto loginUser = userComponent.getUserFromRequest(request);
-        return userService.findAllUserByIdList(idList, loginUser.getId())
-                .stream()
-                .map(userModelMapping::convertToDto)
-                .collect(toList());
+        List<UserDto> userDtoList = userService.findAllUserByIdList(idList, loginUser.getId());
+        return ResponseEntity.ok(userDtoList);
     }
 
     /**
@@ -85,13 +127,10 @@ public class UserServerController extends BaseController {
      * @return 当前登录用户
      */
     @ApiOperation(value = "获取当前登录用户")
-    @GetMapping(value = "/getLoginUser")
-    public ServerResponse<UserDto> getLoginUser() {
+    @GetMapping(path = "loginUser")
+    public ResponseEntity<UserDto> getLoginUser() {
         UserDto userDto = userComponent.getUserFromRequest(request);
-        if (Objects.isNull(userDto)) {
-            return ServerResponse.createByErrorMessage("用户未登录");
-        }
-        return ServerResponse.createBySuccess(userDto);
+        return ResponseEntity.ok(userDto);
     }
 
     /**
@@ -101,13 +140,12 @@ public class UserServerController extends BaseController {
      * @return 用户列表
      */
     @ApiOperation(value = "通过关键字搜索用户")
-    @ApiImplicitParam(name = "keyword", value = "关键字", required = true, paramType = "path", dataType = "String")
-    @GetMapping(value = "/search/{keyword}")
-    public ServerResponse<List<UserDto>> search(@PathVariable String keyword) {
+    @ApiImplicitParam(value = "关键字", paramType = "path", required = true)
+    @GetMapping(path = "search/{keyword}")
+    public ResponseEntity<List<UserDto>> search(@PathVariable String keyword) {
         UserDto loginUser = userComponent.getUserFromRequest(request);
-        List<UserEntity> userEntityList = userService.findByKeyword(keyword, loginUser.getId());
-        List<UserDto> userDtoList = userModelMapping.convertToDtoList(userEntityList);
+        List<UserDto> userDtoList = userService.findByKeyword(keyword, loginUser.getId());
         //TODO add relation state
-        return ServerResponse.createBySuccess(userDtoList);
+        return ResponseEntity.ok(userDtoList);
     }
 }

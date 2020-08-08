@@ -2,8 +2,8 @@ package com.scott.neptune.fileserver.component;
 
 import com.scott.neptune.fileserver.FileServerApplicationTests;
 import com.scott.neptune.fileserver.model.ImageSize;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import javax.annotation.Resource;
 import java.io.File;
@@ -26,6 +26,6 @@ public class ImageComponentTest extends FileServerApplicationTests {
         boolean resizeSuccess = imageComponent.resizeImage(originalFile, targetFile,
                 ImageSize.builder().height(500).width(500).build());
 
-        Assert.assertTrue(resizeSuccess);
+        Assertions.assertTrue(resizeSuccess);
     }
 }

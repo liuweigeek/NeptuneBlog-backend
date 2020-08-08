@@ -1,7 +1,6 @@
 package com.scott.neptune.common.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
@@ -10,7 +9,6 @@ import java.io.Serializable;
  * Created by Scott
  */
 @NoArgsConstructor
-@JsonInclude(value = JsonInclude.Include.NON_NULL)
 public class ServerResponse<T> implements Serializable {
 
     private int status;

@@ -93,7 +93,6 @@ public class ControllerAop {
             response.getWriter().println(mapper.writeValueAsString(result));
         } catch (Exception e) {
             log.error("write response exception: ", e);
-            return;
         }
 
     }

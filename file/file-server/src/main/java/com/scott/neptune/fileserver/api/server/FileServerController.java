@@ -1,6 +1,6 @@
 package com.scott.neptune.fileserver.api.server;
 
-import com.scott.neptune.common.controller.BaseController;
+import com.scott.neptune.common.base.BaseController;
 import com.scott.neptune.common.response.ServerResponse;
 import com.scott.neptune.fileserver.component.FileComponent;
 import com.scott.neptune.fileserver.enumerate.FileUseTypeEnum;
@@ -53,7 +53,7 @@ public class FileServerController extends BaseController {
             @ApiImplicitParam(name = "file", value = "文件", required = true, paramType = "form", dataTypeClass = MultipartFile.class),
             @ApiImplicitParam(name = "useTypeId", value = "业务用途ID",
                     example = "1: default, 2: avatar, 3: user background, 4: post image",
-                    paramType = "form", dataType = "String")
+                    paramType = "form")
     })
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public ServerResponse<String> upload(@RequestParam("file") MultipartFile file,

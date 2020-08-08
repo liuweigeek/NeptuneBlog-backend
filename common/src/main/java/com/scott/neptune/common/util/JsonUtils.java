@@ -168,8 +168,6 @@ public class JsonUtils extends ObjectMapper {
     public <T> T update(String jsonString, T object) {
         try {
             return (T) this.readerForUpdating(object).readValue(jsonString);
-        } catch (JsonProcessingException e) {
-            logger.warn("update json string:" + jsonString + " to object:" + object + " error.", e);
         } catch (IOException e) {
             logger.warn("update json string:" + jsonString + " to object:" + object + " error.", e);
         }

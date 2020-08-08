@@ -1,10 +1,7 @@
 package com.scott.neptune.userserver.service;
 
-import com.scott.neptune.common.response.ServerResponse;
+import com.scott.neptune.userclient.dto.AuthUserDto;
 import com.scott.neptune.userclient.dto.UserDto;
-import com.scott.neptune.userserver.entity.UserAvatarEntity;
-import com.scott.neptune.userserver.entity.UserEntity;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -20,19 +17,22 @@ public interface IUserService {
 
     boolean existsByEmail(String email);
 
-    ServerResponse<UserDto> login(String email, String password);
+    UserDto save(UserDto userDto);
 
-    ServerResponse<UserDto> save(UserEntity userEntity);
+    UserDto findUserById(Long userId, Long loginUserId);
 
-    UserEntity getUserById(String id, String loginUserId);
+    UserDto findUserByUsername(String username, Long loginUserId);
 
-    UserEntity getUserByUsername(String username, String loginUserId);
+    AuthUserDto findUserByUsernameForAuthenticate(String username);
 
-    List<UserEntity> findByKeyword(String keyword, String loginUserId);
+    UserDto findUserByEmail(String email, Long loginUserId);
 
-    List<UserEntity> findUserList(String loginUserId);
+    List<UserDto> findByKeyword(String keyword, Long loginUserId);
 
-    List<UserEntity> findAllUserByIdList(List<String> idList, String loginUserId);
+    List<UserDto> findUserList(Long loginUserId);
 
-    ServerResponse<List<UserAvatarEntity>> uploadAvatar(MultipartFile avatarFile, UserDto userDto);
+    List<UserDto> findAllUserByIdList(List<Long> idList, Long loginUserId);
+
+    //TODO remove soon
+//    ServerResponse<List<UserAvatarEntity>> uploadAvatar(MultipartFile avatarFile, UserDto userDto);
 }

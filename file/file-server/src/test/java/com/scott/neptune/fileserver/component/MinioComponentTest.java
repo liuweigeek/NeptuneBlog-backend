@@ -4,7 +4,7 @@ import com.scott.neptune.fileserver.FileServerApplicationTests;
 import com.scott.neptune.fileserver.property.MinioProperties;
 import io.minio.MinioClient;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import javax.annotation.Resource;
 

@@ -1,7 +1,6 @@
 package com.scott.neptune.authentication.domain;
 
 import lombok.Data;
-import lombok.ToString;
 
 /**
  * @Author: scott

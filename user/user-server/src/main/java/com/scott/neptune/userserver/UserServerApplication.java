@@ -1,6 +1,6 @@
 package com.scott.neptune.userserver;
 
-import org.mybatis.spring.annotation.MapperScan;
+import com.scott.neptune.common.constant.Constant;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -9,7 +9,6 @@ import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
  * @Author: scott
@@ -18,13 +17,11 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * @Description:
  */
 @Configuration
-@EnableSwagger2
-@MapperScan("com.scott.neptune.userserver.mapper")
-@EntityScan(basePackages = "com.scott.neptune")
-@ComponentScan(basePackages = "com.scott.neptune")
-@EnableDiscoveryClient
-@EnableFeignClients(basePackages = "com.scott.neptune")
+@EntityScan(basePackages = Constant.BASE_PACKAGE)
+@ComponentScan(basePackages = Constant.BASE_PACKAGE)
+@EnableFeignClients(basePackages = Constant.BASE_PACKAGE)
 @EnableHystrix
+@EnableDiscoveryClient
 @SpringBootApplication
 public class UserServerApplication {
 

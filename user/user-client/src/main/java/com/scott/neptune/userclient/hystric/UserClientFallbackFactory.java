@@ -1,77 +1,74 @@
 package com.scott.neptune.userclient.hystric;
 
-import com.google.common.collect.Lists;
-import com.scott.neptune.common.response.ServerResponse;
 import com.scott.neptune.userclient.client.UserClient;
+import com.scott.neptune.userclient.dto.AuthUserDto;
 import com.scott.neptune.userclient.dto.UserDto;
 import feign.hystrix.FallbackFactory;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
  * @author scott
  */
 @Slf4j
+@EnableHystrix
 @Component
 public class UserClientFallbackFactory implements FallbackFactory<UserClient> {
 
     @Override
     public UserClient create(Throwable throwable) {
+
         return new UserClient() {
-
-            /**
-             * 获取指定用户
-             *
-             * @param id 用户ID
-             * @return 用户对象
-             */
             @Override
-            public ServerResponse<UserDto> getUserById(String id) {
-                log.error("feign fallback Exception: ", throwable);
-                return ServerResponse.createByErrorMessage("用户服务异常，请稍后重试");
-            }
-
-            /**
-             * 获取当前登录用户
-             *
-             * @return 当前登录用户
-             */
-            @Override
-            public ServerResponse<UserDto> getLoginUser() {
-                log.error("feign fallback Exception: ", throwable);
-                return ServerResponse.createByErrorMessage("用户服务异常，请稍后重试");
-            }
-
-            /**
-             * 通过ID列表获取全部用户
-             *
-             * @param idList 用户ID列表
-             * @return 用户对象列表
-             */
-            @Override
-            public List<UserDto> findAllUserByIdList(List<String> idList) {
-                log.error("feign fallback Exception: ", throwable);
-                return Lists.newArrayListWithCapacity(0);
+            public UserDto addUser(UserDto userDto) {
+                log.error("feign [addUser] Exception: ", throwable);
+                return null;
             }
 
             @Override
-            public ServerResponse<List<String>> getFollowingUserIds() {
-                log.error("feign fallback Exception: ", throwable);
-                return ServerResponse.createByErrorMessage("获取关注用户异常，请稍后重试");
+            public UserDto findUserById(Long id) {
+                log.error("feign [findUserById] Exception: ", throwable);
+                return null;
             }
 
-            /**
-             * 通过关键字搜索用户
-             *
-             * @param keyword 关键字
-             * @return 用户列表
-             */
             @Override
-            public ServerResponse<List<UserDto>> search(String keyword) {
-                log.error("feign fallback Exception: ", throwable);
-                return ServerResponse.createByErrorMessage("搜索用户异常，请稍后重试");
+            public UserDto findUserByUsername(String username) {
+                log.error("feign [findUserByUsername] Exception: ", throwable);
+                return null;
+            }
+
+            @Override
+            public AuthUserDto findUserByUsernameForAuthenticate(String username) {
+                log.error("feign [findUserByUsernameForAuthenticate] Exception: ", throwable);
+                return null;
+            }
+
+            @Override
+            public UserDto findUserByEmail(String email) {
+                log.error("feign [findUserByEmail] Exception: ", throwable);
+                return null;
+            }
+
+            @Override
+            public List<UserDto> findAllUserByIdList(List<Long> idList) {
+                log.error("feign [findAllUserByIdList] Exception: ", throwable);
+                return Collections.emptyList();
+            }
+
+            @Override
+            public UserDto getLoginUser() {
+                log.error("feign [getLoginUser] Exception: ", throwable);
+                return null;
+            }
+
+            @Override
+            public List<UserDto> search(String keyword) {
+                log.error("feign [search] Exception: ", throwable);
+                return Collections.emptyList();
             }
         };
     }

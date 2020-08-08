@@ -1,6 +1,5 @@
 package com.scott.neptune.userclient.dto;
 
-import com.scott.neptune.common.dto.Pageable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -9,7 +8,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
@@ -26,12 +24,11 @@ import java.util.Date;
  */
 @Data
 @Builder
-@ToString
 @EqualsAndHashCode(callSuper = false, of = {"id"})
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel(value = "user", description = "用户对象")
-public class UserDto extends Pageable {
+public class UserDto {
 
     private static final long serialVersionUID = 1L;
 
@@ -39,56 +36,50 @@ public class UserDto extends Pageable {
      * Id
      */
     @ApiModelProperty(hidden = true)
-    private String id;
+    private Long id;
 
     /**
      * 邮箱地址
      */
     @NotEmpty(message = "邮箱地址不可为空", groups = {Login.class, Register.class})
     @Email(message = "邮箱格式不正确", groups = {Login.class, Register.class})
-    @ApiModelProperty(name = "email", value = "邮箱地址", required = true)
+    @ApiModelProperty(value = "邮箱地址", required = true)
     private String email;
 
     /**
      * 用户名
      */
     @NotEmpty(message = "用户名不可为空", groups = Register.class)
-    @ApiModelProperty(name = "username", value = "用户名", required = true)
+    @ApiModelProperty(value = "用户名", required = true)
     private String username;
 
     /**
      * 昵称
      */
     @NotEmpty(message = "昵称不可为空", groups = Register.class)
-    @ApiModelProperty(name = "nickname", value = "昵称")
+    @ApiModelProperty(value = "昵称")
     private String nickname;
-
-    /**
-     * 用户头像
-     */
-    @ApiModelProperty(name = "avatar", value = "用户头像")
-    private String avatar;
 
     /**
      * 密码
      */
     @NotEmpty(message = "密码不可为空", groups = {Login.class, Register.class})
     @Length(min = 8, max = 16, message = "密码长度应该为8到16位", groups = Register.class)
-    @ApiModelProperty(name = "password", value = "密码", required = true)
+    @ApiModelProperty(value = "密码", required = true)
     private String password;
 
     /**
      * 出生日期
      */
     @NotNull(message = "出生日期", groups = Register.class)
-    @ApiModelProperty(name = "birthday", value = "出生日期")
+    @ApiModelProperty(value = "出生日期")
     private Date birthday;
 
     /**
      * 性别
      */
     @NotNull(message = "性别不可为空", groups = Register.class)
-    @ApiModelProperty(name = "sex", value = "性别")
+    @ApiModelProperty(value = "性别")
     private Integer sex;
 
     /**
@@ -106,7 +97,7 @@ public class UserDto extends Pageable {
     /**
      * 语言
      */
-    @ApiModelProperty(name = "langKey", value = "语言")
+    @ApiModelProperty(value = "语言")
     private String langKey;
 
     /**
@@ -118,19 +109,19 @@ public class UserDto extends Pageable {
     /**
      * 小尺寸头像
      */
-    @ApiModelProperty(name = "smallAvatar", value = "小尺寸头像")
+    @ApiModelProperty(value = "小尺寸头像")
     private String smallAvatar;
 
     /**
      * 正常尺寸头像
      */
-    @ApiModelProperty(name = "normalAvatar", value = "正常尺寸头像")
+    @ApiModelProperty(value = "正常尺寸头像")
     private String normalAvatar;
 
     /**
      * 大尺寸头像
      */
-    @ApiModelProperty(name = "largeAvatar", value = "大尺寸头像")
+    @ApiModelProperty(value = "大尺寸头像")
     private String largeAvatar;
 
     /**
@@ -175,7 +166,7 @@ public class UserDto extends Pageable {
         FEMALE(2);
 
         @Getter
-        private int code;
+        private final int code;
 
         public SexEnum getEnum(int code) {
             for (SexEnum sexEnum : SexEnum.values()) {
@@ -204,8 +195,8 @@ public class UserDto extends Pageable {
          */
         FOLLOWING(1, "following");
 
-        private int code;
-        private String value;
+        private final int code;
+        private final String value;
 
         public static RelationEnum getEnum(int code) {
             for (RelationEnum relationEnum : RelationEnum.values()) {
@@ -213,7 +204,6 @@ public class UserDto extends Pageable {
                     return relationEnum;
                 }
             }
-
             return null;
         }
     }

@@ -3,8 +3,8 @@ package com.scott.neptune.mailserver.service.impl;
 import com.scott.neptune.common.response.ServerResponse;
 import com.scott.neptune.mailserver.MailServerApplicationTests;
 import com.scott.neptune.mailserver.service.IEmailService;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import javax.annotation.Resource;
 
@@ -25,13 +25,13 @@ public class EmailServiceImplTest extends MailServerApplicationTests {
         ServerResponse response = emailService.sendSimpleMessage("xxxxxxxx@outlook.com",
                 "Hello Scott",
                 "Hello Scott, This email is sent from Spring Boot");
-        Assert.assertTrue(response.isSuccess());
+        Assertions.assertTrue(response.isSuccess());
     }
 
     @Test
     public void sendTemplateMessage() {
         ServerResponse response = emailService.sendTemplateMessage("xxxxxxxx@outlook.com",
                 "Hello Scott");
-        Assert.assertTrue(response.isSuccess());
+        Assertions.assertTrue(response.isSuccess());
     }
 }

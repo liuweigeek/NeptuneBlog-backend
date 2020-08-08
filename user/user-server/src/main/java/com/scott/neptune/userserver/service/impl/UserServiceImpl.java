@@ -1,33 +1,25 @@
 package com.scott.neptune.userserver.service.impl;
 
-import com.google.common.collect.Lists;
-import com.scott.neptune.common.response.ServerResponse;
-import com.scott.neptune.common.util.MD5Utils;
-import com.scott.neptune.fileclient.FileClient;
-import com.scott.neptune.userclient.dto.UserAvatarDto;
+import com.scott.neptune.common.exception.NeptuneBlogException;
+import com.scott.neptune.userclient.dto.AuthUserDto;
 import com.scott.neptune.userclient.dto.UserDto;
-import com.scott.neptune.userserver.entity.UserAvatarEntity;
-import com.scott.neptune.userserver.entity.UserEntity;
-import com.scott.neptune.userserver.mapper.UserMapper;
-import com.scott.neptune.userserver.mapping.UserAvatarModelMapping;
-import com.scott.neptune.userserver.mapping.UserModelMapping;
-import com.scott.neptune.userserver.service.IUserAvatarService;
+import com.scott.neptune.userserver.convertor.UserConvertor;
+import com.scott.neptune.userserver.domain.aggregate.UserEntity;
+import com.scott.neptune.userserver.repository.UserRepository;
 import com.scott.neptune.userserver.service.IUserService;
-import com.scott.neptune.userserver.util.UserUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.Resource;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.TimeUnit;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @Author: scott
@@ -40,18 +32,18 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class UserServiceImpl implements IUserService {
 
-    @Resource
-    private UserMapper userMapper;
-    @Resource
-    private UserModelMapping userModelMapping;
-    @Resource
-    private UserAvatarModelMapping userAvatarModelMapping;
-    @Resource
-    private RedisTemplate<String, Object> redisTemplate;
-    @Resource
-    private FileClient fileClient;
-    @Resource
-    private IUserAvatarService userAvatarService;
+    private final UserRepository userRepository;
+    private final UserConvertor userConvertor;
+    private final PasswordEncoder passwordEncoder;
+
+    public UserServiceImpl(UserRepository userRepository,
+                           UserConvertor userConvertor,
+                           PasswordEncoder passwordEncoder) {
+
+        this.userRepository = userRepository;
+        this.userConvertor = userConvertor;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     /**
      * 判断指定用户名是否存在
@@ -61,7 +53,10 @@ public class UserServiceImpl implements IUserService {
      */
     @Override
     public boolean existsByUsername(String username) {
-        return userMapper.exists(UserEntity.builder().username(username).build());
+        ExampleMatcher usernameExampleMatcher = ExampleMatcher.matching()
+                .withMatcher("username", ExampleMatcher.GenericPropertyMatchers.ignoreCase())
+                .withIgnoreNullValues();
+        return userRepository.exists(Example.of(UserEntity.builder().username(username).build(), usernameExampleMatcher));
     }
 
     /**
@@ -72,79 +67,48 @@ public class UserServiceImpl implements IUserService {
      */
     @Override
     public boolean existsByEmail(String email) {
-        return userMapper.exists(UserEntity.builder().email(email).build());
-    }
-
-    /**
-     * 用户登录
-     *
-     * @param email    邮箱地址
-     * @param password 密码
-     * @return 登录结果
-     */
-    @Override
-    public ServerResponse<UserDto> login(String email, String password) {
-
-        UserEntity userEntity = userMapper.getOne(UserEntity.builder().email(email).build(), null);
-        if (Objects.isNull(userEntity)) {
-            return ServerResponse.createByErrorMessage("用户不存在，请检查邮箱地址是否正确");
-        }
-
-        String md5Password = MD5Utils.encodeUtf8(password);
-        if (!StringUtils.equals(userEntity.getPassword(), md5Password)) {
-            return ServerResponse.createByErrorMessage("密码错误");
-        }
-        userEntity.setLoginDate(new Date());
-        userEntity.setToken(UserUtil.generateTokenByUser(userEntity));
-        userMapper.updateById(userEntity);
-
-        UserDto userDto = userModelMapping.convertToDto(userEntity);
-        redisTemplate.opsForValue().set(userEntity.getToken(), userDto, 30, TimeUnit.MINUTES);
-
-        return ServerResponse.createBySuccess("登录成功", userDto);
+        ExampleMatcher emailExampleMatcher = ExampleMatcher.matching()
+                .withMatcher("email", ExampleMatcher.GenericPropertyMatchers.ignoreCase())
+                .withIgnoreNullValues();
+        return userRepository.exists(Example.of(UserEntity.builder().email(email).build(), emailExampleMatcher));
     }
 
     /**
      * 保存用户
      *
-     * @param userEntity 用户对象
+     * @param userDto 用户对象
      * @return 保存结果
      */
     @Override
-    public ServerResponse<UserDto> save(UserEntity userEntity) {
-        if (this.existsByEmail(userEntity.getEmail())) {
-            return ServerResponse.createByErrorMessage("用户邮箱已存在");
+    public UserDto save(UserDto userDto) {
+        if (this.existsByEmail(userDto.getEmail())) {
+            throw new NeptuneBlogException("用户邮箱已存在");
         }
-        if (this.existsByUsername(userEntity.getUsername())) {
-            return ServerResponse.createByErrorMessage("用户名已存在,请更换后重试");
+        if (this.existsByUsername(userDto.getUsername())) {
+            throw new NeptuneBlogException("用户名已存在,请更换后重试");
         }
+        UserEntity userEntity = userConvertor.convertToEntity().apply(userDto);
+        //TODO create by event
+        userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
+
         userEntity.setRegisterDate(new Date());
-        userEntity.setPassword(MD5Utils.encodeUtf8(userEntity.getPassword()));
-        try {
-            userEntity.setLoginDate(new Date());
-            userEntity.setToken(UserUtil.generateTokenByUser(userEntity));
-            userMapper.insert(userEntity);
-            UserDto userDto = userModelMapping.convertToDto(userEntity);
-            return ServerResponse.createBySuccess(userDto);
-        } catch (Exception e) {
-            return ServerResponse.createByErrorMessage("新建用户失败");
-        }
+        userEntity.setLoginDate(new Date());
+
+        userRepository.save(userEntity);
+        return userConvertor.convertToDto().apply(userEntity);
     }
 
     /**
      * 通过ID获取用户
      *
-     * @param id 用户ID
+     * @param userId 用户ID
      * @return 用户对象
      */
     @Override
-    public UserEntity getUserById(String id, String loginUserId) {
-        try {
-            return userMapper.getOne(UserEntity.builder().id(id).build(), loginUserId);
-        } catch (Exception e) {
-            log.error("getUserByUsername exception: ", e);
-            return null;
-        }
+    public UserDto findUserById(Long userId, Long loginUserId) {
+        return Optional.of(userRepository.getOne(userId))
+                .map(userConvertor.convertToDto())
+                .orElseThrow(() -> new NeptuneBlogException("指定用户不存在"));
     }
 
     /**
@@ -154,13 +118,53 @@ public class UserServiceImpl implements IUserService {
      * @return 用户对象
      */
     @Override
-    public UserEntity getUserByUsername(String username, String loginUserId) {
-        try {
-            return userMapper.getOne(UserEntity.builder().username(username).build(), loginUserId);
-        } catch (Exception e) {
-            log.error("getUserByUsername exception: ", e);
-            return null;
-        }
+    public UserDto findUserByUsername(String username, Long loginUserId) {
+        ExampleMatcher usernameExampleMatcher = ExampleMatcher.matching()
+                .withMatcher("username", ExampleMatcher.GenericPropertyMatchers.ignoreCase())
+                .withIgnoreNullValues();
+
+        return userRepository.findOne(Example.of(UserEntity.builder().username(username).build(), usernameExampleMatcher))
+                .map(userConvertor.convertToDto())
+                .orElseThrow(() -> new NeptuneBlogException("username not found"));
+    }
+
+    @Override
+    public AuthUserDto findUserByUsernameForAuthenticate(String username) {
+        ExampleMatcher usernameExampleMatcher = ExampleMatcher.matching()
+                .withMatcher("username", ExampleMatcher.GenericPropertyMatchers.ignoreCase())
+                .withIgnoreNullValues();
+
+        return userRepository.findOne(Example.of(UserEntity.builder().username(username).build(), usernameExampleMatcher))
+                .map(userEntity -> AuthUserDto.builder()
+                        .id(userEntity.getId())
+                        .username(userEntity.getUsername())
+                        .password(userEntity.getPassword())
+                        .nickname(userEntity.getNickname())
+                        .email(userEntity.getEmail())
+                        .active(true)
+                        .isLocked(false)
+                        .isExpired(false)
+                        .isEnabled(true)
+                        .authorities(new String[]{})
+                        .build())
+                .orElseThrow(() -> new NeptuneBlogException("username not found"));
+    }
+
+    /**
+     * 通过邮箱获取用户
+     *
+     * @param email 邮箱
+     * @return 用户对象
+     */
+    @Override
+    public UserDto findUserByEmail(String email, Long loginUserId) {
+        ExampleMatcher usernameExampleMatcher = ExampleMatcher.matching()
+                .withMatcher("email", ExampleMatcher.GenericPropertyMatchers.ignoreCase())
+                .withIgnoreNullValues();
+
+        return userRepository.findOne(Example.of(UserEntity.builder().email(email).build(), usernameExampleMatcher))
+                .map(userConvertor.convertToDto())
+                .orElseThrow(() -> new NeptuneBlogException("email not found"));
     }
 
     /**
@@ -170,13 +174,18 @@ public class UserServiceImpl implements IUserService {
      * @return 用户列表
      */
     @Override
-    public List<UserEntity> findByKeyword(String keyword, String loginUserId) {
-        try {
-            return userMapper.findByKeyword(keyword, loginUserId);
-        } catch (Exception e) {
-            log.error("getUserByKeyword exception: ", e);
-            return Collections.emptyList();
-        }
+    public List<UserDto> findByKeyword(String keyword, Long loginUserId) {
+        return userRepository.findAll((root, query, criteriaBuilder) ->
+                query.where(
+                        criteriaBuilder.or(
+                                criteriaBuilder.like(root.get("username").as(String.class), "%" + keyword + "%"),
+                                criteriaBuilder.like(root.get("nickname").as(String.class), "%" + keyword + "%"),
+                                criteriaBuilder.like(root.get("email").as(String.class), "%" + keyword + "%"),
+                                criteriaBuilder.like(root.get("username").as(String.class), "%" + keyword + "%")))
+                        .orderBy(criteriaBuilder.asc(root.get("registerDate").as(Date.class)))
+                        .getRestriction()).stream()
+                .map(userConvertor.convertToDto())
+                .collect(Collectors.toList());
     }
 
     /**
@@ -185,13 +194,10 @@ public class UserServiceImpl implements IUserService {
      * @return 用户列表
      */
     @Override
-    public List<UserEntity> findUserList(String loginUserId) {
-        try {
-            return userMapper.findAll(null, loginUserId);
-        } catch (Exception e) {
-            log.error("findUserList exception: ", e);
-            return Collections.emptyList();
-        }
+    public List<UserDto> findUserList(Long loginUserId) {
+        return userRepository.findAll().stream()
+                .map(userConvertor.convertToDto())
+                .collect(Collectors.toList());
     }
 
     /**
@@ -201,16 +207,13 @@ public class UserServiceImpl implements IUserService {
      * @return 用户对象列表
      */
     @Override
-    public List<UserEntity> findAllUserByIdList(List<String> idList, String loginUserId) {
+    public List<UserDto> findAllUserByIdList(List<Long> idList, Long loginUserId) {
         if (CollectionUtils.isEmpty(idList)) {
-            return Lists.newArrayListWithCapacity(0);
-        }
-        try {
-            return userMapper.findAllInUserIds(idList, loginUserId);
-        } catch (Exception e) {
-            log.error("findAllUserByIdList exception: ", e);
             return Collections.emptyList();
         }
+        return userRepository.findAllByIdIn(idList).stream()
+                .map(userConvertor.convertToDto())
+                .collect(Collectors.toList());
     }
 
     /**
@@ -220,7 +223,7 @@ public class UserServiceImpl implements IUserService {
      * @param userDto    用户
      * @return 上传结果
      */
-    @Override
+/*    @Override
     public ServerResponse<List<UserAvatarEntity>> uploadAvatar(MultipartFile avatarFile, UserDto userDto) {
         ServerResponse<List<UserAvatarDto>> uploadAvatarRes = fileClient.uploadAvatar(avatarFile);
         if (uploadAvatarRes.isFailed()) {
@@ -232,17 +235,17 @@ public class UserServiceImpl implements IUserService {
             avatarDto.setUserId(userDto.getId());
             normalAvatar = avatarDto.getUrl();
         }
-        List<UserAvatarEntity> avatarEntityList = userAvatarModelMapping.convertToEntityList(avatarDtoList);
+        List<UserAvatarEntity> avatarEntityList = userAvatarConvertor.convertToEntityList(avatarDtoList);
         userAvatarService.delete(UserAvatarEntity.builder().userId(userDto.getId()).build());
         try {
             userAvatarService.saveList(avatarEntityList);
-            UserEntity userEntity = userModelMapping.convertToEntity(userDto);
+            UserEntity userEntity = userConvertor.convertToEntity(userDto);
             userEntity.setAvatar(normalAvatar);
-            userMapper.updateById(userEntity);
+            entityManager.merge(userEntity);
             return ServerResponse.createBySuccess();
         } catch (Exception e) {
             log.error("uploadAvatar exception: ", e);
             return ServerResponse.createByErrorMessage("保存头像失败");
         }
-    }
+    }*/
 }
