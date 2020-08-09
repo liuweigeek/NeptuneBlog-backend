@@ -36,7 +36,7 @@ public interface UserClient {
      * @param id 用户ID
      * @return 用户对象
      */
-    @RequestMapping(value = "server/user/{id}", method = RequestMethod.GET)
+    @RequestMapping(path = "server/user/{id}", method = RequestMethod.GET)
     UserDto findUserById(@PathVariable Long id);
 
     /**
@@ -45,10 +45,10 @@ public interface UserClient {
      * @param username 用户名
      * @return 用户对象
      */
-    @RequestMapping(value = "server/user/username/{username}", method = RequestMethod.GET)
+    @RequestMapping(path = "server/user/username/{username}", method = RequestMethod.GET)
     UserDto findUserByUsername(@PathVariable String username);
 
-    @RequestMapping(value = "authenticate/{username}", method = RequestMethod.GET)
+    @RequestMapping(path = "authenticate/{username}", method = RequestMethod.GET)
     AuthUserDto findUserByUsernameForAuthenticate(@PathVariable String username);
 
     /**
@@ -57,7 +57,7 @@ public interface UserClient {
      * @param email 邮箱
      * @return 用户对象
      */
-    @RequestMapping(value = "server/user/email/{email}", method = RequestMethod.GET)
+    @RequestMapping(path = "server/user/email/{email}", method = RequestMethod.GET)
     UserDto findUserByEmail(@PathVariable String email);
 
     /**
@@ -67,7 +67,7 @@ public interface UserClient {
      * @return 用户对象列表
      */
     //TODO change the http method
-    @RequestMapping(value = "server/user/findAllUserByIdList", method = RequestMethod.POST)
+    @RequestMapping(path = "server/user/findAllUserByIdList", method = RequestMethod.POST)
     List<UserDto> findAllUserByIdList(@RequestBody List<Long> idList);
 
     /**
@@ -75,7 +75,7 @@ public interface UserClient {
      *
      * @return 当前登录用户
      */
-    @GetMapping(value = "server/user/loginUser")
+    @GetMapping(path = "server/user/loginUser")
     UserDto getLoginUser();
 
     /**
@@ -84,6 +84,6 @@ public interface UserClient {
      * @param keyword 关键字
      * @return 用户列表
      */
-    @RequestMapping(value = "server/user/search/{keyword}", method = RequestMethod.GET)
+    @RequestMapping(path = "server/user/search/{keyword}", method = RequestMethod.GET)
     List<UserDto> search(@PathVariable String keyword);
 }

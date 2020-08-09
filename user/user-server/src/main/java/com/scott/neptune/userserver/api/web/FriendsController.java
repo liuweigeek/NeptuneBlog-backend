@@ -36,7 +36,7 @@ import java.util.Objects;
 @Api(tags = "好友关系接口 - 面向前端")
 @Slf4j
 @RestController
-@RequestMapping("friendship")
+@RequestMapping(path = "friendship")
 public class FriendsController extends BaseController {
 
     @Resource
@@ -97,7 +97,7 @@ public class FriendsController extends BaseController {
      * @return 关注列表
      */
     @ApiOperation(value = "获取关注列表")
-    @GetMapping(value = "findFollowing")
+    @GetMapping(path = "findFollowing")
     public ResponseEntity<Page<FriendshipDto>> findAllFollowing(UserDto userDto) {
 
         Long fromUserId;
@@ -121,7 +121,7 @@ public class FriendsController extends BaseController {
      * @return 关注者列表
      */
     @ApiOperation(value = "获取关注者列表")
-    @GetMapping(value = "findFollower")
+    @GetMapping(path = "findFollower")
     public ResponseEntity<Page<FriendshipDto>> findAllFollower(UserDto userDto) {
         Long toUserId;
         if (Objects.isNull(userDto) || StringUtils.isBlank(userDto.getUsername())) {

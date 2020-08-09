@@ -1,8 +1,8 @@
 package com.scott.neptune.common.config;
 
-import com.scott.neptune.common.dto.ApiErrorResponse;
 import com.scott.neptune.common.exception.NeptuneBlogException;
 import com.scott.neptune.common.exception.RestException;
+import com.scott.neptune.common.model.ApiErrorResponse;
 import feign.Contract;
 import feign.codec.Decoder;
 import feign.codec.Encoder;

@@ -1,7 +1,7 @@
 package com.scott.neptune.common.handler;
 
-import com.scott.neptune.common.dto.ApiErrorResponse;
 import com.scott.neptune.common.exception.RestException;
+import com.scott.neptune.common.model.ApiErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

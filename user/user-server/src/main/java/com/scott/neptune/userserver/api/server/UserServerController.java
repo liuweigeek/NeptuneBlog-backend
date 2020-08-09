@@ -28,7 +28,7 @@ import java.util.List;
 @Api(tags = "用户接口 - 面向其他服务")
 @Slf4j
 @RestController
-@RequestMapping("server/user")
+@RequestMapping(path = "server/user")
 public class UserServerController extends BaseController {
 
     private final IUserService userService;

@@ -15,3 +15,25 @@ spring:
 eureka:
   instance:
     prefer-ip-address: true
+
+neptune:
+  oss:
+    minio:
+      endpoint: http://localhost:9000
+      access-key: scott
+      secret-key: 12345678
+      bucket: neptune-blog
+  file:
+    tempFolder: /Users/scott/Data/neptune_files
+    avatar:
+      extensionName: png
+      sizes:
+        - sizeType: 1
+          height: 50
+          width: 50
+        - sizeType: 2
+          height: 200
+          width: 200
+        - sizeType: 3
+          height: 500
+          width: 500

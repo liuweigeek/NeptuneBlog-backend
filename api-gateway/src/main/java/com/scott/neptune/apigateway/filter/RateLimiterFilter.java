@@ -7,6 +7,7 @@ import com.netflix.zuul.context.RequestContext;
 import com.scott.neptune.common.response.ResponseCode;
 import com.scott.neptune.common.response.ServerResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletResponse;
@@ -49,7 +50,7 @@ public class RateLimiterFilter extends ZuulFilter {
             try {
                 HttpServletResponse response = requestContext.getResponse();
                 ObjectMapper mapper = new ObjectMapper();
-                response.setContentType("application/json;charset=utf-8");
+                response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                 ServerResponse noLoginResponse = ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),
                         "系统繁忙，请稍后再试");
                 response.getWriter().println(mapper.writeValueAsString(noLoginResponse));

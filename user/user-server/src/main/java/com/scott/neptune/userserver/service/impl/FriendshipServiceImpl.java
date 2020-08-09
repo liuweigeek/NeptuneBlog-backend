@@ -1,6 +1,6 @@
 package com.scott.neptune.userserver.service.impl;
 
-import com.scott.neptune.common.dto.OffsetPageRequest;
+import com.scott.neptune.common.model.OffsetPageRequest;
 import com.scott.neptune.userclient.dto.FriendshipDto;
 import com.scott.neptune.userserver.convertor.FriendshipConvertor;
 import com.scott.neptune.userserver.domain.entity.FriendshipEntity;

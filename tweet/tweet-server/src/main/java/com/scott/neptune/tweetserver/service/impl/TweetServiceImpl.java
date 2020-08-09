@@ -1,6 +1,6 @@
 package com.scott.neptune.tweetserver.service.impl;
 
-import com.scott.neptune.common.dto.OffsetPageRequest;
+import com.scott.neptune.common.model.OffsetPageRequest;
 import com.scott.neptune.tweetclient.dto.TweetDto;
 import com.scott.neptune.tweetserver.convertor.TweetConvertor;
 import com.scott.neptune.tweetserver.domain.entity.TweetEntity;

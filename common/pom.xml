@@ -16,6 +16,8 @@
 
     <properties>
         <springfox-boot-starter.version>3.0.0</springfox-boot-starter.version>
+        <minio.version>6.0.11</minio.version>
+        <thumbnailator.version>0.4.8</thumbnailator.version>
         <lombok.version>1.18.6</lombok.version>
         <guava.version>28.1-jre</guava.version>
         <commons-lang.version>2.6</commons-lang.version>
@@ -72,6 +74,24 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>io.minio</groupId>
+            <artifactId>minio</artifactId>
+            <version>${minio.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.coobird</groupId>
+            <artifactId>thumbnailator</artifactId>
+            <version>${thumbnailator.version}</version>
         </dependency>
 
         <dependency>

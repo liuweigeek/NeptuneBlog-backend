@@ -44,7 +44,7 @@ public class TweetController extends BaseController {
      * @return
      */
     @ApiOperation(value = "发送推文")
-    @PostMapping(value = "update")
+    @PostMapping(path = "update")
     public ResponseEntity<TweetDto> update(@RequestBody TweetDto tweetDto) {
         UserDto loginUser = userClient.getLoginUser();
         tweetDto = tweetService.save(tweetDto, loginUser);
@@ -58,7 +58,7 @@ public class TweetController extends BaseController {
      * @return
      */
     @ApiOperation(value = "获取关注用户的推文")
-    @GetMapping(value = "/followingPosts")
+    @GetMapping(path = "followingPosts")
     public ResponseEntity<Page<TweetDto>> getFollowingPosts() {
         UserDto loginUser = userClient.getLoginUser();
         //TODO parameters for pageable
@@ -75,7 +75,7 @@ public class TweetController extends BaseController {
     @ApiOperation(value = "获取指定用户的推文")
     //TODO rebuild the key for cache
     //@Cacheable(value = Constant.CacheKey.TWEET, key = "#userId+'.'+#postDto.getCurrent()+'.'+#postDto.getSize()")
-    @GetMapping(value = "/getPostsByUserId")
+    @GetMapping(path = "getPostsByUserId")
     public ResponseEntity<Page<TweetDto>> getPostsByUserId(Long userId) {
         //TODO parameters for pageable
         Page<TweetDto> tweetDtoPage = tweetService.findByUserId(userId, 0, 0);

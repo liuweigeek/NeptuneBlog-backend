@@ -24,7 +24,6 @@
         <module>user</module>
         <module>tweet</module>
         <module>search</module>
-        <module>file</module>
         <module>mail</module>
     </modules>
 
