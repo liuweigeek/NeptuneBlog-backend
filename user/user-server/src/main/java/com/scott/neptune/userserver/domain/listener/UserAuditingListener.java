@@ -1,6 +1,6 @@
 package com.scott.neptune.userserver.domain.listener;
 
-import com.scott.neptune.userserver.domain.aggregate.UserEntity;
+import com.scott.neptune.userserver.domain.entity.UserEntity;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.PostPersist;

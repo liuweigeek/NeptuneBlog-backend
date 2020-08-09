@@ -1,6 +1,6 @@
 package com.scott.neptune.searchserver.dto;
 
-import com.scott.neptune.postclient.dto.PostDto;
+import com.scott.neptune.tweetclient.dto.TweetDto;
 import com.scott.neptune.userclient.dto.UserDto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -36,7 +36,7 @@ public class SearchResultMap implements Serializable {
     /**
      * 推文列表
      */
-    @ApiModelProperty(name = "postList", value = "推文列表")
-    private List<PostDto> postList;
+    @ApiModelProperty(name = "tweetList", value = "推文列表")
+    private List<TweetDto> tweetList;
 
 }

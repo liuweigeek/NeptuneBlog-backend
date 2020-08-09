@@ -22,7 +22,7 @@
 
 用户模块，使用Eureka Client
 
-## post
+## tweet
 
 推文模块，使用Eureka Client
 

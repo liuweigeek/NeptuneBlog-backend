@@ -17,8 +17,8 @@ public class MinioFolders {
 
     private String userAvatarMd;
 
-    private String postImageSm;
+    private String tweetImageSm;
 
-    private String postImageOrigin;
+    private String tweetImageOrigin;
 
 }

@@ -1,6 +1,6 @@
 package com.scott.neptune.userserver.repository;
 
-import com.scott.neptune.userserver.domain.aggregate.UserEntity;
+import com.scott.neptune.userserver.domain.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;

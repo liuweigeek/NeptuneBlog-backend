@@ -47,7 +47,7 @@ public class AuthUserService implements UserDetailsService {
         if (authUserDto == null) {
             throw new RestException("指定用不不存在", HttpStatus.NOT_FOUND);
         }
-        return authUserConvertor.convertToEntity().apply(authUserDto);
+        return authUserConvertor.convertToEntity(authUserDto);
     }
 
     public UserDto signIn(String username, String password) {

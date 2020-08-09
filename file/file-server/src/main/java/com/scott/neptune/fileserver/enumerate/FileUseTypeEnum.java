@@ -31,9 +31,9 @@ public enum FileUseTypeEnum {
     USER_BACKGROUND(3, "user background", "background"),
 
     /**
-     * image of post
+     * image of tweet
      */
-    POST_IMAGE(4, "image of post", "post_image");
+    POST_IMAGE(4, "image of tweet", "tweet_image");
 
     private int code;
     private String name;

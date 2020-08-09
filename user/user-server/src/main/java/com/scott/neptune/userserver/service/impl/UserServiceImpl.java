@@ -4,11 +4,12 @@ import com.scott.neptune.common.exception.NeptuneBlogException;
 import com.scott.neptune.userclient.dto.AuthUserDto;
 import com.scott.neptune.userclient.dto.UserDto;
 import com.scott.neptune.userserver.convertor.UserConvertor;
-import com.scott.neptune.userserver.domain.aggregate.UserEntity;
+import com.scott.neptune.userserver.domain.entity.UserEntity;
 import com.scott.neptune.userserver.repository.UserRepository;
 import com.scott.neptune.userserver.service.IUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -87,7 +88,7 @@ public class UserServiceImpl implements IUserService {
         if (this.existsByUsername(userDto.getUsername())) {
             throw new NeptuneBlogException("用户名已存在,请更换后重试");
         }
-        UserEntity userEntity = userConvertor.convertToEntity().apply(userDto);
+        UserEntity userEntity = userConvertor.convertToEntity(userDto);
         //TODO create by event
         userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
 
@@ -95,7 +96,7 @@ public class UserServiceImpl implements IUserService {
         userEntity.setLoginDate(new Date());
 
         userRepository.save(userEntity);
-        return userConvertor.convertToDto().apply(userEntity);
+        return userConvertor.convertToDto(userEntity);
     }
 
     /**
@@ -175,6 +176,9 @@ public class UserServiceImpl implements IUserService {
      */
     @Override
     public List<UserDto> findByKeyword(String keyword, Long loginUserId) {
+        if (StringUtils.isBlank(keyword)) {
+            return Collections.emptyList();
+        }
         return userRepository.findAll((root, query, criteriaBuilder) ->
                 query.where(
                         criteriaBuilder.or(

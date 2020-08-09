@@ -2,8 +2,8 @@ package com.scott.neptune.searchserver.api.web;
 
 import com.scott.neptune.common.annotation.RedisLock;
 import com.scott.neptune.common.base.BaseController;
-import com.scott.neptune.postclient.client.PostClient;
-import com.scott.neptune.postclient.dto.PostDto;
+import com.scott.neptune.tweetclient.client.TweetClient;
+import com.scott.neptune.tweetclient.dto.TweetDto;
 import com.scott.neptune.userclient.client.UserClient;
 import com.scott.neptune.userclient.dto.UserDto;
 import io.swagger.annotations.Api;
@@ -39,7 +39,7 @@ public class SearchController extends BaseController {
     private UserClient userClient;
 
     @Resource
-    private PostClient postClient;
+    private TweetClient tweetClient;
 
     @RedisLock
     @ApiOperation(value = "搜索用户和推文")
@@ -48,11 +48,11 @@ public class SearchController extends BaseController {
     public ResponseEntity<Map<String, List>> searchByKeyword(@PathVariable("keyword") String keyword) {
 
         List<UserDto> userDtoList = userClient.search(keyword);
-        List<PostDto> postDtoList = postClient.search(keyword);
+        List<TweetDto> tweetDtoList = tweetClient.search(keyword);
 
         Map<String, List> searchResultMap = new HashMap<>();
         searchResultMap.put("userRes", userDtoList);
-        searchResultMap.put("postRes", postDtoList);
+        searchResultMap.put("tweetRes", tweetDtoList);
 
         return ResponseEntity.ok(searchResultMap);
     }

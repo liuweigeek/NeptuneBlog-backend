@@ -11,7 +11,7 @@
 
     <name>${project.artifactId}</name>
     <artifactId>authentication</artifactId>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>

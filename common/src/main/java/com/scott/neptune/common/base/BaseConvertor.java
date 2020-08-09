@@ -14,13 +14,29 @@ public abstract class BaseConvertor<ENTITY, DTO> {
 
     private Function<DTO, ENTITY> INSTANCE_TO_ENTITY = null;
 
+    /**
+     * convert to DTO
+     *
+     * @return
+     */
+    public DTO convertToDto(ENTITY entity) {
+        return this.convertToDto(entity);
+    }
+
+    /**
+     * convert to Entity
+     *
+     * @return
+     */
+    public ENTITY convertToEntity(DTO dto) {
+        return this.convertToEntity(dto);
+    }
 
     /**
      * convert to DTO
      *
      * @return
      */
-    //TODO concurrency
     public Function<ENTITY, DTO> convertToDto() {
         if (INSTANCE_TO_DTO == null) {
             INSTANCE_TO_DTO = getFunctionInstanceToDto();
@@ -33,7 +49,6 @@ public abstract class BaseConvertor<ENTITY, DTO> {
      *
      * @return
      */
-    //TODO concurrency
     public Function<DTO, ENTITY> convertToEntity() {
         if (INSTANCE_TO_ENTITY == null) {
             INSTANCE_TO_ENTITY = getFunctionInstanceToEntity();

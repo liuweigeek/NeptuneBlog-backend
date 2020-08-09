@@ -14,6 +14,6 @@ public class Constant {
     }
 
     public interface CacheKey {
-        String POST = "post";
+        String TWEET = "tweet";
     }
 }

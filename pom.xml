@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.11.RELEASE</version>
+        <version>2.3.1.RELEASE</version>
         <relativePath/>
     </parent>
 
@@ -20,10 +20,9 @@
         <module>config-server</module>
         <module>api-gateway</module>
         <module>common</module>
-        <module>login</module>
+        <module>authentication</module>
         <module>user</module>
-        <module>post</module>
-        <module>social</module>
+        <module>tweet</module>
         <module>search</module>
         <module>file</module>
         <module>mail</module>
@@ -32,26 +31,22 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>8</java.version>
-        <spring-cloud.version>Greenwich.SR3</spring-cloud.version>
-        <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
-        <hibernate.version>5.3.11.Final</hibernate.version>
-        <mybatis.version>2.1.0</mybatis.version>
-        <mybatis-plus.version>3.2.0</mybatis-plus.version>
+        <java.version>1.8</java.version>
+        <spring-cloud.version>Hoxton.SR4</spring-cloud.version>
         <dockerfile-maven-plugin.version>1.4.12</dockerfile-maven-plugin.version>
         <docker.image.prefix>registry.cn-shenzhen.aliyuncs.com/neptune-blog</docker.image.prefix>
         <docker.tag>latest</docker.tag>
     </properties>
 
-    <dependencies>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-    </dependencies>
+    <developers>
+        <developer>
+            <id>liuweigeek</id>
+            <name>Scott Lau</name>
+            <email>liuweigeek@outlook.com</email>
+            <url>https://github.com/liuweigeek</url>
+            <timezone>UTF-8</timezone>
+        </developer>
+    </developers>
 
     <dependencyManagement>
         <dependencies>
@@ -94,7 +89,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.0</version>
+                <version>3.8.1</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
@@ -103,11 +98,34 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.1</version>
+                <version>2.22.2</version>
                 <configuration>
                     <skipTests>true</skipTests>
                 </configuration>
             </plugin>
+            <!--<plugin>
+                <groupId>com.mysema.maven</groupId>
+                <artifactId>apt-maven-plugin</artifactId>
+                <version>1.1.3</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>process</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>target/generated-sources/java</outputDirectory>
+                            <processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.querydsl</groupId>
+                        <artifactId>querydsl-apt</artifactId>
+                        <version>${querydsl.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>-->
         </plugins>
     </build>
 

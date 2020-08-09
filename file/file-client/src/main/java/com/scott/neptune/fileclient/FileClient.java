@@ -27,7 +27,7 @@ public interface FileClient {
      * 上传文件
      *
      * @param file      文件
-     * @param useTypeId 文件用途标识 [1: default, 2: avatar, 3: user background, 4: post image]
+     * @param useTypeId 文件用途标识 [1: default, 2: avatar, 3: user background, 4: tweet image]
      * @return
      */
     @RequestMapping(value = "/file/fileServer/upload", method = RequestMethod.POST,

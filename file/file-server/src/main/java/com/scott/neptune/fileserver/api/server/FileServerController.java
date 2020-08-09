@@ -52,7 +52,7 @@ public class FileServerController extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "file", value = "文件", required = true, paramType = "form", dataTypeClass = MultipartFile.class),
             @ApiImplicitParam(name = "useTypeId", value = "业务用途ID",
-                    example = "1: default, 2: avatar, 3: user background, 4: post image",
+                    example = "1: default, 2: avatar, 3: user background, 4: tweet image",
                     paramType = "form")
     })
     @RequestMapping(value = "/upload", method = RequestMethod.POST)

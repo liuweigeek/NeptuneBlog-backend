@@ -29,7 +29,7 @@
 
         <dependency>
             <groupId>com.scott.neptune</groupId>
-            <artifactId>post-client</artifactId>
+            <artifactId>tweet-client</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 

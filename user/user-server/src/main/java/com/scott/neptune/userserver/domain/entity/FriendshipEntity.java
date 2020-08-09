@@ -1,6 +1,5 @@
 package com.scott.neptune.userserver.domain.entity;
 
-import com.scott.neptune.userserver.domain.aggregate.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

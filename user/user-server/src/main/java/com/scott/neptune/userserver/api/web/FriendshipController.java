@@ -112,7 +112,8 @@ public class FriendshipController extends BaseController {
             fromUserId = fromUser.getId();
         }
         //TODO parameters for pageable
-        return ResponseEntity.ok(friendshipService.findFriends(fromUserId, 0, 0));
+        Page<FriendshipDto> friendshipDtoPage = friendshipService.findFriends(fromUserId, 0, 0);
+        return ResponseEntity.ok(friendshipDtoPage);
     }
 
     /**

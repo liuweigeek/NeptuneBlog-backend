@@ -2,7 +2,7 @@ package com.scott.neptune.userserver.convertor;
 
 import com.scott.neptune.common.base.BaseConvertor;
 import com.scott.neptune.userclient.dto.UserDto;
-import com.scott.neptune.userserver.domain.aggregate.UserEntity;
+import com.scott.neptune.userserver.domain.entity.UserEntity;
 import com.scott.neptune.userserver.domain.valueobject.UserAvatarValObj;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
@@ -20,13 +20,13 @@ public class UserConvertor extends BaseConvertor<UserEntity, UserDto> {
 
     @Override
     protected Function<UserEntity, UserDto> getFunctionInstanceToDto() {
-        return userEntity -> {
+        return entity -> {
             UserDto dto = new UserDto();
-            BeanUtils.copyProperties(userEntity, dto);
-            if (userEntity.getUserAvatarValObj() != null) {
-                dto.setSmallAvatar(userEntity.getUserAvatarValObj().getSmallAvatarUrl());
-                dto.setNormalAvatar(userEntity.getUserAvatarValObj().getNormalAvatarUrl());
-                dto.setLargeAvatar(userEntity.getUserAvatarValObj().getLargeAvatarUrl());
+            BeanUtils.copyProperties(entity, dto);
+            if (entity.getUserAvatarValObj() != null) {
+                dto.setSmallAvatar(entity.getUserAvatarValObj().getSmallAvatarUrl());
+                dto.setNormalAvatar(entity.getUserAvatarValObj().getNormalAvatarUrl());
+                dto.setLargeAvatar(entity.getUserAvatarValObj().getLargeAvatarUrl());
             }
             return dto;
         };

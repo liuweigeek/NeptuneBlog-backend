@@ -38,7 +38,7 @@ public class FriendshipServiceImpl implements IFriendshipService {
     @Override
     public FriendshipDto save(FriendshipDto friendshipDto) {
 
-        FriendshipEntity friendshipEntity = friendshipConvertor.convertToEntity().apply(friendshipDto);
+        FriendshipEntity friendshipEntity = friendshipConvertor.convertToEntity(friendshipDto);
         //TODO more clearly?
         return friendshipRepository.findById(FriendshipEntity.FriendshipId.builder()
                 .sourceId(friendshipEntity.getSourceUser().getId())
@@ -48,7 +48,7 @@ public class FriendshipServiceImpl implements IFriendshipService {
                 .orElseGet(() -> {
                     friendshipEntity.setFollowDate(new Date());
                     friendshipRepository.save(friendshipEntity);
-                    return friendshipConvertor.convertToDto().apply(friendshipEntity);
+                    return friendshipConvertor.convertToDto(friendshipEntity);
                 });
     }
 
@@ -78,7 +78,10 @@ public class FriendshipServiceImpl implements IFriendshipService {
 
         //TODO necessary to catch the exception?
         try {
-            friendshipRepository.delete(friendshipConvertor.convertToEntity().apply(friendshipDto));
+            friendshipRepository.deleteById(FriendshipEntity.FriendshipId.builder()
+                    .sourceId(friendshipDto.getSourceId())
+                    .targetId(friendshipDto.getTargetId())
+                    .build());
             return true;
         } catch (Exception e) {
             log.error("delete friendship exception: ", e);
