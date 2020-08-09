@@ -9,7 +9,6 @@ import com.scott.neptune.userserver.service.IUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +29,6 @@ import java.util.List;
  */
 @Slf4j
 @Api(tags = "用户接口 - 面向前端")
-@RefreshScope
 @RestController
 @RequestMapping(path = "users")
 public class UserController extends BaseController {

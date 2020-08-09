@@ -2,8 +2,8 @@ package com.scott.neptune.userserver.convertor;
 
 import com.scott.neptune.common.base.BaseConvertor;
 import com.scott.neptune.userclient.dto.FriendshipDto;
-import com.scott.neptune.userserver.domain.entity.UserEntity;
 import com.scott.neptune.userserver.domain.entity.FriendshipEntity;
+import com.scott.neptune.userserver.domain.entity.UserEntity;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 

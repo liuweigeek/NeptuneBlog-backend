@@ -3,7 +3,6 @@ package com.scott.neptune.fileserver.config;
 import com.scott.neptune.fileserver.model.AvatarProp;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -16,7 +15,6 @@ import java.util.List;
  * @Description: NeptuneBlog
  */
 @Data
-@RefreshScope
 @Component
 @ConfigurationProperties(prefix = "file.avatar")
 public class AvatarProps {

@@ -7,7 +7,6 @@ import com.scott.neptune.userserver.component.UserComponent;
 import com.scott.neptune.userserver.service.IFriendshipService;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +24,6 @@ import static java.util.stream.Collectors.toList;
  */
 @Api(tags = "好友关系接口 - 面向其他服务")
 @Slf4j
-@RefreshScope
 @RestController
 @RequestMapping(path = "server/friendship")
 public class FriendshipServerController extends BaseController {
