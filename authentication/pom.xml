@@ -23,7 +23,7 @@
         <dependency>
             <groupId>com.scott.neptune</groupId>
             <artifactId>user-client</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
 
         <dependency>
