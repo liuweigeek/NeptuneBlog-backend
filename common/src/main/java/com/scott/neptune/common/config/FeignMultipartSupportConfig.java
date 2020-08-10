@@ -8,8 +8,6 @@ import org.springframework.cloud.openfeign.support.SpringEncoder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.annotation.Resource;
-
 /**
  * @Author: scott
  * @Email: <a href="mailto:wliu@fleetup.com">scott</a>
@@ -19,8 +17,11 @@ import javax.annotation.Resource;
 @Configuration
 public class FeignMultipartSupportConfig {
 
-    @Resource
-    private ObjectFactory<HttpMessageConverters> messageConverters;
+    private final ObjectFactory<HttpMessageConverters> messageConverters;
+
+    public FeignMultipartSupportConfig(ObjectFactory<HttpMessageConverters> messageConverters) {
+        this.messageConverters = messageConverters;
+    }
 
     @Bean
     public Encoder feignFormEncoder() {

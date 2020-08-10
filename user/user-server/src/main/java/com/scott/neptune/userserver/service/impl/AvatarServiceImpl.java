@@ -13,7 +13,6 @@ import com.scott.neptune.userserver.property.AvatarProperties;
 import com.scott.neptune.userserver.service.IAvatarService;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.io.File;
 import java.util.List;
 import java.util.Objects;
@@ -29,14 +28,21 @@ import static com.scott.neptune.common.response.ServerResponse.createByErrorMess
 @Service
 public class AvatarServiceImpl implements IAvatarService {
 
-    @Resource
-    private AvatarProperties avatarProps;
-    @Resource
-    private ImageComponent imageComponent;
-    @Resource
-    private FileComponent fileComponent;
-    @Resource
-    private IFileService fileService;
+    private final IFileService fileService;
+    private final ImageComponent imageComponent;
+    private final FileComponent fileComponent;
+    private final AvatarProperties avatarProps;
+
+    public AvatarServiceImpl(IFileService fileService,
+                             ImageComponent imageComponent,
+                             FileComponent fileComponent,
+                             AvatarProperties avatarProps) {
+
+        this.fileService = fileService;
+        this.imageComponent = imageComponent;
+        this.fileComponent = fileComponent;
+        this.avatarProps = avatarProps;
+    }
 
     /**
      * generateAvatar

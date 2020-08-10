@@ -5,7 +5,6 @@ import com.scott.neptune.common.util.FileUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
 
@@ -20,8 +19,11 @@ public class FileComponent {
 
     private static final String SEPARATOR = File.separator;
 
-    @Resource
-    private FileProps fileProps;
+    private final FileProps fileProps;
+
+    public FileComponent(FileProps fileProps) {
+        this.fileProps = fileProps;
+    }
 
     public File createFileByFilename(String filename) {
         File file = new File(fileProps.getTempFolder() + SEPARATOR + filename);

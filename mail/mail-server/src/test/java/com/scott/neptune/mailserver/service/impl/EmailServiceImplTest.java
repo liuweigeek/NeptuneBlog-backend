@@ -6,8 +6,6 @@ import com.scott.neptune.mailserver.service.IEmailService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import javax.annotation.Resource;
-
 /**
  * @Author: scott
  * @Email: <a href="mailto:wliu@fleetup.com">scott</a>
@@ -16,8 +14,11 @@ import javax.annotation.Resource;
  */
 public class EmailServiceImplTest extends MailServerApplicationTests {
 
-    @Resource
-    private IEmailService emailService;
+    private final IEmailService emailService;
+
+    public EmailServiceImplTest(IEmailService emailService) {
+        this.emailService = emailService;
+    }
 
     @Test
     public void sendSimpleMessage() {

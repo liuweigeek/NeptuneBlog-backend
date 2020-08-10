@@ -2,7 +2,6 @@ package com.scott.neptune.tweetserver.api.web;
 
 import com.scott.neptune.common.base.BaseController;
 import com.scott.neptune.tweetclient.dto.TweetDto;
-import com.scott.neptune.tweetserver.convertor.TweetConvertor;
 import com.scott.neptune.tweetserver.service.ITweetService;
 import com.scott.neptune.userclient.client.UserClient;
 import com.scott.neptune.userclient.dto.UserDto;
@@ -10,14 +9,13 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.annotation.Resource;
 
 /**
  * 推文接口
@@ -30,12 +28,13 @@ import javax.annotation.Resource;
 @RequestMapping(path = "tweets")
 public class TweetController extends BaseController {
 
-    @Resource
-    private UserClient userClient;
-    @Resource
-    private ITweetService tweetService;
-    @Resource
-    private TweetConvertor tweetConvertor;
+    private final UserClient userClient;
+    private final ITweetService tweetService;
+
+    public TweetController(UserClient userClient, ITweetService tweetService) {
+        this.userClient = userClient;
+        this.tweetService = tweetService;
+    }
 
     /**
      * 发送推文
@@ -49,7 +48,7 @@ public class TweetController extends BaseController {
         UserDto loginUser = userClient.getLoginUser();
         tweetDto = tweetService.save(tweetDto, loginUser);
         tweetDto.setUser(loginUser);
-        return ResponseEntity.ok(tweetDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(tweetDto);
     }
 
     /**

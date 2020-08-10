@@ -5,8 +5,6 @@ import io.minio.MinioClient;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
-import javax.annotation.Resource;
-
 /**
  * @Author: scott
  * @Email: <a href="mailto:wliu@fleetup.com">scott</a>
@@ -16,11 +14,13 @@ import javax.annotation.Resource;
 @Slf4j
 public class MinioComponentTest {
 
-    @Resource
-    private MinioClient minioClient;
+    private final MinioClient minioClient;
+    private final MinioProperties minioProperties;
 
-    @Resource
-    private MinioProperties minioProperties;
+    public MinioComponentTest(MinioClient minioClient, MinioProperties minioProperties) {
+        this.minioClient = minioClient;
+        this.minioProperties = minioProperties;
+    }
 
     @Test
     public void getPolicy() {

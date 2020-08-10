@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,11 +32,13 @@ import java.util.Map;
 @RequestMapping(path = "search")
 public class SearchController extends BaseController {
 
-    @Resource
-    private UserClient userClient;
+    private final UserClient userClient;
+    private final TweetClient tweetClient;
 
-    @Resource
-    private TweetClient tweetClient;
+    public SearchController(UserClient userClient, TweetClient tweetClient) {
+        this.userClient = userClient;
+        this.tweetClient = tweetClient;
+    }
 
     @RedisLock
     @ApiOperation(value = "搜索用户和推文")

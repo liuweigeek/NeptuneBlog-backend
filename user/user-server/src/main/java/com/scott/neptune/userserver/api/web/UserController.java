@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -32,12 +31,18 @@ import java.util.List;
 @RequestMapping(path = "users")
 public class UserController extends BaseController {
 
-    @Resource
-    private IUserService userService;
-    @Resource
-    private UserComponent userComponent;
-    @Resource
-    private RedisTemplate<String, Object> redisTemplate;
+    private final IUserService userService;
+    private final UserComponent userComponent;
+    private final RedisTemplate<String, Object> redisTemplate;
+
+    public UserController(IUserService userService,
+                          UserComponent userComponent,
+                          RedisTemplate<String, Object> redisTemplate) {
+
+        this.userService = userService;
+        this.userComponent = userComponent;
+        this.redisTemplate = redisTemplate;
+    }
 
     /**
      * 用户退出登录

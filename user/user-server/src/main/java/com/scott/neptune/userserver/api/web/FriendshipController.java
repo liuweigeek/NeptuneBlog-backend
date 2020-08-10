@@ -5,7 +5,6 @@ import com.scott.neptune.common.exception.RestException;
 import com.scott.neptune.userclient.dto.FriendshipDto;
 import com.scott.neptune.userclient.dto.UserDto;
 import com.scott.neptune.userserver.component.UserComponent;
-import com.scott.neptune.userserver.convertor.FriendshipConvertor;
 import com.scott.neptune.userserver.service.IFriendshipService;
 import com.scott.neptune.userserver.service.IUserService;
 import io.swagger.annotations.Api;
@@ -24,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
 import java.util.Objects;
 
 /**
@@ -39,14 +37,18 @@ import java.util.Objects;
 @RequestMapping(path = "friendship")
 public class FriendshipController extends BaseController {
 
-    @Resource
-    private UserComponent userComponent;
-    @Resource
-    private IUserService userService;
-    @Resource
-    private IFriendshipService friendshipService;
-    @Resource
-    private FriendshipConvertor friendshipConvertor;
+    private final IUserService userService;
+    private final IFriendshipService friendshipService;
+    private final UserComponent userComponent;
+
+    public FriendshipController(IUserService userService,
+                                IFriendshipService friendshipService,
+                                UserComponent userComponent) {
+
+        this.userService = userService;
+        this.friendshipService = friendshipService;
+        this.userComponent = userComponent;
+    }
 
     /**
      * 关注指定用户

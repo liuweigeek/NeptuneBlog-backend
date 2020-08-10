@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 
-import javax.annotation.Resource;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -23,8 +22,11 @@ import java.nio.charset.StandardCharsets;
 @ConditionalOnProperty(prefix = "neptune.oss.minio", name = "endpoint")
 public class MinioConfig {
 
-    @Resource
-    private MinioProperties minioProperties;
+    private final MinioProperties minioProperties;
+
+    public MinioConfig(MinioProperties minioProperties) {
+        this.minioProperties = minioProperties;
+    }
 
     @Bean
     public MinioClient minioClient() {

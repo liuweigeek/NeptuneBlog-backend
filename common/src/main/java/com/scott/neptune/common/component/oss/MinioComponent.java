@@ -12,7 +12,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.Resource;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -33,10 +32,13 @@ import java.util.stream.Collectors;
 @Component
 public class MinioComponent {
 
-    @Resource
-    private MinioClient minioClient;
-    @Resource
-    private MinioProperties minioProperties;
+    private final MinioClient minioClient;
+    private final MinioProperties minioProperties;
+
+    public MinioComponent(MinioClient minioClient, MinioProperties minioProperties) {
+        this.minioClient = minioClient;
+        this.minioProperties = minioProperties;
+    }
 
     /**
      * 获取文件URL

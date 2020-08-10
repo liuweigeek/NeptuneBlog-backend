@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
@@ -31,15 +30,21 @@ import java.util.Objects;
 @Api(tags = "文件接口 - 面向其他服务")
 @Slf4j
 @RestController
-@RequestMapping("/fileServer")
+@RequestMapping(path = "fileServer")
 public class UserAvatarController extends BaseController {
 
-    @Resource
-    private IFileService fileService;
-    @Resource
-    private FileComponent fileComponent;
-    @Resource
-    private IAvatarService avatarService;
+    private final IFileService fileService;
+    private final FileComponent fileComponent;
+    private final IAvatarService avatarService;
+
+    public UserAvatarController(IFileService fileService,
+                                FileComponent fileComponent,
+                                IAvatarService avatarService) {
+
+        this.fileService = fileService;
+        this.fileComponent = fileComponent;
+        this.avatarService = avatarService;
+    }
 
     /**
      * 上传文件
@@ -55,7 +60,7 @@ public class UserAvatarController extends BaseController {
                     example = "1: default, 2: avatar, 3: user background, 4: tweet image",
                     paramType = "form")
     })
-    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    @RequestMapping(path = "upload", method = RequestMethod.POST)
     public ServerResponse<String> upload(@RequestParam("file") MultipartFile file,
                                          @RequestParam(defaultValue = "1") Integer useTypeId) {
 
@@ -70,7 +75,7 @@ public class UserAvatarController extends BaseController {
      */
     @ApiOperation(value = "上传头像")
     @ApiImplicitParam(name = "file", value = "文件", required = true, paramType = "form", dataTypeClass = MultipartFile.class)
-    @RequestMapping(value = "/uploadAvatar", method = RequestMethod.POST)
+    @RequestMapping(path = "uploadAvatar", method = RequestMethod.POST)
     public ServerResponse uploadAvatar(@RequestParam("file") MultipartFile file) {
 
         if (Objects.isNull(file)) {

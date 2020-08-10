@@ -13,7 +13,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -24,10 +23,15 @@ import java.util.stream.Collectors;
 @Service
 public class FriendshipServiceImpl implements IFriendshipService {
 
-    @Resource
-    private FriendshipRepository friendshipRepository;
-    @Resource
-    private FriendshipConvertor friendshipConvertor;
+    private final FriendshipRepository friendshipRepository;
+    private final FriendshipConvertor friendshipConvertor;
+
+    public FriendshipServiceImpl(FriendshipRepository friendshipRepository,
+                                 FriendshipConvertor friendshipConvertor) {
+
+        this.friendshipRepository = friendshipRepository;
+        this.friendshipConvertor = friendshipConvertor;
+    }
 
     /**
      * 保存好友关系

@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.Resource;
 import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,10 +24,13 @@ import java.util.stream.Collectors;
 @Service
 public class FileServiceImpl implements IFileService {
 
-    @Resource
-    private MinioProperties minioProperties;
-    @Resource
-    private MinioComponent minioComponent;
+    private final MinioProperties minioProperties;
+    private final MinioComponent minioComponent;
+
+    public FileServiceImpl(MinioProperties minioProperties, MinioComponent minioComponent) {
+        this.minioProperties = minioProperties;
+        this.minioComponent = minioComponent;
+    }
 
     /**
      * 上传文件

@@ -5,7 +5,6 @@ import com.scott.neptune.common.model.ImageSize;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import javax.annotation.Resource;
 import java.io.File;
 
 /**
@@ -16,8 +15,11 @@ import java.io.File;
  */
 public class ImageComponentTest {
 
-    @Resource
-    private ImageComponent imageComponent;
+    private final ImageComponent imageComponent;
+
+    public ImageComponentTest(ImageComponent imageComponent) {
+        this.imageComponent = imageComponent;
+    }
 
     @Test
     public void resizeImage() {

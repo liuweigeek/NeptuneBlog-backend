@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -28,8 +27,11 @@ import java.util.List;
 @RequestMapping("server/tweets")
 public class TweetServerController extends BaseController {
 
-    @Resource
-    private ITweetService tweetService;
+    private final ITweetService tweetService;
+
+    public TweetServerController(ITweetService tweetService) {
+        this.tweetService = tweetService;
+    }
 
     /**
      * 通过关键字搜索推文

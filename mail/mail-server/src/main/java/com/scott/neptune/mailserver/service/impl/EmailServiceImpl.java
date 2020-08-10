@@ -12,7 +12,6 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
-import javax.annotation.Resource;
 import javax.mail.internet.MimeMessage;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,14 +26,16 @@ import java.util.Map;
 @Service
 public class EmailServiceImpl implements IEmailService {
 
-    @Resource
-    private JavaMailSender mailSender;
-
-    @Resource
-    private Configuration configuration;
+    private final JavaMailSender mailSender;
+    private final Configuration freemarkerConfig;
 
     @Value("${spring.mail.username}")
     private String fromAddress;
+
+    public EmailServiceImpl(JavaMailSender mailSender, Configuration freemarkerConfig) {
+        this.mailSender = mailSender;
+        this.freemarkerConfig = freemarkerConfig;
+    }
 
     @Override
     public ServerResponse sendSimpleMessage(String to, String subject, String content) {
@@ -66,7 +67,7 @@ public class EmailServiceImpl implements IEmailService {
             Map<String, Object> model = new HashMap<>();
             model.put("username", "Scott");
 
-            Template template = configuration.getTemplate("welcome.ftl");
+            Template template = freemarkerConfig.getTemplate("welcome.ftl");
             String html = FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
             helper.setText(html, true);
             mailSender.send(message);
