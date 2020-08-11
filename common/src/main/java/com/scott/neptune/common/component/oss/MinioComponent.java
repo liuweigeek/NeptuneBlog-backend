@@ -1,14 +1,18 @@
 package com.scott.neptune.common.component.oss;
 
 import com.google.common.collect.Lists;
+import com.scott.neptune.common.exception.NeptuneBlogException;
 import com.scott.neptune.common.property.MinioProperties;
-import com.scott.neptune.common.response.ServerResponse;
-import com.scott.neptune.common.util.FileUtils;
+import io.minio.GetPresignedObjectUrlArgs;
+import io.minio.ListObjectsArgs;
 import io.minio.MinioClient;
+import io.minio.PutObjectArgs;
+import io.minio.RemoveObjectArgs;
+import io.minio.RemoveObjectsArgs;
 import io.minio.Result;
+import io.minio.messages.DeleteObject;
 import io.minio.messages.Item;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,7 +22,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,239 +45,282 @@ public class MinioComponent {
     }
 
     /**
-     * 获取文件URL
+     * 获取文件对象URL
      *
-     * @param bucket   容器
-     * @param folder   文件夹
-     * @param filename 文件名
+     * @param objectKey 文件对象名
      * @return URL
      */
-    public String getFileUrl(String bucket, String folder, String filename) {
+    public String getObjectUrl(String objectKey) {
+        return getObjectUrl(minioProperties.getBucket(), objectKey);
+    }
+
+    /**
+     * 获取对象URL
+     *
+     * @param bucket    容器
+     * @param objectKey 文件对象名
+     * @return URL
+     */
+    public String getObjectUrl(String bucket, String objectKey) {
         try {
-            return minioClient.getObjectUrl(StringUtils.isNotBlank(bucket) ? bucket : minioProperties.getBucket(),
-                    FileUtils.getPathByFolderAndName(folder, filename));
+            return minioClient.getObjectUrl(bucket, objectKey);
         } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+            log.error("获取文件对象访问链接异常: ", e);
+            throw new NeptuneBlogException("获取文件对象访问链接异常: ", e);
         }
     }
 
     /**
-     * 获取文件URL(可访问时间限制)
+     * 获取文件对象URL(可访问时间限制)
      *
-     * @param bucket   容器
-     * @param folder   文件夹
-     * @param filename 文件名
-     * @param expires  可访问时间(秒)
+     * @param objectKey 文件对象名
+     * @param expires   可访问时间(秒)
      * @return URL
      */
-    public String getFileUrl(String bucket, String folder, String filename, Integer expires) {
+    public String getObjectUrlWithExpires(String objectKey, int expires) {
+        return getObjectUrlWithExpires(minioProperties.getBucket(), objectKey, expires);
+    }
+
+    /**
+     * 获取文件对象URL(可访问时间限制)
+     *
+     * @param bucket    容器
+     * @param objectKey 文件对象名
+     * @param expires   可访问时间(秒)
+     * @return URL
+     */
+    public String getObjectUrlWithExpires(String bucket, String objectKey, int expires) {
         try {
-            return minioClient.presignedGetObject(StringUtils.isNotBlank(bucket) ? bucket : minioProperties.getBucket(),
-                    FileUtils.getPathByFolderAndName(folder, filename), expires);
+            return minioClient.getPresignedObjectUrl(GetPresignedObjectUrlArgs.builder()
+                    .bucket(bucket)
+                    .object(objectKey)
+                    .expiry(expires)
+                    .build());
         } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+            log.error("生成文件对象访问链接异常: ", e);
+            throw new NeptuneBlogException("生成文件对象访问链接异常: ", e);
         }
     }
 
     /**
-     * 获取指定文件夹下的全部文件名
+     * 获取默认容器下的全部文件对象名
+     *
+     * @return 文件对象名列表
+     */
+    public List<String> getObjects() {
+        return getObjects(minioProperties.getBucket());
+    }
+
+    /**
+     * 获取指定容器下的全部文件对象名
      *
      * @param bucket 容器
-     * @param bucket 容器
-     * @return 文件名列表
+     * @return 文件对象名
      */
-    public List<String> getFiles(String bucket) {
-        if (StringUtils.isBlank(bucket)) {
-            bucket = minioProperties.getBucket();
-        }
+    public List<String> getObjects(String bucket) {
         try {
-            Iterable<Result<Item>> objects = minioClient.listObjects(bucket);
-            List<String> filenames = new LinkedList<>();
-            for (Result<Item> object : objects) {
-                Item item = object.get();
-                filenames.add(item.objectName());
+            Iterator<Result<Item>> iterator = minioClient.listObjects(ListObjectsArgs.builder()
+                    .bucket(bucket)
+                    .build()
+            ).iterator();
+            List<String> filenames = new ArrayList<>();
+            while (iterator.hasNext()) {
+                filenames.add(iterator.next().get().objectName());
             }
             return filenames;
         } catch (Exception e) {
-            e.printStackTrace();
-            return new ArrayList<>();
+            log.error("文件对象存储服务器异常: ", e);
+            throw new NeptuneBlogException("文件对象存储服务器异常: ", e);
         }
     }
 
     /**
-     * 保存文件
+     * 保存文件对象
      *
-     * @param bucket 容器
-     * @param folder 文件夹
-     * @param file   文件
-     * @return 保存结果
+     * @param objectKey 文件对象名
+     * @param file      文件对象
+     * @return URL
      */
-    public ServerResponse<String> saveMultipartFile(String bucket, String folder, MultipartFile file) {
-        return saveMultipartFile(bucket, folder, file, file.getOriginalFilename());
+    public String saveObject(String objectKey, File file) {
+        return this.saveObject(minioProperties.getBucket(), objectKey, file);
     }
 
     /**
-     * 保存文件
-     *
-     * @param bucket   容器
-     * @param folder   文件夹
-     * @param file     文件
-     * @param filename 保存的文件名
-     * @return 保存结果
-     */
-    public ServerResponse<String> saveMultipartFile(String bucket, String folder, MultipartFile file, String filename) {
-        if (StringUtils.isBlank(bucket)) {
-            bucket = minioProperties.getBucket();
-        }
-        try {
-            minioClient.putObject(bucket, FileUtils.getPathByFolderAndName(folder, filename),
-                    file.getInputStream(), file.getSize(), null, null, file.getContentType());
-            String url = this.getFileUrl(bucket, folder, filename);
-            return ServerResponse.createBySuccess(url);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ServerResponse.createByErrorMessage("保存失败");
-        }
-    }
-
-    /**
-     * 批量保存文件
+     * 保存文件对象
      *
      * @param bucket    容器
-     * @param folder    文件夹
-     * @param files     文件列表
-     * @param filenames 保存的文件名列表
-     * @return 保存结果
+     * @param objectKey 文件对象名
+     * @param file      文件对象
+     * @return URL
      */
-    public ServerResponse<List<String>> saveMultipartFiles(String bucket, String folder, List<MultipartFile> files, List<String> filenames) {
-        List<String> urlList = Lists.newArrayListWithExpectedSize(files.size());
-        for (int i = 0; i < files.size(); i++) {
-            ServerResponse<String> saveResponse = saveMultipartFile(bucket, folder, files.get(i), filenames.get(i));
-            if (saveResponse.isFailed()) {
-                return ServerResponse.createByErrorMessage("保存失败");
-            }
-            urlList.add(saveResponse.getData());
-        }
-        return ServerResponse.createBySuccess(urlList);
-    }
-
-    /**
-     * 批量保存文件
-     *
-     * @param bucket 容器
-     * @param folder 文件夹
-     * @param files  文件列表
-     * @return 保存结果
-     */
-    public ServerResponse<List<String>> saveMultipartFiles(String bucket, String folder, List<MultipartFile> files) {
-        List<String> filenames = files.stream()
-                .map(MultipartFile::getOriginalFilename)
-                .collect(Collectors.toList());
-        return this.saveMultipartFiles(bucket, folder, files, filenames);
-    }
-
-    /**
-     * 保存文件
-     *
-     * @param bucket 容器
-     * @param folder 文件夹
-     * @param file   文件
-     * @return 保存结果
-     */
-    public ServerResponse<String> saveFile(String bucket, String folder, File file) {
-        return saveFile(bucket, folder, file, file.getName());
-    }
-
-    /**
-     * 保存文件
-     *
-     * @param bucket   容器
-     * @param folder   文件夹
-     * @param file     文件
-     * @param filename 保存的文件名
-     * @return 保存结果
-     */
-    public ServerResponse<String> saveFile(String bucket, String folder, File file, String filename) {
+    public String saveObject(String bucket, String objectKey, File file) {
         if (file == null || !file.exists()) {
-            return ServerResponse.createByErrorMessage("请传入文件");
+            throw new NeptuneBlogException("请传入文件");
         }
-
-        try {
-            InputStream fileInputStream = new FileInputStream(file);
-            minioClient.putObject(StringUtils.isNotBlank(bucket) ? bucket : minioProperties.getBucket(),
-                    FileUtils.getPathByFolderAndName(folder, filename), fileInputStream,
-                    file.length(), null, null, Files.probeContentType(Paths.get(file.getPath())));
-            String url = this.getFileUrl(bucket, folder, filename);
-            return ServerResponse.createBySuccess(url);
+        try (InputStream fileInputStream = new FileInputStream(file);) {
+            minioClient.putObject(PutObjectArgs.builder()
+                    .bucket(bucket)
+                    .object(objectKey)
+                    .stream(fileInputStream, file.length(), -1)
+                    .contentType(Files.probeContentType(Paths.get(file.getPath())))
+                    .build());
+            return this.getObjectUrl(bucket, objectKey);
         } catch (Exception e) {
-            e.printStackTrace();
-            return ServerResponse.createByErrorMessage("保存失败");
+            log.error("保存文件对象失败: ", e);
+            throw new NeptuneBlogException("保存文件对象失败");
         }
     }
 
     /**
-     * 批量保存文件
+     * 批量保存文件对象
      *
-     * @param bucket    容器
-     * @param folder    文件夹
-     * @param files     文件列表
-     * @param filenames 保存的文件名列表
-     * @return 保存结果
+     * @param objectKeys 文件对象名列表
+     * @param files      文件对象列表
+     * @return URL列表
      */
-    public ServerResponse<List<String>> saveFiles(String bucket, String folder, List<File> files, List<String> filenames) {
+    public List<String> saveObjects(List<String> objectKeys, List<File> files) {
+        return this.saveObjects(minioProperties.getBucket(), objectKeys, files);
+    }
+
+    /**
+     * 批量保存文件对象
+     *
+     * @param bucket     容器
+     * @param objectKeys 文件对象名列表
+     * @param files      文件对象列表
+     * @return URL列表
+     */
+    public List<String> saveObjects(String bucket, List<String> objectKeys, List<File> files) {
         List<String> urlList = Lists.newArrayListWithExpectedSize(files.size());
         for (int i = 0; i < files.size(); i++) {
-            ServerResponse<String> saveResponse = saveFile(bucket, folder, files.get(i), filenames.get(i));
-            if (saveResponse.isFailed()) {
-                return ServerResponse.createByErrorMessage("保存失败");
-            }
-            urlList.add(saveResponse.getData());
+            urlList.add(saveObject(bucket, objectKeys.get(i), files.get(i)));
         }
-        return ServerResponse.createBySuccess(urlList);
+        return urlList;
     }
 
     /**
-     * 批量保存文件
+     * 保存文件对象
      *
-     * @param bucket 容器
-     * @param folder 文件夹
-     * @param files  文件列表
-     * @return 保存结果
+     * @param objectKey 文件对象名
+     * @param file      文件对象
+     * @return URL
      */
-    public ServerResponse<List<String>> saveFiles(String bucket, String folder, List<File> files) {
-        List<String> filenames = files.stream()
-                .map(File::getName)
-                .collect(Collectors.toList());
-        return this.saveFiles(bucket, folder, files, filenames);
+    public String saveMultipartObject(String objectKey, MultipartFile file) {
+        return saveMultipartObject(minioProperties.getBucket(), objectKey, file);
     }
 
     /**
-     * 删除文件
+     * 保存文件对象
      *
-     * @param bucket   容器
-     * @param folder   所在文件夹
-     * @param filename 文件名
+     * @param bucket    容器
+     * @param objectKey 文件对象名
+     * @param file      文件对象
+     * @return URL
      */
-    public ServerResponse deleteFile(String bucket, String folder, String filename) {
+    public String saveMultipartObject(String bucket, String objectKey, MultipartFile file) {
+
         try {
-            minioClient.removeObject(StringUtils.isNotBlank(bucket) ? bucket : minioProperties.getBucket(),
-                    FileUtils.getPathByFolderAndName(folder, filename));
-            return ServerResponse.createBySuccess();
+            minioClient.putObject(PutObjectArgs.builder()
+                    .bucket(bucket)
+                    .object(objectKey)
+                    .stream(file.getInputStream(), file.getSize(), -1)
+                    .contentType(file.getContentType())
+                    .build());
+            return this.getObjectUrl(bucket, objectKey);
         } catch (Exception e) {
-            e.printStackTrace();
-            return ServerResponse.createByErrorMessage("删除失败");
+            log.error("保存文件对象失败: ", e);
+            throw new NeptuneBlogException("保存文件对象失败", e);
         }
     }
 
-    public ServerResponse deleteFile(String bucket, String objectName) {
+    /**
+     * 批量保存文件对象
+     *
+     * @param files      文件对象列表
+     * @param objectKeys 文件对象名列表
+     * @return URL列表
+     */
+    public List<String> saveMultipartObjects(List<String> objectKeys, List<MultipartFile> files) {
+        List<String> urlList = Lists.newArrayListWithExpectedSize(files.size());
+        for (int i = 0; i < files.size(); i++) {
+            urlList.add(saveMultipartObject(minioProperties.getBucket(), objectKeys.get(i), files.get(i)));
+        }
+        return urlList;
+    }
+
+    /**
+     * 批量保存文件对象
+     *
+     * @param bucket     容器
+     * @param objectKeys 文件对象名列表
+     * @param files      文件对象列表
+     * @return URL列表
+     */
+    public List<String> saveMultipartObjects(String bucket, List<String> objectKeys, List<MultipartFile> files) {
+        List<String> urlList = Lists.newArrayListWithExpectedSize(files.size());
+        for (int i = 0; i < files.size(); i++) {
+            urlList.add(saveMultipartObject(bucket, objectKeys.get(i), files.get(i)));
+        }
+        return urlList;
+    }
+
+    /**
+     * 删除文件对象
+     *
+     * @param objectKey 文件对象名
+     * @return 删除结果
+     */
+    public boolean deleteObject(String objectKey) {
+        return this.deleteObject(minioProperties.getBucket(), objectKey);
+    }
+
+    /**
+     * 删除文件对象
+     *
+     * @param bucket    容器
+     * @param objectKey 文件对象名
+     * @return 删除结果
+     */
+    public boolean deleteObject(String bucket, String objectKey) {
         try {
-            minioClient.removeObject(StringUtils.isNotBlank(bucket) ? bucket : minioProperties.getBucket(), objectName);
-            return ServerResponse.createBySuccess();
+            minioClient.removeObject(RemoveObjectArgs.builder()
+                    .bucket(bucket)
+                    .object(objectKey)
+                    .build());
+            return true;
         } catch (Exception e) {
-            e.printStackTrace();
-            return ServerResponse.createByErrorMessage("删除失败");
+            log.error("删除对象[" + objectKey + "]失败");
+            throw new NeptuneBlogException("删除对象失败");
+        }
+    }
+
+    /**
+     * 批量删除文件对象
+     *
+     * @param objectKeys 文件对象名列表
+     * @return 删除结果
+     */
+    public boolean deleteObjects(List<String> objectKeys) {
+        return this.deleteObjects(minioProperties.getBucket(), objectKeys);
+    }
+
+    /**
+     * 批量删除文件对象
+     *
+     * @param bucket     容器
+     * @param objectKeys 文件对象名列表
+     * @return 删除结果
+     */
+    public boolean deleteObjects(String bucket, List<String> objectKeys) {
+        try {
+            minioClient.removeObjects(RemoveObjectsArgs.builder()
+                    .bucket(bucket)
+                    .objects(objectKeys.stream().map(DeleteObject::new).collect(Collectors.toList()))
+                    .build());
+            return true;
+        } catch (Exception e) {
+            log.error("删除文件对象" + objectKeys + "失败");
+            throw new NeptuneBlogException("删除文件对象失败");
         }
     }
 

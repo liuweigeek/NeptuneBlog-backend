@@ -64,9 +64,9 @@ public class UserAvatarDto implements Serializable {
          */
         LARGE(3, "large");
 
-        private int code;
+        private final int code;
 
-        private String name;
+        private final String name;
 
         /**
          * get enum instance from code

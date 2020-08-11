@@ -18,10 +18,10 @@ import java.util.List;
  */
 @Data
 @Component
-@ConfigurationProperties(prefix = "neptune.file.avatar")
+@ConfigurationProperties(prefix = "neptune.user.avatar")
 public class AvatarProperties {
 
-    private String extensionName;
+    private String extension;
 
     private List<AvatarValueObject> sizes = new ArrayList<>();
 

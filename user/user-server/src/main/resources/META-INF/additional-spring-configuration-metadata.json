@@ -1,0 +1,14 @@
+{
+  "properties": [
+    {
+      "name": "neptune.user.avatar.extensionName",
+      "type": "java.lang.String",
+      "description": "Description for neptune.file.avatar.extensionName."
+    },
+    {
+      "name": "neptune.user.avatar.sizes",
+      "type": "java.util.List<com.scott.neptune.userserver.property.AvatarProperties>",
+      "description": "Description for neptune.file.avatar.sizes."
+    }
+  ]
+}

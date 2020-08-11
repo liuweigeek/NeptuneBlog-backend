@@ -1,0 +1,29 @@
+{
+  "properties": [
+    {
+      "name": "neptune.oss.minio.endpoint",
+      "type": "java.lang.String",
+      "description": "Description for neptune.file.avatar.extensionName."
+    },
+    {
+      "name": "neptune.oss.minio.accessKey",
+      "type": "java.lang.String",
+      "description": "Description for neptune.file.avatar.extensionName."
+    },
+    {
+      "name": "neptune.oss.minio.secretKey",
+      "type": "java.lang.String",
+      "description": "Description for neptune.file.avatar.extensionName."
+    },
+    {
+      "name": "neptune.oss.minio.bucket",
+      "type": "java.lang.String",
+      "description": "Description for neptune.file.avatar.extensionName."
+    },
+    {
+      "name": "neptune.file.tempFolder",
+      "type": "java.lang.String",
+      "description": "Description for neptune.file.avatar.extensionName."
+    }
+  ]
+}

@@ -11,9 +11,9 @@ import lombok.Data;
 @Data
 public class OffsetPageCommand<T> {
 
-    private long offset;
+    private long offset = 0;
 
-    private int limit;
+    private int limit = 20;
 
     private T data;
 }

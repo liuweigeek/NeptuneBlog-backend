@@ -20,13 +20,14 @@ neptune:
   oss:
     minio:
       endpoint: http://localhost:9000
-      access-key: scott
-      secret-key: 12345678
+      accessKey: scott
+      secretKey: 12345678
       bucket: neptune-blog
   file:
     tempFolder: /Users/scott/Data/neptune_files
+  user:
     avatar:
-      extensionName: png
+      extension: png
       sizes:
         - sizeType: 1
           height: 50

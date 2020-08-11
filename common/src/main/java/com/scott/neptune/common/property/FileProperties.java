@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Data
 @Component
 @ConfigurationProperties(prefix = "neptune.file")
-public class FileProps {
+public class FileProperties {
 
     private String tempFolder;
 

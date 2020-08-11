@@ -1,23 +1,22 @@
 package com.scott.neptune.userserver.service.impl;
 
 import com.google.common.collect.Lists;
-import com.scott.neptune.common.component.oss.FileComponent;
-import com.scott.neptune.common.component.oss.ImageComponent;
-import com.scott.neptune.common.enumerate.FileUseTypeEnum;
+import com.scott.neptune.common.component.FileComponent;
+import com.scott.neptune.common.component.ImageComponent;
+import com.scott.neptune.common.exception.NeptuneBlogException;
 import com.scott.neptune.common.model.ImageSize;
-import com.scott.neptune.common.response.ServerResponse;
-import com.scott.neptune.common.service.IFileService;
-import com.scott.neptune.common.util.VerifyFileTypeUtil;
+import com.scott.neptune.common.property.FileProperties;
+import com.scott.neptune.common.util.FileUtils;
+import com.scott.neptune.common.util.VerifyFileTypeUtils;
 import com.scott.neptune.userclient.dto.UserAvatarDto;
+import com.scott.neptune.userserver.model.UserAvatarStorageInfo;
 import com.scott.neptune.userserver.property.AvatarProperties;
 import com.scott.neptune.userserver.service.IAvatarService;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.util.List;
-import java.util.Objects;
-
-import static com.scott.neptune.common.response.ServerResponse.createByErrorMessage;
 
 /**
  * @Author: scott
@@ -28,20 +27,26 @@ import static com.scott.neptune.common.response.ServerResponse.createByErrorMess
 @Service
 public class AvatarServiceImpl implements IAvatarService {
 
-    private final IFileService fileService;
-    private final ImageComponent imageComponent;
     private final FileComponent fileComponent;
-    private final AvatarProperties avatarProps;
+    private final ImageComponent imageComponent;
+    private final FileProperties fileProperties;
+    private final AvatarProperties avatarProperties;
 
-    public AvatarServiceImpl(IFileService fileService,
+    public AvatarServiceImpl(FileComponent fileComponent,
                              ImageComponent imageComponent,
-                             FileComponent fileComponent,
-                             AvatarProperties avatarProps) {
+                             FileProperties fileProperties,
+                             AvatarProperties avatarProperties) {
 
-        this.fileService = fileService;
-        this.imageComponent = imageComponent;
         this.fileComponent = fileComponent;
-        this.avatarProps = avatarProps;
+        this.imageComponent = imageComponent;
+        this.fileProperties = fileProperties;
+        this.avatarProperties = avatarProperties;
+    }
+
+    @Override
+    public List<UserAvatarDto> generateAvatar(MultipartFile imageFile) {
+        File avatarFile = FileUtils.transferToFile(fileProperties.getTempFolder(), imageFile);
+        return generateAvatar(avatarFile);
     }
 
     /**
@@ -50,33 +55,32 @@ public class AvatarServiceImpl implements IAvatarService {
      * @param imageFile
      * @return
      */
+    //TODO optimize
     @Override
-    public ServerResponse<List<UserAvatarDto>> generateAvatar(File imageFile) {
+    public List<UserAvatarDto> generateAvatar(File imageFile) {
 
-        if (!VerifyFileTypeUtil.isImageFile(imageFile)) {
-            return createByErrorMessage("请传入支持的图片文件");
+        if (!VerifyFileTypeUtils.isImageFile(imageFile)) {
+            throw new NeptuneBlogException("图片格式不支持");
         }
 
-        List<UserAvatarDto> avatarDtoList = Lists.newArrayListWithExpectedSize(avatarProps.getSizes().size());
+        List<UserAvatarDto> avatarDtoList = Lists.newArrayListWithExpectedSize(avatarProperties.getSizes().size());
 
-        for (AvatarProperties.AvatarValueObject avatarProp : avatarProps.getSizes()) {
-            File targetFile = fileComponent.createFileByExtensionName(avatarProps.getExtensionName());
-            boolean resizeSuccess = imageComponent.resizeImageToSquare(imageFile,
+        for (AvatarProperties.AvatarValueObject avatarProp : avatarProperties.getSizes()) {
+            File targetFile = FileUtils.createFileByExtension(fileProperties.getTempFolder(), avatarProperties.getExtension());
+            boolean resizeSuccess = imageComponent.resizeImageToSquare(imageFile, targetFile,
                     ImageSize.builder().width(avatarProp.getWidth()).height(avatarProp.getHeight()).build(),
-                    targetFile, avatarProps.getExtensionName());
+                    avatarProperties.getExtension());
 
             if (!resizeSuccess) {
-                return createByErrorMessage("生成头像缩略图失败");
+                throw new NeptuneBlogException("生成头像缩略图失败");
             }
-            ServerResponse<String> uploadRes = fileService.saveFile(FileUseTypeEnum.AVATAR, targetFile, false);
-            if (!Objects.isNull(targetFile) && targetFile.exists()) {
+            String avatarUrl = fileComponent.saveFile(new UserAvatarStorageInfo(), targetFile,
+                    targetFile.getName());
+            if (targetFile.exists()) {
                 targetFile.delete();
             }
-            if (!uploadRes.isSuccess()) {
-                return ServerResponse.createByErrorMessage("上传头像缩略图失败");
-            }
-            avatarDtoList.add(new UserAvatarDto(null, avatarProp.getSizeType(), uploadRes.getData()));
+            avatarDtoList.add(new UserAvatarDto(null, avatarProp.getSizeType(), avatarUrl));
         }
-        return ServerResponse.createBySuccess(avatarDtoList);
+        return avatarDtoList;
     }
 }

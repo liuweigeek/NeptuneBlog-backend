@@ -11,7 +11,7 @@ import javax.servlet.http.HttpSession;
  * @Date: 2019/10/19 12:07
  * @Description: 基础Controller
  */
-public class BaseController {
+public abstract class BaseController {
 
     @Resource
     protected HttpServletRequest request;

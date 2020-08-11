@@ -1,3 +1,6 @@
+### Spring Boot ###
+!additional-spring-configuration-metadata.json
+
 ### Maven ###
 .mvn
 target/

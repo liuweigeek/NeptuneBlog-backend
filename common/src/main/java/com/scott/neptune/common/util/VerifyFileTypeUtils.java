@@ -15,13 +15,13 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * @Author liuwei
+ * @Author scott
  * @Date 18/4/24 8:41
  * @Description 验证文件格式的工具类
  */
-public class VerifyFileTypeUtil {
+public class VerifyFileTypeUtils {
 
-    private static final Logger logger = LoggerFactory.getLogger(VerifyFileTypeUtil.class);
+    private static final Logger logger = LoggerFactory.getLogger(VerifyFileTypeUtils.class);
 
     /**
      * 图片文件头信息与格式字符串

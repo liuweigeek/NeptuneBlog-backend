@@ -1,11 +1,12 @@
-package com.scott.neptune.common.component.oss;
+package com.scott.neptune.common.listener;
 
-import org.springframework.beans.factory.annotation.Value;
+import com.scott.neptune.common.property.FileProperties;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * @Author: scott
@@ -16,8 +17,11 @@ import java.io.File;
 @Component
 public class StartupRunner implements ApplicationRunner {
 
-    @Value("${neptune.file.tempFolder}")
-    private String tempFolder;
+    private final FileProperties fileProperties;
+
+    public StartupRunner(FileProperties fileProperties) {
+        this.fileProperties = fileProperties;
+    }
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -27,8 +31,8 @@ public class StartupRunner implements ApplicationRunner {
     /**
      * init temp folders on disk
      */
-    private void initTempFolder() {
-        File appTmpDir = new File(tempFolder);
+    private void initTempFolder() throws IOException {
+        File appTmpDir = new File(fileProperties.getTempFolder());
         if (!appTmpDir.exists()) {
             appTmpDir.mkdirs();
         }

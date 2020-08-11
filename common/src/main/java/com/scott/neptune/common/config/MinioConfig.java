@@ -1,7 +1,10 @@
 package com.scott.neptune.common.config;
 
 import com.scott.neptune.common.property.MinioProperties;
+import io.minio.BucketExistsArgs;
+import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;
+import io.minio.SetBucketPolicyArgs;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -29,25 +32,22 @@ public class MinioConfig {
     }
 
     @Bean
-    public MinioClient minioClient() {
-        try {
-            MinioClient minioClient = new MinioClient(minioProperties.getEndpoint(),
-                    minioProperties.getAccessKey(),
-                    minioProperties.getSecretKey());
-
-            //检测用户上传文件的容器是否已经创建
-            boolean bucketExists = minioClient.bucketExists(minioProperties.getBucket());
-            if (!bucketExists) {
-                minioClient.makeBucket(minioProperties.getBucket());
-                String readOnlyPolicy = FileUtils.readFileToString(new ClassPathResource("config/neptune-blog.ReadOnlyPolicy.json").getFile(),
-                        StandardCharsets.UTF_8);
-                log.info("readOnlyPolicy: {}", readOnlyPolicy);
-                minioClient.setBucketPolicy(minioProperties.getBucket(), readOnlyPolicy);
-            }
-            return minioClient;
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            return null;
+    public MinioClient minioClient() throws Exception {
+        MinioClient minioClient = MinioClient.builder()
+                .endpoint(minioProperties.getEndpoint())
+                .credentials(minioProperties.getAccessKey(), minioProperties.getSecretKey())
+                .build();
+        //检测用户上传文件的容器是否已经创建
+        boolean bucketExists = minioClient.bucketExists(BucketExistsArgs.builder().bucket(minioProperties.getBucket()).build());
+        if (!bucketExists) {
+            minioClient.makeBucket(MakeBucketArgs.builder().bucket(minioProperties.getBucket()).build());
+            String readOnlyPolicy = FileUtils.readFileToString(new ClassPathResource("config/neptune-blog.ReadOnlyPolicy.json").getFile(),
+                    StandardCharsets.UTF_8);
+            minioClient.setBucketPolicy(SetBucketPolicyArgs.builder()
+                    .bucket(minioProperties.getBucket())
+                    .config(readOnlyPolicy)
+                    .build());
         }
+        return minioClient;
     }
 }

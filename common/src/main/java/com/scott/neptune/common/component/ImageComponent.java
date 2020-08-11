@@ -1,4 +1,4 @@
-package com.scott.neptune.common.component.oss;
+package com.scott.neptune.common.component;
 
 import com.scott.neptune.common.model.ImageSize;
 import lombok.extern.slf4j.Slf4j;
@@ -20,17 +20,16 @@ import java.io.File;
 @Component
 public class ImageComponent {
 
-    public boolean resizeImage(File originalImage, File targetImage, ImageSize size) {
+    public boolean resizeImage(File originalImage, File toFile, ImageSize size, String extension) {
 
         try {
             BufferedImage image = ImageIO.read(originalImage);
-            int sideLength = Math.min(image.getHeight(), image.getWidth());
             Thumbnails.of(originalImage)
-                    .sourceRegion(Positions.CENTER, sideLength, sideLength)
+                    .sourceRegion(Positions.CENTER, image.getWidth(), image.getHeight())
                     .size(size.getWidth(), size.getHeight())
                     .outputQuality(1.0f)
-                    .outputFormat("png")
-                    .toFile(targetImage);
+                    .outputFormat(extension)
+                    .toFile(toFile);
             return true;
         } catch (Exception e) {
             log.error("resize image exception: ", e);
@@ -38,7 +37,7 @@ public class ImageComponent {
         }
     }
 
-    public boolean resizeImageToSquare(File originalImage, ImageSize size, File toFile, String extensionName) {
+    public boolean resizeImageToSquare(File originalImage, File toFile, ImageSize size, String extension) {
 
         try {
             BufferedImage image = ImageIO.read(originalImage);
@@ -47,7 +46,7 @@ public class ImageComponent {
                     .sourceRegion(Positions.CENTER, sideLength, sideLength)
                     .size(size.getWidth(), size.getHeight())
                     .outputQuality(1.0f)
-                    .outputFormat(extensionName)
+                    .outputFormat(extension)
                     .toFile(toFile);
             return true;
         } catch (Exception e) {

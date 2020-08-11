@@ -1,7 +1,7 @@
-package com.scott.neptune.common.component.oss;
+package com.scott.neptune.common.listener;
 
+import com.scott.neptune.common.property.FileProperties;
 import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -15,8 +15,11 @@ import java.io.File;
 @Component
 public class DestroyRunner implements DisposableBean {
 
-    @Value("${neptune.file.tempFolder}")
-    private String tempFolder;
+    private final FileProperties fileProperties;
+
+    public DestroyRunner(FileProperties fileProperties) {
+        this.fileProperties = fileProperties;
+    }
 
     @Override
     public void destroy() throws Exception {
@@ -24,7 +27,7 @@ public class DestroyRunner implements DisposableBean {
     }
 
     private void clearTempFolder() {
-        File appTmpDir = new File(tempFolder);
+        File appTmpDir = new File(fileProperties.getTempFolder());
         if (appTmpDir.exists()) {
             appTmpDir.delete();
         }

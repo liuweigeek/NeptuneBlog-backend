@@ -1,6 +1,7 @@
 package com.scott.neptune.common.component;
 
 import com.scott.neptune.common.property.MinioProperties;
+import io.minio.GetBucketPolicyArgs;
 import io.minio.MinioClient;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -26,7 +27,9 @@ public class MinioComponentTest {
     public void getPolicy() {
 
         try {
-            String policy = minioClient.getBucketPolicy(minioProperties.getBucket());
+            String policy = minioClient.getBucketPolicy(GetBucketPolicyArgs.builder().
+                    bucket(minioProperties.getBucket())
+                    .build());
             log.info(policy);
             assert true;
         } catch (Exception e) {
