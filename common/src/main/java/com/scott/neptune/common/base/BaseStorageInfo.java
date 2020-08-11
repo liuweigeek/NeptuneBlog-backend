@@ -1,7 +1,5 @@
 package com.scott.neptune.common.base;
 
-import com.scott.neptune.common.property.MinioProperties;
-import com.scott.neptune.common.util.SpringContextUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -15,18 +13,11 @@ import java.util.Optional;
  */
 public abstract class BaseStorageInfo {
 
-    private final MinioProperties minioProperties = SpringContextUtils.containsBean("minioProperties") ?
-            SpringContextUtils.getBean(MinioProperties.class) : null;
+    protected final String SEPARATOR = "/";
 
     public abstract String getBusinessType();
 
-    public abstract String getFolder(String... args);
-
-    public String getBucket() {
-        return Optional.ofNullable(minioProperties)
-                .map(MinioProperties::getBucket)
-                .orElse("neptune-blog");
-    }
+    public abstract String buildFolder();
 
     @Getter
     @AllArgsConstructor

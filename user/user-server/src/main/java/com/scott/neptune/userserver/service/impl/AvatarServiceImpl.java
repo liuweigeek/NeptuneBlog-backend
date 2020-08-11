@@ -1,6 +1,7 @@
 package com.scott.neptune.userserver.service.impl;
 
 import com.google.common.collect.Lists;
+import com.scott.neptune.common.base.BaseStorageInfo;
 import com.scott.neptune.common.component.FileComponent;
 import com.scott.neptune.common.component.ImageComponent;
 import com.scott.neptune.common.exception.NeptuneBlogException;
@@ -44,9 +45,9 @@ public class AvatarServiceImpl implements IAvatarService {
     }
 
     @Override
-    public List<UserAvatarDto> generateAvatar(MultipartFile imageFile) {
+    public List<UserAvatarDto> generateAvatar(Long userId, MultipartFile imageFile) {
         File avatarFile = FileUtils.transferToFile(fileProperties.getTempFolder(), imageFile);
-        return generateAvatar(avatarFile);
+        return generateAvatar(userId, avatarFile);
     }
 
     /**
@@ -57,7 +58,7 @@ public class AvatarServiceImpl implements IAvatarService {
      */
     //TODO optimize
     @Override
-    public List<UserAvatarDto> generateAvatar(File imageFile) {
+    public List<UserAvatarDto> generateAvatar(Long userId, File imageFile) {
 
         if (!VerifyFileTypeUtils.isImageFile(imageFile)) {
             throw new NeptuneBlogException("图片格式不支持");
@@ -65,21 +66,20 @@ public class AvatarServiceImpl implements IAvatarService {
 
         List<UserAvatarDto> avatarDtoList = Lists.newArrayListWithExpectedSize(avatarProperties.getSizes().size());
 
-        for (AvatarProperties.AvatarValueObject avatarProp : avatarProperties.getSizes()) {
+        for (AvatarProperties.AvatarSizeValueObject sizeValueObject : avatarProperties.getSizes()) {
             File targetFile = FileUtils.createFileByExtension(fileProperties.getTempFolder(), avatarProperties.getExtension());
             boolean resizeSuccess = imageComponent.resizeImageToSquare(imageFile, targetFile,
-                    ImageSize.builder().width(avatarProp.getWidth()).height(avatarProp.getHeight()).build(),
+                    ImageSize.builder().width(sizeValueObject.getWidth()).height(sizeValueObject.getHeight()).build(),
                     avatarProperties.getExtension());
-
             if (!resizeSuccess) {
                 throw new NeptuneBlogException("生成头像缩略图失败");
             }
-            String avatarUrl = fileComponent.saveFile(new UserAvatarStorageInfo(), targetFile,
-                    targetFile.getName());
+            BaseStorageInfo avatarStorageInfo = new UserAvatarStorageInfo(userId, sizeValueObject.getSizeName());
+            String avatarUrl = fileComponent.saveFile(avatarStorageInfo, targetFile, targetFile.getName());
             if (targetFile.exists()) {
                 targetFile.delete();
             }
-            avatarDtoList.add(new UserAvatarDto(null, avatarProp.getSizeType(), avatarUrl));
+            avatarDtoList.add(new UserAvatarDto(userId, sizeValueObject.getSizeType(), avatarUrl));
         }
         return avatarDtoList;
     }

@@ -33,7 +33,7 @@ public class FileComponent {
      * @return
      */
     public String saveFile(BaseStorageInfo storageInfo, File file, String filename) {
-        return minioComponent.saveObject(storageInfo.getBucket(), storageInfo.getFolder() + "/" + filename, file);
+        return minioComponent.saveObject(storageInfo.buildFolder() + "/" + filename, file);
     }
 
     /**
@@ -57,9 +57,9 @@ public class FileComponent {
      */
     public List<String> saveFiles(BaseStorageInfo storageInfo, List<File> fileList, List<String> filenames) {
         List<String> fileFullPaths = filenames.stream()
-                .map(filename -> storageInfo.getFolder() + "/" + filename)
+                .map(filename -> storageInfo.buildFolder() + "/" + filename)
                 .collect(Collectors.toList());
-        return minioComponent.saveObjects(storageInfo.getBucket(), fileFullPaths, fileList);
+        return minioComponent.saveObjects(fileFullPaths, fileList);
     }
 
     /**
@@ -83,7 +83,7 @@ public class FileComponent {
      * @return
      */
     public String saveMultipartFile(BaseStorageInfo storageInfo, MultipartFile file, String filename) {
-        return minioComponent.saveMultipartObject(storageInfo.getBucket(), storageInfo.getFolder() + "/" + filename, file);
+        return minioComponent.saveMultipartObject(storageInfo.buildFolder() + "/" + filename, file);
     }
 
     /**
@@ -107,9 +107,9 @@ public class FileComponent {
      */
     public List<String> saveMultipartFiles(BaseStorageInfo storageInfo, List<MultipartFile> fileList, List<String> filenames) {
         List<String> fileFullPaths = filenames.stream()
-                .map(filename -> storageInfo.getFolder() + "/" + filename)
+                .map(filename -> storageInfo.buildFolder() + "/" + filename)
                 .collect(Collectors.toList());
-        return minioComponent.saveMultipartObjects(storageInfo.getBucket(), fileFullPaths, fileList);
+        return minioComponent.saveMultipartObjects(fileFullPaths, fileList);
     }
 
     /**
@@ -131,7 +131,7 @@ public class FileComponent {
      * @return
      */
     public boolean deleteFile(BaseStorageInfo storageInfo, String filename) {
-        return minioComponent.deleteObject(storageInfo.getBucket(), storageInfo.getFolder() + "/" + filename);
+        return minioComponent.deleteObject(storageInfo.buildFolder() + "/" + filename);
     }
 
     /**
@@ -143,8 +143,8 @@ public class FileComponent {
      */
     public boolean deleteFiles(BaseStorageInfo storageInfo, List<String> filenames) {
         List<String> fileFullPaths = filenames.stream()
-                .map(filename -> storageInfo.getFolder() + "/" + filename)
+                .map(filename -> storageInfo.buildFolder() + "/" + filename)
                 .collect(Collectors.toList());
-        return minioComponent.deleteObjects(storageInfo.getBucket(), fileFullPaths);
+        return minioComponent.deleteObjects(fileFullPaths);
     }
 }

@@ -10,13 +10,21 @@ import com.scott.neptune.common.base.BaseStorageInfo;
  */
 public class UserAvatarStorageInfo extends BaseStorageInfo {
 
+    private final long userId;
+    private final String size;
+
+    public UserAvatarStorageInfo(long userId, String size) {
+        this.userId = userId;
+        this.size = size;
+    }
+
     @Override
     public String getBusinessType() {
         return BusinessTypeEnum.AVATAR.getName();
     }
 
     @Override
-    public String getFolder(String... args) {
-        return BusinessTypeEnum.AVATAR.getName();
+    public String buildFolder() {
+        return "user_avatar" + SEPARATOR + userId + SEPARATOR + size;
     }
 }

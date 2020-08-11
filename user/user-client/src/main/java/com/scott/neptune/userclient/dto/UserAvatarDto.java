@@ -31,7 +31,7 @@ public class UserAvatarDto implements Serializable {
      * 用户ID
      */
     @ApiModelProperty(value = "用户ID")
-    private String userId;
+    private Long userId;
 
     /**
      * 图片尺寸
@@ -74,13 +74,13 @@ public class UserAvatarDto implements Serializable {
          * @param code
          * @return
          */
-        public SizeTypeEnum getEnum(int code) {
+        public static SizeTypeEnum getEnum(int code) {
             for (SizeTypeEnum sizeTypeEnum : SizeTypeEnum.values()) {
                 if (sizeTypeEnum.getCode() == code) {
                     return sizeTypeEnum;
                 }
             }
-            return null;
+            return NORMAL;
         }
 
     }

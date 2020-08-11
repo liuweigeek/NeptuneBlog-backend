@@ -14,7 +14,7 @@ import java.util.List;
  */
 public interface IAvatarService {
 
-    List<UserAvatarDto> generateAvatar(MultipartFile imageFile);
+    List<UserAvatarDto> generateAvatar(Long userId, MultipartFile imageFile);
 
-    List<UserAvatarDto> generateAvatar(File imageFile);
+    List<UserAvatarDto> generateAvatar(Long userId, File imageFile);
 }

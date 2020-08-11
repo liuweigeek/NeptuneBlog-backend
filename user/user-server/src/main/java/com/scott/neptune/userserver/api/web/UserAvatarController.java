@@ -2,6 +2,8 @@ package com.scott.neptune.userserver.api.web;
 
 import com.scott.neptune.common.base.BaseController;
 import com.scott.neptune.userclient.dto.UserAvatarDto;
+import com.scott.neptune.userclient.dto.UserDto;
+import com.scott.neptune.userserver.component.UserComponent;
 import com.scott.neptune.userserver.service.IAvatarService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -28,10 +30,11 @@ import java.util.List;
 public class UserAvatarController extends BaseController {
 
     private final IAvatarService avatarService;
+    private final UserComponent userComponent;
 
-    public UserAvatarController(IAvatarService avatarService) {
-
+    public UserAvatarController(IAvatarService avatarService, UserComponent userComponent) {
         this.avatarService = avatarService;
+        this.userComponent = userComponent;
     }
 
     /**
@@ -43,7 +46,7 @@ public class UserAvatarController extends BaseController {
     @ApiImplicitParam(name = "file", value = "文件", required = true, paramType = "form", dataTypeClass = MultipartFile.class)
     @RequestMapping(path = "uploadAvatar", method = RequestMethod.POST)
     public List<UserAvatarDto> uploadAvatar(@RequestParam("file") MultipartFile file) {
-
-        return avatarService.generateAvatar(file);
+        UserDto loginUser = userComponent.getUserFromRequest(request);
+        return avatarService.generateAvatar(loginUser.getId(), file);
     }
 }
