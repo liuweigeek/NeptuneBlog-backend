@@ -4,7 +4,7 @@ import lombok.Data;
 
 /**
  * @Author: scott
- * @Email: <a href="wliu@fleetup.com">scott</a>
+ * @Email: <a href="mailto:liuweigeek@outlook.com">scott</a>
  * @Date: 2020/7/27 10:01
  * @Description:
  */

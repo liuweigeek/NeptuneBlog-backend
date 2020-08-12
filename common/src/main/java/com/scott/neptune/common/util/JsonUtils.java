@@ -22,7 +22,7 @@ import java.io.IOException;
 
 /**
  * @Author: scott
- * @Email: <a href="mailto:wliu@fleetup.com">scott</a>
+ * @Email: <a href="mailto:liuweigeek@outlook.com">scott</a>
  * @Date: 2019/11/10 17:55
  * @Description: 简单封装Jackson，实现JSON String<->Java Object的Mapper.
  * 封装不同的输出风格, 使用不同的builder函数创建实例.

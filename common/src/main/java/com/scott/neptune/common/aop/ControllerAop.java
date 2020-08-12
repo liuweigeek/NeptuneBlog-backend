@@ -31,7 +31,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @Author: scott
- * @Email: <a href="mailto:wliu@fleetup.com">scott</a>
+ * @Email: <a href="mailto:liuweigeek@outlook.com">scott</a>
  * @Date: 2019/11/10 17:27
  * @Description:
  */

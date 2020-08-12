@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 /**
  * @Author: scott
- * @Email: <a href="wliu@fleetup.com">scott</a>
+ * @Email: <a href="mailto:liuweigeek@outlook.com">scott</a>
  * @Date: 2020/7/22 11:32
  * @Description:
  */

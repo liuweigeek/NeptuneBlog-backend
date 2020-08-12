@@ -4,7 +4,7 @@ import java.util.UUID;
 
 /**
  * @Author: scott
- * @Email: <a href="mailto:wliu@fleetup.com">scott</a>
+ * @Email: <a href="mailto:liuweigeek@outlook.com">scott</a>
  * @Date: 2019/9/30 09:00
  * @Description: NeptuneBlog
  */

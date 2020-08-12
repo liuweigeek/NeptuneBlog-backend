@@ -21,7 +21,7 @@ import org.springframework.http.HttpStatus;
 
 /**
  * @Author: scott
- * @Email: <a href="wliu@fleetup.com">scott</a>
+ * @Email: <a href="mailto:liuweigeek@outlook.com">scott</a>
  * @Date: 2020/8/7 09:40
  * @Description:
  */

@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * @Author: scott
- * @Email: <a href="mailto:wliu@fleetup.com">scott</a>
+ * @Email: <a href="mailto:liuweigeek@outlook.com">scott</a>
  * @Date: 2019/11/3 17:38
  * @Description: NeptuneBlog
  */

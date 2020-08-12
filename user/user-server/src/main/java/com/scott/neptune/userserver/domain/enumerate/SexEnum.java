@@ -6,7 +6,7 @@ import lombok.Getter;
 
 /**
  * @Author: scott
- * @Email: <a href="wliu@fleetup.com">scott</a>
+ * @Email: <a href="mailto:liuweigeek@outlook.com">scott</a>
  * @Date: 2020/8/7 10:04
  * @Description: 性别
  */

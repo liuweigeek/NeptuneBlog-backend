@@ -17,7 +17,7 @@ import static org.springframework.cloud.netflix.zuul.filters.support.FilterConst
 
 /**
  * @Author: scott
- * @Email: <a href="mailto:wliu@fleetup.com">scott</a>
+ * @Email: <a href="mailto:liuweigeek@outlook.com">scott</a>
  * @Date: 2019/10/28 21:44
  * @Description: NeptuneBlog
  */
