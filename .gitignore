@@ -2,7 +2,6 @@
 !additional-spring-configuration-metadata.json
 
 ### Maven ###
-.mvn
 target/
 out/
 META-INF/
