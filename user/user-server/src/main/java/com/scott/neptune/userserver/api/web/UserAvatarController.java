@@ -9,6 +9,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -45,8 +46,9 @@ public class UserAvatarController extends BaseController {
     @ApiOperation(value = "上传头像")
     @ApiImplicitParam(name = "file", value = "文件", required = true, paramType = "form", dataTypeClass = MultipartFile.class)
     @RequestMapping(path = "uploadAvatar", method = RequestMethod.POST)
-    public List<UserAvatarDto> uploadAvatar(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<List<UserAvatarDto>> uploadAvatar(@RequestParam("file") MultipartFile file) {
         UserDto loginUser = userComponent.getUserFromRequest(request);
-        return avatarService.generateAvatar(loginUser.getId(), file);
+        List<UserAvatarDto> userAvatarDtoList = avatarService.generateAvatar(loginUser.getId(), file);
+        return ResponseEntity.ok(userAvatarDtoList);
     }
 }

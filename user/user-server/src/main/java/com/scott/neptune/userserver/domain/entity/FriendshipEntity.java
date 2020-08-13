@@ -33,7 +33,7 @@ import java.util.Date;
  */
 @Data
 @Builder
-@EqualsAndHashCode(callSuper = false, of = {"sourceUser", "targetUser"})
+@EqualsAndHashCode(callSuper = false, of = {"id"})
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -43,7 +43,6 @@ import java.util.Date;
         @NamedEntityGraph(name = "friendship.friends", attributeNodes = {@NamedAttributeNode("targetUser")}),
         @NamedEntityGraph(name = "friendship.followers", attributeNodes = {@NamedAttributeNode("sourceUser")})
 })
-//@IdClass(FriendshipEntity.FriendshipId.class)
 public class FriendshipEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -83,9 +82,10 @@ public class FriendshipEntity implements Serializable {
     private String followFrom;
 
     @Data
+    @Builder
+    @EqualsAndHashCode(callSuper = false, of = {"sourceId", "targetId"})
     @NoArgsConstructor
     @AllArgsConstructor
-    @Builder
     @Embeddable
     public static class FriendshipId implements Serializable {
 

@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -89,9 +88,9 @@ public class UserServiceImpl implements IUserService {
             throw new NeptuneBlogException("用户名已存在,请更换后重试");
         }
         UserEntity userEntity = userConvertor.convertToEntity(userDto);
-        //TODO create by event
         userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
 
+        //TODO create by event
         userEntity.setRegisterDate(new Date());
         userEntity.setLoginDate(new Date());
 
@@ -107,7 +106,7 @@ public class UserServiceImpl implements IUserService {
      */
     @Override
     public UserDto findUserById(Long userId, Long loginUserId) {
-        return Optional.of(userRepository.getOne(userId))
+        return userRepository.findById(userId)
                 .map(userConvertor.convertToDto())
                 .orElseThrow(() -> new NeptuneBlogException("指定用户不存在"));
     }
@@ -134,7 +133,7 @@ public class UserServiceImpl implements IUserService {
         ExampleMatcher usernameExampleMatcher = ExampleMatcher.matching()
                 .withMatcher("username", ExampleMatcher.GenericPropertyMatchers.ignoreCase())
                 .withIgnoreNullValues();
-
+        //TODO add a new convertor
         return userRepository.findOne(Example.of(UserEntity.builder().username(username).build(), usernameExampleMatcher))
                 .map(userEntity -> AuthUserDto.builder()
                         .id(userEntity.getId())
@@ -185,8 +184,8 @@ public class UserServiceImpl implements IUserService {
                                 criteriaBuilder.like(root.get("username").as(String.class), "%" + keyword + "%"),
                                 criteriaBuilder.like(root.get("nickname").as(String.class), "%" + keyword + "%"),
                                 criteriaBuilder.like(root.get("email").as(String.class), "%" + keyword + "%"),
-                                criteriaBuilder.like(root.get("username").as(String.class), "%" + keyword + "%")))
-                        .orderBy(criteriaBuilder.asc(root.get("registerDate").as(Date.class)))
+                                criteriaBuilder.like(root.get("username").as(String.class), "%" + keyword + "%"))
+                ).orderBy(criteriaBuilder.asc(root.get("registerDate").as(Date.class)))
                         .getRestriction()).stream()
                 .map(userConvertor.convertToDto())
                 .collect(Collectors.toList());
