@@ -85,7 +85,7 @@ public class UserDto {
      */
     @NotNull(message = "性别不可为空", groups = Register.class)
     @ApiModelProperty(value = "性别")
-    private Integer sex;
+    private Integer gender;
 
     /**
      * 注册时间

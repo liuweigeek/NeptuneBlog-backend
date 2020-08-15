@@ -1,6 +1,6 @@
 package com.scott.neptune.userserver.domain.entity;
 
-import com.scott.neptune.userclient.enumerate.SexEnum;
+import com.scott.neptune.userclient.enumerate.GenderEnum;
 import com.scott.neptune.userserver.domain.listener.UserAuditingListener;
 import com.scott.neptune.userserver.domain.valueobject.FriendshipCountValObj;
 import com.scott.neptune.userserver.domain.valueobject.UserAvatarValObj;
@@ -83,10 +83,10 @@ public class UserEntity implements Serializable {
 
     /**
      * 性别
-     * {@link SexEnum}
+     * {@link GenderEnum}
      */
     @Enumerated(EnumType.STRING)
-    private SexEnum sex;
+    private GenderEnum gender;
 
     /**
      * 注册时间

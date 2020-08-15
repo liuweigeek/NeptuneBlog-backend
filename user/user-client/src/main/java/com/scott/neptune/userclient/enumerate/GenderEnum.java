@@ -10,7 +10,7 @@ import lombok.Getter;
  * @Description: 性别
  */
 @AllArgsConstructor
-public enum SexEnum {
+public enum GenderEnum {
 
     /**
      * 男
@@ -25,10 +25,10 @@ public enum SexEnum {
     @Getter
     private final int code;
 
-    public SexEnum getEnum(int code) {
-        for (SexEnum sexEnum : SexEnum.values()) {
-            if (sexEnum.getCode() == code) {
-                return sexEnum;
+    public GenderEnum getEnum(int code) {
+        for (GenderEnum genderEnum : GenderEnum.values()) {
+            if (genderEnum.getCode() == code) {
+                return genderEnum;
             }
         }
         return null;
