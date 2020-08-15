@@ -29,7 +29,7 @@ import java.util.Map;
 @Slf4j
 @Api(tags = "搜索接口 - 面向前端")
 @RestController
-@RequestMapping(path = "search")
+@RequestMapping("/search")
 public class SearchController extends BaseController {
 
     private final UserClient userClient;
@@ -43,7 +43,7 @@ public class SearchController extends BaseController {
     @RedisLock
     @ApiOperation(value = "搜索用户和推文")
     @ApiImplicitParam(value = "关键字", paramType = "path", required = true)
-    @GetMapping(path = "{keyword}")
+    @GetMapping("/{keyword}")
     public ResponseEntity<Map<String, List>> searchByKeyword(@PathVariable("keyword") String keyword) {
 
         List<UserDto> userDtoList = userClient.search(keyword);

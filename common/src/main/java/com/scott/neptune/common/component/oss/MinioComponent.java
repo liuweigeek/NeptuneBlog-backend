@@ -12,6 +12,7 @@ import io.minio.RemoveObjectsArgs;
 import io.minio.Result;
 import io.minio.messages.DeleteObject;
 import io.minio.messages.Item;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,16 +34,12 @@ import java.util.stream.Collectors;
  * @Description: NeptuneBlog
  */
 @Slf4j
+@RequiredArgsConstructor
 @Component
 public class MinioComponent {
 
     private final MinioClient minioClient;
     private final MinioProperties minioProperties;
-
-    public MinioComponent(MinioClient minioClient, MinioProperties minioProperties) {
-        this.minioClient = minioClient;
-        this.minioProperties = minioProperties;
-    }
 
     /**
      * 获取文件对象URL

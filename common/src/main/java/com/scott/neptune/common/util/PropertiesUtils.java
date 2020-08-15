@@ -1,12 +1,16 @@
 package com.scott.neptune.common.util;
 
+import com.scott.neptune.common.exception.NeptuneBlogException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.util.Strings;
 
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
 
 /**
@@ -18,17 +22,20 @@ import java.util.Properties;
 @Slf4j
 public class PropertiesUtils {
 
-    private static Map<String, Properties> propsMap = new HashMap<>();
+    private static final Map<String, Properties> propsMap = new HashMap<>();
 
     private static Properties getProp(String fileName) {
         if (!propsMap.containsKey(fileName)) {
             try {
+                Reader resourceReader = new InputStreamReader(Objects.requireNonNull(PropertiesUtils.class.getClassLoader().getResourceAsStream(fileName)),
+                        StandardCharsets.UTF_8);
                 Properties properties = new Properties();
-                properties.load(new InputStreamReader(PropertiesUtils.class.getClassLoader().getResourceAsStream(fileName), StandardCharsets.UTF_8));
+                properties.load(resourceReader);
                 propsMap.put(fileName, properties);
+                resourceReader.close();
             } catch (Exception e) {
                 log.error("配置文件[" + fileName + "]读取异常", e);
-                return null;
+                throw new NeptuneBlogException("配置文件[" + fileName + "]读取异常", e);
             }
         }
 
@@ -45,7 +52,7 @@ public class PropertiesUtils {
     public static String getProperty(String fileName, String key) {
         String value = getProp(fileName).getProperty(key);
         if (StringUtils.isBlank(value)) {
-            return null;
+            return Strings.EMPTY;
         }
         return value.trim();
     }

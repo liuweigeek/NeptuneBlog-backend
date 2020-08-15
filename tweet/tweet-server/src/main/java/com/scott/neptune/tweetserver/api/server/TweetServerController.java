@@ -6,6 +6,7 @@ import com.scott.neptune.tweetserver.service.ITweetService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,17 +22,14 @@ import java.util.List;
  * @Date: 2019/9/23 14:07
  * @Description: 为其他服务提供的推文接口
  */
-@Api(tags = "推文接口 - 面向其他服务")
 @Slf4j
+@RequiredArgsConstructor
+@Api(tags = "推文接口 - 面向其他服务")
 @RestController
 @RequestMapping("server/tweets")
 public class TweetServerController extends BaseController {
 
     private final ITweetService tweetService;
-
-    public TweetServerController(ITweetService tweetService) {
-        this.tweetService = tweetService;
-    }
 
     /**
      * 通过关键字搜索推文

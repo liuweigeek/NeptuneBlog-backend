@@ -7,6 +7,7 @@ import com.scott.neptune.userserver.component.UserComponent;
 import com.scott.neptune.userserver.service.IUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
@@ -26,23 +27,15 @@ import java.util.List;
  * @Description: 用户接口
  */
 @Slf4j
+@RequiredArgsConstructor
 @Api(tags = "用户接口 - 面向前端")
 @RestController
-@RequestMapping(path = "users")
+@RequestMapping("/users")
 public class UserController extends BaseController {
 
     private final IUserService userService;
     private final UserComponent userComponent;
     private final RedisTemplate<String, Object> redisTemplate;
-
-    public UserController(IUserService userService,
-                          UserComponent userComponent,
-                          RedisTemplate<String, Object> redisTemplate) {
-
-        this.userService = userService;
-        this.userComponent = userComponent;
-        this.redisTemplate = redisTemplate;
-    }
 
     /**
      * 用户退出登录
@@ -50,7 +43,7 @@ public class UserController extends BaseController {
      * @return 退出登录结果
      */
     @ApiOperation(value = "用户退出登录")
-    @PostMapping(path = "logout")
+    @PostMapping("/logout")
     public ResponseEntity<Object> logout() {
         UserDto loginUser = userComponent.getUserFromRequest(request);
         redisTemplate.delete(loginUser.getToken());
@@ -63,7 +56,7 @@ public class UserController extends BaseController {
      * @return 用户信息
      */
     @ApiOperation(value = "获取当前登录用户信息")
-    @GetMapping(path = "getLoginUserInfo")
+    @GetMapping("/getLoginUserInfo")
     public ResponseEntity<UserDto> getLoginUserInfo() {
         UserDto userDto = userComponent.getUserFromRequest(request);
         return ResponseEntity.ok(userDto);
@@ -75,7 +68,7 @@ public class UserController extends BaseController {
      * @return 用户信息
      */
     @ApiOperation(value = "获取指定用户信息")
-    @GetMapping(path = "getUserInfo/{userId}")
+    @GetMapping("/getUserInfo/{userId}")
     public ResponseEntity<UserDto> getUserInfo(@PathVariable("userId") Long userId) {
         UserDto loginUser = userComponent.getUserFromRequest(request);
         UserDto userDto = userService.findUserById(userId, loginUser.getId());
@@ -91,7 +84,7 @@ public class UserController extends BaseController {
      * @return 用户信息
      */
     @ApiOperation(value = "获取指定用户信息")
-    @GetMapping(path = "getByUsername/{username}")
+    @GetMapping("/getByUsername/{username}")
     public ResponseEntity<UserDto> getByUsername(@PathVariable("username") String username) {
         UserDto loginUser = userComponent.getUserFromRequest(request);
         UserDto userDto = userService.findUserByUsername(username, loginUser.getId());
@@ -109,7 +102,7 @@ public class UserController extends BaseController {
      * @return 用户列表
      */
     @ApiOperation(value = "查询用户列表")
-    @GetMapping(path = "list")
+    @GetMapping("/list")
     public ResponseEntity<List<UserDto>> list() {
         UserDto loginUser = userComponent.getUserFromRequest(request);
         List<UserDto> userDtoList = userService.findUserList(loginUser.getId());

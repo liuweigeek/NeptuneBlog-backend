@@ -8,6 +8,7 @@ import feign.codec.Decoder;
 import feign.codec.Encoder;
 import feign.codec.ErrorDecoder;
 import feign.form.spring.SpringFormEncoder;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
@@ -26,14 +27,11 @@ import org.springframework.http.HttpStatus;
  * @Description:
  */
 @Slf4j
+@RequiredArgsConstructor
 @Configuration
 public class FeignConfig {
 
     private final ObjectFactory<HttpMessageConverters> messageConverters;
-
-    public FeignConfig(ObjectFactory<HttpMessageConverters> messageConverters) {
-        this.messageConverters = messageConverters;
-    }
 
     @Bean
     public Encoder feignFormEncoder() {

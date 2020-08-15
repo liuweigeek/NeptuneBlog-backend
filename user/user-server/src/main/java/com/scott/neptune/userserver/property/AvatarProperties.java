@@ -23,13 +23,13 @@ public class AvatarProperties {
 
     private String extension;
 
-    private List<AvatarSizeValueObject> sizes = new ArrayList<>();
+    private List<AvatarSizeValObj> sizes = new ArrayList<>();
 
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
-    public static class AvatarSizeValueObject {
+    public static class AvatarSizeValObj {
 
         private Integer sizeType;
         private String sizeName;

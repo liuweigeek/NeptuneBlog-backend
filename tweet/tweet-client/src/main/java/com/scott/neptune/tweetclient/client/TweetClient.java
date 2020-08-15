@@ -24,7 +24,7 @@ public interface TweetClient {
      * @param keyword 关键字
      * @return 用户列表
      */
-    @RequestMapping(path = "server/tweets/search/{keyword}", method = RequestMethod.GET)
+    @RequestMapping(path = "/server/tweets/search/{keyword}", method = RequestMethod.GET)
     List<TweetDto> search(@PathVariable String keyword);
 
 }

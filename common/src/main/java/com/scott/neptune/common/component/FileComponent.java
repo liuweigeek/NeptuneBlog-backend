@@ -2,6 +2,7 @@ package com.scott.neptune.common.component;
 
 import com.scott.neptune.common.base.BaseStorageInfo;
 import com.scott.neptune.common.component.oss.MinioComponent;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,14 +16,11 @@ import java.util.stream.Collectors;
  * @Date: 2019/10/29 17:49
  * @Description: NeptuneBlog
  */
+@RequiredArgsConstructor
 @Component
 public class FileComponent {
 
     private final MinioComponent minioComponent;
-
-    public FileComponent(MinioComponent minioComponent) {
-        this.minioComponent = minioComponent;
-    }
 
     /**
      * 上传文件

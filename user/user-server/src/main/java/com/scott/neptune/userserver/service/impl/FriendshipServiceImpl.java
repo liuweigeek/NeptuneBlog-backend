@@ -6,6 +6,7 @@ import com.scott.neptune.userserver.convertor.FriendshipConvertor;
 import com.scott.neptune.userserver.domain.entity.FriendshipEntity;
 import com.scott.neptune.userserver.repository.FriendshipRepository;
 import com.scott.neptune.userserver.service.IFriendshipService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,19 +20,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
-@Transactional
+@RequiredArgsConstructor
+@Transactional(readOnly = true, rollbackFor = RuntimeException.class)
 @Service
 public class FriendshipServiceImpl implements IFriendshipService {
 
     private final FriendshipRepository friendshipRepository;
     private final FriendshipConvertor friendshipConvertor;
-
-    public FriendshipServiceImpl(FriendshipRepository friendshipRepository,
-                                 FriendshipConvertor friendshipConvertor) {
-
-        this.friendshipRepository = friendshipRepository;
-        this.friendshipConvertor = friendshipConvertor;
-    }
 
     /**
      * 保存好友关系

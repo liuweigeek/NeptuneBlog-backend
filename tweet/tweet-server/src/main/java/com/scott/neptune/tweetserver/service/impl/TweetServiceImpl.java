@@ -7,6 +7,7 @@ import com.scott.neptune.tweetserver.domain.entity.TweetEntity;
 import com.scott.neptune.tweetserver.repository.TweetRepository;
 import com.scott.neptune.tweetserver.service.ITweetService;
 import com.scott.neptune.userclient.dto.UserDto;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.Date;
@@ -24,16 +26,13 @@ import java.util.stream.Collectors;
  * @author scott
  */
 @Slf4j
+@RequiredArgsConstructor
+@Transactional(readOnly = true, rollbackFor = RuntimeException.class)
 @Service
 public class TweetServiceImpl implements ITweetService {
 
     private final TweetRepository tweetRepository;
     private final TweetConvertor tweetConvertor;
-
-    public TweetServiceImpl(TweetRepository tweetRepository, TweetConvertor tweetConvertor) {
-        this.tweetRepository = tweetRepository;
-        this.tweetConvertor = tweetConvertor;
-    }
 
     /**
      * 保存推文

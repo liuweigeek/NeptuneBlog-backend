@@ -20,7 +20,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Embeddable
-public class FriendshipCount implements Serializable {
+public class FriendshipCountValObj implements Serializable {
 
     /**
      * 正在关注用户数量

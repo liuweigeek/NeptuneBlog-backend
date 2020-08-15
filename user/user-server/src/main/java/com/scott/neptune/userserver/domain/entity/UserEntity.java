@@ -2,7 +2,7 @@ package com.scott.neptune.userserver.domain.entity;
 
 import com.scott.neptune.userserver.domain.enumerate.SexEnum;
 import com.scott.neptune.userserver.domain.listener.UserAuditingListener;
-import com.scott.neptune.userserver.domain.valueobject.FriendshipCount;
+import com.scott.neptune.userserver.domain.valueobject.FriendshipCountValObj;
 import com.scott.neptune.userserver.domain.valueobject.UserAvatarValObj;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -113,5 +113,5 @@ public class UserEntity implements Serializable {
      * 正在关注和关注者统计
      */
     @Embedded
-    private FriendshipCount friendshipCount;
+    private FriendshipCountValObj friendshipCount;
 }

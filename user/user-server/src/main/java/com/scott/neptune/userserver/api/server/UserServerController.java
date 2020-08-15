@@ -8,6 +8,7 @@ import com.scott.neptune.userserver.service.IUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,19 +27,15 @@ import java.util.List;
  * @Date: 2019/9/23 14:07
  * @Description: 为其他服务提供的用户接口
  */
-@Api(tags = "用户接口 - 面向其他服务")
 @Slf4j
+@RequiredArgsConstructor
+@Api(tags = "用户接口 - 面向其他服务")
 @RestController
-@RequestMapping(path = "server/user")
+@RequestMapping("/server/user")
 public class UserServerController extends BaseController {
 
     private final IUserService userService;
     private final UserComponent userComponent;
-
-    public UserServerController(IUserService userService, UserComponent userComponent) {
-        this.userService = userService;
-        this.userComponent = userComponent;
-    }
 
     /**
      * 新增用户
@@ -61,7 +58,7 @@ public class UserServerController extends BaseController {
      */
     @ApiOperation(value = "根据ID获取指定用户")
     @ApiImplicitParam(value = "用户ID", paramType = "path", required = true)
-    @GetMapping(path = "{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<UserDto> findUserById(@PathVariable Long id) {
         UserDto loginUser = userComponent.getUserFromRequest(request);
         UserDto userDto = userService.findUserById(id, loginUser.getId());
@@ -76,7 +73,7 @@ public class UserServerController extends BaseController {
      */
     @ApiOperation(value = "根据用户名获取指定用户")
     @ApiImplicitParam(value = "用户名", paramType = "path", required = true)
-    @GetMapping(path = "username/{username}")
+    @GetMapping("/username/{username}")
     public ResponseEntity<UserDto> findUserByUsername(@PathVariable String username) {
         UserDto loginUser = userComponent.getUserFromRequest(request);
         UserDto userDto = userService.findUserByUsername(username, loginUser.getId());
@@ -85,7 +82,7 @@ public class UserServerController extends BaseController {
 
     @ApiOperation(value = "根据用户名获取指定用户,用于授权接口")
     @ApiImplicitParam(value = "用户名", paramType = "path", required = true)
-    @GetMapping(path = "authenticate/{username}")
+    @GetMapping("/authenticate/{username}")
     public ResponseEntity<AuthUserDto> findUserByUsernameForAuthenticate(@PathVariable String username) {
         AuthUserDto authUserDto = userService.findUserByUsernameForAuthenticate(username);
         return ResponseEntity.ok(authUserDto);
@@ -99,7 +96,7 @@ public class UserServerController extends BaseController {
      */
     @ApiOperation(value = "根据邮箱获取指定用户")
     @ApiImplicitParam(value = "用户名", paramType = "path", required = true)
-    @GetMapping(path = "email/{email}")
+    @GetMapping("/email/{email}")
     public ResponseEntity<UserDto> findUserByEmail(@PathVariable String email) {
         UserDto loginUser = userComponent.getUserFromRequest(request);
         UserDto userDto = userService.findUserByEmail(email, loginUser.getId());
@@ -113,7 +110,7 @@ public class UserServerController extends BaseController {
      * @return 用户对象列表
      */
     @ApiOperation(value = "通过ID列表获取全部用户")
-    @PostMapping(path = "findAllUserByIdList")
+    @PostMapping("/findAllUserByIdList")
     public ResponseEntity<List<UserDto>> findAllUserByIdList(@RequestBody List<Long> idList) {
         UserDto loginUser = userComponent.getUserFromRequest(request);
         List<UserDto> userDtoList = userService.findAllUserByIdList(idList, loginUser.getId());
@@ -126,7 +123,7 @@ public class UserServerController extends BaseController {
      * @return 当前登录用户
      */
     @ApiOperation(value = "获取当前登录用户")
-    @GetMapping(path = "loginUser")
+    @GetMapping("/loginUser")
     public ResponseEntity<UserDto> getLoginUser() {
         UserDto userDto = userComponent.getUserFromRequest(request);
         return ResponseEntity.ok(userDto);
@@ -140,7 +137,7 @@ public class UserServerController extends BaseController {
      */
     @ApiOperation(value = "通过关键字搜索用户")
     @ApiImplicitParam(value = "关键字", paramType = "path", required = true)
-    @GetMapping(path = "search/{keyword}")
+    @GetMapping("/search/{keyword}")
     public ResponseEntity<List<UserDto>> search(@PathVariable String keyword) {
         UserDto loginUser = userComponent.getUserFromRequest(request);
         List<UserDto> userDtoList = userService.findByKeyword(keyword, loginUser.getId());

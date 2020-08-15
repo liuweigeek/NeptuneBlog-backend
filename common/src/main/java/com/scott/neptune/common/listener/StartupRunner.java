@@ -1,12 +1,12 @@
 package com.scott.neptune.common.listener;
 
 import com.scott.neptune.common.property.FileProperties;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
-import java.io.IOException;
 
 /**
  * @Author: scott
@@ -14,14 +14,11 @@ import java.io.IOException;
  * @Date: 2019/10/17 22:10
  * @Description: NeptuneBlog
  */
+@RequiredArgsConstructor
 @Component
 public class StartupRunner implements ApplicationRunner {
 
     private final FileProperties fileProperties;
-
-    public StartupRunner(FileProperties fileProperties) {
-        this.fileProperties = fileProperties;
-    }
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -31,7 +28,7 @@ public class StartupRunner implements ApplicationRunner {
     /**
      * init temp folders on disk
      */
-    private void initTempFolder() throws IOException {
+    private void initTempFolder() {
         File appTmpDir = new File(fileProperties.getTempFolder());
         if (!appTmpDir.exists()) {
             appTmpDir.mkdirs();

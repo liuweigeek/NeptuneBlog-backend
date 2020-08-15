@@ -10,6 +10,7 @@ import com.scott.neptune.userserver.service.IUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
@@ -31,24 +32,16 @@ import java.util.Objects;
  * @Date: 2019/9/24 17:33
  * @Description: 好友关系接口
  */
-@Api(tags = "好友关系接口 - 面向前端")
 @Slf4j
+@RequiredArgsConstructor
+@Api(tags = "好友关系接口 - 面向前端")
 @RestController
-@RequestMapping(path = "friendship")
+@RequestMapping("/friendship")
 public class FriendshipController extends BaseController {
 
     private final IUserService userService;
     private final IFriendshipService friendshipService;
     private final UserComponent userComponent;
-
-    public FriendshipController(IUserService userService,
-                                IFriendshipService friendshipService,
-                                UserComponent userComponent) {
-
-        this.userService = userService;
-        this.friendshipService = friendshipService;
-        this.userComponent = userComponent;
-    }
 
     /**
      * 关注指定用户
@@ -58,7 +51,7 @@ public class FriendshipController extends BaseController {
      */
     @ApiOperation(value = "关注指定用户")
     @ApiImplicitParam(value = "要关注的用户ID", paramType = "body", required = true)
-    @PostMapping(path = "follow")
+    @PostMapping("/follow")
     public ResponseEntity<FriendshipDto> follow(@RequestParam Long userId) {
 
         UserDto loginUser = userComponent.getUserFromRequest(request);
@@ -85,7 +78,7 @@ public class FriendshipController extends BaseController {
      */
     @ApiOperation(value = "取消关注指定用户")
     @ApiImplicitParam(name = "userId", value = "要取消关注的用户ID", paramType = "path", required = true)
-    @DeleteMapping(path = "cancelFollow/{userId}")
+    @DeleteMapping("/cancelFollow/{userId}")
     public ResponseEntity<Void> cancelFollow(@PathVariable("userId") Long userId) {
 
         UserDto loginUser = userComponent.getUserFromRequest(request);
@@ -99,7 +92,7 @@ public class FriendshipController extends BaseController {
      * @return 关注列表
      */
     @ApiOperation(value = "获取关注列表")
-    @GetMapping(path = "findFollowing")
+    @GetMapping("/findFollowing")
     public ResponseEntity<Page<FriendshipDto>> findAllFollowing(UserDto userDto) {
 
         Long fromUserId;
@@ -124,7 +117,7 @@ public class FriendshipController extends BaseController {
      * @return 关注者列表
      */
     @ApiOperation(value = "获取关注者列表")
-    @GetMapping(path = "findFollower")
+    @GetMapping("/findFollower")
     public ResponseEntity<Page<FriendshipDto>> findAllFollower(UserDto userDto) {
         Long toUserId;
         if (Objects.isNull(userDto) || StringUtils.isBlank(userDto.getUsername())) {

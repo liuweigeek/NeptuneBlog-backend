@@ -1,6 +1,7 @@
 package com.scott.neptune.userserver.model;
 
 import com.scott.neptune.common.base.BaseStorageInfo;
+import lombok.RequiredArgsConstructor;
 
 /**
  * @Author: scott
@@ -8,15 +9,11 @@ import com.scott.neptune.common.base.BaseStorageInfo;
  * @Date: 2020/8/11 17:01
  * @Description:
  */
+@RequiredArgsConstructor
 public class UserAvatarStorageInfo extends BaseStorageInfo {
 
     private final long userId;
     private final String size;
-
-    public UserAvatarStorageInfo(long userId, String size) {
-        this.userId = userId;
-        this.size = size;
-    }
 
     @Override
     public String getBusinessType() {

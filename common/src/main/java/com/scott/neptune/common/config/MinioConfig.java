@@ -5,6 +5,7 @@ import io.minio.BucketExistsArgs;
 import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;
 import io.minio.SetBucketPolicyArgs;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -21,15 +22,12 @@ import java.nio.charset.StandardCharsets;
  * @Description: NeptuneBlog
  */
 @Slf4j
+@RequiredArgsConstructor
 @Configuration
 @ConditionalOnProperty(prefix = "neptune.oss.minio", name = "endpoint")
 public class MinioConfig {
 
     private final MinioProperties minioProperties;
-
-    public MinioConfig(MinioProperties minioProperties) {
-        this.minioProperties = minioProperties;
-    }
 
     @Bean
     public MinioClient minioClient() throws Exception {

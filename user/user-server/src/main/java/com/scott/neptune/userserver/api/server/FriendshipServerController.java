@@ -6,6 +6,7 @@ import com.scott.neptune.userclient.dto.UserDto;
 import com.scott.neptune.userserver.component.UserComponent;
 import com.scott.neptune.userserver.service.IFriendshipService;
 import io.swagger.annotations.Api;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,26 +23,22 @@ import static java.util.stream.Collectors.toList;
  * @Date: 2019/9/23 09:12
  * @Description: 为其他服务提供的用户接口
  */
-@Api(tags = "好友关系接口 - 面向其他服务")
 @Slf4j
+@RequiredArgsConstructor
+@Api(tags = "好友关系接口 - 面向其他服务")
 @RestController
-@RequestMapping(path = "server/friendship")
+@RequestMapping("/server/friendship")
 public class FriendshipServerController extends BaseController {
 
     private final UserComponent userComponent;
     private final IFriendshipService friendshipService;
-
-    public FriendshipServerController(UserComponent userComponent, IFriendshipService friendshipService) {
-        this.userComponent = userComponent;
-        this.friendshipService = friendshipService;
-    }
 
     /**
      * 获取全部已关注用户
      *
      * @return 用户对象
      */
-    @GetMapping(path = "getFollowingUsers")
+    @GetMapping("/getFollowingUsers")
     public ResponseEntity<List<FriendshipDto>> getFollowingUsers(FriendshipDto friendshipDto) {
 
         UserDto currentUser = userComponent.getUserFromRequest(request);
@@ -54,7 +51,7 @@ public class FriendshipServerController extends BaseController {
      *
      * @return 用户对象
      */
-    @GetMapping(path = "getFollowingUserIds")
+    @GetMapping("/getFollowingUserIds")
     public ResponseEntity<List<Long>> getFollowingUserIds() {
 
         UserDto currentUser = userComponent.getUserFromRequest(request);

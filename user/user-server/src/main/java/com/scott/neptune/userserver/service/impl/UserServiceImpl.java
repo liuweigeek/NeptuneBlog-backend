@@ -3,10 +3,12 @@ package com.scott.neptune.userserver.service.impl;
 import com.scott.neptune.common.exception.NeptuneBlogException;
 import com.scott.neptune.userclient.dto.AuthUserDto;
 import com.scott.neptune.userclient.dto.UserDto;
+import com.scott.neptune.userserver.convertor.AuthUserConvertor;
 import com.scott.neptune.userserver.convertor.UserConvertor;
 import com.scott.neptune.userserver.domain.entity.UserEntity;
 import com.scott.neptune.userserver.repository.UserRepository;
 import com.scott.neptune.userserver.service.IUserService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -28,22 +30,15 @@ import java.util.stream.Collectors;
  * @Description:
  */
 @Slf4j
-@Transactional
+@RequiredArgsConstructor
+@Transactional(readOnly = true, rollbackFor = RuntimeException.class)
 @Service
 public class UserServiceImpl implements IUserService {
 
     private final UserRepository userRepository;
     private final UserConvertor userConvertor;
+    private final AuthUserConvertor authUserConvertor;
     private final PasswordEncoder passwordEncoder;
-
-    public UserServiceImpl(UserRepository userRepository,
-                           UserConvertor userConvertor,
-                           PasswordEncoder passwordEncoder) {
-
-        this.userRepository = userRepository;
-        this.userConvertor = userConvertor;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     /**
      * 判断指定用户名是否存在
@@ -135,18 +130,7 @@ public class UserServiceImpl implements IUserService {
                 .withIgnoreNullValues();
         //TODO add a new convertor
         return userRepository.findOne(Example.of(UserEntity.builder().username(username).build(), usernameExampleMatcher))
-                .map(userEntity -> AuthUserDto.builder()
-                        .id(userEntity.getId())
-                        .username(userEntity.getUsername())
-                        .password(userEntity.getPassword())
-                        .nickname(userEntity.getNickname())
-                        .email(userEntity.getEmail())
-                        .active(true)
-                        .isLocked(false)
-                        .isExpired(false)
-                        .isEnabled(true)
-                        .authorities(new String[]{})
-                        .build())
+                .map(authUserConvertor::convertToDto)
                 .orElseThrow(() -> new NeptuneBlogException("username not found"));
     }
 

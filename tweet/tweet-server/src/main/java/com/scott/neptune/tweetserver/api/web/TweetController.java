@@ -7,6 +7,7 @@ import com.scott.neptune.userclient.client.UserClient;
 import com.scott.neptune.userclient.dto.UserDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -23,18 +24,14 @@ import org.springframework.web.bind.annotation.RestController;
  * @author scott
  */
 @Slf4j
+@RequiredArgsConstructor
 @Api(tags = "推文接口 - 面向前端")
 @RestController
-@RequestMapping(path = "tweets")
+@RequestMapping("/tweets")
 public class TweetController extends BaseController {
 
     private final UserClient userClient;
     private final ITweetService tweetService;
-
-    public TweetController(UserClient userClient, ITweetService tweetService) {
-        this.userClient = userClient;
-        this.tweetService = tweetService;
-    }
 
     /**
      * 发送推文
@@ -43,7 +40,7 @@ public class TweetController extends BaseController {
      * @return
      */
     @ApiOperation(value = "发送推文")
-    @PostMapping(path = "update")
+    @PostMapping("/update")
     public ResponseEntity<TweetDto> update(@RequestBody TweetDto tweetDto) {
         UserDto loginUser = userClient.getLoginUser();
         tweetDto = tweetService.save(tweetDto, loginUser);
@@ -57,7 +54,7 @@ public class TweetController extends BaseController {
      * @return
      */
     @ApiOperation(value = "获取关注用户的推文")
-    @GetMapping(path = "followingPosts")
+    @GetMapping("/followingPosts")
     public ResponseEntity<Page<TweetDto>> getFollowingPosts() {
         UserDto loginUser = userClient.getLoginUser();
         //TODO parameters for pageable
@@ -74,7 +71,7 @@ public class TweetController extends BaseController {
     @ApiOperation(value = "获取指定用户的推文")
     //TODO rebuild the key for cache
     //@Cacheable(value = Constant.CacheKey.TWEET, key = "#userId+'.'+#postDto.getCurrent()+'.'+#postDto.getSize()")
-    @GetMapping(path = "getPostsByUserId")
+    @GetMapping("/getPostsByUserId")
     public ResponseEntity<Page<TweetDto>> getPostsByUserId(Long userId) {
         //TODO parameters for pageable
         Page<TweetDto> tweetDtoPage = tweetService.findByUserId(userId, 0, 0);

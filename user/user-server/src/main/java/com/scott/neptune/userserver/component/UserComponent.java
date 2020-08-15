@@ -3,6 +3,7 @@ package com.scott.neptune.userserver.component;
 import com.scott.neptune.common.constant.Constant;
 import com.scott.neptune.common.util.HeaderUtils;
 import com.scott.neptune.userclient.dto.UserDto;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -15,14 +16,11 @@ import javax.servlet.http.HttpServletRequest;
  * @Date: 2019/9/23 13:58
  * @Description: 用户相关组件
  */
+@RequiredArgsConstructor
 @Component
 public class UserComponent {
 
     private final RedisTemplate<String, Object> redisTemplate;
-
-    public UserComponent(RedisTemplate<String, Object> redisTemplate) {
-        this.redisTemplate = redisTemplate;
-    }
 
     /**
      * 通过Request获取当前登录用户
