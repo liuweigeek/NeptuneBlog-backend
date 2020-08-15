@@ -1,4 +1,4 @@
-package com.scott.neptune.tweetserver.api.web;
+package com.scott.neptune.tweetserver.api;
 
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Description:
  */
 @Slf4j
-@Api(tags = "推文接口 - 面向前端")
+@Api(tags = "推文接口")
 @RestController
 @RequestMapping("/statuses")
 public class StatusController {

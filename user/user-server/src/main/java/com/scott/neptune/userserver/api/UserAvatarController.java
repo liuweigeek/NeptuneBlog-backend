@@ -1,4 +1,4 @@
-package com.scott.neptune.userserver.api.web;
+package com.scott.neptune.userserver.api;
 
 import com.scott.neptune.common.base.BaseController;
 import com.scott.neptune.userclient.dto.UserAvatarDto;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -27,7 +28,7 @@ import java.util.List;
  */
 @Slf4j
 @RequiredArgsConstructor
-@Api(tags = "文件接口 - 面向其他服务")
+@Api(tags = "文件接口")
 @RestController
 @RequestMapping("/avatars")
 public class UserAvatarController extends BaseController {
@@ -43,7 +44,7 @@ public class UserAvatarController extends BaseController {
     @ApiOperation(value = "上传头像")
     @ApiImplicitParam(name = "file", value = "文件", required = true, paramType = "form", dataTypeClass = MultipartFile.class)
     @PostMapping("uploadAvatar")
-    public ResponseEntity<List<UserAvatarDto>> uploadAvatar(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<Collection<UserAvatarDto>> uploadAvatar(@RequestParam("file") MultipartFile file) {
         UserDto loginUser = userComponent.getUserFromRequest(httpServletRequest);
         List<UserAvatarDto> userAvatarDtoList = avatarService.generateAvatar(loginUser.getId(), file);
         return ResponseEntity.ok(userAvatarDtoList);

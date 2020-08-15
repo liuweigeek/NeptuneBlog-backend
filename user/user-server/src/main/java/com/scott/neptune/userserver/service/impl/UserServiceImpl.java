@@ -123,16 +123,6 @@ public class UserServiceImpl implements IUserService {
                 .orElseThrow(() -> new NeptuneBlogException("screenName not found"));
     }
 
-    @Override
-    public AuthUserDto findUserByScreenNameForAuthenticate(String screenName) {
-        ExampleMatcher screenNameExampleMatcher = ExampleMatcher.matching()
-                .withMatcher("screenName", ExampleMatcher.GenericPropertyMatchers.ignoreCase())
-                .withIgnoreNullValues();
-        //TODO add a new convertor
-        return userRepository.findOne(Example.of(UserEntity.builder().screenName(screenName).build(), screenNameExampleMatcher))
-                .map(authUserConvertor::convertToDto)
-                .orElseThrow(() -> new NeptuneBlogException("screenName not found"));
-    }
 
     /**
      * 通过邮箱获取用户
@@ -168,23 +158,12 @@ public class UserServiceImpl implements IUserService {
                                 criteriaBuilder.like(root.get("screenName").as(String.class), "%" + keyword + "%"),
                                 criteriaBuilder.like(root.get("nickname").as(String.class), "%" + keyword + "%"),
                                 criteriaBuilder.like(root.get("email").as(String.class), "%" + keyword + "%"))
-                ).orderBy(criteriaBuilder.asc(root.get("registerDate").as(Date.class)))
+                ).orderBy(criteriaBuilder.asc(root.get("createAt").as(Date.class)))
                         .getRestriction()).stream()
                 .map(userConvertor.convertToDto())
                 .collect(Collectors.toList());
     }
 
-    /**
-     * 获取全部用户
-     *
-     * @return 用户列表
-     */
-    @Override
-    public List<UserDto> findUserList(Long loginUserId) {
-        return userRepository.findAll().stream()
-                .map(userConvertor.convertToDto())
-                .collect(Collectors.toList());
-    }
 
     /**
      * 通过用户ID列表获取全部用户
@@ -200,6 +179,34 @@ public class UserServiceImpl implements IUserService {
         return userRepository.findAllByIdIn(idList).stream()
                 .map(userConvertor.convertToDto())
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * 通过用户名列表获取全部用户
+     *
+     * @param screenNameList 用户名列表
+     * @return 用户对象列表
+     */
+    @Override
+    public List<UserDto> findAllUserByScreenNameList(List<String> screenNameList, Long loginUserId) {
+
+        if (CollectionUtils.isEmpty(screenNameList)) {
+            return Collections.emptyList();
+        }
+        return userRepository.findAllByScreenNameIn(screenNameList).stream()
+                .map(userConvertor.convertToDto())
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public AuthUserDto findUserByScreenNameForAuthenticate(String screenName) {
+        ExampleMatcher screenNameExampleMatcher = ExampleMatcher.matching()
+                .withMatcher("screenName", ExampleMatcher.GenericPropertyMatchers.ignoreCase())
+                .withIgnoreNullValues();
+        //TODO add a new convertor
+        return userRepository.findOne(Example.of(UserEntity.builder().screenName(screenName).build(), screenNameExampleMatcher))
+                .map(authUserConvertor::convertToDto)
+                .orElseThrow(() -> new NeptuneBlogException("screenName not found"));
     }
 
     /**

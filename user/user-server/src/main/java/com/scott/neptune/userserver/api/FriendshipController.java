@@ -1,4 +1,4 @@
-package com.scott.neptune.userserver.api.web;
+package com.scott.neptune.userserver.api;
 
 import com.scott.neptune.common.base.BaseController;
 import com.scott.neptune.common.exception.RestException;
@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Slf4j
 @RequiredArgsConstructor
-@Api(tags = "好友关系接口 - 面向前端")
+@Api(tags = "好友关系接口")
 @RestController
 @RequestMapping("/friendships")
 public class FriendshipController extends BaseController {

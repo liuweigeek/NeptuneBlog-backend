@@ -23,10 +23,18 @@ public interface UserRepository extends JpaRepository<UserEntity, Long>,
     /**
      * 根据用户ID列表获取全部用户
      *
-     * @param ids
+     * @param ids 用户ID列表
      * @return
      */
     List<UserEntity> findAllByIdIn(Collection<Long> ids);
+
+    /**
+     * 根据用户名列表获取全部用户
+     *
+     * @param screenNames 用户名列表
+     * @return
+     */
+    List<UserEntity> findAllByScreenNameIn(@Param("screenNames") Collection<String> screenNames);
 
     /**
      * 更新登录时间

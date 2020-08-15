@@ -9,6 +9,7 @@ import com.scott.neptune.userserver.repository.FriendshipRepository;
 import com.scott.neptune.userserver.service.IFriendshipService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -60,50 +61,11 @@ public class FriendshipServiceImpl implements IFriendshipService {
      * @return
      */
     @Override
-    public FriendshipDto getRelationBySourceIdAndTargetId(Long sourceId, Long targetId) {
+    public FriendshipDto getBySourceAndTarget(Long sourceId, Long targetId) {
         return friendshipRepository.findById(FriendshipEntity.FriendshipId.builder()
                 .sourceId(sourceId).targetId(targetId).build())
                 .map(friendshipConvertor.convertToDto())
                 .orElse(null);
-    }
-
-    /**
-     * 删除好友关系
-     *
-     * @param friendshipDto 单向好友关系
-     * @return 删除结果
-     */
-    @Override
-    public boolean delete(FriendshipDto friendshipDto) {
-        try {
-            friendshipRepository.deleteById(FriendshipEntity.FriendshipId.builder()
-                    .sourceId(friendshipDto.getSourceId())
-                    .targetId(friendshipDto.getTargetId())
-                    .build());
-            return true;
-        } catch (Exception e) {
-            log.error("取消关注失败: ", e);
-            throw new NeptuneBlogException("取消关注失败", e);
-        }
-    }
-
-    /**
-     * 根据关注人和被关注人解除关系
-     *
-     * @param sourceId 关注人
-     * @param targetId 被关注人
-     * @return
-     */
-    @Override
-    public boolean delete(Long sourceId, Long targetId) {
-        try {
-            friendshipRepository.deleteById(FriendshipEntity.FriendshipId.builder()
-                    .sourceId(sourceId).targetId(targetId).build());
-            return true;
-        } catch (Exception e) {
-            log.error("取消关注失败: ", e);
-            throw new NeptuneBlogException("取消关注失败", e);
-        }
     }
 
     /**
@@ -140,50 +102,85 @@ public class FriendshipServiceImpl implements IFriendshipService {
      * 获取全部已关注用户
      *
      * @param userId
+     * @param targetUserIds
      * @return
      */
     @Override
-    public List<FriendshipDto> findAllFriends(Long userId) {
+    public List<FriendshipDto> findAllFriends(Long userId, List<Long> targetUserIds) {
         if (userId == null) {
             return Collections.emptyList();
         }
-        return friendshipRepository.findAllBySourceUserOrderByFollowDateDesc(userId).stream()
-                .map(friendshipConvertor.convertToDto())
-                .collect(Collectors.toList());
+        if (CollectionUtils.isEmpty(targetUserIds)) {
+            return friendshipRepository.findAllBySourceUser(userId, Sort.by(Sort.Order.desc("followDate"))).stream()
+                    .map(friendshipConvertor.convertToDto())
+                    .collect(Collectors.toList());
+        } else {
+            return friendshipRepository.findAllBySourceUserAndTargetUserIn(userId, targetUserIds,
+                    Sort.by(Sort.Order.desc("followDate"))).stream()
+                    .map(friendshipConvertor.convertToDto())
+                    .collect(Collectors.toList());
+        }
+
     }
 
     /**
      * 获取全部关注者
      *
      * @param userId
+     * @param sourceUserIds
      * @return
      */
     @Override
-    public List<FriendshipDto> findAllFollowers(Long userId) {
+    public List<FriendshipDto> findAllFollowers(Long userId, List<Long> sourceUserIds) {
         if (userId == null) {
             return Collections.emptyList();
         }
-        return friendshipRepository.findAllByTargetUserOrderByFollowDateDesc(userId).stream()
-                .map(friendshipConvertor.convertToDto())
-                .collect(Collectors.toList());
+        if (CollectionUtils.isEmpty(sourceUserIds)) {
+            return friendshipRepository.findAllByTargetUser(userId, Sort.by(Sort.Order.desc("followDate"))).stream()
+                    .map(friendshipConvertor.convertToDto())
+                    .collect(Collectors.toList());
+        } else {
+            return friendshipRepository.findAllByTargetUserAndSourceUserIn(userId, sourceUserIds,
+                    Sort.by(Sort.Order.desc("followDate"))).stream()
+                    .map(friendshipConvertor.convertToDto())
+                    .collect(Collectors.toList());
+        }
     }
 
     /**
-     * 获取用户关系
+     * 删除好友关系
      *
-     * @param fromUserId
-     * @param toUserId
+     * @param friendshipDto 单向好友关系
+     * @return 删除结果
+     */
+    @Override
+    public void delete(FriendshipDto friendshipDto) {
+        try {
+            friendshipRepository.deleteById(FriendshipEntity.FriendshipId.builder()
+                    .sourceId(friendshipDto.getSourceId())
+                    .targetId(friendshipDto.getTargetId())
+                    .build());
+        } catch (Exception e) {
+            log.error("取消关注失败: ", e);
+            throw new NeptuneBlogException("取消关注失败", e);
+        }
+    }
+
+    /**
+     * 根据关注人和被关注人解除关系
+     *
+     * @param sourceId 关注人
+     * @param targetId 被关注人
      * @return
      */
-    /*@Override
-    public UserDto.RelationEnum getRelation(String fromUserId, String toUserId) {
-        if (StringUtils.equals(fromUserId, toUserId)) {
-            return null;
+    @Override
+    public void delete(Long sourceId, Long targetId) {
+        try {
+            friendshipRepository.deleteById(FriendshipEntity.FriendshipId.builder()
+                    .sourceId(sourceId).targetId(targetId).build());
+        } catch (Exception e) {
+            log.error("取消关注失败: ", e);
+            throw new NeptuneBlogException("取消关注失败", e);
         }
-        FriendRelationEntity friendRelationEntity = this.getRelationBysourceIdAndtargetId(fromUserId, toUserId);
-        if (Objects.isNull(friendRelationEntity)) {
-            return UserDto.RelationEnum.UN_FOLLOW;
-        }
-        return UserDto.RelationEnum.FOLLOWING;
-    }*/
+    }
 }

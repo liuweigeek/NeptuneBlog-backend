@@ -39,6 +39,8 @@ import java.util.Date;
 @Table(name = "t_tweet")
 public class TweetEntity implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * Id
      */
@@ -53,12 +55,6 @@ public class TweetEntity implements Serializable {
     private Long userId;
 
     /**
-     * 发送人信息
-     */
-    @Transient
-    private UserDto user;
-
-    /**
      * 发送内容
      */
     private String text;
@@ -67,6 +63,12 @@ public class TweetEntity implements Serializable {
      * 发送设备
      */
     private String source;
+
+    /**
+     * 发送人信息
+     */
+    @Transient
+    private UserDto user;
 
     /**
      * 发送时间

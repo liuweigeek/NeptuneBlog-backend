@@ -31,6 +31,8 @@ import java.util.Date;
 @Table(name = "t_like")
 public class LikeEntity implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     //TODO needs a promary key
 
     /**
