@@ -44,7 +44,7 @@ public class UserAvatarController extends BaseController {
     @ApiImplicitParam(name = "file", value = "文件", required = true, paramType = "form", dataTypeClass = MultipartFile.class)
     @PostMapping("uploadAvatar")
     public ResponseEntity<List<UserAvatarDto>> uploadAvatar(@RequestParam("file") MultipartFile file) {
-        UserDto loginUser = userComponent.getUserFromRequest(request);
+        UserDto loginUser = userComponent.getUserFromRequest(httpServletRequest);
         List<UserAvatarDto> userAvatarDtoList = avatarService.generateAvatar(loginUser.getId(), file);
         return ResponseEntity.ok(userAvatarDtoList);
     }

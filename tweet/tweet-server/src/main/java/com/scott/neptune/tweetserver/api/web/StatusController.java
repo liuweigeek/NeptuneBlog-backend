@@ -14,6 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @Api(tags = "推文接口 - 面向前端")
 @RestController
-@RequestMapping("/statues")
+@RequestMapping("/statuses")
 public class StatusController {
 }

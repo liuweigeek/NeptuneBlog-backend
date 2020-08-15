@@ -9,17 +9,17 @@ import org.springframework.data.domain.Sort;
  * @Date: 2019/10/6 00:40
  * @Description: NeptuneBlog
  */
-public class OffsetPageRequest implements Pageable {
+public class OffsetPageable implements Pageable {
 
     private final long offset;
     private final int limit;
     private final Sort sort;
 
-    protected OffsetPageRequest(long offset, int limit) {
+    protected OffsetPageable(long offset, int limit) {
         this(offset, limit, Sort.unsorted());
     }
 
-    protected OffsetPageRequest(long offset, int limit, Sort sort) {
+    protected OffsetPageable(long offset, int limit, Sort sort) {
         if (offset < 0) {
             throw new IllegalArgumentException("Offset index must not be less than zero!");
         }
@@ -31,12 +31,12 @@ public class OffsetPageRequest implements Pageable {
         this.sort = sort;
     }
 
-    public static OffsetPageRequest of(long offset, int limit) {
-        return new OffsetPageRequest(offset, limit);
+    public static OffsetPageable of(long offset, int limit) {
+        return new OffsetPageable(offset, limit);
     }
 
-    public static OffsetPageRequest of(long offset, int limit, Sort sort) {
-        return new OffsetPageRequest(offset, limit, sort);
+    public static OffsetPageable of(long offset, int limit, Sort sort) {
+        return new OffsetPageable(offset, limit, sort);
     }
 
     @Override
@@ -61,11 +61,11 @@ public class OffsetPageRequest implements Pageable {
 
     @Override
     public Pageable next() {
-        return new OffsetPageRequest(getOffset() + getPageSize(), getPageSize());
+        return new OffsetPageable(getOffset() + getPageSize(), getPageSize());
     }
 
     public Pageable previous() {
-        return hasPrevious() ? new OffsetPageRequest(getOffset() - getPageSize(), getPageSize()) : this;
+        return hasPrevious() ? new OffsetPageable(getOffset() - getPageSize(), getPageSize()) : this;
     }
 
     @Override
@@ -75,7 +75,7 @@ public class OffsetPageRequest implements Pageable {
 
     @Override
     public Pageable first() {
-        return new OffsetPageRequest(0, getPageSize());
+        return new OffsetPageable(0, getPageSize());
     }
 
     @Override

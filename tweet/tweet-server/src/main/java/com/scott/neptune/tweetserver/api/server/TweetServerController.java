@@ -26,7 +26,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Api(tags = "推文接口 - 面向其他服务")
 @RestController
-@RequestMapping("server/tweets")
+@RequestMapping("/server/tweets")
 public class TweetServerController extends BaseController {
 
     private final ITweetService tweetService;

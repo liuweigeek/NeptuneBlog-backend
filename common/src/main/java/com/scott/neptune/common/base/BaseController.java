@@ -14,11 +14,11 @@ import javax.servlet.http.HttpSession;
 public abstract class BaseController {
 
     @Resource
-    protected HttpServletRequest request;
+    protected HttpServletRequest httpServletRequest;
     @Resource
-    protected HttpServletResponse response;
+    protected HttpServletResponse httpServletResponse;
     @Resource
-    protected HttpSession session;
+    protected HttpSession httpSession;
     /*@Resource
     protected MessageSource messageSource;*/
 

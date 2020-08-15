@@ -1,4 +1,4 @@
-package com.scott.neptune.common.model.command;
+package com.scott.neptune.common.command;
 
 import lombok.Data;
 
@@ -9,11 +9,11 @@ import lombok.Data;
  * @Description:
  */
 @Data
-public class OffsetPageCommand<T> {
+public class StartIdCommand<T> {
 
-    private long offset = 0;
+    private long startId = 0;
 
-    private int limit = 20;
+    private int count = 20;
 
     private T data;
 }

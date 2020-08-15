@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
@@ -51,14 +50,20 @@ public class UserDto {
      */
     @NotEmpty(message = "用户名不可为空", groups = Register.class)
     @ApiModelProperty(value = "用户名", required = true)
-    private String username;
+    private String screenName;
 
     /**
      * 昵称
      */
     @NotEmpty(message = "昵称不可为空", groups = Register.class)
     @ApiModelProperty(value = "昵称")
-    private String nickname;
+    private String name;
+
+    /**
+     * 自我介绍
+     */
+    @ApiModelProperty(value = "自我介绍")
+    private String description;
 
     /**
      * 密码
@@ -86,7 +91,7 @@ public class UserDto {
      * 注册时间
      */
     @ApiModelProperty(hidden = true)
-    private Date registerDate;
+    private Date createAt;
 
     /**
      * 最近登录时间
@@ -129,83 +134,24 @@ public class UserDto {
      * {@link }
      */
     @ApiModelProperty(hidden = true)
-    private Integer relation;
+    private Integer friendship;
 
     /**
      * 正在关注用户数量
      */
     @ApiModelProperty(hidden = true)
-    private Integer followingCount;
+    private Integer friendsCount;
 
     /**
      * 关注者数量
      */
     @ApiModelProperty(hidden = true)
-    private Integer followerCount;
+    private Integer followersCount;
 
     public interface Register extends Default {
     }
 
     public interface Login extends Default {
-    }
-
-    /**
-     * 性别
-     */
-    @AllArgsConstructor
-    public enum SexEnum {
-
-        /**
-         * 男
-         */
-        MALE(1),
-
-        /**
-         * 女
-         */
-        FEMALE(2);
-
-        @Getter
-        private final int code;
-
-        public SexEnum getEnum(int code) {
-            for (SexEnum sexEnum : SexEnum.values()) {
-                if (sexEnum.getCode() == code) {
-                    return sexEnum;
-                }
-            }
-            return null;
-        }
-    }
-
-    /**
-     * 关系类型
-     */
-    @Getter
-    @AllArgsConstructor
-    public enum RelationEnum {
-
-        /**
-         * 未关注
-         */
-        UN_FOLLOW(0, "not following"),
-
-        /**
-         * 正在关注
-         */
-        FOLLOWING(1, "following");
-
-        private final int code;
-        private final String value;
-
-        public static RelationEnum getEnum(int code) {
-            for (RelationEnum relationEnum : RelationEnum.values()) {
-                if (relationEnum.getCode() == code) {
-                    return relationEnum;
-                }
-            }
-            return null;
-        }
     }
 
 }

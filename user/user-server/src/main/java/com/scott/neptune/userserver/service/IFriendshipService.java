@@ -19,11 +19,11 @@ public interface IFriendshipService {
 
     boolean delete(FriendshipDto friendshipDto);
 
-    boolean deleteBySourceIdAndTargetId(Long sourceId, Long targetId);
+    boolean delete(Long sourceId, Long targetId);
 
-    Page<FriendshipDto> findFriends(Long userId, int offset, int limit);
+    Page<FriendshipDto> findFriends(Long userId, long offset, int limit);
 
-    Page<FriendshipDto> findFollowers(Long userId, int offset, int limit);
+    Page<FriendshipDto> findFollowers(Long userId, long offset, int limit);
 
     List<FriendshipDto> findAllFriends(Long userId);
 

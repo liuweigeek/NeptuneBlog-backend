@@ -42,14 +42,14 @@ public interface UserClient {
     /**
      * 根据用户名获取指定用户
      *
-     * @param username 用户名
+     * @param screenName 用户名
      * @return 用户对象
      */
-    @RequestMapping(path = "/server/user/username/{username}", method = RequestMethod.GET)
-    UserDto findUserByUsername(@PathVariable String username);
+    @RequestMapping(path = "/server/user/screenName/{screenName}", method = RequestMethod.GET)
+    UserDto findUserByScreenName(@PathVariable String screenName);
 
-    @RequestMapping(path = "/authenticate/{username}", method = RequestMethod.GET)
-    AuthUserDto findUserByUsernameForAuthenticate(@PathVariable String username);
+    @RequestMapping(path = "/authenticate/{screenName}", method = RequestMethod.GET)
+    AuthUserDto findUserByScreenNameForAuthenticate(@PathVariable String screenName);
 
     /**
      * 根据邮箱获取指定用户

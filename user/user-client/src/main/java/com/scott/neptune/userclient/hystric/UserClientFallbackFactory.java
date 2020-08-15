@@ -36,14 +36,14 @@ public class UserClientFallbackFactory implements FallbackFactory<UserClient> {
             }
 
             @Override
-            public UserDto findUserByUsername(String username) {
-                log.error("feign [findUserByUsername] Exception: ", throwable);
+            public UserDto findUserByScreenName(String screenName) {
+                log.error("feign [findUserByScreenName] Exception: ", throwable);
                 return null;
             }
 
             @Override
-            public AuthUserDto findUserByUsernameForAuthenticate(String username) {
-                log.error("feign [findUserByUsernameForAuthenticate] Exception: ", throwable);
+            public AuthUserDto findUserByScreenNameForAuthenticate(String screenName) {
+                log.error("feign [findUserByScreenNameForAuthenticate] Exception: ", throwable);
                 return null;
             }
 

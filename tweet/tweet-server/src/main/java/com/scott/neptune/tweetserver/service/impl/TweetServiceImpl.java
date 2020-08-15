@@ -1,6 +1,6 @@
 package com.scott.neptune.tweetserver.service.impl;
 
-import com.scott.neptune.common.model.OffsetPageRequest;
+import com.scott.neptune.common.model.OffsetPageable;
 import com.scott.neptune.tweetclient.dto.TweetDto;
 import com.scott.neptune.tweetserver.convertor.TweetConvertor;
 import com.scott.neptune.tweetserver.domain.entity.TweetEntity;
@@ -79,7 +79,7 @@ public class TweetServiceImpl implements ITweetService {
         if (userId == null) {
             return Page.empty();
         }
-        Pageable pageable = OffsetPageRequest.of(offset, limit, Sort.by(Sort.Order.desc("createAt")));
+        Pageable pageable = OffsetPageable.of(offset, limit, Sort.by(Sort.Order.desc("createAt")));
         return tweetRepository.findByUserId(userId, pageable).map(tweetConvertor.convertToDto());
     }
 
@@ -96,7 +96,7 @@ public class TweetServiceImpl implements ITweetService {
         if (CollectionUtils.isEmpty(userIdList)) {
             return Page.empty();
         }
-        Pageable pageable = OffsetPageRequest.of(offset, limit, Sort.by(Sort.Order.desc("createAt")));
+        Pageable pageable = OffsetPageable.of(offset, limit, Sort.by(Sort.Order.desc("createAt")));
         return tweetRepository.findByUserIdIn(userIdList, pageable).map(tweetConvertor.convertToDto());
     }
 

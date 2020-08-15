@@ -26,11 +26,11 @@ public class FriendshipCountValObj implements Serializable {
      * 正在关注用户数量
      */
     @Formula("select count(1) from t_friend_relation where follower_id = id")
-    private Integer followingCount;
+    private Integer friendsCount;
 
     /**
      * 关注者数量
      */
     @Formula("select count(1) from t_friend_relation where follower_id = id")
-    private Integer followerCount;
+    private Integer followersCount;
 }

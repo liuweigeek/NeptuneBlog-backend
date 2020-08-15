@@ -1,6 +1,7 @@
 package com.scott.neptune.userserver.service.impl;
 
-import com.scott.neptune.common.model.OffsetPageRequest;
+import com.scott.neptune.common.exception.NeptuneBlogException;
+import com.scott.neptune.common.model.OffsetPageable;
 import com.scott.neptune.userclient.dto.FriendshipDto;
 import com.scott.neptune.userserver.convertor.FriendshipConvertor;
 import com.scott.neptune.userserver.domain.entity.FriendshipEntity;
@@ -74,8 +75,6 @@ public class FriendshipServiceImpl implements IFriendshipService {
      */
     @Override
     public boolean delete(FriendshipDto friendshipDto) {
-
-        //TODO necessary to catch the exception?
         try {
             friendshipRepository.deleteById(FriendshipEntity.FriendshipId.builder()
                     .sourceId(friendshipDto.getSourceId())
@@ -83,8 +82,8 @@ public class FriendshipServiceImpl implements IFriendshipService {
                     .build());
             return true;
         } catch (Exception e) {
-            log.error("delete friendship exception: ", e);
-            return false;
+            log.error("取消关注失败: ", e);
+            throw new NeptuneBlogException("取消关注失败", e);
         }
     }
 
@@ -96,10 +95,15 @@ public class FriendshipServiceImpl implements IFriendshipService {
      * @return
      */
     @Override
-    public boolean deleteBySourceIdAndTargetId(Long sourceId, Long targetId) {
-        friendshipRepository.deleteById(FriendshipEntity.FriendshipId.builder()
-                .sourceId(sourceId).targetId(targetId).build());
-        return true;
+    public boolean delete(Long sourceId, Long targetId) {
+        try {
+            friendshipRepository.deleteById(FriendshipEntity.FriendshipId.builder()
+                    .sourceId(sourceId).targetId(targetId).build());
+            return true;
+        } catch (Exception e) {
+            log.error("取消关注失败: ", e);
+            throw new NeptuneBlogException("取消关注失败", e);
+        }
     }
 
     /**
@@ -109,11 +113,11 @@ public class FriendshipServiceImpl implements IFriendshipService {
      * @return 关注列表
      */
     @Override
-    public Page<FriendshipDto> findFriends(Long userId, int offset, int limit) {
+    public Page<FriendshipDto> findFriends(Long userId, long offset, int limit) {
         if (userId == null) {
             return Page.empty();
         }
-        Pageable pageable = OffsetPageRequest.of(offset, limit, Sort.by(Sort.Order.desc("followDate")));
+        Pageable pageable = OffsetPageable.of(offset, limit, Sort.by(Sort.Order.desc("followDate")));
         return friendshipRepository.findFriends(userId, pageable).map(friendshipConvertor.convertToDto());
     }
 
@@ -124,11 +128,11 @@ public class FriendshipServiceImpl implements IFriendshipService {
      * @return 关注者列表
      */
     @Override
-    public Page<FriendshipDto> findFollowers(Long userId, int offset, int limit) {
+    public Page<FriendshipDto> findFollowers(Long userId, long offset, int limit) {
         if (userId == null) {
             return Page.empty();
         }
-        Pageable pageable = OffsetPageRequest.of(offset, limit, Sort.by(Sort.Order.desc("followDate")));
+        Pageable pageable = OffsetPageable.of(offset, limit, Sort.by(Sort.Order.desc("followDate")));
         return friendshipRepository.findFollowers(userId, pageable).map(friendshipConvertor.convertToDto());
     }
 

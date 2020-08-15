@@ -43,15 +43,15 @@ public class UserServiceImpl implements IUserService {
     /**
      * 判断指定用户名是否存在
      *
-     * @param username 用户名
+     * @param screenName 用户名
      * @return 判断结果
      */
     @Override
-    public boolean existsByUsername(String username) {
-        ExampleMatcher usernameExampleMatcher = ExampleMatcher.matching()
-                .withMatcher("username", ExampleMatcher.GenericPropertyMatchers.ignoreCase())
+    public boolean existsByScreenName(String screenName) {
+        ExampleMatcher screenNameExampleMatcher = ExampleMatcher.matching()
+                .withMatcher("screenName", ExampleMatcher.GenericPropertyMatchers.ignoreCase())
                 .withIgnoreNullValues();
-        return userRepository.exists(Example.of(UserEntity.builder().username(username).build(), usernameExampleMatcher));
+        return userRepository.exists(Example.of(UserEntity.builder().screenName(screenName).build(), screenNameExampleMatcher));
     }
 
     /**
@@ -79,14 +79,14 @@ public class UserServiceImpl implements IUserService {
         if (this.existsByEmail(userDto.getEmail())) {
             throw new NeptuneBlogException("用户邮箱已存在");
         }
-        if (this.existsByUsername(userDto.getUsername())) {
+        if (this.existsByScreenName(userDto.getScreenName())) {
             throw new NeptuneBlogException("用户名已存在,请更换后重试");
         }
         UserEntity userEntity = userConvertor.convertToEntity(userDto);
         userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
 
         //TODO create by event
-        userEntity.setRegisterDate(new Date());
+        userEntity.setCreateAt(new Date());
         userEntity.setLoginDate(new Date());
 
         userRepository.save(userEntity);
@@ -109,29 +109,29 @@ public class UserServiceImpl implements IUserService {
     /**
      * 通过用户名获取用户
      *
-     * @param username 用户名
+     * @param screenName 用户名
      * @return 用户对象
      */
     @Override
-    public UserDto findUserByUsername(String username, Long loginUserId) {
-        ExampleMatcher usernameExampleMatcher = ExampleMatcher.matching()
-                .withMatcher("username", ExampleMatcher.GenericPropertyMatchers.ignoreCase())
+    public UserDto findUserByScreenName(String screenName, Long loginUserId) {
+        ExampleMatcher screenNameExampleMatcher = ExampleMatcher.matching()
+                .withMatcher("screenName", ExampleMatcher.GenericPropertyMatchers.ignoreCase())
                 .withIgnoreNullValues();
 
-        return userRepository.findOne(Example.of(UserEntity.builder().username(username).build(), usernameExampleMatcher))
+        return userRepository.findOne(Example.of(UserEntity.builder().screenName(screenName).build(), screenNameExampleMatcher))
                 .map(userConvertor.convertToDto())
-                .orElseThrow(() -> new NeptuneBlogException("username not found"));
+                .orElseThrow(() -> new NeptuneBlogException("screenName not found"));
     }
 
     @Override
-    public AuthUserDto findUserByUsernameForAuthenticate(String username) {
-        ExampleMatcher usernameExampleMatcher = ExampleMatcher.matching()
-                .withMatcher("username", ExampleMatcher.GenericPropertyMatchers.ignoreCase())
+    public AuthUserDto findUserByScreenNameForAuthenticate(String screenName) {
+        ExampleMatcher screenNameExampleMatcher = ExampleMatcher.matching()
+                .withMatcher("screenName", ExampleMatcher.GenericPropertyMatchers.ignoreCase())
                 .withIgnoreNullValues();
         //TODO add a new convertor
-        return userRepository.findOne(Example.of(UserEntity.builder().username(username).build(), usernameExampleMatcher))
+        return userRepository.findOne(Example.of(UserEntity.builder().screenName(screenName).build(), screenNameExampleMatcher))
                 .map(authUserConvertor::convertToDto)
-                .orElseThrow(() -> new NeptuneBlogException("username not found"));
+                .orElseThrow(() -> new NeptuneBlogException("screenName not found"));
     }
 
     /**
@@ -142,11 +142,11 @@ public class UserServiceImpl implements IUserService {
      */
     @Override
     public UserDto findUserByEmail(String email, Long loginUserId) {
-        ExampleMatcher usernameExampleMatcher = ExampleMatcher.matching()
+        ExampleMatcher screenNameExampleMatcher = ExampleMatcher.matching()
                 .withMatcher("email", ExampleMatcher.GenericPropertyMatchers.ignoreCase())
                 .withIgnoreNullValues();
 
-        return userRepository.findOne(Example.of(UserEntity.builder().email(email).build(), usernameExampleMatcher))
+        return userRepository.findOne(Example.of(UserEntity.builder().email(email).build(), screenNameExampleMatcher))
                 .map(userConvertor.convertToDto())
                 .orElseThrow(() -> new NeptuneBlogException("email not found"));
     }
@@ -165,10 +165,9 @@ public class UserServiceImpl implements IUserService {
         return userRepository.findAll((root, query, criteriaBuilder) ->
                 query.where(
                         criteriaBuilder.or(
-                                criteriaBuilder.like(root.get("username").as(String.class), "%" + keyword + "%"),
+                                criteriaBuilder.like(root.get("screenName").as(String.class), "%" + keyword + "%"),
                                 criteriaBuilder.like(root.get("nickname").as(String.class), "%" + keyword + "%"),
-                                criteriaBuilder.like(root.get("email").as(String.class), "%" + keyword + "%"),
-                                criteriaBuilder.like(root.get("username").as(String.class), "%" + keyword + "%"))
+                                criteriaBuilder.like(root.get("email").as(String.class), "%" + keyword + "%"))
                 ).orderBy(criteriaBuilder.asc(root.get("registerDate").as(Date.class)))
                         .getRestriction()).stream()
                 .map(userConvertor.convertToDto())

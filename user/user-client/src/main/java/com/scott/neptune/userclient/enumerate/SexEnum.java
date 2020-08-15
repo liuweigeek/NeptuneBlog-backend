@@ -1,6 +1,5 @@
-package com.scott.neptune.userserver.domain.enumerate;
+package com.scott.neptune.userclient.enumerate;
 
-import com.scott.neptune.userclient.dto.UserDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -26,8 +25,8 @@ public enum SexEnum {
     @Getter
     private final int code;
 
-    public UserDto.SexEnum getEnum(int code) {
-        for (UserDto.SexEnum sexEnum : UserDto.SexEnum.values()) {
+    public SexEnum getEnum(int code) {
+        for (SexEnum sexEnum : SexEnum.values()) {
             if (sexEnum.getCode() == code) {
                 return sexEnum;
             }

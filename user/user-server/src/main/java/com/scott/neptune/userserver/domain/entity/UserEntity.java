@@ -1,6 +1,6 @@
 package com.scott.neptune.userserver.domain.entity;
 
-import com.scott.neptune.userserver.domain.enumerate.SexEnum;
+import com.scott.neptune.userclient.enumerate.SexEnum;
 import com.scott.neptune.userserver.domain.listener.UserAuditingListener;
 import com.scott.neptune.userserver.domain.valueobject.FriendshipCountValObj;
 import com.scott.neptune.userserver.domain.valueobject.UserAvatarValObj;
@@ -58,18 +58,17 @@ public class UserEntity implements Serializable {
     /**
      * 用户名
      */
-    private String username;
+    private String screenName;
 
     /**
      * 用户昵称
      */
-    private String nickname;
+    private String name;
 
     /**
-     * 头像列表
+     * 自我介绍
      */
-    @Embedded
-    private UserAvatarValObj userAvatarValObj;
+    private String description;
 
     /**
      * 密码
@@ -92,9 +91,9 @@ public class UserEntity implements Serializable {
     /**
      * 注册时间
      */
-    @Column(name = "register_date")
+    @Column(name = "create_at")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date registerDate;
+    private Date createAt;
 
     /**
      * 最近登录时间
@@ -110,8 +109,17 @@ public class UserEntity implements Serializable {
     private String langKey;
 
     /**
+     * 头像列表
+     */
+    @Embedded
+    private UserAvatarValObj userAvatarValObj;
+
+    /**
      * 正在关注和关注者统计
      */
     @Embedded
     private FriendshipCountValObj friendshipCount;
+
+    //TODO count of likes, statuses, retweets
+    //TODO connections
 }

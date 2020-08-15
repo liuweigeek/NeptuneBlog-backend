@@ -41,7 +41,7 @@ public class FriendshipServerController extends BaseController {
     @GetMapping("/getFollowingUsers")
     public ResponseEntity<List<FriendshipDto>> getFollowingUsers(FriendshipDto friendshipDto) {
 
-        UserDto currentUser = userComponent.getUserFromRequest(request);
+        UserDto currentUser = userComponent.getUserFromRequest(httpServletRequest);
         List<FriendshipDto> followingUsers = friendshipService.findAllFriends(currentUser.getId());
         return ResponseEntity.ok(followingUsers);
     }
@@ -54,7 +54,7 @@ public class FriendshipServerController extends BaseController {
     @GetMapping("/getFollowingUserIds")
     public ResponseEntity<List<Long>> getFollowingUserIds() {
 
-        UserDto currentUser = userComponent.getUserFromRequest(request);
+        UserDto currentUser = userComponent.getUserFromRequest(httpServletRequest);
         List<Long> followingUserIds = friendshipService.findAllFriends(currentUser.getId()).stream()
                 .map(FriendshipDto::getTargetId)
                 .collect(toList());

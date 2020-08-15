@@ -39,6 +39,7 @@ import java.util.Date;
 @Entity
 @Table(name = "t_friendship")
 @NamedEntityGraphs(value = {
+        @NamedEntityGraph(name = "friendship.id"),
         @NamedEntityGraph(name = "friendship.all", attributeNodes = {@NamedAttributeNode("sourceUser"), @NamedAttributeNode("targetUser")}),
         @NamedEntityGraph(name = "friendship.friends", attributeNodes = {@NamedAttributeNode("targetUser")}),
         @NamedEntityGraph(name = "friendship.followers", attributeNodes = {@NamedAttributeNode("sourceUser")})

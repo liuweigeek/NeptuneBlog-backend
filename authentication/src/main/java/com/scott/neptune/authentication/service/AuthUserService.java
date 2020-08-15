@@ -8,6 +8,7 @@ import com.scott.neptune.common.exception.RestException;
 import com.scott.neptune.userclient.client.UserClient;
 import com.scott.neptune.userclient.dto.AuthUserDto;
 import com.scott.neptune.userclient.dto.UserDto;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -21,29 +22,21 @@ import org.springframework.stereotype.Service;
  * @Date: 2020/7/27 10:02
  * @Description:
  */
+@RequiredArgsConstructor
 @Service
 public class AuthUserService implements UserDetailsService {
 
+    //TODO injection
     private final UserClient userClient;
     private final AuthUserConvertor authUserConvertor;
+    //TODO injection
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
-
-
-    public AuthUserService(UserClient userClient,
-                           AuthUserConvertor authUserConvertor,
-                           PasswordEncoder passwordEncoder,
-                           JwtTokenProvider jwtTokenProvider) {
-        this.userClient = userClient;
-        this.authUserConvertor = authUserConvertor;
-        this.passwordEncoder = passwordEncoder;
-        this.jwtTokenProvider = jwtTokenProvider;
-    }
 
     @Override
     public AuthUser loadUserByUsername(String username) throws UsernameNotFoundException {
         //TODO change to username
-        AuthUserDto authUserDto = userClient.findUserByUsernameForAuthenticate(username);
+        AuthUserDto authUserDto = userClient.findUserByScreenNameForAuthenticate(username);
         if (authUserDto == null) {
             throw new RestException("指定用不不存在", HttpStatus.NOT_FOUND);
         }
