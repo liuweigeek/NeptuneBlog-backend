@@ -3,6 +3,7 @@ package com.scott.neptune.apigateway.filter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netflix.zuul.context.RequestContext;
 import com.scott.neptune.common.response.ServerResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.netflix.zuul.filters.post.SendErrorFilter;
 import org.springframework.http.MediaType;
@@ -17,8 +18,11 @@ import javax.servlet.http.HttpServletResponse;
  * @Description: NeptuneBlog
  */
 @Slf4j
+@RequiredArgsConstructor
 @Component
 public class ThrowExceptionFilter extends SendErrorFilter {
+
+    private final ObjectMapper objectMapper;
 
     @Override
     public Object run() {
@@ -28,11 +32,10 @@ public class ThrowExceptionFilter extends SendErrorFilter {
             ExceptionHolder exception = findZuulException(requestContext.getThrowable());
             log.error("网关异常: ", exception.getThrowable());
 
-            ObjectMapper mapper = new ObjectMapper();
             ServerResponse<Void> errorResponse = ServerResponse.createByErrorMessage("服务不可用，请稍后再试");
             HttpServletResponse response = requestContext.getResponse();
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.getWriter().println(mapper.writeValueAsString(errorResponse));
+            response.getWriter().println(objectMapper.writeValueAsString(errorResponse));
         } catch (Exception e) {
             log.error("拦截器异常", e);
         }

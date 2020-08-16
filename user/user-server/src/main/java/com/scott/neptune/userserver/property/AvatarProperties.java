@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,12 +30,11 @@ public class AvatarProperties {
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
-    public static class AvatarSizeValObj {
+    public static class AvatarSizeValObj implements Serializable {
 
         private Integer sizeType;
         private String sizeName;
         private Integer width;
         private Integer height;
     }
-
 }

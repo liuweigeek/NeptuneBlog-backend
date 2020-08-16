@@ -7,6 +7,7 @@ import com.scott.neptune.common.constant.Constant;
 import com.scott.neptune.common.response.ServerResponse;
 import com.scott.neptune.common.util.HeaderUtils;
 import com.scott.neptune.common.util.JsonUtils;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -36,16 +37,14 @@ import java.util.concurrent.TimeUnit;
  * @Description:
  */
 @Slf4j
+@RequiredArgsConstructor
 @Aspect
 @Component
 @ConditionalOnBean(name = "redisTemplate")
 public class ControllerAop {
 
     private final RedisTemplate<String, Object> redisTemplate;
-
-    public ControllerAop(RedisTemplate<String, Object> redisTemplate) {
-        this.redisTemplate = redisTemplate;
-    }
+    private final ObjectMapper objectMapper;
 
     /**
      * 防止重复提交 在关键操作controller上添加注解@RedisLock
@@ -91,9 +90,8 @@ public class ControllerAop {
             if (Objects.isNull(response)) {
                 return;
             }
-            ObjectMapper mapper = new ObjectMapper();
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.getWriter().println(mapper.writeValueAsString(result));
+            response.getWriter().println(objectMapper.writeValueAsString(result));
         } catch (Exception e) {
             log.error("write response exception: ", e);
         }

@@ -22,15 +22,17 @@ import java.io.Serializable;
 @Embeddable
 public class FriendshipCountValObj implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * 正在关注用户数量
      */
-    @Formula("select count(1) from t_friend_relation where follower_id = id")
+    @Formula("select count(1) from t_friendship where follower_id = id")
     private Integer friendsCount;
 
     /**
      * 关注者数量
      */
-    @Formula("select count(1) from t_friend_relation where follower_id = id")
+    @Formula("select count(1) from t_friendship where follower_id = id")
     private Integer followersCount;
 }

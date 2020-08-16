@@ -1,13 +1,13 @@
-package com.scott.neptune.userserver.domain.valueobject;
+package com.scott.neptune.tweetserver.domain.valueobject;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @Author: scott
@@ -20,17 +20,9 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Embeddable
-public class UserAvatarValObj implements Serializable {
+public class TweetExtendedEntitiesValObj implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Column(name = "small_avatar_url")
-    private String smallAvatarUrl;
-
-    @Column(name = "normal_avatar_url")
-    private String normalAvatarUrl;
-
-    @Column(name = "large_avatar_url")
-    private String largeAvatarUrl;
-
+    private List<String> media;
 }

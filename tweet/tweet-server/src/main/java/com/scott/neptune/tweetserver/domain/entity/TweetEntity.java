@@ -1,7 +1,10 @@
 package com.scott.neptune.tweetserver.domain.entity;
 
 import com.scott.neptune.tweetserver.domain.listener.TweetAuditingListener;
-import com.scott.neptune.tweetserver.domain.valueobject.TweetCount;
+import com.scott.neptune.tweetserver.domain.valueobject.QuotedValObj;
+import com.scott.neptune.tweetserver.domain.valueobject.ReplyValObj;
+import com.scott.neptune.tweetserver.domain.valueobject.RetweetedValObj;
+import com.scott.neptune.tweetserver.domain.valueobject.TweetCountValObj;
 import com.scott.neptune.userclient.dto.UserDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -77,29 +80,28 @@ public class TweetEntity implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createAt;
 
-    @Column(name = "is_quote_status")
-    private Boolean isQuoteStatus;
-
-    @Column(name = "quoted_status_id")
-    private Long quotedStatusId;
-
-    @Transient
-    private TweetEntity quotedStatus;
-
     /**
-     * 统计数据
+     * 本条Tweet转发的Retweet
      */
     @Embedded
-    private TweetCount count;
+    private RetweetedValObj retweeted;
 
-    //coming soon
-    /*@Column(name = "in_reply_to_status_id")
-    private Long inReplyToStatusId;
+    /**
+     * 本条Tweet引用的Retweet
+     */
+    @Embedded
+    private QuotedValObj quotedTweet;
 
-    @Column(name = "in_reply_to_user_id")
-    private Long inReplyToUserId;
+    /**
+     * 如果本条Tweet是一条回复，则包含回复信息
+     */
+    @Embedded
+    private ReplyValObj reply;
 
-    @Column(name = "in_reply_to_screen_name")
-    private String inReplyToScreenName;*/
+    /**
+     * 互动统计数据
+     */
+    @Embedded
+    private TweetCountValObj count;
 
 }

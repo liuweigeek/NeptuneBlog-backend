@@ -1,5 +1,6 @@
-package com.scott.neptune.userserver.domain.valueobject;
+package com.scott.neptune.tweetserver.domain.valueobject;
 
+import com.scott.neptune.tweetserver.domain.entity.TweetEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -7,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.OneToOne;
 import java.io.Serializable;
 
 /**
@@ -20,17 +22,12 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Embeddable
-public class UserAvatarValObj implements Serializable {
+public class RetweetedValObj implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Column(name = "small_avatar_url")
-    private String smallAvatarUrl;
-
-    @Column(name = "normal_avatar_url")
-    private String normalAvatarUrl;
-
-    @Column(name = "large_avatar_url")
-    private String largeAvatarUrl;
+    @OneToOne
+    @Column(name = "retweeted_status")
+    private TweetEntity retweetedStatus;
 
 }

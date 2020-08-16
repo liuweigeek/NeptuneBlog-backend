@@ -1,4 +1,4 @@
-package com.scott.neptune.userserver.domain.valueobject;
+package com.scott.neptune.tweetserver.domain.valueobject;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,25 +12,27 @@ import java.io.Serializable;
 /**
  * @Author: scott
  * @Email: <a href="mailto:liuweigeek@outlook.com">Scott Lau</a>
- * @Date: 2019/10/8 21:39
- * @Description: NeptuneBlog
+ * @Date: 2020/8/9 16:20
+ * @Description:
  */
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Embeddable
-public class UserAvatarValObj implements Serializable {
+public class TweetCountValObj implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Column(name = "small_avatar_url")
-    private String smallAvatarUrl;
+    @Column(name = "quote_count")
+    private Long quoteCount;
 
-    @Column(name = "normal_avatar_url")
-    private String normalAvatarUrl;
+    @Column(name = "reply_count")
+    private Long replyCount;
 
-    @Column(name = "large_avatar_url")
-    private String largeAvatarUrl;
+    @Column(name = "retweet_count")
+    private Long retweetCount;
 
+    @Column(name = "favorite_count")
+    private Long favoriteCount;
 }

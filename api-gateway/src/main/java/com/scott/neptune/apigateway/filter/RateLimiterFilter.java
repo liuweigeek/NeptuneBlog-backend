@@ -6,6 +6,7 @@ import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.scott.neptune.common.response.ResponseCode;
 import com.scott.neptune.common.response.ServerResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -22,10 +23,12 @@ import static org.springframework.cloud.netflix.zuul.filters.support.FilterConst
  * @Description: NeptuneBlog
  */
 @Slf4j
+@RequiredArgsConstructor
 @Component
 public class RateLimiterFilter extends ZuulFilter {
 
     private static final RateLimiter RATE_LIMITER = RateLimiter.create(100);
+    private final ObjectMapper objectMapper;
 
     @Override
     public String filterType() {
@@ -49,11 +52,10 @@ public class RateLimiterFilter extends ZuulFilter {
             requestContext.setSendZuulResponse(false);
             try {
                 HttpServletResponse response = requestContext.getResponse();
-                ObjectMapper mapper = new ObjectMapper();
                 response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                 ServerResponse noLoginResponse = ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),
                         "系统繁忙，请稍后再试");
-                response.getWriter().println(mapper.writeValueAsString(noLoginResponse));
+                response.getWriter().println(objectMapper.writeValueAsString(noLoginResponse));
             } catch (Exception e) {
                 log.error("拦截器异常", e);
             }
