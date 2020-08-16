@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * @Author: scott
- * @Email: <a href="mailto:liuweigeek@outlook.com">scott</a>
+ * @Email: <a href="mailto:liuweigeek@outlook.com">Scott Lau</a>
  * @Date: 2019/9/23 09:14
  * @Description: Header工具类
  */

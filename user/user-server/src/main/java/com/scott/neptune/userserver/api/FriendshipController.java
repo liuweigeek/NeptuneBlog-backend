@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @Author: scott
- * @Email: <a href="mailto:liuweigeek@outlook.com">scott</a>
+ * @Email: <a href="mailto:liuweigeek@outlook.com">Scott Lau</a>
  * @Date: 2019/9/24 17:33
  * @Description: 好友关系接口
  */

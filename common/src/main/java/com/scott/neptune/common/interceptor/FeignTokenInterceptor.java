@@ -13,7 +13,7 @@ import java.util.Objects;
 
 /**
  * @Author: scott
- * @Email: <a href="mailto:liuweigeek@outlook.com">scott</a>
+ * @Email: <a href="mailto:liuweigeek@outlook.com">Scott Lau</a>
  * @Date: 2019/10/31 08:25
  * @Description: Feign统一Token拦截器
  */

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * @Author: scott
- * @Email: <a href="mailto:liuweigeek@outlook.com">scott</a>
+ * @Email: <a href="mailto:liuweigeek@outlook.com">Scott Lau</a>
  * @Date: 2019/10/29 15:08
  * @Description: NeptuneBlog
  */

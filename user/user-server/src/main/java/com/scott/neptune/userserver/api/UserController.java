@@ -29,7 +29,7 @@ import java.util.stream.Stream;
 
 /**
  * @Author: scott
- * @Email: <a href="mailto:liuweigeek@outlook.com">scott</a>
+ * @Email: <a href="mailto:liuweigeek@outlook.com">Scott Lau</a>
  * @Date: 2019/9/23 13:54
  * @Description: 用户接口
  */

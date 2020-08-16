@@ -2,7 +2,7 @@ package com.scott.neptune.common.exception;
 
 /**
  * @Author: scott
- * @Email: <a href="mailto:liuweigeek@outlook.com">scott</a>
+ * @Email: <a href="mailto:liuweigeek@outlook.com">Scott Lau</a>
  * @Date: 2020/7/27 10:37
  * @Description:
  */
