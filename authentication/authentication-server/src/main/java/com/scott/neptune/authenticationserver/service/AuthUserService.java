@@ -26,10 +26,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthUserService implements UserDetailsService {
 
-    //TODO injection
     private final UserClient userClient;
     private final AuthUserConvertor authUserConvertor;
-    //TODO injection
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
 

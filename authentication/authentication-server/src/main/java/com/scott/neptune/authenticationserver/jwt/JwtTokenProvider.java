@@ -1,5 +1,6 @@
 package com.scott.neptune.authenticationserver.jwt;
 
+import com.scott.neptune.authenticationserver.convertor.AuthUserConvertor;
 import com.scott.neptune.authenticationserver.domain.AuthRole;
 import com.scott.neptune.authenticationserver.domain.AuthUser;
 import com.scott.neptune.authenticationserver.properties.JwtProperties;
@@ -8,10 +9,10 @@ import com.scott.neptune.common.exception.RestException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.spec.SecretKeySpec;
@@ -21,17 +22,13 @@ import java.security.Key;
 import java.util.Date;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Component
 public class JwtTokenProvider {
 
     private final JwtProperties jwtProperties;
-
     private final AuthUserService authUserService;
-
-    public JwtTokenProvider(JwtProperties jwtProperties, AuthUserService authUserService) {
-        this.jwtProperties = jwtProperties;
-        this.authUserService = authUserService;
-    }
+    private final AuthUserConvertor authUserConvertor;
 
     public String createToken(AuthUser user, List<AuthRole> roles) {
 
@@ -58,8 +55,8 @@ public class JwtTokenProvider {
     }
 
     public Authentication getAuthentication(String token) {
-        UserDetails userDetails = authUserService.loadUserByUsername(getUsername(token));
-        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+        AuthUser authUser = authUserService.loadUserByUsername(getUsername(token));
+        return new UsernamePasswordAuthenticationToken(authUserConvertor.convertToDto(), "", authUser.getAuthorities());
     }
 
     public String getUsername(String token) {

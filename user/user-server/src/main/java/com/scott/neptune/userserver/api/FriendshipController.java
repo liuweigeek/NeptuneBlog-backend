@@ -2,9 +2,9 @@ package com.scott.neptune.userserver.api;
 
 import com.scott.neptune.common.base.BaseController;
 import com.scott.neptune.common.exception.RestException;
+import com.scott.neptune.userclient.dto.AuthUserDto;
 import com.scott.neptune.userclient.dto.FriendshipDto;
 import com.scott.neptune.userclient.dto.UserDto;
-import com.scott.neptune.userserver.component.UserComponent;
 import com.scott.neptune.userserver.service.IFriendshipService;
 import com.scott.neptune.userserver.service.IUserService;
 import io.swagger.annotations.Api;
@@ -34,7 +34,6 @@ public class FriendshipController extends BaseController {
 
     private final IUserService userService;
     private final IFriendshipService friendshipService;
-    private final UserComponent userComponent;
 
     //TODO
     public ResponseEntity<FriendshipDto> lookUp() {
@@ -48,22 +47,22 @@ public class FriendshipController extends BaseController {
     /**
      * 关注指定用户
      *
-     * @param userId 指定用户Id
-     * @return 关注结果
+     * @param userId   指定用户ID
+     * @param authUser 已登录用户
+     * @return
      */
     @ApiOperation(value = "关注指定用户")
     @ApiImplicitParam(value = "要关注的用户ID", paramType = "body", required = true)
     @PostMapping("/create")
-    public ResponseEntity<FriendshipDto> create(Long userId) {
+    public ResponseEntity<FriendshipDto> create(Long userId, AuthUserDto authUser) {
 
-        UserDto loginUser = userComponent.getUserFromRequest(httpServletRequest);
-        UserDto targetUserDto = userService.findUserById(userId, loginUser.getId());
+        UserDto targetUserDto = userService.findUserById(userId, authUser.getId());
         if (targetUserDto == null) {
             throw new RestException("用户不存在", HttpStatus.NOT_FOUND);
         }
 
         FriendshipDto friendshipDto = FriendshipDto.builder()
-                .sourceId(loginUser.getId())
+                .sourceId(authUser.getId())
                 .targetId(targetUserDto.getId())
                 .build();
         return ResponseEntity.status(HttpStatus.CREATED).body(friendshipService.save(friendshipDto));
@@ -72,15 +71,15 @@ public class FriendshipController extends BaseController {
     /**
      * 取消关注指定用户
      *
-     * @param userId 指定用户
-     * @return 取消关注结果
+     * @param userId   指定用户ID
+     * @param authUser 已登录用户
+     * @return
      */
     @ApiOperation(value = "取消关注指定用户")
     @ApiImplicitParam(name = "userId", value = "要取消关注的用户ID", paramType = "path", required = true)
     @DeleteMapping("/destroy")
-    public ResponseEntity<Void> destroy(Long userId) {
-        UserDto loginUser = userComponent.getUserFromRequest(httpServletRequest);
-        friendshipService.delete(loginUser.getId(), userId);
+    public ResponseEntity<Void> destroy(Long userId, AuthUserDto authUser) {
+        friendshipService.delete(authUser.getId(), userId);
         return ResponseEntity.noContent().build();
     }
 }

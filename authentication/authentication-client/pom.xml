@@ -4,19 +4,25 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.scott.neptune</groupId>
-        <artifactId>user</artifactId>
+        <artifactId>authentication</artifactId>
         <version>1.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <name>${project.artifactId}</name>
-    <artifactId>user-client</artifactId>
+    <artifactId>authentication-client</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
             <groupId>com.scott.neptune</groupId>
             <artifactId>common</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.scott.neptune</groupId>
+            <artifactId>user-client</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 
@@ -29,6 +35,7 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
         </dependency>
+
     </dependencies>
 
 </project>

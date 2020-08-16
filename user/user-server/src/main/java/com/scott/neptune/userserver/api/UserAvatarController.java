@@ -1,9 +1,8 @@
 package com.scott.neptune.userserver.api;
 
 import com.scott.neptune.common.base.BaseController;
+import com.scott.neptune.userclient.dto.AuthUserDto;
 import com.scott.neptune.userclient.dto.UserAvatarDto;
-import com.scott.neptune.userclient.dto.UserDto;
-import com.scott.neptune.userserver.component.UserComponent;
 import com.scott.neptune.userserver.service.IAvatarService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -34,19 +33,19 @@ import java.util.List;
 public class UserAvatarController extends BaseController {
 
     private final IAvatarService avatarService;
-    private final UserComponent userComponent;
 
     /**
      * 上传头像
      *
+     * @param file     头像
+     * @param authUser 已登录用户
      * @return
      */
     @ApiOperation(value = "上传头像")
     @ApiImplicitParam(name = "file", value = "文件", required = true, paramType = "form", dataTypeClass = MultipartFile.class)
     @PostMapping("uploadAvatar")
-    public ResponseEntity<Collection<UserAvatarDto>> uploadAvatar(@RequestParam("file") MultipartFile file) {
-        UserDto loginUser = userComponent.getUserFromRequest(httpServletRequest);
-        List<UserAvatarDto> userAvatarDtoList = avatarService.generateAvatar(loginUser.getId(), file);
+    public ResponseEntity<Collection<UserAvatarDto>> uploadAvatar(@RequestParam("file") MultipartFile file, AuthUserDto authUser) {
+        List<UserAvatarDto> userAvatarDtoList = avatarService.generateAvatar(authUser.getId(), file);
         return ResponseEntity.ok(userAvatarDtoList);
     }
 }

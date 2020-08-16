@@ -14,6 +14,7 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>authentication-client</module>
         <module>authentication-server</module>
     </modules>
 

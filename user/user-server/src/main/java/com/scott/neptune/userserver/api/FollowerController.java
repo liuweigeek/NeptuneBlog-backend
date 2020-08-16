@@ -2,10 +2,9 @@ package com.scott.neptune.userserver.api;
 
 import com.scott.neptune.common.base.BaseController;
 import com.scott.neptune.userclient.command.FriendshipRequest;
+import com.scott.neptune.userclient.dto.AuthUserDto;
 import com.scott.neptune.userclient.dto.FriendshipDto;
-import com.scott.neptune.userserver.component.UserComponent;
 import com.scott.neptune.userserver.service.IFriendshipService;
-import com.scott.neptune.userserver.service.IUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -22,42 +21,44 @@ import java.util.Optional;
  * @Author: scott
  * @Email: <a href="mailto:liuweigeek@outlook.com">Scott Lau</a>
  * @Date: 2019/9/24 17:33
- * @Description: 好友关系接口
+ * @Description: 关注者接口
  */
 @Slf4j
 @RequiredArgsConstructor
-@Api(tags = "好友关系接口")
+@Api(tags = "关注者接口")
 @RestController
 @RequestMapping("/followers")
 public class FollowerController extends BaseController {
 
-    private final IUserService userService;
     private final IFriendshipService friendshipService;
-    private final UserComponent userComponent;
 
     /**
-     * 获取关注者ID列表
+     * 获取关注者用户ID列表
      *
-     * @return 关注者ID列表
+     * @param request  指定用户视角
+     * @param authUser 已登录用户
+     * @return
      */
-    @ApiOperation(value = "获取关注者列表")
+    @ApiOperation(value = "获取关注者用户ID列表")
     @GetMapping("/ids")
-    public ResponseEntity<Page<FriendshipDto>> ids(FriendshipRequest request) {
+    public ResponseEntity<Page<FriendshipDto>> ids(FriendshipRequest request, AuthUserDto authUser) {
         Long whomUserId = Optional.ofNullable(request.getUserId())
-                .orElseGet(userComponent.getUserFromRequest(httpServletRequest)::getId);
+                .orElseGet(authUser::getId);
         return ResponseEntity.ok(friendshipService.findFollowers(whomUserId, request.getCursor(), request.getCount()));
     }
 
     /**
-     * 获取关注者列表
+     * 获取关注者用户列表
      *
-     * @return 关注者列表
+     * @param request  指定用户视角
+     * @param authUser 已登录用户
+     * @return
      */
-    @ApiOperation(value = "获取关注者列表")
+    @ApiOperation(value = "获取关注者用户列表")
     @GetMapping("/list")
-    public ResponseEntity<Page<FriendshipDto>> list(FriendshipRequest request) {
+    public ResponseEntity<Page<FriendshipDto>> list(FriendshipRequest request, AuthUserDto authUser) {
         Long whomUserId = Optional.ofNullable(request.getUserId())
-                .orElseGet(userComponent.getUserFromRequest(httpServletRequest)::getId);
+                .orElseGet(authUser::getId);
         return ResponseEntity.ok(friendshipService.findFollowers(whomUserId, request.getCursor(), request.getCount()));
     }
 }

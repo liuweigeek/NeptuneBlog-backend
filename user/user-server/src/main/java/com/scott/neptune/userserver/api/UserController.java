@@ -5,7 +5,6 @@ import com.scott.neptune.common.exception.RestException;
 import com.scott.neptune.userclient.command.UserSearchRequest;
 import com.scott.neptune.userclient.dto.AuthUserDto;
 import com.scott.neptune.userclient.dto.UserDto;
-import com.scott.neptune.userserver.component.UserComponent;
 import com.scott.neptune.userserver.service.IUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -41,7 +40,6 @@ import java.util.stream.Stream;
 public class UserController extends BaseController {
 
     private final IUserService userService;
-    private final UserComponent userComponent;
     private final RedisTemplate<String, Object> redisTemplate;
 
     /**
@@ -58,34 +56,23 @@ public class UserController extends BaseController {
     }
 
     /**
-     * 用户退出登录
-     *
-     * @return 退出登录结果
-     */
-    @ApiOperation(value = "用户退出登录")
-    @PostMapping("/logout")
-    public ResponseEntity<Object> logout() {
-        UserDto loginUser = userComponent.getUserFromRequest(httpServletRequest);
-        redisTemplate.delete(loginUser.getToken());
-        return ResponseEntity.ok().build();
-    }
-
-    /**
      * 获取指定用户信息
      *
+     * @param userId     用户ID
+     * @param screenName 用户名
+     * @param authUser   已登陆用户
      * @return 用户信息
      */
     @ApiOperation(value = "获取指定用户信息")
     @GetMapping("/show")
-    public ResponseEntity<UserDto> show(Long userId, String screenName) {
-        UserDto loginUser = userComponent.getUserFromRequest(httpServletRequest);
+    public ResponseEntity<UserDto> show(Long userId, String screenName, AuthUserDto authUser) {
         if (userId != null) {
-            return Optional.ofNullable(userService.findUserById(userId, loginUser.getId()))
+            return Optional.ofNullable(userService.findUserById(userId, authUser.getId()))
                     .map(ResponseEntity::ok)
                     .orElseThrow(() -> new RestException("用户不存在", HttpStatus.NOT_FOUND));
         }
         if (StringUtils.isNotBlank(screenName)) {
-            return Optional.ofNullable(userService.findUserByScreenName(screenName, loginUser.getId()))
+            return Optional.ofNullable(userService.findUserByScreenName(screenName, authUser.getId()))
                     .map(ResponseEntity::ok)
                     .orElseThrow(() -> new RestException("用户不存在", HttpStatus.NOT_FOUND));
         }
@@ -97,23 +84,25 @@ public class UserController extends BaseController {
     /**
      * 获取全部用户列表
      *
-     * @return 用户列表
+     * @param userIds     用户ID列表
+     * @param screenNames 用户名列表
+     * @param authUser    已登录用户
+     * @return
      */
     @ApiOperation(value = "查询用户列表")
     @GetMapping("/lookup")
-    public ResponseEntity<Collection<UserDto>> lookup(String userIds, String screenNames) {
-        UserDto loginUser = userComponent.getUserFromRequest(httpServletRequest);
+    public ResponseEntity<Collection<UserDto>> lookup(String userIds, String screenNames, AuthUserDto authUser) {
         if (StringUtils.isNotBlank(userIds)) {
             List<Long> ids = Stream.of(StringUtils.split(userIds, ","))
                     .map(Long::parseLong)
                     .collect(Collectors.toList());
-            List<UserDto> userDtoList = userService.findAllUserByIdList(ids, loginUser.getId());
+            List<UserDto> userDtoList = userService.findAllUserByIdList(ids, authUser.getId());
             return ResponseEntity.ok(userDtoList);
         }
         if (StringUtils.isNotBlank(screenNames)) {
             List<String> userScreenNames = Stream.of(StringUtils.split(screenNames, ","))
                     .collect(Collectors.toList());
-            List<UserDto> userDtoList = userService.findAllUserByScreenNameList(userScreenNames, loginUser.getId());
+            List<UserDto> userDtoList = userService.findAllUserByScreenNameList(userScreenNames, authUser.getId());
             return ResponseEntity.ok(userDtoList);
         }
         throw new RestException("请指定要查找的用户ID或用户名", HttpStatus.BAD_REQUEST);
@@ -127,15 +116,15 @@ public class UserController extends BaseController {
     /**
      * 通过关键字搜索用户
      *
-     * @param request 关键字
+     * @param request  关键字
+     * @param authUser 已登陆用户
      * @return 用户列表
      */
     @ApiOperation(value = "通过关键字搜索用户")
 
     @GetMapping("/search")
-    public ResponseEntity<Collection<UserDto>> search(UserSearchRequest request) {
-        UserDto loginUser = userComponent.getUserFromRequest(httpServletRequest);
-        List<UserDto> userDtoList = userService.findByKeyword(request.getQ(), loginUser.getId());
+    public ResponseEntity<Collection<UserDto>> search(UserSearchRequest request, AuthUserDto authUser) {
+        List<UserDto> userDtoList = userService.findByKeyword(request.getQ(), authUser.getId());
         //TODO add relation state
         return ResponseEntity.ok(userDtoList);
     }
