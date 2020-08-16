@@ -35,7 +35,8 @@ public class UserAvatarDto implements Serializable {
 
     /**
      * 图片尺寸
-     * {@link SizeTypeEnum}
+     *
+     * @see SizeTypeEnum
      */
     @ApiModelProperty(value = "图片尺寸")
     private Integer sizeType;

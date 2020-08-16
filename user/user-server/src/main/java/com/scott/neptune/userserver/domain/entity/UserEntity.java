@@ -83,7 +83,8 @@ public class UserEntity implements Serializable {
 
     /**
      * 性别
-     * {@link GenderEnum}
+     *
+     * @see GenderEnum
      */
     @Enumerated(EnumType.STRING)
     private GenderEnum gender;

@@ -130,13 +130,6 @@ public class UserDto {
     private String largeAvatar;
 
     /**
-     * 关系状态
-     * {@link }
-     */
-    @ApiModelProperty(hidden = true)
-    private Integer friendship;
-
-    /**
      * 正在关注用户数量
      */
     @ApiModelProperty(hidden = true)
