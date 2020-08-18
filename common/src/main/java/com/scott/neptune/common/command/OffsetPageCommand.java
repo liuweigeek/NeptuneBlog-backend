@@ -11,6 +11,8 @@ import lombok.Data;
 @Data
 public class OffsetPageCommand<T> {
 
+    private static final long serialVersionUID = 1L;
+
     private long offset = 0;
 
     private int limit = 20;

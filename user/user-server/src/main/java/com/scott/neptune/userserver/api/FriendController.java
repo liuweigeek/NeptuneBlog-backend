@@ -1,7 +1,7 @@
 package com.scott.neptune.userserver.api;
 
 import com.scott.neptune.common.base.BaseController;
-import com.scott.neptune.userclient.command.FriendshipRequest;
+import com.scott.neptune.userclient.command.FriendshipQueryRequest;
 import com.scott.neptune.userclient.dto.AuthUserDto;
 import com.scott.neptune.userclient.dto.FriendshipDto;
 import com.scott.neptune.userserver.service.IFriendshipService;
@@ -41,7 +41,7 @@ public class FriendController extends BaseController {
      */
     @ApiOperation(value = "获取已关注用户ID列表")
     @GetMapping("/ids")
-    public ResponseEntity<Page<FriendshipDto>> ids(FriendshipRequest request, AuthUserDto authUser) {
+    public ResponseEntity<Page<FriendshipDto>> ids(FriendshipQueryRequest request, AuthUserDto authUser) {
 
         Long whomUserId = Optional.ofNullable(request.getUserId())
                 .orElseGet(authUser::getId);
@@ -58,7 +58,7 @@ public class FriendController extends BaseController {
      */
     @ApiOperation(value = "获取已关注用户列表")
     @GetMapping("/list")
-    public ResponseEntity<Page<FriendshipDto>> list(FriendshipRequest request, AuthUserDto authUser) {
+    public ResponseEntity<Page<FriendshipDto>> list(FriendshipQueryRequest request, AuthUserDto authUser) {
 
         Long whomUserId = Optional.ofNullable(request.getUserId())
                 .orElseGet(authUser::getId);

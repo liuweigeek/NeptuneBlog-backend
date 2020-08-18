@@ -11,6 +11,8 @@ import lombok.Data;
 @Data
 public class StartIdCommand<T> {
 
+    private static final long serialVersionUID = 1L;
+
     private long startId = 0;
 
     private int count = 20;

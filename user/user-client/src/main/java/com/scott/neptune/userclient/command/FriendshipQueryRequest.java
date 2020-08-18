@@ -12,7 +12,9 @@ import lombok.EqualsAndHashCode;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class FriendshipRequest extends CursorCommand {
+public class FriendshipQueryRequest extends CursorCommand {
+
+    private static final long serialVersionUID = 1L;
 
     private Long userId;
 }

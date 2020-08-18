@@ -19,6 +19,8 @@ import javax.validation.constraints.NotBlank;
 @ApiModel(value = "user search request", description = "用户搜索请求")
 public class UserSearchRequest extends CursorCommand {
 
+    private static final long serialVersionUID = 1L;
+
     @NotBlank
     @ApiModelProperty(value = "关键字", required = true)
     private String q;

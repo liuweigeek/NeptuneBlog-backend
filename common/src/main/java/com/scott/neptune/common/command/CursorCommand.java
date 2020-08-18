@@ -11,6 +11,8 @@ import lombok.Data;
 @Data
 public class CursorCommand {
 
+    private static final long serialVersionUID = 1L;
+
     private long cursor = 0;
 
     private int count = 20;
