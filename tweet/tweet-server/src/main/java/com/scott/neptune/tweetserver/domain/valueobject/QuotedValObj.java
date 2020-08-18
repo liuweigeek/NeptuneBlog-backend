@@ -7,8 +7,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
+import javax.persistence.ConstraintMode;
 import javax.persistence.Embeddable;
-import javax.persistence.OneToOne;
+import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import java.io.Serializable;
 
 /**
@@ -32,8 +36,8 @@ public class QuotedValObj implements Serializable {
     @Column(name = "quoted_status_id")
     private Long quotedStatusId;
 
-    @OneToOne
-    @Column(name = "quoted_status")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "quoted_status_id", foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
     private TweetEntity quotedStatus;
 
 }

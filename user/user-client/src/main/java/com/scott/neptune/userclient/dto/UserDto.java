@@ -103,13 +103,7 @@ public class UserDto {
      * 语言
      */
     @ApiModelProperty(value = "语言")
-    private String langKey;
-
-    /**
-     * 登录Token信息
-     */
-    @ApiModelProperty(hidden = true)
-    private String token;
+    private String lang;
 
     /**
      * 小尺寸头像
@@ -118,10 +112,10 @@ public class UserDto {
     private String smallAvatar;
 
     /**
-     * 正常尺寸头像
+     * 中等尺寸头像
      */
     @ApiModelProperty(value = "正常尺寸头像")
-    private String normalAvatar;
+    private String mediumAvatar;
 
     /**
      * 大尺寸头像

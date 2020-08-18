@@ -21,7 +21,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = false, of = {"sourceId", "targetId"})
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel(value = "friendRelation", description = "关注关系")
+@ApiModel(value = "friendship", description = "关注关系")
 public class FriendshipDto {
 
     private static final long serialVersionUID = 1L;

@@ -48,6 +48,9 @@ public class UserServiceImpl implements IUserService {
      */
     @Override
     public boolean existsByScreenName(String screenName) {
+        if (StringUtils.isBlank(screenName)) {
+            throw new NeptuneBlogException("请指定要查询的用户");
+        }
         ExampleMatcher screenNameExampleMatcher = ExampleMatcher.matching()
                 .withMatcher("screenName", ExampleMatcher.GenericPropertyMatchers.ignoreCase())
                 .withIgnoreNullValues();
@@ -62,6 +65,9 @@ public class UserServiceImpl implements IUserService {
      */
     @Override
     public boolean existsByEmail(String email) {
+        if (StringUtils.isBlank(email)) {
+            throw new NeptuneBlogException("请指定要查询的用户");
+        }
         ExampleMatcher emailExampleMatcher = ExampleMatcher.matching()
                 .withMatcher("email", ExampleMatcher.GenericPropertyMatchers.ignoreCase())
                 .withIgnoreNullValues();
@@ -101,6 +107,9 @@ public class UserServiceImpl implements IUserService {
      */
     @Override
     public UserDto findUserById(Long userId, Long loginUserId) {
+        if (userId == null) {
+            throw new NeptuneBlogException("请指定要查询的用户");
+        }
         return userRepository.findById(userId)
                 .map(userConvertor.convertToDto())
                 .orElseThrow(() -> new NeptuneBlogException("指定用户不存在"));
@@ -114,6 +123,9 @@ public class UserServiceImpl implements IUserService {
      */
     @Override
     public UserDto findUserByScreenName(String screenName, Long loginUserId) {
+        if (StringUtils.isBlank(screenName)) {
+            throw new NeptuneBlogException("请指定要查询的用户");
+        }
         ExampleMatcher screenNameExampleMatcher = ExampleMatcher.matching()
                 .withMatcher("screenName", ExampleMatcher.GenericPropertyMatchers.ignoreCase())
                 .withIgnoreNullValues();
@@ -132,6 +144,9 @@ public class UserServiceImpl implements IUserService {
      */
     @Override
     public UserDto findUserByEmail(String email, Long loginUserId) {
+        if (StringUtils.isBlank(email)) {
+            throw new NeptuneBlogException("请指定要查询的用户");
+        }
         ExampleMatcher screenNameExampleMatcher = ExampleMatcher.matching()
                 .withMatcher("email", ExampleMatcher.GenericPropertyMatchers.ignoreCase())
                 .withIgnoreNullValues();
@@ -189,7 +204,6 @@ public class UserServiceImpl implements IUserService {
      */
     @Override
     public List<UserDto> findAllUserByScreenNameList(List<String> screenNameList, Long loginUserId) {
-
         if (CollectionUtils.isEmpty(screenNameList)) {
             return Collections.emptyList();
         }
@@ -200,6 +214,9 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public AuthUserDto findUserByScreenNameForAuthenticate(String screenName) {
+        if (StringUtils.isBlank(screenName)) {
+            throw new NeptuneBlogException("请指定要查询的用户");
+        }
         ExampleMatcher screenNameExampleMatcher = ExampleMatcher.matching()
                 .withMatcher("screenName", ExampleMatcher.GenericPropertyMatchers.ignoreCase())
                 .withIgnoreNullValues();
@@ -223,17 +240,17 @@ public class UserServiceImpl implements IUserService {
             return ServerResponse.createByErrorMessage(uploadAvatarRes.getMsg());
         }
         List<UserAvatarDto> avatarDtoList = uploadAvatarRes.getData();
-        String normalAvatar = null;
+        String mediumAvatar = null;
         for (UserAvatarDto avatarDto : avatarDtoList) {
             avatarDto.setUserId(userDto.getId());
-            normalAvatar = avatarDto.getUrl();
+            mediumAvatar = avatarDto.getUrl();
         }
         List<UserAvatarEntity> avatarEntityList = userAvatarConvertor.convertToEntityList(avatarDtoList);
         userAvatarService.delete(UserAvatarEntity.builder().userId(userDto.getId()).build());
         try {
             userAvatarService.saveList(avatarEntityList);
             UserEntity userEntity = userConvertor.convertToEntity(userDto);
-            userEntity.setAvatar(normalAvatar);
+            userEntity.setAvatar(mediumAvatar);
             entityManager.merge(userEntity);
             return ServerResponse.createBySuccess();
         } catch (Exception e) {

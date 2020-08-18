@@ -1,11 +1,16 @@
 package com.scott.neptune.userserver.service.impl;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.scott.neptune.common.exception.NeptuneBlogException;
 import com.scott.neptune.common.model.OffsetPageable;
 import com.scott.neptune.userclient.dto.FriendshipDto;
+import com.scott.neptune.userclient.dto.RelationshipDto;
 import com.scott.neptune.userserver.convertor.FriendshipConvertor;
 import com.scott.neptune.userserver.domain.entity.FriendshipEntity;
+import com.scott.neptune.userserver.domain.entity.UserEntity;
 import com.scott.neptune.userserver.repository.FriendshipRepository;
+import com.scott.neptune.userserver.repository.UserRepository;
 import com.scott.neptune.userserver.service.IFriendshipService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,9 +21,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -27,6 +34,7 @@ import java.util.stream.Collectors;
 @Service
 public class FriendshipServiceImpl implements IFriendshipService {
 
+    private final UserRepository userRepository;
     private final FriendshipRepository friendshipRepository;
     private final FriendshipConvertor friendshipConvertor;
 
@@ -182,5 +190,56 @@ public class FriendshipServiceImpl implements IFriendshipService {
             log.error("取消关注失败: ", e);
             throw new NeptuneBlogException("取消关注失败", e);
         }
+    }
+
+    /**
+     * 查询指定用户与已登录用户的关系
+     *
+     * @param userIds
+     * @param userScreenNames
+     * @param authUserId
+     * @return
+     */
+    @Override
+    public List<RelationshipDto> getRelationship(List<Long> userIds, List<String> userScreenNames, Long authUserId) {
+
+        List<Long> ids = Lists.newArrayListWithExpectedSize(userIds.size() + userScreenNames.size());
+        if (CollectionUtils.isNotEmpty(userIds)) {
+            ids.addAll(userIds);
+        }
+        if (CollectionUtils.isNotEmpty(userScreenNames)) {
+            List<Long> idFromScreenNames = userRepository.findAllByScreenNameIn(userScreenNames)
+                    .stream().map(UserEntity::getId).collect(Collectors.toList());
+            if (CollectionUtils.isNotEmpty(idFromScreenNames)) {
+                ids.addAll(idFromScreenNames);
+            }
+        }
+
+        List<FriendshipEntity> friends = friendshipRepository.findAllBySourceUserAndTargetUserIn(authUserId, ids, Sort.by(Sort.Order.desc("followDate")));
+        List<FriendshipEntity> followers = friendshipRepository.findAllByTargetUserAndSourceUserIn(authUserId, ids, Sort.by(Sort.Order.desc("followDate")));
+
+        Map<Long, RelationshipDto> relationshipMap = Maps.newHashMapWithExpectedSize(ids.size());
+        friends.forEach(entity -> {
+            UserEntity targetUser = entity.getTargetUser();
+            if (relationshipMap.containsKey(targetUser.getId())) {
+                relationshipMap.get(targetUser.getId()).addConnection(RelationshipDto.ConnectionEnum.FOLLOWING.getName());
+            } else {
+                relationshipMap.put(targetUser.getId(), new RelationshipDto(targetUser.getId(),
+                        targetUser.getScreenName(), targetUser.getName(),
+                        RelationshipDto.ConnectionEnum.FOLLOWING.getName()));
+            }
+        });
+        followers.forEach(entity -> {
+            UserEntity sourceUser = entity.getTargetUser();
+            if (relationshipMap.containsKey(sourceUser.getId())) {
+                relationshipMap.get(sourceUser.getId()).addConnection(RelationshipDto.ConnectionEnum.FOLLOWED_BY.getName());
+            } else {
+                relationshipMap.put(sourceUser.getId(), new RelationshipDto(sourceUser.getId(),
+                        sourceUser.getScreenName(), sourceUser.getName(),
+                        RelationshipDto.ConnectionEnum.FOLLOWED_BY.getName()));
+            }
+        });
+
+        return new ArrayList<>(relationshipMap.values());
     }
 }

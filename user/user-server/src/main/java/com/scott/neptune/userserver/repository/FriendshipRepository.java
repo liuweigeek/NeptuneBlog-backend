@@ -21,7 +21,6 @@ import java.util.List;
 public interface FriendshipRepository extends JpaRepository<FriendshipEntity, FriendshipEntity.FriendshipId>,
         JpaSpecificationExecutor<FriendshipEntity> {
 
-
     /**
      * find following friends
      *

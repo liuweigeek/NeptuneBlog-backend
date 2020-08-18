@@ -1,6 +1,7 @@
 package com.scott.neptune.userserver.service;
 
 import com.scott.neptune.userclient.dto.FriendshipDto;
+import com.scott.neptune.userclient.dto.RelationshipDto;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -80,5 +81,15 @@ public interface IFriendshipService {
      * @return
      */
     void delete(Long sourceId, Long targetId);
+
+    /**
+     * 查询指定用户与已登录用户的关系
+     *
+     * @param userIds
+     * @param userScreenNames
+     * @param authUserId
+     * @return
+     */
+    List<RelationshipDto> getRelationship(List<Long> userIds, List<String> userScreenNames, Long authUserId);
 
 }

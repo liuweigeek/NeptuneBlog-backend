@@ -2,6 +2,7 @@ package com.scott.neptune.userserver.domain.entity;
 
 import com.scott.neptune.userclient.enumerate.GenderEnum;
 import com.scott.neptune.userserver.domain.listener.UserAuditingListener;
+import com.scott.neptune.userserver.domain.valueobject.ConnectionCountValObj;
 import com.scott.neptune.userserver.domain.valueobject.FriendshipCountValObj;
 import com.scott.neptune.userserver.domain.valueobject.UserAvatarValObj;
 import lombok.AllArgsConstructor;
@@ -90,6 +91,18 @@ public class UserEntity implements Serializable {
     private GenderEnum gender;
 
     /**
+     * avatar
+     */
+    @Column(name = "profile_image_url")
+    private String profileImageUrl;
+
+    /**
+     * banner
+     */
+    @Column(name = "profile_banner_url")
+    private String profileBannerUrl;
+
+    /**
      * 注册时间
      */
     @Column(name = "create_at")
@@ -106,8 +119,8 @@ public class UserEntity implements Serializable {
     /**
      * 语言
      */
-    @Column(name = "lang_key")
-    private String langKey;
+    @Column(name = "lang")
+    private String lang;
 
     /**
      * 头像列表
@@ -121,6 +134,6 @@ public class UserEntity implements Serializable {
     @Embedded
     private FriendshipCountValObj friendshipCount;
 
-    //TODO count of likes, statuses, retweets
-    //TODO connections
+    @Embedded
+    private ConnectionCountValObj connectionCount;
 }

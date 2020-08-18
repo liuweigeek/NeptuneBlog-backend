@@ -6,9 +6,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
+import javax.persistence.ConstraintMode;
 import javax.persistence.Embeddable;
-import javax.persistence.OneToOne;
+import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import java.io.Serializable;
 
 /**
@@ -26,8 +29,8 @@ public class RetweetedValObj implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @OneToOne
-    @Column(name = "retweeted_status")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "retweeted_status_id", foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
     private TweetEntity retweetedStatus;
 
 }

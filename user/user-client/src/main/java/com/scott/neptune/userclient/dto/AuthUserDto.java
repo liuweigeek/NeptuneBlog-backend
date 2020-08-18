@@ -17,6 +17,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AuthUserDto {
 
+    private static final long serialVersionUID = 1L;
+
     private Long id;
 
     private String username;

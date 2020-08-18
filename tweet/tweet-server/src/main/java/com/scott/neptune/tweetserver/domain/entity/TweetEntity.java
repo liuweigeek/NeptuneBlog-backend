@@ -1,10 +1,13 @@
 package com.scott.neptune.tweetserver.domain.entity;
 
 import com.scott.neptune.tweetserver.domain.listener.TweetAuditingListener;
+import com.scott.neptune.tweetserver.domain.valueobject.ConnectionStatusValObj;
 import com.scott.neptune.tweetserver.domain.valueobject.QuotedValObj;
 import com.scott.neptune.tweetserver.domain.valueobject.ReplyValObj;
 import com.scott.neptune.tweetserver.domain.valueobject.RetweetedValObj;
 import com.scott.neptune.tweetserver.domain.valueobject.TweetCountValObj;
+import com.scott.neptune.tweetserver.domain.valueobject.TweetEntitiesValObj;
+import com.scott.neptune.tweetserver.domain.valueobject.TweetExtendedEntitiesValObj;
 import com.scott.neptune.userclient.dto.UserDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -68,17 +71,17 @@ public class TweetEntity implements Serializable {
     private String source;
 
     /**
-     * 发送人信息
-     */
-    @Transient
-    private UserDto user;
-
-    /**
      * 发送时间
      */
     @Column(name = "create_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createAt;
+
+    /**
+     * 发送人信息
+     */
+    @Transient
+    private UserDto user;
 
     /**
      * 本条Tweet转发的Retweet
@@ -103,5 +106,20 @@ public class TweetEntity implements Serializable {
      */
     @Embedded
     private TweetCountValObj count;
+
+    /**
+     * 附加信息
+     */
+    @Embedded
+    private TweetEntitiesValObj entities;
+
+    /**
+     * TODO is this necessary?
+     */
+    @Embedded
+    private TweetExtendedEntitiesValObj extendedEntities;
+
+    @Transient
+    private ConnectionStatusValObj connectionStatus;
 
 }

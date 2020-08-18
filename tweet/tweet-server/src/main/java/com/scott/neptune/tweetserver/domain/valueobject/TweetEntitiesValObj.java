@@ -39,34 +39,35 @@ public class TweetEntitiesValObj implements Serializable {
 
     @Convert(converter = JpaConverterJson.class)
     private List<Symbols> symbols;
-}
 
-@Data
-class Hashtag implements Serializable {
-    private Integer[] indices;
-    private String text;
-}
 
-@Data
-class Url implements Serializable {
-    private Integer[] indices;
-    private String url;
-    private String displayUrl;
-    private String expandedUrl;
-}
+    @Data
+    public static class Hashtag implements Serializable {
+        private Integer[] indices;
+        private String text;
+    }
 
-@Data
-class UserMentions implements Serializable {
-    private String name;
-    private Integer[] indices;
-    private String screenName;
-    private Long id;
-}
+    @Data
+    public static class Url implements Serializable {
+        private Integer[] indices;
+        private String url;
+        private String displayUrl;
+        private String expandedUrl;
+    }
 
-@Data
-class Symbols implements Serializable {
-    private Integer[] indices;
-    private String text;
-}
+    @Data
+    public static class UserMentions implements Serializable {
+        private String name;
+        private Integer[] indices;
+        private String screenName;
+        private Long id;
+    }
+
+    @Data
+    public static class Symbols implements Serializable {
+        private Integer[] indices;
+        private String text;
+    }
 
 //TODO media
+}

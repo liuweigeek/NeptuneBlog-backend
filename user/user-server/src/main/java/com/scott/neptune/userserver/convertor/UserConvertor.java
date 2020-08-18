@@ -25,7 +25,7 @@ public class UserConvertor extends BaseConvertor<UserEntity, UserDto> {
             BeanUtils.copyProperties(entity, dto);
             if (entity.getUserAvatarValObj() != null) {
                 dto.setSmallAvatar(entity.getUserAvatarValObj().getSmallAvatarUrl());
-                dto.setNormalAvatar(entity.getUserAvatarValObj().getNormalAvatarUrl());
+                dto.setMediumAvatar(entity.getUserAvatarValObj().getMediumAvatarUrl());
                 dto.setLargeAvatar(entity.getUserAvatarValObj().getLargeAvatarUrl());
             }
             return dto;
@@ -39,7 +39,7 @@ public class UserConvertor extends BaseConvertor<UserEntity, UserDto> {
             BeanUtils.copyProperties(dto, entity);
             UserAvatarValObj userAvatarValObj = UserAvatarValObj.builder()
                     .smallAvatarUrl(dto.getSmallAvatar())
-                    .normalAvatarUrl(dto.getNormalAvatar())
+                    .mediumAvatarUrl(dto.getMediumAvatar())
                     .largeAvatarUrl(dto.getLargeAvatar())
                     .build();
             entity.setUserAvatarValObj(userAvatarValObj);

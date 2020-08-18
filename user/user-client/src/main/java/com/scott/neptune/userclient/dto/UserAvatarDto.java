@@ -57,9 +57,9 @@ public class UserAvatarDto implements Serializable {
         SMALL(1, "small"),
 
         /**
-         * normal size
+         * medimul size
          */
-        NORMAL(2, "normal"),
+        MEDIUM(2, "medium"),
         /**
          * large size
          */
@@ -81,7 +81,7 @@ public class UserAvatarDto implements Serializable {
                     return sizeTypeEnum;
                 }
             }
-            return NORMAL;
+            return MEDIUM;
         }
 
     }
