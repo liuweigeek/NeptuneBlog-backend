@@ -53,7 +53,6 @@ public class AuthUserService implements UserDetailsService {
         UserDto userDto = new UserDto();
         //TODO use convertor
         BeanUtils.copyProperties(authUser, userDto);
-        userDto.setToken(token);
         return userDto;
     }
 

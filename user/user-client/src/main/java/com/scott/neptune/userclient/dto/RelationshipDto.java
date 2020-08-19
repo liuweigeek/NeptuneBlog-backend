@@ -33,6 +33,7 @@ public class RelationshipDto {
 
     private String name;
 
+    @Builder.Default
     private List<String> connections = Lists.newArrayListWithExpectedSize(6);
 
     public RelationshipDto(Long id, String screenName, String name, String connection) {

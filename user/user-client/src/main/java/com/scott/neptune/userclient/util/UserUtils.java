@@ -22,9 +22,9 @@ public class UserUtils {
      * @return
      */
     public Locale getLocaleFromUser(UserDto userDto) {
-        if (userDto == null || StringUtils.isBlank(userDto.getLangKey())) {
+        if (userDto == null || StringUtils.isBlank(userDto.getLang())) {
             return Locale.getDefault();
         }
-        return Locale.forLanguageTag(userDto.getLangKey());
+        return Locale.forLanguageTag(userDto.getLang());
     }
 }
