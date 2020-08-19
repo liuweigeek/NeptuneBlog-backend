@@ -79,8 +79,6 @@ public class UserController extends BaseController {
         throw new RestException("请指定要查找的用户ID或用户名", HttpStatus.BAD_REQUEST);
     }
 
-    //TODO used?
-
     /**
      * 获取全部用户列表
      *
@@ -124,7 +122,7 @@ public class UserController extends BaseController {
 
     @GetMapping("/search")
     public ResponseEntity<Collection<UserDto>> search(UserSearchRequest request, AuthUserDto authUser) {
-        List<UserDto> userDtoList = userService.findByKeyword(request.getQ(), authUser.getId());
+        List<UserDto> userDtoList = userService.search(request.getQ(), authUser.getId());
         //TODO add relation state
         return ResponseEntity.ok(userDtoList);
     }

@@ -76,28 +76,23 @@ public class FriendshipController extends BaseController {
         return ResponseEntity.ok(relationshipList);
     }
 
-    public ResponseEntity<FriendshipDto> show() {
-        return ResponseEntity.ok(new FriendshipDto());
-    }
-
     /**
      * 获取指定用户与登录用户的关系
      *
-     * @param userIds
-     * @param screenNames
+     * @param userId
+     * @param screenName
      * @param authUser
      * @return
      */
     @ApiOperation(value = "获取指定用户与登录用户的关系")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(value = "要查询的用户ID列表，用[,]分割", paramType = "query"),
-            @ApiImplicitParam(value = "要查询的用户名列表，用[,]分割", paramType = "query")
+            @ApiImplicitParam(value = "要查询的用户ID", paramType = "query"),
+            @ApiImplicitParam(value = "要查询的用户名", paramType = "query")
     })
     @GetMapping("/show")
-    public ResponseEntity<RelationshipDto> show(String userIds, String screenNames,
+    public ResponseEntity<RelationshipDto> show(Long userId, String screenName,
                                                 @ApiIgnore AuthUserDto authUser) {
-
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(new RelationshipDto());
     }
 
     /**

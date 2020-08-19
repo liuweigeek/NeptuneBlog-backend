@@ -11,12 +11,18 @@ public interface ITweetService {
 
     TweetDto save(TweetDto tweetDto, UserDto loginUser);
 
-    boolean delete(TweetEntity tweetEntity);
+    TweetDto findTweetById(Long tweetId);
+
+    List<TweetDto> findAllByIdList(List<Long> tweetIds);
 
     Page<TweetDto> findByUserId(Long userId, int offset, int limit);
 
     Page<TweetDto> findByUserIdList(List<Long> userIdList, int offset, int limit);
 
     List<TweetDto> findByKeyword(String keyword);
+
+    boolean delete(TweetEntity tweetEntity);
+
+    boolean deleteById(Long tweetId);
 
 }

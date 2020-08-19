@@ -25,13 +25,13 @@ public interface IUserService {
 
     UserDto findUserByEmail(String email, Long loginUserId);
 
-    List<UserDto> findByKeyword(String keyword, Long loginUserId);
-
-    List<UserDto> findAllUserByIdList(List<Long> idList, Long loginUserId);
+    List<UserDto> findAllUserByIdList(List<Long> ids, Long loginUserId);
 
     List<UserDto> findAllUserByScreenNameList(List<String> screenNameList, Long loginUserId);
 
     AuthUserDto findUserByScreenNameForAuthenticate(String screenName);
+
+    List<UserDto> search(String keyword, Long loginUserId);
 
     //TODO remove soon
 //    ServerResponse<List<UserAvatarEntity>> uploadAvatar(MultipartFile avatarFile, UserDto userDto);

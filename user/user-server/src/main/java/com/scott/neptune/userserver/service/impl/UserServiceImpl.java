@@ -157,41 +157,17 @@ public class UserServiceImpl implements IUserService {
     }
 
     /**
-     * 通过关键字搜索用户
-     *
-     * @param keyword 关键字
-     * @return 用户列表
-     */
-    @Override
-    public List<UserDto> findByKeyword(String keyword, Long loginUserId) {
-        if (StringUtils.isBlank(keyword)) {
-            return Collections.emptyList();
-        }
-        return userRepository.findAll((root, query, criteriaBuilder) ->
-                query.where(
-                        criteriaBuilder.or(
-                                criteriaBuilder.like(root.get("screenName").as(String.class), "%" + keyword + "%"),
-                                criteriaBuilder.like(root.get("nickname").as(String.class), "%" + keyword + "%"),
-                                criteriaBuilder.like(root.get("email").as(String.class), "%" + keyword + "%"))
-                ).orderBy(criteriaBuilder.asc(root.get("createAt").as(Date.class)))
-                        .getRestriction()).stream()
-                .map(userConvertor.convertToDto())
-                .collect(Collectors.toList());
-    }
-
-
-    /**
      * 通过用户ID列表获取全部用户
      *
-     * @param idList 用户ID列表
+     * @param ids 用户ID列表
      * @return 用户对象列表
      */
     @Override
-    public List<UserDto> findAllUserByIdList(List<Long> idList, Long loginUserId) {
-        if (CollectionUtils.isEmpty(idList)) {
+    public List<UserDto> findAllUserByIdList(List<Long> ids, Long loginUserId) {
+        if (CollectionUtils.isEmpty(ids)) {
             return Collections.emptyList();
         }
-        return userRepository.findAllByIdIn(idList).stream()
+        return userRepository.findAllByIdIn(ids).stream()
                 .map(userConvertor.convertToDto())
                 .collect(Collectors.toList());
     }
@@ -224,6 +200,29 @@ public class UserServiceImpl implements IUserService {
         return userRepository.findOne(Example.of(UserEntity.builder().screenName(screenName).build(), screenNameExampleMatcher))
                 .map(authUserConvertor::convertToDto)
                 .orElseThrow(() -> new NeptuneBlogException("screenName not found"));
+    }
+
+    /**
+     * 通过关键字搜索用户
+     *
+     * @param keyword 关键字
+     * @return 用户列表
+     */
+    @Override
+    public List<UserDto> search(String keyword, Long loginUserId) {
+        if (StringUtils.isBlank(keyword)) {
+            return Collections.emptyList();
+        }
+        return userRepository.findAll((root, query, criteriaBuilder) ->
+                query.where(
+                        criteriaBuilder.or(
+                                criteriaBuilder.like(root.get("screenName").as(String.class), "%" + keyword + "%"),
+                                criteriaBuilder.like(root.get("nickname").as(String.class), "%" + keyword + "%"),
+                                criteriaBuilder.like(root.get("email").as(String.class), "%" + keyword + "%"))
+                ).orderBy(criteriaBuilder.asc(root.get("createAt").as(Date.class)))
+                        .getRestriction()).stream()
+                .map(userConvertor.convertToDto())
+                .collect(Collectors.toList());
     }
 
     /**

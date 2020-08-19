@@ -1,5 +1,6 @@
 package com.scott.neptune.tweetserver.service.impl;
 
+import com.scott.neptune.common.exception.NeptuneBlogException;
 import com.scott.neptune.common.model.OffsetPageable;
 import com.scott.neptune.tweetclient.dto.TweetDto;
 import com.scott.neptune.tweetserver.convertor.TweetConvertor;
@@ -49,21 +50,35 @@ public class TweetServiceImpl implements ITweetService {
     }
 
     /**
-     * 删除推文
+     * 获取指定推文
      *
-     * @param tweetEntity 推文
-     * @return 删除结果
+     * @param tweetId
+     * @return
      */
     @Override
-    public boolean delete(TweetEntity tweetEntity) {
-
-        try {
-            tweetRepository.deleteById(tweetEntity.getId());
-            return true;
-        } catch (Exception e) {
-            log.error("delete tweet exception: ", e);
-            return false;
+    public TweetDto findTweetById(Long tweetId) {
+        if (tweetId == null) {
+            throw new NeptuneBlogException("请指定要查询的推文");
         }
+        return tweetRepository.findById(tweetId)
+                .map(tweetConvertor.convertToDto())
+                .orElseThrow(() -> new NeptuneBlogException("指定推文不存在"));
+    }
+
+    /**
+     * 获取指定推文列表
+     *
+     * @param tweetIds
+     * @return
+     */
+    @Override
+    public List<TweetDto> findAllByIdList(List<Long> tweetIds) {
+        if (CollectionUtils.isEmpty(tweetIds)) {
+            return Collections.emptyList();
+        }
+        return tweetRepository.findAllById(tweetIds).stream()
+                .map(tweetConvertor.convertToDto())
+                .collect(Collectors.toList());
     }
 
     /**
@@ -119,6 +134,40 @@ public class TweetServiceImpl implements ITweetService {
                         .getRestriction()).stream()
                 .map(tweetConvertor.convertToDto())
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * 删除推文
+     *
+     * @param tweetEntity 推文
+     * @return 删除结果
+     */
+    @Override
+    public boolean delete(TweetEntity tweetEntity) {
+        try {
+            tweetRepository.deleteById(tweetEntity.getId());
+            return true;
+        } catch (Exception e) {
+            log.error("delete tweet exception: ", e);
+            return false;
+        }
+    }
+
+    /**
+     * 删除推文
+     *
+     * @param tweetId 推文ID
+     * @return 删除结果
+     */
+    @Override
+    public boolean deleteById(Long tweetId) {
+        try {
+            tweetRepository.deleteById(tweetId);
+            return true;
+        } catch (Exception e) {
+            log.error("delete tweet exception: ", e);
+            return false;
+        }
     }
 
 }

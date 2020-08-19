@@ -1,17 +1,24 @@
 package com.scott.neptune.tweetserver.api;
 
+import com.scott.neptune.common.exception.RestException;
 import com.scott.neptune.tweetclient.command.StatusesUpdateRequest;
 import com.scott.neptune.tweetclient.dto.TweetDto;
 import com.scott.neptune.tweetserver.service.ITweetService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @Author: scott
@@ -41,13 +48,29 @@ public class StatusController {
 
     @GetMapping("/show")
     public ResponseEntity<TweetDto> show(Long statusId, Boolean includeMyRetweet) {
-        //tweetService.delete()
-        return ResponseEntity.ok(new TweetDto());
+        TweetDto tweetDto = tweetService.findTweetById(statusId);
+        return ResponseEntity.ok(tweetDto);
+    }
+
+    @GetMapping("/lookup")
+    public ResponseEntity<List<TweetDto>> lookup(String statusIds) {
+        if (StringUtils.isBlank(statusIds)) {
+            throw new RestException("请指定要查找的推文", HttpStatus.BAD_REQUEST);
+        }
+        List<Long> ids = Stream.of(StringUtils.split(statusIds, ","))
+                .map(Long::parseLong)
+                .collect(Collectors.toList());
+        List<TweetDto> tweetDtoList = tweetService.findAllByIdList(ids);
+        return ResponseEntity.ok(tweetDtoList);
     }
 
     @PostMapping("/destroy/{id}")
     public ResponseEntity<TweetDto> destroy(@PathVariable("id") Long statusId) {
-        //tweetService.delete()
-        return ResponseEntity.ok(new TweetDto());
+        TweetDto tweetDto = tweetService.findTweetById(statusId);
+        if (tweetDto == null) {
+            throw new RestException("指定推文不存在", HttpStatus.NOT_FOUND);
+        }
+        tweetService.deleteById(tweetDto.getId());
+        return ResponseEntity.ok(tweetDto);
     }
 }
