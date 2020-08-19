@@ -36,8 +36,8 @@ import java.util.Date;
  * @Description: 推文
  */
 @Data
-@EqualsAndHashCode(callSuper = false, of = {"id"})
 @Builder
+@EqualsAndHashCode(callSuper = false, of = {"id"})
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -114,7 +114,7 @@ public class TweetEntity implements Serializable {
     private TweetEntitiesValObj entities;
 
     /**
-     * TODO is this necessary?
+     * 媒体附加信息
      */
     @Embedded
     private TweetExtendedEntitiesValObj extendedEntities;

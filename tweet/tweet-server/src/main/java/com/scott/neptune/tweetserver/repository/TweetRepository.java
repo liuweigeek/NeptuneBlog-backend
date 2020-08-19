@@ -5,7 +5,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
@@ -19,8 +18,9 @@ import java.util.List;
 public interface TweetRepository extends JpaRepository<TweetEntity, Long>,
         JpaSpecificationExecutor<TweetEntity> {
 
-    @Query("from TweetEntity t where t.userId = :userId")
     Page<TweetEntity> findByUserId(@Param("userId") Long userId, Pageable pageable);
 
-    Page<TweetEntity> findByUserIdIn(@Param("userId") List<Long> userIds, Pageable pageable);
+    Page<TweetEntity> findByUserIdIn(@Param("userIds") List<Long> userIds, Pageable pageable);
+
+
 }
