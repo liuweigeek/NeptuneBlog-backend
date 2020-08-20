@@ -20,7 +20,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Embeddable
-public class FriendshipCountValObj implements Serializable {
+public class UserPublicMetricsValObj implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -28,11 +28,15 @@ public class FriendshipCountValObj implements Serializable {
      * 正在关注用户数量
      */
     @Formula("select count(1) from t_friendship where follower_id = id")
-    private Integer friendsCount;
+    private Integer followingCount;
 
     /**
      * 关注者数量
      */
     @Formula("select count(1) from t_friendship where follower_id = id")
     private Integer followersCount;
+
+    private Integer tweetCount;
+
+    private Integer likedCount;
 }

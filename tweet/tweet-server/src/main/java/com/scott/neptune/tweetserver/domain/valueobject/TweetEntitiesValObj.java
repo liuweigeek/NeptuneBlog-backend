@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
@@ -28,46 +27,61 @@ public class TweetEntitiesValObj implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Convert(converter = JpaConverterJson.class)
+    private List<Annotation> annotations;
+
+    @Convert(converter = JpaConverterJson.class)
+    private List<Cashtag> cashtags;
+
+    @Convert(converter = JpaConverterJson.class)
     private List<Hashtag> hashtags;
 
     @Convert(converter = JpaConverterJson.class)
     private List<Url> urls;
 
     @Convert(converter = JpaConverterJson.class)
-    @Column(name = "user_mentions")
-    private List<UserMentions> userMentions;
+    private List<Mention> mentions;
 
-    @Convert(converter = JpaConverterJson.class)
-    private List<Symbols> symbols;
+    @Data
+    public static class Annotation implements Serializable {
+        private Integer start;
+        private Integer end;
+        private Double probability;
+        private String type;
+        private String normalizedText;
+    }
 
+    @Data
+    public static class Cashtag implements Serializable {
+        private Integer start;
+        private Integer end;
+        private String tag;
+    }
 
     @Data
     public static class Hashtag implements Serializable {
-        private Integer[] indices;
-        private String text;
+        private Integer start;
+        private Integer end;
+        private String tag;
+    }
+
+    @Data
+    public static class Mention implements Serializable {
+        private Integer start;
+        private Integer end;
+        private String tag;
     }
 
     @Data
     public static class Url implements Serializable {
-        private Integer[] indices;
+        private Integer start;
+        private Integer end;
         private String url;
-        private String displayUrl;
         private String expandedUrl;
+        private String displayUrl;
+        private String status;
+        private String title;
+        private String description;
+        private String unwoundUrl;
     }
 
-    @Data
-    public static class UserMentions implements Serializable {
-        private String name;
-        private Integer[] indices;
-        private String screenName;
-        private Long id;
-    }
-
-    @Data
-    public static class Symbols implements Serializable {
-        private Integer[] indices;
-        private String text;
-    }
-
-//TODO media
 }

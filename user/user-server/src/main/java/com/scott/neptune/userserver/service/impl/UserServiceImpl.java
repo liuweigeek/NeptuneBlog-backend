@@ -43,18 +43,18 @@ public class UserServiceImpl implements IUserService {
     /**
      * 判断指定用户名是否存在
      *
-     * @param screenName 用户名
+     * @param username 用户名
      * @return 判断结果
      */
     @Override
-    public boolean existsByScreenName(String screenName) {
-        if (StringUtils.isBlank(screenName)) {
+    public boolean existsByUsername(String username) {
+        if (StringUtils.isBlank(username)) {
             throw new NeptuneBlogException("请指定要查询的用户");
         }
-        ExampleMatcher screenNameExampleMatcher = ExampleMatcher.matching()
-                .withMatcher("screenName", ExampleMatcher.GenericPropertyMatchers.ignoreCase())
+        ExampleMatcher usernameExampleMatcher = ExampleMatcher.matching()
+                .withMatcher("username", ExampleMatcher.GenericPropertyMatchers.ignoreCase())
                 .withIgnoreNullValues();
-        return userRepository.exists(Example.of(UserEntity.builder().screenName(screenName).build(), screenNameExampleMatcher));
+        return userRepository.exists(Example.of(UserEntity.builder().username(username).build(), usernameExampleMatcher));
     }
 
     /**
@@ -85,7 +85,7 @@ public class UserServiceImpl implements IUserService {
         if (this.existsByEmail(userDto.getEmail())) {
             throw new NeptuneBlogException("用户邮箱已存在");
         }
-        if (this.existsByScreenName(userDto.getScreenName())) {
+        if (this.existsByUsername(userDto.getUsername())) {
             throw new NeptuneBlogException("用户名已存在,请更换后重试");
         }
         UserEntity userEntity = userConvertor.convertToEntity(userDto);
@@ -118,21 +118,21 @@ public class UserServiceImpl implements IUserService {
     /**
      * 通过用户名获取用户
      *
-     * @param screenName 用户名
+     * @param username 用户名
      * @return 用户对象
      */
     @Override
-    public UserDto findUserByScreenName(String screenName, Long loginUserId) {
-        if (StringUtils.isBlank(screenName)) {
+    public UserDto findUserByScreenName(String username, Long loginUserId) {
+        if (StringUtils.isBlank(username)) {
             throw new NeptuneBlogException("请指定要查询的用户");
         }
-        ExampleMatcher screenNameExampleMatcher = ExampleMatcher.matching()
-                .withMatcher("screenName", ExampleMatcher.GenericPropertyMatchers.ignoreCase())
+        ExampleMatcher usernameExampleMatcher = ExampleMatcher.matching()
+                .withMatcher("username", ExampleMatcher.GenericPropertyMatchers.ignoreCase())
                 .withIgnoreNullValues();
 
-        return userRepository.findOne(Example.of(UserEntity.builder().screenName(screenName).build(), screenNameExampleMatcher))
+        return userRepository.findOne(Example.of(UserEntity.builder().username(username).build(), usernameExampleMatcher))
                 .map(userConvertor.convertToDto())
-                .orElseThrow(() -> new NeptuneBlogException("screenName not found"));
+                .orElseThrow(() -> new NeptuneBlogException("username not found"));
     }
 
 
@@ -147,11 +147,11 @@ public class UserServiceImpl implements IUserService {
         if (StringUtils.isBlank(email)) {
             throw new NeptuneBlogException("请指定要查询的用户");
         }
-        ExampleMatcher screenNameExampleMatcher = ExampleMatcher.matching()
+        ExampleMatcher usernameExampleMatcher = ExampleMatcher.matching()
                 .withMatcher("email", ExampleMatcher.GenericPropertyMatchers.ignoreCase())
                 .withIgnoreNullValues();
 
-        return userRepository.findOne(Example.of(UserEntity.builder().email(email).build(), screenNameExampleMatcher))
+        return userRepository.findOne(Example.of(UserEntity.builder().email(email).build(), usernameExampleMatcher))
                 .map(userConvertor.convertToDto())
                 .orElseThrow(() -> new NeptuneBlogException("email not found"));
     }
@@ -175,31 +175,31 @@ public class UserServiceImpl implements IUserService {
     /**
      * 通过用户名列表获取全部用户
      *
-     * @param screenNameList 用户名列表
+     * @param usernameList 用户名列表
      * @return 用户对象列表
      */
     @Override
-    public List<UserDto> findAllUserByScreenNameList(List<String> screenNameList, Long loginUserId) {
-        if (CollectionUtils.isEmpty(screenNameList)) {
+    public List<UserDto> findAllUserByScreenNameList(List<String> usernameList, Long loginUserId) {
+        if (CollectionUtils.isEmpty(usernameList)) {
             return Collections.emptyList();
         }
-        return userRepository.findAllByScreenNameIn(screenNameList).stream()
+        return userRepository.findAllByScreenNameIn(usernameList).stream()
                 .map(userConvertor.convertToDto())
                 .collect(Collectors.toList());
     }
 
     @Override
-    public AuthUserDto findUserByScreenNameForAuthenticate(String screenName) {
-        if (StringUtils.isBlank(screenName)) {
+    public AuthUserDto findUserByScreenNameForAuthenticate(String username) {
+        if (StringUtils.isBlank(username)) {
             throw new NeptuneBlogException("请指定要查询的用户");
         }
-        ExampleMatcher screenNameExampleMatcher = ExampleMatcher.matching()
-                .withMatcher("screenName", ExampleMatcher.GenericPropertyMatchers.ignoreCase())
+        ExampleMatcher usernameExampleMatcher = ExampleMatcher.matching()
+                .withMatcher("username", ExampleMatcher.GenericPropertyMatchers.ignoreCase())
                 .withIgnoreNullValues();
         //TODO add a new convertor
-        return userRepository.findOne(Example.of(UserEntity.builder().screenName(screenName).build(), screenNameExampleMatcher))
+        return userRepository.findOne(Example.of(UserEntity.builder().username(username).build(), usernameExampleMatcher))
                 .map(authUserConvertor::convertToDto)
-                .orElseThrow(() -> new NeptuneBlogException("screenName not found"));
+                .orElseThrow(() -> new NeptuneBlogException("username not found"));
     }
 
     /**
@@ -216,7 +216,7 @@ public class UserServiceImpl implements IUserService {
         return userRepository.findAll((root, query, criteriaBuilder) ->
                 query.where(
                         criteriaBuilder.or(
-                                criteriaBuilder.like(root.get("screenName").as(String.class), "%" + keyword + "%"),
+                                criteriaBuilder.like(root.get("username").as(String.class), "%" + keyword + "%"),
                                 criteriaBuilder.like(root.get("nickname").as(String.class), "%" + keyword + "%"),
                                 criteriaBuilder.like(root.get("email").as(String.class), "%" + keyword + "%"))
                 ).orderBy(criteriaBuilder.asc(root.get("createAt").as(Date.class)))

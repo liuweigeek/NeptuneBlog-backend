@@ -50,7 +50,7 @@ public class FriendshipController extends BaseController {
      * 获取指定用户与登录用户的关系
      *
      * @param userIds
-     * @param screenNames
+     * @param usernames
      * @param authUser
      * @return
      */
@@ -60,7 +60,7 @@ public class FriendshipController extends BaseController {
             @ApiImplicitParam(value = "要查询的用户名列表，用[,]分割", paramType = "query")
     })
     @GetMapping("/lookUp")
-    public ResponseEntity<Collection<RelationshipDto>> lookUp(String userIds, String screenNames,
+    public ResponseEntity<Collection<RelationshipDto>> lookUp(String userIds, String usernames,
                                                               @ApiIgnore AuthUserDto authUser) {
         List<Long> userIdList = Collections.emptyList();
         if (StringUtils.isNotBlank(userIds)) {
@@ -68,12 +68,12 @@ public class FriendshipController extends BaseController {
                     .map(Long::parseLong)
                     .collect(Collectors.toList());
         }
-        List<String> screenNameList = Collections.emptyList();
-        if (StringUtils.isNotBlank(screenNames)) {
-            screenNameList = Arrays.stream(StringUtils.split(screenNames, ","))
+        List<String> usernameList = Collections.emptyList();
+        if (StringUtils.isNotBlank(usernames)) {
+            usernameList = Arrays.stream(StringUtils.split(usernames, ","))
                     .collect(Collectors.toList());
         }
-        List<RelationshipDto> relationshipList = friendshipService.getRelationship(userIdList, screenNameList, authUser.getId());
+        List<RelationshipDto> relationshipList = friendshipService.getRelationship(userIdList, usernameList, authUser.getId());
         return ResponseEntity.ok(relationshipList);
     }
 
@@ -81,7 +81,7 @@ public class FriendshipController extends BaseController {
      * 获取指定用户与登录用户的关系
      *
      * @param userId
-     * @param screenName
+     * @param username
      * @param authUser
      * @return
      */
@@ -91,7 +91,7 @@ public class FriendshipController extends BaseController {
             @ApiImplicitParam(value = "要查询的用户名", paramType = "query")
     })
     @GetMapping("/show")
-    public ResponseEntity<RelationshipDto> show(Long userId, String screenName,
+    public ResponseEntity<RelationshipDto> show(Long userId, String username,
                                                 @ApiIgnore AuthUserDto authUser) {
         return ResponseEntity.ok(new RelationshipDto());
     }
@@ -106,10 +106,10 @@ public class FriendshipController extends BaseController {
     @ApiOperation(value = "关注指定用户")
     @ApiImplicitParam(value = "要关注的用户ID", paramType = "query", required = true)
     @PostMapping("/create")
-    public ResponseEntity<FriendshipDto> create(Long userId, String screenName, AuthUserDto authUser) {
+    public ResponseEntity<FriendshipDto> create(Long userId, String username, AuthUserDto authUser) {
         UserDto targetUser = Optional.ofNullable(userId)
                 .map(id -> userService.findUserById(id, authUser.getId()))
-                .orElse(userService.findUserByScreenName(screenName, authUser.getId()));
+                .orElse(userService.findUserByScreenName(username, authUser.getId()));
 
         if (targetUser == null) {
             throw new RestException("用户不存在", HttpStatus.NOT_FOUND);
@@ -131,10 +131,10 @@ public class FriendshipController extends BaseController {
     @ApiOperation(value = "取消关注指定用户")
     @ApiImplicitParam(name = "userId", value = "要取消关注的用户ID", paramType = "query", required = true)
     @PostMapping("/destroy")
-    public ResponseEntity<Void> destroy(Long userId, String screenName, AuthUserDto authUser) {
+    public ResponseEntity<Void> destroy(Long userId, String username, AuthUserDto authUser) {
         UserDto targetUser = Optional.ofNullable(userId)
                 .map(id -> userService.findUserById(id, authUser.getId()))
-                .orElse(userService.findUserByScreenName(screenName, authUser.getId()));
+                .orElse(userService.findUserByScreenName(username, authUser.getId()));
 
         if (targetUser == null) {
             throw new RestException("用户不存在", HttpStatus.NOT_FOUND);

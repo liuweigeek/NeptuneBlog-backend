@@ -4,6 +4,7 @@ import com.scott.neptune.common.exception.RestException;
 import com.scott.neptune.tweetclient.command.StatusesUpdateRequest;
 import com.scott.neptune.tweetclient.dto.TweetDto;
 import com.scott.neptune.tweetserver.service.ITweetService;
+import com.scott.neptune.userclient.dto.AuthUserDto;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
@@ -31,7 +31,6 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 @Api(tags = "推文接口")
 @RestController
-@RequestMapping("/statuses")
 public class StatusController {
 
     private final ITweetService tweetService;
@@ -42,18 +41,18 @@ public class StatusController {
      * @param request
      * @return
      */
-    @PostMapping("/update")
-    public ResponseEntity<TweetDto> update(StatusesUpdateRequest request) {
+    @PostMapping("/statuses/update")
+    public ResponseEntity<TweetDto> update(StatusesUpdateRequest request, AuthUserDto authUser) {
         return ResponseEntity.ok(new TweetDto());
     }
 
-    @GetMapping("/show")
-    public ResponseEntity<TweetDto> show(Long statusId, Boolean includeMyRetweet) {
+    @GetMapping("/statuses/show/{id}")
+    public ResponseEntity<TweetDto> show(@PathVariable("id") Long statusId, Boolean includeMyRetweet) {
         TweetDto tweetDto = tweetService.findTweetById(statusId);
         return ResponseEntity.ok(tweetDto);
     }
 
-    @GetMapping("/lookup")
+    @GetMapping("/statuses/lookup")
     public ResponseEntity<Collection<TweetDto>> lookup(String statusIds) {
         if (StringUtils.isBlank(statusIds)) {
             throw new RestException("请指定要查找的推文", HttpStatus.BAD_REQUEST);
@@ -65,7 +64,7 @@ public class StatusController {
         return ResponseEntity.ok(tweetDtoList);
     }
 
-    @PostMapping("/destroy/{id}")
+    @PostMapping("/statuses/destroy/{id}")
     public ResponseEntity<TweetDto> destroy(@PathVariable("id") Long statusId) {
         TweetDto tweetDto = tweetService.findTweetById(statusId);
         if (tweetDto == null) {

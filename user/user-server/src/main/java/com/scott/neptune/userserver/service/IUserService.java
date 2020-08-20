@@ -13,7 +13,7 @@ import java.util.List;
  */
 public interface IUserService {
 
-    boolean existsByScreenName(String screenName);
+    boolean existsByUsername(String username);
 
     boolean existsByEmail(String email);
 
@@ -21,15 +21,15 @@ public interface IUserService {
 
     UserDto findUserById(Long userId, Long loginUserId);
 
-    UserDto findUserByScreenName(String screenName, Long loginUserId);
+    UserDto findUserByScreenName(String username, Long loginUserId);
 
     UserDto findUserByEmail(String email, Long loginUserId);
 
     List<UserDto> findAllUserByIdList(List<Long> ids, Long loginUserId);
 
-    List<UserDto> findAllUserByScreenNameList(List<String> screenNameList, Long loginUserId);
+    List<UserDto> findAllUserByScreenNameList(List<String> usernameList, Long loginUserId);
 
-    AuthUserDto findUserByScreenNameForAuthenticate(String screenName);
+    AuthUserDto findUserByScreenNameForAuthenticate(String username);
 
     List<UserDto> search(String keyword, Long loginUserId);
 

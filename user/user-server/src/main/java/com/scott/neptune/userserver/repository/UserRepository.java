@@ -31,10 +31,10 @@ public interface UserRepository extends JpaRepository<UserEntity, Long>,
     /**
      * 根据用户名列表获取全部用户
      *
-     * @param screenNames 用户名列表
+     * @param usernames 用户名列表
      * @return
      */
-    List<UserEntity> findAllByScreenNameIn(@Param("screenNames") Collection<String> screenNames);
+    List<UserEntity> findAllByScreenNameIn(@Param("usernames") Collection<String> usernames);
 
     /**
      * 更新登录时间

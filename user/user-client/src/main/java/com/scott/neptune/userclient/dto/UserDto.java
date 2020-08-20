@@ -50,7 +50,7 @@ public class UserDto {
      */
     @NotEmpty(message = "用户名不可为空", groups = Register.class)
     @ApiModelProperty(value = "用户名", required = true)
-    private String screenName;
+    private String username;
 
     /**
      * 昵称

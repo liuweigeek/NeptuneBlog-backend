@@ -3,8 +3,8 @@ package com.scott.neptune.userserver.domain.entity;
 import com.scott.neptune.userclient.enumerate.GenderEnum;
 import com.scott.neptune.userserver.domain.listener.UserAuditingListener;
 import com.scott.neptune.userserver.domain.valueobject.ConnectionCountValObj;
-import com.scott.neptune.userserver.domain.valueobject.FriendshipCountValObj;
 import com.scott.neptune.userserver.domain.valueobject.UserAvatarValObj;
+import com.scott.neptune.userserver.domain.valueobject.UserPublicMetricsValObj;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -52,19 +52,26 @@ public class UserEntity implements Serializable {
     private Long id;
 
     /**
-     * 邮箱地址
+     * 用户昵称
      */
-    private String email;
+    private String name;
 
     /**
      * 用户名
      */
-    private String screenName;
+    private String username;
 
     /**
-     * 用户昵称
+     * 邮箱
      */
-    private String name;
+    private String email;
+
+    /**
+     * 注册时间
+     */
+    @Column(name = "create_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createAt;
 
     /**
      * 自我介绍
@@ -91,23 +98,16 @@ public class UserEntity implements Serializable {
     private GenderEnum gender;
 
     /**
-     * avatar
+     * 指定Tweet ID
+     */
+    @Column(name = "pinned_tweet_id")
+    private Long pinnedTweetId;
+
+    /**
+     * 背景图片
      */
     @Column(name = "profile_image_url")
     private String profileImageUrl;
-
-    /**
-     * banner
-     */
-    @Column(name = "profile_banner_url")
-    private String profileBannerUrl;
-
-    /**
-     * 注册时间
-     */
-    @Column(name = "create_at")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createAt;
 
     /**
      * 最近登录时间
@@ -132,7 +132,7 @@ public class UserEntity implements Serializable {
      * 正在关注和关注者统计
      */
     @Embedded
-    private FriendshipCountValObj friendshipCount;
+    private UserPublicMetricsValObj friendshipCount;
 
     @Embedded
     private ConnectionCountValObj connectionCount;

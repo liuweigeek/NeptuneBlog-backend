@@ -32,22 +32,22 @@ public interface UserClient {
     /**
      * 根据ID获取指定用户
      *
-     * @param id         用户ID
-     * @param screenName 用户名
+     * @param id       用户ID
+     * @param username 用户名
      * @return
      */
     @RequestMapping(path = "/users/show", method = RequestMethod.GET)
-    UserDto show(Long id, String screenName);
+    UserDto show(Long id, String username);
 
     /**
      * 获取全部用户列表
      *
-     * @param userIds     用户ID列表
-     * @param screenNames 用户名列表
+     * @param userIds   用户ID列表
+     * @param usernames 用户名列表
      * @return
      */
     @RequestMapping(path = "/users/lookup", method = RequestMethod.GET)
-    Collection<UserDto> lookup(String userIds, String screenNames);
+    Collection<UserDto> lookup(String userIds, String usernames);
 
     /**
      * 通过关键字搜索用户
@@ -61,9 +61,9 @@ public interface UserClient {
     /**
      * 根据用户名获取指定用户,用于授权
      *
-     * @param screenName 用户名
+     * @param username 用户名
      * @return
      */
-    @RequestMapping(path = "/users/authenticate/{screenName}", method = RequestMethod.GET)
-    AuthUserDto getUserByScreenNameForAuthenticate(@PathVariable String screenName);
+    @RequestMapping(path = "/users/authenticate/{username}", method = RequestMethod.GET)
+    AuthUserDto getUserByScreenNameForAuthenticate(@PathVariable String username);
 }

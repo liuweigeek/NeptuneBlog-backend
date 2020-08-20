@@ -44,7 +44,7 @@ public class TweetServiceImpl implements ITweetService {
     @Override
     public TweetDto save(TweetDto tweetDto, Long authUserId) {
         TweetEntity tweetEntity = tweetConvertor.convertToEntity(tweetDto);
-        tweetEntity.setUserId(authUserId);
+        tweetEntity.setAuthorId(authUserId);
         tweetRepository.save(tweetEntity);
         return tweetConvertor.convertToDto(tweetEntity);
     }

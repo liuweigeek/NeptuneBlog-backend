@@ -12,25 +12,27 @@ import java.io.Serializable;
 /**
  * @Author: scott
  * @Email: <a href="mailto:liuweigeek@outlook.com">Scott Lau</a>
- * @Date: 2019/10/8 21:39
- * @Description: NeptuneBlog
+ * @Date: 2020/8/9 16:20
+ * @Description:
  */
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Embeddable
-public class ReplyValObj implements Serializable {
+public class TweetPublicMetricsValObj implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Column(name = "in_reply_to_status_id")
-    private Long inReplyToStatusId;
+    @Column(name = "retweet_count")
+    private Long retweetCount;
 
-    @Column(name = "in_reply_to_user_id")
-    private Long inReplyToUserId;
+    @Column(name = "quote_count")
+    private Long quoteCount;
 
-    @Column(name = "in_reply_to_screen_name")
-    private String inReplyToScreenName;
+    @Column(name = "reply_count")
+    private Long replyCount;
 
+    @Column(name = "like_count")
+    private Long likeCount;
 }

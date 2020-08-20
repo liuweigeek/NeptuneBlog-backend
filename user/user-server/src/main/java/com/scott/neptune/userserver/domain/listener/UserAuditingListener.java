@@ -21,27 +21,27 @@ public class UserAuditingListener {
 
     @PrePersist
     public void onPreSave(UserEntity userEntity) {
-        log.info("onPreSave => screenName: [{}]", userEntity.getScreenName());
+        log.info("onPreSave => username: [{}]", userEntity.getUsername());
         userEntity.setCreateAt(new Date());
     }
 
     @PreUpdate
     public void onPreUpdate(UserEntity userEntity) {
-        log.info("onPreUpdate => screenName: [{}]", userEntity.getScreenName());
+        log.info("onPreUpdate => username: [{}]", userEntity.getUsername());
     }
 
     @PreRemove
     public void onPreRemove(UserEntity userEntity) {
-        log.info("onPreRemove => screenName: [{}]", userEntity.getScreenName());
+        log.info("onPreRemove => username: [{}]", userEntity.getUsername());
     }
 
     @PostPersist
     public void onPostSave(UserEntity userEntity) {
-        log.info("onPostSave => screenName: [{}]", userEntity.getScreenName());
+        log.info("onPostSave => username: [{}]", userEntity.getUsername());
     }
 
     @PostRemove
     public void onPostRemove(UserEntity userEntity) {
-        log.info("onPostRemove => screenName: [{}]", userEntity.getScreenName());
+        log.info("onPostRemove => username: [{}]", userEntity.getUsername());
     }
 }

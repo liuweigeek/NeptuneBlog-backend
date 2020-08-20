@@ -2,12 +2,9 @@ package com.scott.neptune.tweetserver.domain.entity;
 
 import com.scott.neptune.tweetserver.domain.listener.TweetAuditingListener;
 import com.scott.neptune.tweetserver.domain.valueobject.ConnectionStatusValObj;
-import com.scott.neptune.tweetserver.domain.valueobject.QuotedValObj;
-import com.scott.neptune.tweetserver.domain.valueobject.ReplyValObj;
-import com.scott.neptune.tweetserver.domain.valueobject.RetweetedValObj;
-import com.scott.neptune.tweetserver.domain.valueobject.TweetCountValObj;
+import com.scott.neptune.tweetserver.domain.valueobject.ReferencedTweetValObj;
 import com.scott.neptune.tweetserver.domain.valueobject.TweetEntitiesValObj;
-import com.scott.neptune.tweetserver.domain.valueobject.TweetExtendedEntitiesValObj;
+import com.scott.neptune.tweetserver.domain.valueobject.TweetPublicMetricsValObj;
 import com.scott.neptune.userclient.dto.UserDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,15 +16,18 @@ import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @Author: scott
@@ -55,20 +55,31 @@ public class TweetEntity implements Serializable {
     private Long id;
 
     /**
-     * 作者ID
-     */
-    @Column(name = "user_id")
-    private Long userId;
-
-    /**
      * 发送内容
      */
     private String text;
 
     /**
-     * 发送设备
+     * attachments
      */
-    private String source;
+
+    /**
+     * 作者ID
+     */
+    @Column(name = "author_id")
+    private Long authorId;
+
+    /**
+     * 发送人信息
+     */
+    @Transient
+    private UserDto author;
+
+    /**
+     * 对话ID，若当前Tweet为Reply，则指向另一条Tweet
+     */
+    @Column(name = "conversation_id")
+    private Long conversationId;
 
     /**
      * 发送时间
@@ -78,46 +89,33 @@ public class TweetEntity implements Serializable {
     private Date createAt;
 
     /**
-     * 发送人信息
-     */
-    @Transient
-    private UserDto user;
-
-    /**
-     * 本条Tweet转发的Retweet
-     */
-    @Embedded
-    private RetweetedValObj retweeted;
-
-    /**
-     * 本条Tweet引用的Retweet
-     */
-    @Embedded
-    private QuotedValObj quotedTweet;
-
-    /**
-     * 如果本条Tweet是一条回复，则包含回复信息
-     */
-    @Embedded
-    private ReplyValObj reply;
-
-    /**
-     * 互动统计数据
-     */
-    @Embedded
-    private TweetCountValObj count;
-
-    /**
      * 附加信息
      */
     @Embedded
     private TweetEntitiesValObj entities;
 
     /**
-     * 媒体附加信息
+     * 如果当前Tweet是一条回复，则该字段指向原Tweet的Author ID
+     */
+    @Column(name = "in_reply_to_user_id")
+    private Long inReplyToUserId;
+
+    /**
+     * 互动统计数据
      */
     @Embedded
-    private TweetExtendedEntitiesValObj extendedEntities;
+    private TweetPublicMetricsValObj publicMetrics;
+
+    /**
+     * 被引用的Tweet
+     */
+    @OneToMany(mappedBy = "referencedBy", fetch = FetchType.LAZY)
+    private List<ReferencedTweetValObj> referencedTweets;
+
+    /**
+     * 发送设备
+     */
+    private String source;
 
     @Transient
     private ConnectionStatusValObj connectionStatus;

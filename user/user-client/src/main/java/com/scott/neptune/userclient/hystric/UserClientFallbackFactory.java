@@ -31,13 +31,13 @@ public class UserClientFallbackFactory implements FallbackFactory<UserClient> {
             }
 
             @Override
-            public UserDto show(Long id, String screenName) {
+            public UserDto show(Long id, String username) {
                 log.error("feign [show] Exception: ", throwable);
                 return null;
             }
 
             @Override
-            public Collection<UserDto> lookup(String userIds, String screenNames) {
+            public Collection<UserDto> lookup(String userIds, String usernames) {
                 log.error("feign [lookup] Exception: ", throwable);
                 return null;
             }
@@ -49,7 +49,7 @@ public class UserClientFallbackFactory implements FallbackFactory<UserClient> {
             }
 
             @Override
-            public AuthUserDto getUserByScreenNameForAuthenticate(String screenName) {
+            public AuthUserDto getUserByScreenNameForAuthenticate(String username) {
                 log.error("feign [getUserByScreenNameForAuthenticate] Exception: ", throwable);
                 return null;
             }

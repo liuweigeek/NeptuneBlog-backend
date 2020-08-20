@@ -29,16 +29,16 @@ public class RelationshipDto {
 
     private Long id;
 
-    private String screenName;
+    private String username;
 
     private String name;
 
     @Builder.Default
     private List<String> connections = Lists.newArrayListWithExpectedSize(6);
 
-    public RelationshipDto(Long id, String screenName, String name, String connection) {
+    public RelationshipDto(Long id, String username, String name, String connection) {
         this.id = id;
-        this.screenName = screenName;
+        this.username = username;
         this.name = name;
         this.connections.add(connection);
     }

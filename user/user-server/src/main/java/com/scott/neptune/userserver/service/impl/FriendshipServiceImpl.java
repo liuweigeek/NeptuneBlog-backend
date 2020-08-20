@@ -225,7 +225,7 @@ public class FriendshipServiceImpl implements IFriendshipService {
                 relationshipMap.get(targetUser.getId()).addConnection(RelationshipDto.ConnectionEnum.FOLLOWING.getName());
             } else {
                 relationshipMap.put(targetUser.getId(), new RelationshipDto(targetUser.getId(),
-                        targetUser.getScreenName(), targetUser.getName(),
+                        targetUser.getUsername(), targetUser.getName(),
                         RelationshipDto.ConnectionEnum.FOLLOWING.getName()));
             }
         });
@@ -235,7 +235,7 @@ public class FriendshipServiceImpl implements IFriendshipService {
                 relationshipMap.get(sourceUser.getId()).addConnection(RelationshipDto.ConnectionEnum.FOLLOWED_BY.getName());
             } else {
                 relationshipMap.put(sourceUser.getId(), new RelationshipDto(sourceUser.getId(),
-                        sourceUser.getScreenName(), sourceUser.getName(),
+                        sourceUser.getUsername(), sourceUser.getName(),
                         RelationshipDto.ConnectionEnum.FOLLOWED_BY.getName()));
             }
         });
