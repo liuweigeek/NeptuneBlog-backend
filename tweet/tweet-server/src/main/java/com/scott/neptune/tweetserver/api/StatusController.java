@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -53,7 +54,7 @@ public class StatusController {
     }
 
     @GetMapping("/lookup")
-    public ResponseEntity<List<TweetDto>> lookup(String statusIds) {
+    public ResponseEntity<Collection<TweetDto>> lookup(String statusIds) {
         if (StringUtils.isBlank(statusIds)) {
             throw new RestException("请指定要查找的推文", HttpStatus.BAD_REQUEST);
         }

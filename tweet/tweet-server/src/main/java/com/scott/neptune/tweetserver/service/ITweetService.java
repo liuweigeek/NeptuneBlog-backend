@@ -2,14 +2,13 @@ package com.scott.neptune.tweetserver.service;
 
 import com.scott.neptune.tweetclient.dto.TweetDto;
 import com.scott.neptune.tweetserver.domain.entity.TweetEntity;
-import com.scott.neptune.userclient.dto.UserDto;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
 
 public interface ITweetService {
 
-    TweetDto save(TweetDto tweetDto, UserDto loginUser);
+    TweetDto save(TweetDto tweetDto, Long authUserId);
 
     TweetDto findTweetById(Long tweetId);
 

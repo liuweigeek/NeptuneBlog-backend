@@ -16,6 +16,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -106,11 +107,6 @@ public class UserController extends BaseController {
         throw new RestException("请指定要查找的用户ID或用户名", HttpStatus.BAD_REQUEST);
     }
 
-    //TODO show specific user
-    public ResponseEntity<UserDto> search() {
-        return ResponseEntity.ok(new UserDto());
-    }
-
     /**
      * 通过关键字搜索用户
      *
@@ -119,7 +115,6 @@ public class UserController extends BaseController {
      * @return 用户列表
      */
     @ApiOperation(value = "通过关键字搜索用户")
-
     @GetMapping("/search")
     public ResponseEntity<Collection<UserDto>> search(UserSearchRequest request, AuthUserDto authUser) {
         List<UserDto> userDtoList = userService.search(request.getQ(), authUser.getId());
@@ -127,10 +122,16 @@ public class UserController extends BaseController {
         return ResponseEntity.ok(userDtoList);
     }
 
-    @ApiOperation(value = "根据用户名获取指定用户,用于授权接口")
+    /**
+     * 根据用户名获取指定用户,用于授权
+     *
+     * @param screenName 用户名
+     * @return
+     */
+    @ApiOperation(value = "根据用户名获取指定用户,用于授权")
     @ApiImplicitParam(value = "用户名", paramType = "path", required = true)
-    @GetMapping("/authenticate}")
-    public ResponseEntity<AuthUserDto> getUserByScreenNameForAuthenticate(String screenName) {
+    @GetMapping("/authenticate/{screenName}")
+    public ResponseEntity<AuthUserDto> getUserByScreenNameForAuthenticate(@PathVariable String screenName) {
         AuthUserDto authUserDto = userService.findUserByScreenNameForAuthenticate(screenName);
         return ResponseEntity.ok(authUserDto);
     }

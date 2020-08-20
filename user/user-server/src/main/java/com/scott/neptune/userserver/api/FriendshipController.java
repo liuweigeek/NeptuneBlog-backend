@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -59,8 +60,8 @@ public class FriendshipController extends BaseController {
             @ApiImplicitParam(value = "要查询的用户名列表，用[,]分割", paramType = "query")
     })
     @GetMapping("/lookUp")
-    public ResponseEntity<List<RelationshipDto>> lookUp(String userIds, String screenNames,
-                                                        @ApiIgnore AuthUserDto authUser) {
+    public ResponseEntity<Collection<RelationshipDto>> lookUp(String userIds, String screenNames,
+                                                              @ApiIgnore AuthUserDto authUser) {
         List<Long> userIdList = Collections.emptyList();
         if (StringUtils.isNotBlank(userIds)) {
             userIdList = Arrays.stream(StringUtils.split(userIds, ","))

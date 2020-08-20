@@ -7,7 +7,6 @@ import com.scott.neptune.tweetserver.convertor.TweetConvertor;
 import com.scott.neptune.tweetserver.domain.entity.TweetEntity;
 import com.scott.neptune.tweetserver.repository.TweetRepository;
 import com.scott.neptune.tweetserver.service.ITweetService;
-import com.scott.neptune.userclient.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -38,13 +37,14 @@ public class TweetServiceImpl implements ITweetService {
     /**
      * 保存推文
      *
-     * @param tweetDto 推文
+     * @param tweetDto   推文
+     * @param authUserId 用户ID
      * @return 保存结果
      */
     @Override
-    public TweetDto save(TweetDto tweetDto, UserDto loginUser) {
+    public TweetDto save(TweetDto tweetDto, Long authUserId) {
         TweetEntity tweetEntity = tweetConvertor.convertToEntity(tweetDto);
-        tweetEntity.setUserId(loginUser.getId());
+        tweetEntity.setUserId(authUserId);
         tweetRepository.save(tweetEntity);
         return tweetConvertor.convertToDto(tweetEntity);
     }

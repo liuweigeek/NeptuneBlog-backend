@@ -4,7 +4,7 @@ import com.scott.neptune.common.base.BaseController;
 import com.scott.neptune.tweetclient.dto.TweetDto;
 import com.scott.neptune.tweetserver.service.ITweetService;
 import com.scott.neptune.userclient.client.UserClient;
-import com.scott.neptune.userclient.dto.UserDto;
+import com.scott.neptune.userclient.dto.AuthUserDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -46,10 +46,8 @@ public class TweetController extends BaseController {
      */
     @ApiOperation(value = "发送推文")
     @PostMapping("/update")
-    public ResponseEntity<TweetDto> update(@RequestBody TweetDto tweetDto) {
-        UserDto loginUser = userClient.getLoginUser();
-        tweetDto = tweetService.save(tweetDto, loginUser);
-        tweetDto.setUser(loginUser);
+    public ResponseEntity<TweetDto> update(@RequestBody TweetDto tweetDto, AuthUserDto authUser) {
+        tweetDto = tweetService.save(tweetDto, authUser.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(tweetDto);
     }
 
@@ -60,10 +58,9 @@ public class TweetController extends BaseController {
      */
     @ApiOperation(value = "获取关注用户的推文")
     @GetMapping("/followingPosts")
-    public ResponseEntity<Page<TweetDto>> getFollowingPosts() {
-        UserDto loginUser = userClient.getLoginUser();
+    public ResponseEntity<Page<TweetDto>> getFollowingPosts(AuthUserDto authUser) {
         //TODO parameters for pageable
-        Page<TweetDto> tweetDtoPage = tweetService.findByUserId(loginUser.getId(), 0, 0);
+        Page<TweetDto> tweetDtoPage = tweetService.findByUserId(authUser.getId(), 0, 0);
         return ResponseEntity.ok(tweetDtoPage);
     }
 
