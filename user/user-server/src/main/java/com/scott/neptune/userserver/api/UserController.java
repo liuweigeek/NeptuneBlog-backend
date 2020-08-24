@@ -57,52 +57,67 @@ public class UserController extends BaseController {
     /**
      * 获取指定用户信息
      *
-     * @param userId   用户ID
+     * @param id       用户ID
+     * @param authUser 已登陆用户
+     * @return 用户信息
+     */
+    @ApiOperation(value = "获取指定用户信息")
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDto> getUserById(@PathVariable("id") Long id, AuthUserDto authUser) {
+
+        return Optional.ofNullable(userService.findUserById(id, authUser.getId()))
+                .map(ResponseEntity::ok)
+                .orElseThrow(() -> new RestException("用户不存在", HttpStatus.NOT_FOUND));
+    }
+
+    /**
+     * 获取指定用户信息
+     *
      * @param username 用户名
      * @param authUser 已登陆用户
      * @return 用户信息
      */
     @ApiOperation(value = "获取指定用户信息")
-    @GetMapping("/show")
-    public ResponseEntity<UserDto> show(Long userId, String username, AuthUserDto authUser) {
-        if (userId != null) {
-            return Optional.ofNullable(userService.findUserById(userId, authUser.getId()))
-                    .map(ResponseEntity::ok)
-                    .orElseThrow(() -> new RestException("用户不存在", HttpStatus.NOT_FOUND));
-        }
-        if (StringUtils.isNotBlank(username)) {
-            return Optional.ofNullable(userService.findUserByScreenName(username, authUser.getId()))
-                    .map(ResponseEntity::ok)
-                    .orElseThrow(() -> new RestException("用户不存在", HttpStatus.NOT_FOUND));
-        }
-        throw new RestException("请指定要查找的用户ID或用户名", HttpStatus.BAD_REQUEST);
+    @GetMapping("/username/{username}")
+    public ResponseEntity<UserDto> getUserByUsername(@PathVariable("username") String username, AuthUserDto authUser) {
+
+        return Optional.ofNullable(userService.findUserByScreenName(username, authUser.getId()))
+                .map(ResponseEntity::ok)
+                .orElseThrow(() -> new RestException("用户不存在", HttpStatus.NOT_FOUND));
     }
 
     /**
-     * 获取全部用户列表
+     * 获取用户列表
      *
-     * @param userIds   用户ID列表
+     * @param ids      用户ID列表
+     * @param authUser 已登录用户
+     * @return
+     */
+    @ApiOperation(value = "查询用户列表")
+    @GetMapping
+    public ResponseEntity<Collection<UserDto>> findUsersByIds(String ids, AuthUserDto authUser) {
+        List<Long> userIds = Stream.of(StringUtils.split(ids, ","))
+                .map(Long::parseLong)
+                .collect(Collectors.toList());
+        List<UserDto> userDtoList = userService.findAllUserByIdList(userIds, authUser.getId());
+        return ResponseEntity.ok(userDtoList);
+    }
+
+    /**
+     * 获取用户列表
+     *
      * @param usernames 用户名列表
      * @param authUser  已登录用户
      * @return
      */
     @ApiOperation(value = "查询用户列表")
-    @GetMapping("/lookup")
-    public ResponseEntity<Collection<UserDto>> lookup(String userIds, String usernames, AuthUserDto authUser) {
-        if (StringUtils.isNotBlank(userIds)) {
-            List<Long> ids = Stream.of(StringUtils.split(userIds, ","))
-                    .map(Long::parseLong)
-                    .collect(Collectors.toList());
-            List<UserDto> userDtoList = userService.findAllUserByIdList(ids, authUser.getId());
-            return ResponseEntity.ok(userDtoList);
-        }
-        if (StringUtils.isNotBlank(usernames)) {
-            List<String> userScreenNames = Stream.of(StringUtils.split(usernames, ","))
-                    .collect(Collectors.toList());
-            List<UserDto> userDtoList = userService.findAllUserByScreenNameList(userScreenNames, authUser.getId());
-            return ResponseEntity.ok(userDtoList);
-        }
-        throw new RestException("请指定要查找的用户ID或用户名", HttpStatus.BAD_REQUEST);
+    @GetMapping("/username")
+    public ResponseEntity<Collection<UserDto>> findUsersByUsernames(String usernames, AuthUserDto authUser) {
+
+        List<String> userScreenNames = Stream.of(StringUtils.split(usernames, ","))
+                .collect(Collectors.toList());
+        List<UserDto> userDtoList = userService.findAllUserByScreenNameList(userScreenNames, authUser.getId());
+        return ResponseEntity.ok(userDtoList);
     }
 
     /**
@@ -129,7 +144,7 @@ public class UserController extends BaseController {
     @ApiOperation(value = "根据用户名获取指定用户,用于授权")
     @ApiImplicitParam(value = "用户名", paramType = "path", required = true)
     @GetMapping("/authenticate/{username}")
-    public ResponseEntity<AuthUserDto> getUserByScreenNameForAuthenticate(@PathVariable String username) {
+    public ResponseEntity<AuthUserDto> getUserByUsernameForAuthenticate(@PathVariable String username) {
         AuthUserDto authUserDto = userService.findUserByScreenNameForAuthenticate(username);
         return ResponseEntity.ok(authUserDto);
     }

@@ -22,13 +22,13 @@ public interface FriendshipRepository extends JpaRepository<FriendshipEntity, Fr
         JpaSpecificationExecutor<FriendshipEntity> {
 
     /**
-     * find following friends
+     * find following users
      *
      * @param sourceId
      * @param pageable
      * @return
      */
-    @EntityGraph(value = "friendship.friends", type = EntityGraph.EntityGraphType.FETCH)
+    @EntityGraph(value = "friendship.following", type = EntityGraph.EntityGraphType.FETCH)
     @Query("from FriendshipEntity f where f.id.sourceId = :sourceId")
     Page<FriendshipEntity> findFriends(@Param("sourceId") Long sourceId, Pageable pageable);
 
@@ -44,12 +44,12 @@ public interface FriendshipRepository extends JpaRepository<FriendshipEntity, Fr
     Page<FriendshipEntity> findFollowers(@Param("targetId") Long targetId, Pageable pageable);
 
     /**
-     * find all following friends
+     * find all following users
      *
      * @param sourceId
      * @return
      */
-    @EntityGraph(value = "friendship.friends", type = EntityGraph.EntityGraphType.FETCH)
+    @EntityGraph(value = "friendship.following", type = EntityGraph.EntityGraphType.FETCH)
     @Query("from FriendshipEntity f where f.id.sourceId = :sourceId")
     List<FriendshipEntity> findAllBySourceUser(@Param("sourceId") Long sourceId, Sort sort);
 

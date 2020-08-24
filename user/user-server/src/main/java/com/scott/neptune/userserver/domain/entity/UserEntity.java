@@ -2,7 +2,6 @@ package com.scott.neptune.userserver.domain.entity;
 
 import com.scott.neptune.userclient.enumerate.GenderEnum;
 import com.scott.neptune.userserver.domain.listener.UserAuditingListener;
-import com.scott.neptune.userserver.domain.valueobject.ConnectionCountValObj;
 import com.scott.neptune.userserver.domain.valueobject.UserAvatarValObj;
 import com.scott.neptune.userserver.domain.valueobject.UserPublicMetricsValObj;
 import lombok.AllArgsConstructor;
@@ -110,13 +109,6 @@ public class UserEntity implements Serializable {
     private String profileImageUrl;
 
     /**
-     * 最近登录时间
-     */
-    @Column(name = "login_date")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date loginDate;
-
-    /**
      * 语言
      */
     @Column(name = "lang")
@@ -134,6 +126,4 @@ public class UserEntity implements Serializable {
     @Embedded
     private UserPublicMetricsValObj friendshipCount;
 
-    @Embedded
-    private ConnectionCountValObj connectionCount;
 }

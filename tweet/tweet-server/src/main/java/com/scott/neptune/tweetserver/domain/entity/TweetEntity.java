@@ -1,11 +1,10 @@
 package com.scott.neptune.tweetserver.domain.entity;
 
+import com.scott.neptune.tweetclient.enumerate.TweetTypeEnum;
 import com.scott.neptune.tweetserver.domain.listener.TweetAuditingListener;
 import com.scott.neptune.tweetserver.domain.valueobject.ConnectionStatusValObj;
-import com.scott.neptune.tweetserver.domain.valueobject.ReferencedTweetValObj;
 import com.scott.neptune.tweetserver.domain.valueobject.TweetEntitiesValObj;
 import com.scott.neptune.tweetserver.domain.valueobject.TweetPublicMetricsValObj;
-import com.scott.neptune.userclient.dto.UserDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,18 +15,20 @@ import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 /**
  * @Author: scott
@@ -60,26 +61,10 @@ public class TweetEntity implements Serializable {
     private String text;
 
     /**
-     * attachments
-     */
-
-    /**
      * 作者ID
      */
     @Column(name = "author_id")
     private Long authorId;
-
-    /**
-     * 发送人信息
-     */
-    @Transient
-    private UserDto author;
-
-    /**
-     * 对话ID，若当前Tweet为Reply，则指向另一条Tweet
-     */
-    @Column(name = "conversation_id")
-    private Long conversationId;
 
     /**
      * 发送时间
@@ -89,10 +74,27 @@ public class TweetEntity implements Serializable {
     private Date createAt;
 
     /**
+     * 发送设备
+     */
+    private String source;
+
+    /**
      * 附加信息
      */
     @Embedded
     private TweetEntitiesValObj entities;
+
+    /**
+     * tweet类型
+     */
+    @Enumerated(EnumType.STRING)
+    private TweetTypeEnum type;
+
+    /**
+     * 对话ID，如果当前Tweet是一条回复，则指向另一条Tweet
+     */
+    @Column(name = "conversation_id")
+    private Long conversationId;
 
     /**
      * 如果当前Tweet是一条回复，则该字段指向原Tweet的Author ID
@@ -109,13 +111,9 @@ public class TweetEntity implements Serializable {
     /**
      * 被引用的Tweet
      */
-    @OneToMany(mappedBy = "referencedBy", fetch = FetchType.LAZY)
-    private List<ReferencedTweetValObj> referencedTweets;
-
-    /**
-     * 发送设备
-     */
-    private String source;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "referenced_tweet_id")
+    private TweetEntity referencedTweet;
 
     @Transient
     private ConnectionStatusValObj connectionStatus;

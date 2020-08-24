@@ -1,6 +1,8 @@
 package com.scott.neptune.common.base;
 
+import java.util.Collection;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * @Author: scott
@@ -10,38 +12,8 @@ import java.util.function.Function;
  */
 public abstract class BaseConvertor<ENTITY, DTO> {
 
-    private Function<ENTITY, DTO> INSTANCE_TO_DTO = null;
-
-    private Function<DTO, ENTITY> INSTANCE_TO_ENTITY = null;
-
-    /**
-     * convert to DTO
-     *
-     * @return
-     */
-    public DTO convertToDto(ENTITY entity) {
-        return this.convertToDto(entity);
-    }
-
-    /**
-     * convert to Entity
-     *
-     * @return
-     */
-    public ENTITY convertToEntity(DTO dto) {
-        return this.convertToEntity(dto);
-    }
-
-    /**
-     * convert to DTO
-     *
-     * @return
-     */
     public Function<ENTITY, DTO> convertToDto() {
-        if (INSTANCE_TO_DTO == null) {
-            INSTANCE_TO_DTO = getFunctionInstanceToDto();
-        }
-        return INSTANCE_TO_DTO;
+        return functionConvertToDto();
     }
 
     /**
@@ -50,25 +22,62 @@ public abstract class BaseConvertor<ENTITY, DTO> {
      * @return
      */
     public Function<DTO, ENTITY> convertToEntity() {
-        if (INSTANCE_TO_ENTITY == null) {
-            INSTANCE_TO_ENTITY = getFunctionInstanceToEntity();
-        }
-        return INSTANCE_TO_ENTITY;
+        return functionConvertToEntity();
     }
 
     /**
-     * @return
-     */
-    protected abstract Function<ENTITY, DTO> getFunctionInstanceToDto();
-
-    /**
-     * if (INSTANCE_TO_DTO == null) {
-     * INSTANCE_TO_DTO = getFunctionInstanceToDto();
-     * }
-     * return INSTANCE_TO_DTO;
+     * convert to DTO
      *
      * @return
      */
-    protected abstract Function<DTO, ENTITY> getFunctionInstanceToEntity();
+    public DTO convertToDto(ENTITY entity) {
+        return convertToDto().apply(entity);
+    }
+
+    /**
+     * convert to Entity
+     *
+     * @return
+     */
+    public ENTITY convertToEntity(DTO dto) {
+        return convertToEntity().apply(dto);
+    }
+
+    /**
+     * get a function implement to convert an entity to a dto
+     *
+     * @return
+     */
+    protected abstract Function<ENTITY, DTO> functionConvertToDto();
+
+    /**
+     * get a function implement to convert a dto to aentity
+     *
+     * @return
+     */
+    protected abstract Function<DTO, ENTITY> functionConvertToEntity();
+
+    /**
+     * get a function implement to convert several of enties to dtos
+     *
+     * @return
+     */
+    protected Function<Collection<ENTITY>, Collection<DTO>> functionConvertToDtoList() {
+        return entities -> entities.stream()
+                .map(functionConvertToDto())
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * get a function implement to convert several of dtos to entities
+     *
+     * @return
+     */
+    protected Function<Collection<DTO>, Collection<ENTITY>> functionConvertToEntityList() {
+        return dtos -> dtos.stream()
+                .map(functionConvertToEntity())
+                .collect(Collectors.toList());
+    }
+
 
 }

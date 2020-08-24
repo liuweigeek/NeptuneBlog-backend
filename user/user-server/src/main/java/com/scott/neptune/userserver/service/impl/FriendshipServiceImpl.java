@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
-@Transactional(readOnly = true, rollbackFor = RuntimeException.class)
+@Transactional(readOnly = true, rollbackFor = Exception.class)
 @Service
 public class FriendshipServiceImpl implements IFriendshipService {
 
@@ -83,7 +83,7 @@ public class FriendshipServiceImpl implements IFriendshipService {
      * @return 关注列表
      */
     @Override
-    public Page<FriendshipDto> findFriends(Long userId, long offset, int limit) {
+    public Page<FriendshipDto> findFollowing(Long userId, long offset, int limit) {
         if (userId == null) {
             return Page.empty();
         }
@@ -114,7 +114,7 @@ public class FriendshipServiceImpl implements IFriendshipService {
      * @return
      */
     @Override
-    public List<FriendshipDto> findAllFriends(Long userId, List<Long> targetUserIds) {
+    public List<FriendshipDto> findAllFollowing(Long userId, List<Long> targetUserIds) {
         if (userId == null) {
             return Collections.emptyList();
         }
@@ -128,7 +128,6 @@ public class FriendshipServiceImpl implements IFriendshipService {
                     .map(friendshipConvertor.convertToDto())
                     .collect(Collectors.toList());
         }
-
     }
 
     /**
@@ -151,6 +150,58 @@ public class FriendshipServiceImpl implements IFriendshipService {
             return friendshipRepository.findAllByTargetUserAndSourceUserIn(userId, sourceUserIds,
                     Sort.by(Sort.Order.desc("followDate"))).stream()
                     .map(friendshipConvertor.convertToDto())
+                    .collect(Collectors.toList());
+        }
+    }
+
+    /**
+     * 获取全部已关注用户
+     *
+     * @param userId
+     * @param targetUserIds
+     * @return
+     */
+    @Override
+    public List<Long> findAllFollowingIds(Long userId, List<Long> targetUserIds) {
+        if (userId == null) {
+            return Collections.emptyList();
+        }
+        if (CollectionUtils.isEmpty(targetUserIds)) {
+            return friendshipRepository.findAllBySourceUser(userId, Sort.by(Sort.Order.desc("followDate"))).stream()
+                    .map(friendshipConvertor.convertToDto())
+                    .map(FriendshipDto::getTargetId)
+                    .collect(Collectors.toList());
+        } else {
+            return friendshipRepository.findAllBySourceUserAndTargetUserIn(userId, targetUserIds,
+                    Sort.by(Sort.Order.desc("followDate"))).stream()
+                    .map(friendshipConvertor.convertToDto())
+                    .map(FriendshipDto::getTargetId)
+                    .collect(Collectors.toList());
+        }
+    }
+
+    /**
+     * 获取全部关注者
+     *
+     * @param userId
+     * @param sourceUserIds
+     * @return
+     */
+    @Override
+    public List<Long> findAllFollowersIds(Long userId, List<Long> sourceUserIds) {
+        if (userId == null) {
+            return Collections.emptyList();
+        }
+        if (CollectionUtils.isEmpty(sourceUserIds)) {
+            return friendshipRepository.findAllByTargetUser(userId, Sort.by(Sort.Order.desc("followDate"))).stream()
+                    .map(friendshipConvertor.convertToDto())
+                    .map(FriendshipDto::getSourceId)
+                    .collect(Collectors.toList());
+        } else {
+            return friendshipRepository.findAllByTargetUserAndSourceUserIn(userId, sourceUserIds,
+                    Sort.by(Sort.Order.desc("followDate"))).stream()
+                    .map(friendshipConvertor.convertToDto())
+                    .map(FriendshipDto::getSourceId)
                     .collect(Collectors.toList());
         }
     }

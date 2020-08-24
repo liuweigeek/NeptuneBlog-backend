@@ -19,7 +19,7 @@ import java.util.function.Function;
 public class FriendshipConvertor extends BaseConvertor<FriendshipEntity, FriendshipDto> {
 
     @Override
-    protected Function<FriendshipEntity, FriendshipDto> getFunctionInstanceToDto() {
+    protected Function<FriendshipEntity, FriendshipDto> functionConvertToDto() {
         return entity -> {
             FriendshipDto dto = new FriendshipDto();
             BeanUtils.copyProperties(entity, dto);
@@ -30,7 +30,7 @@ public class FriendshipConvertor extends BaseConvertor<FriendshipEntity, Friends
     }
 
     @Override
-    protected Function<FriendshipDto, FriendshipEntity> getFunctionInstanceToEntity() {
+    protected Function<FriendshipDto, FriendshipEntity> functionConvertToEntity() {
         return dto -> {
             FriendshipEntity entity = new FriendshipEntity();
             BeanUtils.copyProperties(dto, entity);

@@ -37,7 +37,7 @@ public interface IFriendshipService {
      * @param userId 当前登陆用户Id
      * @return 关注列表
      */
-    Page<FriendshipDto> findFriends(Long userId, long offset, int limit);
+    Page<FriendshipDto> findFollowing(Long userId, long offset, int limit);
 
     /**
      * 获取关注者列表
@@ -54,7 +54,7 @@ public interface IFriendshipService {
      * @param targetUserIds
      * @return
      */
-    List<FriendshipDto> findAllFriends(Long userId, List<Long> targetUserIds);
+    List<FriendshipDto> findAllFollowing(Long userId, List<Long> targetUserIds);
 
     /**
      * 获取全部关注者
@@ -64,6 +64,24 @@ public interface IFriendshipService {
      * @return
      */
     List<FriendshipDto> findAllFollowers(Long userId, List<Long> sourceUserIds);
+
+    /**
+     * 获取全部已关注用户
+     *
+     * @param userId
+     * @param targetUserIds
+     * @return
+     */
+    List<Long> findAllFollowingIds(Long userId, List<Long> targetUserIds);
+
+    /**
+     * 获取全部关注者
+     *
+     * @param userId
+     * @param sourceUserIds
+     * @return
+     */
+    List<Long> findAllFollowersIds(Long userId, List<Long> sourceUserIds);
 
     /**
      * 删除好友关系

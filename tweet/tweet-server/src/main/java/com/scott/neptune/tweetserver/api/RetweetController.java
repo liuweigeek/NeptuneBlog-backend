@@ -1,6 +1,5 @@
 package com.scott.neptune.tweetserver.api;
 
-import com.scott.neptune.tweetclient.command.StatusesUpdateRequest;
 import com.scott.neptune.tweetclient.dto.TweetDto;
 import com.scott.neptune.tweetserver.service.ITweetService;
 import com.scott.neptune.userclient.dto.AuthUserDto;
@@ -8,9 +7,11 @@ import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
@@ -26,6 +27,7 @@ import java.util.Collections;
 @RequiredArgsConstructor
 @Api(tags = "Retweet接口")
 @RestController
+@RequestMapping("/retweet")
 public class RetweetController {
 
     private final ITweetService tweetService;
@@ -33,24 +35,24 @@ public class RetweetController {
     /**
      * TODO create a retweet
      *
-     * @param statusId tweetId
+     * @param id       tweetId
      * @param authUser 已登录用户
      * @return
      */
-    @PostMapping("/statuses/retweet/{id}")
-    public ResponseEntity<TweetDto> addRetweet(@PathVariable("id") Long statusId, AuthUserDto authUser) {
+    @PostMapping("/{id}")
+    public ResponseEntity<TweetDto> addRetweet(@PathVariable("id") Long id, AuthUserDto authUser) {
         return ResponseEntity.ok(new TweetDto());
     }
 
     /**
      * TODO find retweets of specific tweet
      *
-     * @param statusId tweetId
+     * @param id       tweetId
      * @param authUser 已登录用户
      * @return
      */
-    @GetMapping("/statuses/retweet/{id}")
-    public ResponseEntity<Collection<TweetDto>> findRetweets(@PathVariable("id") Long statusId, AuthUserDto authUser) {
+    @GetMapping("/{id}")
+    public ResponseEntity<Collection<TweetDto>> findRetweets(@PathVariable("id") Long id, AuthUserDto authUser) {
         return ResponseEntity.ok(Collections.singleton(new TweetDto()));
     }
 
@@ -60,20 +62,20 @@ public class RetweetController {
      * @param authUser 已登录用户
      * @return
      */
-    @GetMapping("/statuses/retweet/{id}")
+    @GetMapping("/retweets_of_me/{id}")
     public ResponseEntity<Collection<TweetDto>> findRetweetsOfMe(AuthUserDto authUser) {
         return ResponseEntity.ok(Collections.singleton(new TweetDto()));
     }
 
     /**
-     * TODO remove a retweet
+     * TODO 取消retweet
      *
-     * @param request
+     * @param id
      * @param authUser
      * @return
      */
-    @PostMapping("/statuses/unretweet/{id}")
-    public ResponseEntity<TweetDto> unRetweet(StatusesUpdateRequest request, AuthUserDto authUser) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<TweetDto> removeRetweet(@PathVariable("id") Long id, AuthUserDto authUser) {
         return ResponseEntity.ok(new TweetDto());
     }
 }

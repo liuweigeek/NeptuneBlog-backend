@@ -30,24 +30,40 @@ public interface UserClient {
     UserDto addUser(UserDto userDto);
 
     /**
-     * 根据ID获取指定用户
+     * 获取指定用户信息
      *
-     * @param id       用户ID
+     * @param id 用户ID
+     * @return
+     */
+    @RequestMapping(path = "/users/{id}", method = RequestMethod.GET)
+    UserDto getUserById(@PathVariable("id") Long id);
+
+    /**
+     * 获取指定用户信息
+     *
      * @param username 用户名
      * @return
      */
-    @RequestMapping(path = "/users/show", method = RequestMethod.GET)
-    UserDto show(Long id, String username);
+    @RequestMapping(path = "/users/username/{username}", method = RequestMethod.GET)
+    UserDto getUserByUsername(@PathVariable("username") String username);
 
     /**
-     * 获取全部用户列表
+     * 获取用户列表
      *
-     * @param userIds   用户ID列表
+     * @param ids 用户ID列表
+     * @return
+     */
+    @RequestMapping(path = "/users", method = RequestMethod.GET)
+    Collection<UserDto> findUsersByIds(String ids);
+
+    /**
+     * 获取用户列表
+     *
      * @param usernames 用户名列表
      * @return
      */
-    @RequestMapping(path = "/users/lookup", method = RequestMethod.GET)
-    Collection<UserDto> lookup(String userIds, String usernames);
+    @RequestMapping(path = "/users/username", method = RequestMethod.GET)
+    Collection<UserDto> findUsersByUsernames(String usernames);
 
     /**
      * 通过关键字搜索用户
@@ -65,5 +81,17 @@ public interface UserClient {
      * @return
      */
     @RequestMapping(path = "/users/authenticate/{username}", method = RequestMethod.GET)
-    AuthUserDto getUserByScreenNameForAuthenticate(@PathVariable String username);
+    AuthUserDto getUserByUsernameForAuthenticate(@PathVariable String username);
+
+    @RequestMapping(path = "/ids/all", method = RequestMethod.GET)
+    Collection<Long> findAllFollowingIds(Long id);
+
+    /**
+     * 获取全部关注者用户ID列表
+     *
+     * @param id 指定用户视角
+     * @return
+     */
+    @RequestMapping(path = "/ids/all", method = RequestMethod.GET)
+    Collection<Long> findAllFollowerIds(Long id);
 }

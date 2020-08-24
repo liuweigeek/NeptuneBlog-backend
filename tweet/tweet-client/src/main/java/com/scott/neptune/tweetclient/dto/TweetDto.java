@@ -65,6 +65,6 @@ public class TweetDto implements Serializable {
      */
     //TODO create a new object for simply
     @ApiModelProperty(value = "发送人")
-    private UserDto user;
+    private UserDto author;
 
 }

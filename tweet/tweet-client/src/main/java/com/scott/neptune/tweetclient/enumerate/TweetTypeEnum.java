@@ -6,8 +6,12 @@ package com.scott.neptune.tweetclient.enumerate;
  * @Date: 2020/8/20 23:27
  * @Description:
  */
-public enum ReferencedTweetTypeEnum {
+public enum TweetTypeEnum {
 
+    /**
+     * original
+     */
+    original,
     /**
      * replied_to
      */

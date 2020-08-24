@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @RequiredArgsConstructor
-@Transactional(readOnly = true, rollbackFor = RuntimeException.class)
+@Transactional(readOnly = true, rollbackFor = Exception.class)
 @Service
 public class UserServiceImpl implements IUserService {
 
@@ -93,7 +93,6 @@ public class UserServiceImpl implements IUserService {
 
         //TODO create by event
         userEntity.setCreateAt(new Date());
-        userEntity.setLoginDate(new Date());
 
         userRepository.save(userEntity);
         return userConvertor.convertToDto(userEntity);

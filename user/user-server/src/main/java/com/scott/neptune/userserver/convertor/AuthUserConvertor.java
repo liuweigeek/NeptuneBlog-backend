@@ -18,7 +18,7 @@ import java.util.function.Function;
 public class AuthUserConvertor extends BaseConvertor<UserEntity, AuthUserDto> {
 
     @Override
-    protected Function<UserEntity, AuthUserDto> getFunctionInstanceToDto() {
+    protected Function<UserEntity, AuthUserDto> functionConvertToDto() {
         return entity -> {
             AuthUserDto dto = new AuthUserDto();
             BeanUtils.copyProperties(entity, dto);
@@ -33,7 +33,7 @@ public class AuthUserConvertor extends BaseConvertor<UserEntity, AuthUserDto> {
     }
 
     @Override
-    protected Function<AuthUserDto, UserEntity> getFunctionInstanceToEntity() {
+    protected Function<AuthUserDto, UserEntity> functionConvertToEntity() {
         return dto -> {
             UserEntity entity = new UserEntity();
             BeanUtils.copyProperties(dto, entity);

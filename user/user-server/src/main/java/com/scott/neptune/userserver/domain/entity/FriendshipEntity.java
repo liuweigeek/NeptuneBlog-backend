@@ -41,7 +41,7 @@ import java.util.Date;
 @NamedEntityGraphs(value = {
         @NamedEntityGraph(name = "friendship.id"),
         @NamedEntityGraph(name = "friendship.all", attributeNodes = {@NamedAttributeNode("sourceUser"), @NamedAttributeNode("targetUser")}),
-        @NamedEntityGraph(name = "friendship.friends", attributeNodes = {@NamedAttributeNode("targetUser")}),
+        @NamedEntityGraph(name = "friendship.following", attributeNodes = {@NamedAttributeNode("targetUser")}),
         @NamedEntityGraph(name = "friendship.followers", attributeNodes = {@NamedAttributeNode("sourceUser")})
 })
 public class FriendshipEntity implements Serializable {

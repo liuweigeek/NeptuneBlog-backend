@@ -6,8 +6,7 @@ import com.scott.neptune.tweetclient.dto.TweetDto;
 import com.scott.neptune.tweetserver.convertor.TweetConvertor;
 import com.scott.neptune.tweetserver.domain.entity.TweetEntity;
 import com.scott.neptune.tweetserver.repository.TweetRepository;
-import com.scott.neptune.tweetserver.service.ITweetService;
-import com.scott.neptune.userclient.client.UserClient;
+import com.scott.neptune.tweetserver.service.IReplyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -18,7 +17,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -27,18 +25,17 @@ import java.util.stream.Collectors;
 /**
  * @Author: scott
  * @Email: <a href="mailto:liuweigeek@outlook.com">Scott Lau</a>
- * @Date: 2020/8/23 23:05
- * @Description: Tweet
+ * @Date: 2020/8/23 23:04
+ * @Description: Reply tweet
  */
 @Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true, rollbackFor = Exception.class)
 @Service
-public class TweetServiceImpl implements ITweetService {
+public class ReplyServiceImpl implements IReplyService {
 
     private final TweetRepository tweetRepository;
     private final TweetConvertor tweetConvertor;
-    private final UserClient userClient;
 
     /**
      * 保存推文
@@ -119,25 +116,6 @@ public class TweetServiceImpl implements ITweetService {
         }
         Pageable pageable = OffsetPageable.of(offset, limit, Sort.by(Sort.Order.desc("createAt")));
         return tweetRepository.findByUserIdIn(userIdList, pageable).map(tweetConvertor.convertToDto());
-    }
-
-    /**
-     * 根据关注者获取关注的Tweet
-     *
-     * @param followerId
-     * @param offset
-     * @param limit
-     * @return
-     */
-    @Override
-    public Page<TweetDto> findFollowingTweets(Long followerId, int offset, int limit) {
-        Collection<Long> followingIds = userClient.findAllFollowingIds(followerId);
-        if (CollectionUtils.isEmpty(followingIds)) {
-            return Page.empty();
-        }
-        Pageable pageable = OffsetPageable.of(offset, limit, Sort.by(Sort.Order.desc("createAt")));
-//        return tweetRepository.findByUserIdIn(followingIds, pageable);
-        return null;
     }
 
     /**

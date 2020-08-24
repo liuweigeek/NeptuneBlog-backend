@@ -33,10 +33,9 @@ public class AuthUserService implements UserDetailsService {
 
     @Override
     public AuthUser loadUserByUsername(String username) throws UsernameNotFoundException {
-        //TODO change to username
-        AuthUserDto authUserDto = userClient.getUserByScreenNameForAuthenticate(username);
+        AuthUserDto authUserDto = userClient.getUserByUsernameForAuthenticate(username);
         if (authUserDto == null) {
-            throw new RestException("指定用不不存在", HttpStatus.NOT_FOUND);
+            throw new RestException("指定用户不存在", HttpStatus.NOT_FOUND);
         }
         return authUserConvertor.convertToEntity(authUserDto);
     }
