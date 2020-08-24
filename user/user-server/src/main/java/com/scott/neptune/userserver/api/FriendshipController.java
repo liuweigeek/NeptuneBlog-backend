@@ -17,17 +17,18 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -60,8 +61,8 @@ public class FriendshipController extends BaseController {
             @ApiImplicitParam(value = "要查询的用户名列表，用[,]分割", paramType = "query")
     })
     @GetMapping("/lookUp")
-    public ResponseEntity<Collection<RelationshipDto>> lookUp(String userIds, String usernames,
-                                                              @ApiIgnore AuthUserDto authUser) {
+    public ResponseEntity<List<RelationshipDto>> lookUp(String userIds, String usernames,
+                                                        @ApiIgnore AuthUserDto authUser) {
         List<Long> userIdList = Collections.emptyList();
         if (StringUtils.isNotBlank(userIds)) {
             userIdList = Arrays.stream(StringUtils.split(userIds, ","))
@@ -80,37 +81,29 @@ public class FriendshipController extends BaseController {
     /**
      * 获取指定用户与登录用户的关系
      *
-     * @param userId
-     * @param username
+     * @param id
      * @param authUser
      * @return
      */
     @ApiOperation(value = "获取指定用户与登录用户的关系")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(value = "要查询的用户ID", paramType = "query"),
-            @ApiImplicitParam(value = "要查询的用户名", paramType = "query")
-    })
-    @GetMapping("/show")
-    public ResponseEntity<RelationshipDto> show(Long userId, String username,
-                                                @ApiIgnore AuthUserDto authUser) {
+    @ApiImplicitParam(value = "要查询的用户ID", paramType = "query")
+    @GetMapping("/{id}")
+    public ResponseEntity<RelationshipDto> getFriendshipById(@PathVariable("id") Long id, @ApiIgnore AuthUserDto authUser) {
         return ResponseEntity.ok(new RelationshipDto());
     }
 
     /**
      * 关注指定用户
      *
-     * @param userId   指定用户ID
+     * @param id       指定用户ID
      * @param authUser 已登录用户
      * @return
      */
     @ApiOperation(value = "关注指定用户")
     @ApiImplicitParam(value = "要关注的用户ID", paramType = "query", required = true)
-    @PostMapping("/create")
-    public ResponseEntity<FriendshipDto> create(Long userId, String username, AuthUserDto authUser) {
-        UserDto targetUser = Optional.ofNullable(userId)
-                .map(id -> userService.findUserById(id, authUser.getId()))
-                .orElse(userService.findUserByScreenName(username, authUser.getId()));
-
+    @PostMapping
+    public ResponseEntity<FriendshipDto> addFriendship(@RequestParam Long id, AuthUserDto authUser) {
+        UserDto targetUser = userService.findUserById(id, authUser.getId());
         if (targetUser == null) {
             throw new RestException("用户不存在", HttpStatus.NOT_FOUND);
         }
@@ -124,22 +117,20 @@ public class FriendshipController extends BaseController {
     /**
      * 取消关注指定用户
      *
-     * @param userId   指定用户ID
+     * @param id       指定用户ID
      * @param authUser 已登录用户
      * @return
      */
     @ApiOperation(value = "取消关注指定用户")
     @ApiImplicitParam(name = "userId", value = "要取消关注的用户ID", paramType = "query", required = true)
-    @PostMapping("/destroy")
-    public ResponseEntity<Void> destroy(Long userId, String username, AuthUserDto authUser) {
-        UserDto targetUser = Optional.ofNullable(userId)
-                .map(id -> userService.findUserById(id, authUser.getId()))
-                .orElse(userService.findUserByScreenName(username, authUser.getId()));
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteFriendship(@PathVariable("id") Long id, AuthUserDto authUser) {
+        UserDto targetUser = userService.findUserById(id, authUser.getId());
 
         if (targetUser == null) {
             throw new RestException("用户不存在", HttpStatus.NOT_FOUND);
         }
-        friendshipService.delete(authUser.getId(), userId);
+        friendshipService.delete(authUser.getId(), id);
         return ResponseEntity.noContent().build();
     }
 }

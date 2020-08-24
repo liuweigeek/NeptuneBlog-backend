@@ -121,7 +121,7 @@ public class UserServiceImpl implements IUserService {
      * @return 用户对象
      */
     @Override
-    public UserDto findUserByScreenName(String username, Long loginUserId) {
+    public UserDto findUserByUsername(String username, Long loginUserId) {
         if (StringUtils.isBlank(username)) {
             throw new NeptuneBlogException("请指定要查询的用户");
         }
@@ -178,24 +178,23 @@ public class UserServiceImpl implements IUserService {
      * @return 用户对象列表
      */
     @Override
-    public List<UserDto> findAllUserByScreenNameList(List<String> usernameList, Long loginUserId) {
+    public List<UserDto> findAllUserByUsernameList(List<String> usernameList, Long loginUserId) {
         if (CollectionUtils.isEmpty(usernameList)) {
             return Collections.emptyList();
         }
-        return userRepository.findAllByScreenNameIn(usernameList).stream()
+        return userRepository.findAllByUsernameIn(usernameList).stream()
                 .map(userConvertor.convertToDto())
                 .collect(Collectors.toList());
     }
 
     @Override
-    public AuthUserDto findUserByScreenNameForAuthenticate(String username) {
+    public AuthUserDto findUserByUsernameForAuthenticate(String username) {
         if (StringUtils.isBlank(username)) {
             throw new NeptuneBlogException("请指定要查询的用户");
         }
         ExampleMatcher usernameExampleMatcher = ExampleMatcher.matching()
                 .withMatcher("username", ExampleMatcher.GenericPropertyMatchers.ignoreCase())
                 .withIgnoreNullValues();
-        //TODO add a new convertor
         return userRepository.findOne(Example.of(UserEntity.builder().username(username).build(), usernameExampleMatcher))
                 .map(authUserConvertor::convertToDto)
                 .orElseThrow(() -> new NeptuneBlogException("username not found"));

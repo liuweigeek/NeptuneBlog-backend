@@ -18,7 +18,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -96,12 +95,12 @@ public class TweetServiceImpl implements ITweetService {
      * @return
      */
     @Override
-    public Page<TweetDto> findByUserId(Long userId, int offset, int limit) {
+    public Page<TweetDto> findByUserId(Long userId, long offset, int limit) {
         if (userId == null) {
             return Page.empty();
         }
         Pageable pageable = OffsetPageable.of(offset, limit, Sort.by(Sort.Order.desc("createAt")));
-        return tweetRepository.findByUserId(userId, pageable).map(tweetConvertor.convertToDto());
+        return tweetRepository.findByAuthorId(userId, pageable).map(tweetConvertor::convertToDto);
     }
 
     /**
@@ -113,12 +112,12 @@ public class TweetServiceImpl implements ITweetService {
      * @return
      */
     @Override
-    public Page<TweetDto> findByUserIdList(List<Long> userIdList, int offset, int limit) {
+    public Page<TweetDto> findByUserIdList(List<Long> userIdList, long offset, int limit) {
         if (CollectionUtils.isEmpty(userIdList)) {
             return Page.empty();
         }
         Pageable pageable = OffsetPageable.of(offset, limit, Sort.by(Sort.Order.desc("createAt")));
-        return tweetRepository.findByUserIdIn(userIdList, pageable).map(tweetConvertor.convertToDto());
+        return tweetRepository.findByAuthorIdIn(userIdList, pageable).map(tweetConvertor.convertToDto());
     }
 
     /**
@@ -130,14 +129,13 @@ public class TweetServiceImpl implements ITweetService {
      * @return
      */
     @Override
-    public Page<TweetDto> findFollowingTweets(Long followerId, int offset, int limit) {
-        Collection<Long> followingIds = userClient.findAllFollowingIds(followerId);
+    public Page<TweetDto> findFollowingTweets(Long followerId, long offset, int limit) {
+        List<Long> followingIds = userClient.findAllFollowingIds(followerId);
         if (CollectionUtils.isEmpty(followingIds)) {
             return Page.empty();
         }
         Pageable pageable = OffsetPageable.of(offset, limit, Sort.by(Sort.Order.desc("createAt")));
-//        return tweetRepository.findByUserIdIn(followingIds, pageable);
-        return null;
+        return tweetRepository.findByAuthorIdIn(followingIds, pageable).map(tweetConvertor.convertToDto());
     }
 
     /**

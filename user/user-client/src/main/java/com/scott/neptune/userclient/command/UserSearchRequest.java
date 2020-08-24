@@ -1,6 +1,6 @@
 package com.scott.neptune.userclient.command;
 
-import com.scott.neptune.common.command.CursorCommand;
+import com.scott.neptune.common.command.OffsetPageCommand;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
@@ -19,7 +19,7 @@ import javax.validation.constraints.NotBlank;
 @Builder
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "user search request", description = "用户搜索请求")
-public class UserSearchRequest extends CursorCommand {
+public class UserSearchRequest extends OffsetPageCommand {
 
     private static final long serialVersionUID = 1L;
 

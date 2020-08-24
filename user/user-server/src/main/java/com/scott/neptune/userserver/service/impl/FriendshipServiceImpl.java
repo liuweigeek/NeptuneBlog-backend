@@ -247,22 +247,22 @@ public class FriendshipServiceImpl implements IFriendshipService {
      * 查询指定用户与已登录用户的关系
      *
      * @param userIds
-     * @param userScreenNames
+     * @param usernames
      * @param authUserId
      * @return
      */
     @Override
-    public List<RelationshipDto> getRelationship(List<Long> userIds, List<String> userScreenNames, Long authUserId) {
+    public List<RelationshipDto> getRelationship(List<Long> userIds, List<String> usernames, Long authUserId) {
 
-        List<Long> ids = Lists.newArrayListWithExpectedSize(userIds.size() + userScreenNames.size());
+        List<Long> ids = Lists.newArrayListWithExpectedSize(userIds.size() + usernames.size());
         if (CollectionUtils.isNotEmpty(userIds)) {
             ids.addAll(userIds);
         }
-        if (CollectionUtils.isNotEmpty(userScreenNames)) {
-            List<Long> idFromScreenNames = userRepository.findAllByScreenNameIn(userScreenNames)
+        if (CollectionUtils.isNotEmpty(usernames)) {
+            List<Long> idFromUsernames = userRepository.findAllByUsernameIn(usernames)
                     .stream().map(UserEntity::getId).collect(Collectors.toList());
-            if (CollectionUtils.isNotEmpty(idFromScreenNames)) {
-                ids.addAll(idFromScreenNames);
+            if (CollectionUtils.isNotEmpty(idFromUsernames)) {
+                ids.addAll(idFromUsernames);
             }
         }
 

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -47,8 +48,8 @@ public class SearchController extends BaseController {
     @GetMapping("/{keyword}")
     public ResponseEntity<Map<String, Collection>> searchByKeyword(@PathVariable("keyword") String keyword) {
 
-        Collection<UserDto> userDtoList = userClient.search(UserSearchRequest.builder().q(keyword).build());
-        Collection<TweetDto> tweetDtoList = tweetClient.search(keyword);
+        List<UserDto> userDtoList = userClient.search(UserSearchRequest.builder().q(keyword).build());
+        List<TweetDto> tweetDtoList = tweetClient.search(keyword);
 
         Map<String, Collection> searchResultMap = new HashMap<>();
         searchResultMap.put("userRes", userDtoList);

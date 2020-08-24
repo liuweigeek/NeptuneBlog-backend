@@ -9,7 +9,7 @@ import lombok.Data;
  * @Description:
  */
 @Data
-public class OffsetPageCommand<T> {
+public class OffsetPageCommand {
 
     private static final long serialVersionUID = 1L;
 
@@ -17,5 +17,4 @@ public class OffsetPageCommand<T> {
 
     private int limit = 20;
 
-    private T data;
 }

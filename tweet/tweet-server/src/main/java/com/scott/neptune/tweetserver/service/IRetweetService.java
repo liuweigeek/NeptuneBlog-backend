@@ -13,7 +13,7 @@ public interface IRetweetService {
 
     TweetDto save(Long tweetId, Long authUserId);
 
-    Page<TweetDto> findRetweet(Long tweetId, int offset, int limit);
+    Page<TweetDto> findRetweet(Long tweetId, long offset, int limit);
 
     void delete(Long tweetId, Long authUserId);
 

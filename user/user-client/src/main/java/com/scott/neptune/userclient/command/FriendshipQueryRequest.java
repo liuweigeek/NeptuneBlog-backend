@@ -1,6 +1,6 @@
 package com.scott.neptune.userclient.command;
 
-import com.scott.neptune.common.command.CursorCommand;
+import com.scott.neptune.common.command.OffsetPageCommand;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -12,7 +12,7 @@ import lombok.EqualsAndHashCode;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class FriendshipQueryRequest extends CursorCommand {
+public class FriendshipQueryRequest extends OffsetPageCommand {
 
     private static final long serialVersionUID = 1L;
 

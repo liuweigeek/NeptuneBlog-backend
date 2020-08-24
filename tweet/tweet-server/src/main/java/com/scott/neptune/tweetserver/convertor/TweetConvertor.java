@@ -50,7 +50,7 @@ public class TweetConvertor extends BaseConvertor<TweetEntity, TweetDto> {
     protected Function<Collection<TweetEntity>, Collection<TweetDto>> functionConvertToDtoList() {
         return entities -> {
             Collection<Long> authorIds = entities.stream().map(TweetEntity::getAuthorId).collect(Collectors.toList());
-            Map<Long, UserDto> authorMap = userClient.lookup(StringUtils.join(authorIds, ","), null).stream()
+            Map<Long, UserDto> authorMap = userClient.findUsersByIds(StringUtils.join(authorIds, ",")).stream()
                     .collect(Collectors.toMap(UserDto::getId, userDto -> userDto));
             return entities.stream()
                     .map(entity -> {

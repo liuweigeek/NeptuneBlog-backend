@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -47,7 +47,7 @@ public class FollowingController extends BaseController {
         Long whomUserId = Optional.ofNullable(request.getUserId())
                 .orElseGet(authUser::getId);
         //TODO only query ids
-        return ResponseEntity.ok(friendshipService.findFollowing(whomUserId, request.getCursor(), request.getCount()));
+        return ResponseEntity.ok(friendshipService.findFollowing(whomUserId, request.getOffset(), request.getLimit()));
     }
 
     /**
@@ -63,7 +63,7 @@ public class FollowingController extends BaseController {
 
         Long whomUserId = Optional.ofNullable(request.getUserId())
                 .orElseGet(authUser::getId);
-        return ResponseEntity.ok(friendshipService.findFollowing(whomUserId, request.getCursor(), request.getCount()));
+        return ResponseEntity.ok(friendshipService.findFollowing(whomUserId, request.getOffset(), request.getLimit()));
     }
 
     /**
@@ -75,7 +75,7 @@ public class FollowingController extends BaseController {
      */
     @ApiOperation(value = "获取全部已关注用户ID列表")
     @GetMapping("/ids/all")
-    public ResponseEntity<Collection<Long>> findAllFollowingIds(Long id, AuthUserDto authUser) {
+    public ResponseEntity<List<Long>> findAllFollowingIds(Long id, AuthUserDto authUser) {
 
         Long whomUserId = Optional.ofNullable(id)
                 .orElseGet(authUser::getId);
@@ -91,7 +91,7 @@ public class FollowingController extends BaseController {
      */
     @ApiOperation(value = "获取全部已关注用户列表")
     @GetMapping("/all")
-    public ResponseEntity<Collection<FriendshipDto>> findAllFollowingUsers(Long id, AuthUserDto authUser) {
+    public ResponseEntity<List<FriendshipDto>> findAllFollowingUsers(Long id, AuthUserDto authUser) {
 
         Long whomUserId = Optional.ofNullable(id)
                 .orElseGet(authUser::getId);

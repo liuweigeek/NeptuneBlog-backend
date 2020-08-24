@@ -1,6 +1,5 @@
 package com.scott.neptune.tweetserver.api;
 
-import com.scott.neptune.tweetclient.command.StatusesUpdateRequest;
 import com.scott.neptune.tweetclient.dto.TweetDto;
 import com.scott.neptune.tweetserver.service.ITweetService;
 import com.scott.neptune.userclient.dto.AuthUserDto;
@@ -13,8 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * @Author: scott
@@ -50,19 +49,8 @@ public class FavoritesController {
      * @return
      */
     @GetMapping("/statuses/retweet/{id}")
-    public ResponseEntity<Collection<TweetDto>> findRetweets(@PathVariable("id") Long statusId, AuthUserDto authUser) {
-        return ResponseEntity.ok(Collections.singleton(new TweetDto()));
+    public ResponseEntity<List<TweetDto>> findRetweets(@PathVariable("id") Long statusId, AuthUserDto authUser) {
+        return ResponseEntity.ok(Collections.singletonList(new TweetDto()));
     }
 
-    /**
-     * TODO remove a retweet
-     *
-     * @param request
-     * @param authUser
-     * @return
-     */
-    @PostMapping("/statuses/unretweet/{id}")
-    public ResponseEntity<TweetDto> unRetweet(StatusesUpdateRequest request, AuthUserDto authUser) {
-        return ResponseEntity.ok(new TweetDto());
-    }
 }

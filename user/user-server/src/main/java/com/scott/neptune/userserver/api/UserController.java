@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -81,7 +80,7 @@ public class UserController extends BaseController {
     @GetMapping("/username/{username}")
     public ResponseEntity<UserDto> getUserByUsername(@PathVariable("username") String username, AuthUserDto authUser) {
 
-        return Optional.ofNullable(userService.findUserByScreenName(username, authUser.getId()))
+        return Optional.ofNullable(userService.findUserByUsername(username, authUser.getId()))
                 .map(ResponseEntity::ok)
                 .orElseThrow(() -> new RestException("用户不存在", HttpStatus.NOT_FOUND));
     }
@@ -95,7 +94,7 @@ public class UserController extends BaseController {
      */
     @ApiOperation(value = "查询用户列表")
     @GetMapping
-    public ResponseEntity<Collection<UserDto>> findUsersByIds(String ids, AuthUserDto authUser) {
+    public ResponseEntity<List<UserDto>> findUsersByIds(String ids, AuthUserDto authUser) {
         List<Long> userIds = Stream.of(StringUtils.split(ids, ","))
                 .map(Long::parseLong)
                 .collect(Collectors.toList());
@@ -112,11 +111,11 @@ public class UserController extends BaseController {
      */
     @ApiOperation(value = "查询用户列表")
     @GetMapping("/username")
-    public ResponseEntity<Collection<UserDto>> findUsersByUsernames(String usernames, AuthUserDto authUser) {
+    public ResponseEntity<List<UserDto>> findUsersByUsernames(String usernames, AuthUserDto authUser) {
 
-        List<String> userScreenNames = Stream.of(StringUtils.split(usernames, ","))
+        List<String> usernameList = Stream.of(StringUtils.split(usernames, ","))
                 .collect(Collectors.toList());
-        List<UserDto> userDtoList = userService.findAllUserByScreenNameList(userScreenNames, authUser.getId());
+        List<UserDto> userDtoList = userService.findAllUserByUsernameList(usernameList, authUser.getId());
         return ResponseEntity.ok(userDtoList);
     }
 
@@ -129,7 +128,7 @@ public class UserController extends BaseController {
      */
     @ApiOperation(value = "通过关键字搜索用户")
     @GetMapping("/search")
-    public ResponseEntity<Collection<UserDto>> search(UserSearchRequest request, AuthUserDto authUser) {
+    public ResponseEntity<List<UserDto>> search(UserSearchRequest request, AuthUserDto authUser) {
         List<UserDto> userDtoList = userService.search(request.getQ(), authUser.getId());
         //TODO add relation state
         return ResponseEntity.ok(userDtoList);
@@ -145,7 +144,7 @@ public class UserController extends BaseController {
     @ApiImplicitParam(value = "用户名", paramType = "path", required = true)
     @GetMapping("/authenticate/{username}")
     public ResponseEntity<AuthUserDto> getUserByUsernameForAuthenticate(@PathVariable String username) {
-        AuthUserDto authUserDto = userService.findUserByScreenNameForAuthenticate(username);
+        AuthUserDto authUserDto = userService.findUserByUsernameForAuthenticate(username);
         return ResponseEntity.ok(authUserDto);
     }
 

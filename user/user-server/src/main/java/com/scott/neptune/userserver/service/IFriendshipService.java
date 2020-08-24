@@ -104,10 +104,10 @@ public interface IFriendshipService {
      * 查询指定用户与已登录用户的关系
      *
      * @param userIds
-     * @param userScreenNames
+     * @param usernames
      * @param authUserId
      * @return
      */
-    List<RelationshipDto> getRelationship(List<Long> userIds, List<String> userScreenNames, Long authUserId);
+    List<RelationshipDto> getRelationship(List<Long> userIds, List<String> usernames, Long authUserId);
 
 }

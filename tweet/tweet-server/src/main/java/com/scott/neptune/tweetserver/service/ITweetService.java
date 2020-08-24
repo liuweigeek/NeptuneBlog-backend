@@ -20,11 +20,11 @@ public interface ITweetService {
 
     List<TweetDto> findAllByIdList(List<Long> tweetIds);
 
-    Page<TweetDto> findByUserId(Long userId, int offset, int limit);
+    Page<TweetDto> findByUserId(Long userId, long offset, int limit);
 
-    Page<TweetDto> findByUserIdList(List<Long> userIdList, int offset, int limit);
+    Page<TweetDto> findByUserIdList(List<Long> userIdList, long offset, int limit);
 
-    Page<TweetDto> findFollowingTweets(Long followerId, int offset, int limit);
+    Page<TweetDto> findFollowingTweets(Long followerId, long offset, int limit);
 
     void delete(TweetEntity tweetEntity);
 

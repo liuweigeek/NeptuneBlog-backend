@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -26,7 +25,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long>,
      * @param ids 用户ID列表
      * @return
      */
-    List<UserEntity> findAllByIdIn(Collection<Long> ids);
+    List<UserEntity> findAllByIdIn(List<Long> ids);
 
     /**
      * 根据用户名列表获取全部用户
@@ -34,7 +33,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long>,
      * @param usernames 用户名列表
      * @return
      */
-    List<UserEntity> findAllByScreenNameIn(@Param("usernames") Collection<String> usernames);
+    List<UserEntity> findAllByUsernameIn(@Param("usernames") List<String> usernames);
 
     /**
      * 更新登录时间

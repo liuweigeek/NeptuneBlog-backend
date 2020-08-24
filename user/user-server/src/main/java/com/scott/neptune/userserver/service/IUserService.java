@@ -21,15 +21,15 @@ public interface IUserService {
 
     UserDto findUserById(Long userId, Long loginUserId);
 
-    UserDto findUserByScreenName(String username, Long loginUserId);
+    UserDto findUserByUsername(String username, Long loginUserId);
 
     UserDto findUserByEmail(String email, Long loginUserId);
 
     List<UserDto> findAllUserByIdList(List<Long> ids, Long loginUserId);
 
-    List<UserDto> findAllUserByScreenNameList(List<String> usernameList, Long loginUserId);
+    List<UserDto> findAllUserByUsernameList(List<String> usernameList, Long loginUserId);
 
-    AuthUserDto findUserByScreenNameForAuthenticate(String username);
+    AuthUserDto findUserByUsernameForAuthenticate(String username);
 
     List<UserDto> search(String keyword, Long loginUserId);
 
