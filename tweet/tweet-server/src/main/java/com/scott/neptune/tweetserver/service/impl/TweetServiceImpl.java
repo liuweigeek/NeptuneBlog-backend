@@ -18,6 +18,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -77,47 +78,46 @@ public class TweetServiceImpl implements ITweetService {
      * @return
      */
     @Override
-    public List<TweetDto> findAllByIdList(List<Long> tweetIds) {
+    public Collection<TweetDto> findAllByIdList(Collection<Long> tweetIds) {
         if (CollectionUtils.isEmpty(tweetIds)) {
             return Collections.emptyList();
         }
-        return tweetRepository.findAllById(tweetIds).stream()
-                .map(tweetConvertor.convertToDto())
-                .collect(Collectors.toList());
+        List<TweetEntity> tweetEntities = tweetRepository.findAllById(tweetIds);
+        return tweetConvertor.convertToDtoList(tweetEntities);
     }
 
     /**
      * 获取指定用户的推文
      *
-     * @param userId
+     * @param authorId
      * @param offset
      * @param limit
      * @return
      */
     @Override
-    public Page<TweetDto> findByUserId(Long userId, long offset, int limit) {
-        if (userId == null) {
+    public Page<TweetDto> findByAuthorId(Long authorId, long offset, int limit) {
+        if (authorId == null) {
             return Page.empty();
         }
         Pageable pageable = OffsetPageable.of(offset, limit, Sort.by(Sort.Order.desc("createAt")));
-        return tweetRepository.findByAuthorId(userId, pageable).map(tweetConvertor::convertToDto);
+        return tweetRepository.findByAuthorId(authorId, pageable).map(tweetConvertor::convertToDto);
     }
 
     /**
      * 根据用户ID列表获取对应推文
      *
-     * @param userIdList
+     * @param authorIdList
      * @param offset
      * @param limit
      * @return
      */
     @Override
-    public Page<TweetDto> findByUserIdList(List<Long> userIdList, long offset, int limit) {
-        if (CollectionUtils.isEmpty(userIdList)) {
+    public Page<TweetDto> findByAuthorIdList(Collection<Long> authorIdList, long offset, int limit) {
+        if (CollectionUtils.isEmpty(authorIdList)) {
             return Page.empty();
         }
         Pageable pageable = OffsetPageable.of(offset, limit, Sort.by(Sort.Order.desc("createAt")));
-        return tweetRepository.findByAuthorIdIn(userIdList, pageable).map(tweetConvertor.convertToDto());
+        return tweetRepository.findByAuthorIdIn(authorIdList, pageable).map(tweetConvertor.convertToDto());
     }
 
     /**
@@ -130,7 +130,7 @@ public class TweetServiceImpl implements ITweetService {
      */
     @Override
     public Page<TweetDto> findFollowingTweets(Long followerId, long offset, int limit) {
-        List<Long> followingIds = userClient.findAllFollowingIds(followerId);
+        Collection<Long> followingIds = userClient.findAllFollowingIds(followerId);
         if (CollectionUtils.isEmpty(followingIds)) {
             return Page.empty();
         }
@@ -177,7 +177,7 @@ public class TweetServiceImpl implements ITweetService {
      * @return
      */
     @Override
-    public List<TweetDto> search(String keyword) {
+    public Collection<TweetDto> search(String keyword) {
         if (StringUtils.isBlank(keyword)) {
             return Collections.emptyList();
         }

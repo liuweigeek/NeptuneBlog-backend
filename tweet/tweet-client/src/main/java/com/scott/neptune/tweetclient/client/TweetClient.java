@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import java.util.List;
+import java.util.Collection;
 
 /**
  * Tweet服务的远程调用接口
@@ -25,6 +25,6 @@ public interface TweetClient {
      * @return 用户列表
      */
     @RequestMapping(path = "/server/tweets/search/{keyword}", method = RequestMethod.GET)
-    List<TweetDto> search(@PathVariable String keyword);
+    Collection<TweetDto> search(@PathVariable String keyword);
 
 }

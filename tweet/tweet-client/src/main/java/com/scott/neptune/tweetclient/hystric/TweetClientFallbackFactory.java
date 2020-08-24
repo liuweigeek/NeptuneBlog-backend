@@ -7,8 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 /**
  * @author scott
@@ -29,7 +29,7 @@ public class TweetClientFallbackFactory implements FallbackFactory<TweetClient> 
              * @return 用户列表
              */
             @Override
-            public List<TweetDto> search(String keyword) {
+            public Collection<TweetDto> search(String keyword) {
                 log.error("feign [search] Exception: ", throwable);
                 return Collections.emptyList();
             }

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Optional;
 
 /**
@@ -72,7 +72,7 @@ public class FollowerController extends BaseController {
      */
     @ApiOperation(value = "获取关注者用户ID列表")
     @GetMapping("/ids/all")
-    public ResponseEntity<List<Long>> findAllFollowerIds(Long id, AuthUserDto authUser) {
+    public ResponseEntity<Collection<Long>> findAllFollowerIds(Long id, AuthUserDto authUser) {
         Long whomUserId = Optional.ofNullable(id)
                 .orElseGet(authUser::getId);
         return ResponseEntity.ok(friendshipService.findAllFollowersIds(whomUserId, null));
@@ -87,7 +87,7 @@ public class FollowerController extends BaseController {
      */
     @ApiOperation(value = "获取关注者用户列表")
     @GetMapping("/all")
-    public ResponseEntity<List<FriendshipDto>> findAllFollowerUsers(Long id, AuthUserDto authUser) {
+    public ResponseEntity<Collection<FriendshipDto>> findAllFollowerUsers(Long id, AuthUserDto authUser) {
         Long whomUserId = Optional.ofNullable(id)
                 .orElseGet(authUser::getId);
         return ResponseEntity.ok(friendshipService.findAllFollowers(whomUserId, null));

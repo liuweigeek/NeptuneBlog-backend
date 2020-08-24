@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -62,14 +63,14 @@ public class TweetController extends BaseController {
      * @return
      */
     @GetMapping
-    public ResponseEntity<List<TweetDto>> findTweets(@RequestParam String ids) {
+    public ResponseEntity<Collection<TweetDto>> findTweets(@RequestParam String ids) {
         if (StringUtils.isBlank(ids)) {
             throw new RestException("请指定要查找的推文", HttpStatus.BAD_REQUEST);
         }
         List<Long> idList = Stream.of(StringUtils.split(ids, ","))
                 .map(Long::parseLong)
                 .collect(Collectors.toList());
-        List<TweetDto> tweetDtoList = tweetService.findAllByIdList(idList);
+        Collection<TweetDto> tweetDtoList = tweetService.findAllByIdList(idList);
         return ResponseEntity.ok(tweetDtoList);
     }
 
@@ -130,7 +131,7 @@ public class TweetController extends BaseController {
     public ResponseEntity<Page<TweetDto>> findByUserId(@PathVariable("userId") Long userId,
                                                        @RequestParam OffsetPageCommand command) {
         //TODO parameters for pageable
-        Page<TweetDto> tweetPage = tweetService.findByUserId(userId, command.getOffset(), command.getLimit());
+        Page<TweetDto> tweetPage = tweetService.findByAuthorId(userId, command.getOffset(), command.getLimit());
         return ResponseEntity.ok(tweetPage);
     }
 
@@ -143,8 +144,8 @@ public class TweetController extends BaseController {
     @ApiOperation(value = "通过关键字搜索用户")
     @ApiImplicitParam(name = "keyword", value = "关键字", paramType = "path", required = true)
     @GetMapping(value = "/search/{keyword}")
-    public ResponseEntity<List<TweetDto>> search(@PathVariable String keyword) {
-        List<TweetDto> tweetDtoList = tweetService.search(keyword);
+    public ResponseEntity<Collection<TweetDto>> search(@PathVariable String keyword) {
+        Collection<TweetDto> tweetDtoList = tweetService.search(keyword);
         return ResponseEntity.ok(tweetDtoList);
     }
 }

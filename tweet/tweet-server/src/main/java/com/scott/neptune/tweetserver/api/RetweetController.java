@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 /**
  * @Author: scott
@@ -67,7 +67,7 @@ public class RetweetController {
      * @return
      */
     @GetMapping("/retweets_of_me/{id}")
-    public ResponseEntity<List<TweetDto>> findRetweetsOfMe(AuthUserDto authUser) {
+    public ResponseEntity<Collection<TweetDto>> findRetweetsOfMe(AuthUserDto authUser) {
         return ResponseEntity.ok(Collections.singletonList(new TweetDto()));
     }
 

@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.util.Collection;
 
 /**
  * @author scott
@@ -44,19 +44,19 @@ public class UserClientFallbackFactory implements FallbackFactory<UserClient> {
             }
 
             @Override
-            public List<UserDto> findUsersByIds(String ids) {
+            public Collection<UserDto> findUsersByIds(String ids) {
                 log.error("feign [getUsersByIds] Exception: ", throwable);
                 throw new NeptuneBlogException("feign [getUsersByIds] Exception: ", throwable);
             }
 
             @Override
-            public List<UserDto> findUsersByUsernames(String usernames) {
+            public Collection<UserDto> findUsersByUsernames(String usernames) {
                 log.error("feign [getUsersByUsernames] Exception: ", throwable);
                 throw new NeptuneBlogException("feign [getUsersByUsernames] Exception: ", throwable);
             }
 
             @Override
-            public List<UserDto> search(UserSearchRequest request) {
+            public Collection<UserDto> search(UserSearchRequest request) {
                 log.error("feign [search] Exception: ", throwable);
                 throw new NeptuneBlogException("feign [search] Exception: ", throwable);
             }
@@ -68,13 +68,13 @@ public class UserClientFallbackFactory implements FallbackFactory<UserClient> {
             }
 
             @Override
-            public List<Long> findAllFollowingIds(Long id) {
+            public Collection<Long> findAllFollowingIds(Long id) {
                 log.error("feign [findAllFollowingIds] Exception: ", throwable);
                 throw new NeptuneBlogException("feign [findAllFollowingIds] Exception: ", throwable);
             }
 
             @Override
-            public List<Long> findAllFollowerIds(Long id) {
+            public Collection<Long> findAllFollowerIds(Long id) {
                 log.error("feign [findAllFollowerIds] Exception: ", throwable);
                 throw new NeptuneBlogException("feign [findAllFollowerIds] Exception: ", throwable);
             }

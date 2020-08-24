@@ -18,9 +18,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -162,7 +162,7 @@ public class UserServiceImpl implements IUserService {
      * @return 用户对象列表
      */
     @Override
-    public List<UserDto> findAllUserByIdList(List<Long> ids, Long loginUserId) {
+    public Collection<UserDto> findAllUserByIdList(Collection<Long> ids, Long loginUserId) {
         if (CollectionUtils.isEmpty(ids)) {
             return Collections.emptyList();
         }
@@ -178,7 +178,7 @@ public class UserServiceImpl implements IUserService {
      * @return 用户对象列表
      */
     @Override
-    public List<UserDto> findAllUserByUsernameList(List<String> usernameList, Long loginUserId) {
+    public Collection<UserDto> findAllUserByUsernameList(Collection<String> usernameList, Long loginUserId) {
         if (CollectionUtils.isEmpty(usernameList)) {
             return Collections.emptyList();
         }
@@ -207,7 +207,7 @@ public class UserServiceImpl implements IUserService {
      * @return 用户列表
      */
     @Override
-    public List<UserDto> search(String keyword, Long loginUserId) {
+    public Collection<UserDto> search(String keyword, Long loginUserId) {
         if (StringUtils.isBlank(keyword)) {
             return Collections.emptyList();
         }

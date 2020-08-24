@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.List;
+import java.util.Collection;
 
 /**
  * @Author: scott
@@ -19,9 +19,9 @@ import java.util.List;
 public interface TweetRepository extends JpaRepository<TweetEntity, Long>,
         JpaSpecificationExecutor<TweetEntity> {
 
-    Page<TweetEntity> findByAuthorId(@Param("userId") Long userId, Pageable pageable);
+    Page<TweetEntity> findByAuthorId(@Param("authorId") Long authorId, Pageable pageable);
 
-    Page<TweetEntity> findByAuthorIdIn(@Param("userIds") List<Long> userIds, Pageable pageable);
+    Page<TweetEntity> findByAuthorIdIn(@Param("authorIds") Collection<Long> authorIds, Pageable pageable);
 
     @Query(value = "select t.* from t_tweet t where t.type = 'retweeted' and t.referenced_tweet_id = :tweetId", nativeQuery = true)
     Page<TweetEntity> findRetweetsByTweetId(@Param("tweetId") Long tweetId, Pageable pageable);

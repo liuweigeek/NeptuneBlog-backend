@@ -12,6 +12,11 @@ import java.util.stream.Collectors;
  */
 public abstract class BaseConvertor<ENTITY, DTO> {
 
+    /**
+     * convert to DTO
+     *
+     * @return
+     */
     public Function<ENTITY, DTO> convertToDto() {
         return functionConvertToDto();
     }
@@ -42,6 +47,44 @@ public abstract class BaseConvertor<ENTITY, DTO> {
     public ENTITY convertToEntity(DTO dto) {
         return convertToEntity().apply(dto);
     }
+
+
+    /**
+     * convert to DTO list
+     *
+     * @return
+     */
+    public Function<Collection<ENTITY>, Collection<DTO>> convertToDtoList() {
+        return functionConvertToDtoList();
+    }
+
+    /**
+     * convert to Entity list
+     *
+     * @return
+     */
+    public Function<Collection<DTO>, Collection<ENTITY>> convertToEntityList() {
+        return functionConvertToEntityList();
+    }
+
+    /**
+     * convert to DTO list
+     *
+     * @return
+     */
+    public Collection<DTO> convertToDtoList(Collection<ENTITY> entity) {
+        return convertToDtoList().apply(entity);
+    }
+
+    /**
+     * convert to Entity list
+     *
+     * @return
+     */
+    public Collection<ENTITY> convertToEntityList(Collection<DTO> dto) {
+        return convertToEntityList().apply(dto);
+    }
+
 
     /**
      * get a function implement to convert an entity to a dto

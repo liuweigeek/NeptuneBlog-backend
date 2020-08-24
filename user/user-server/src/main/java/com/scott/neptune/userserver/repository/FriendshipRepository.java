@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.List;
+import java.util.Collection;
 
 /**
  * @Author: scott
@@ -51,7 +51,7 @@ public interface FriendshipRepository extends JpaRepository<FriendshipEntity, Fr
      */
     @EntityGraph(value = "friendship.following", type = EntityGraph.EntityGraphType.FETCH)
     @Query("from FriendshipEntity f where f.id.sourceId = :sourceId")
-    List<FriendshipEntity> findAllBySourceUser(@Param("sourceId") Long sourceId, Sort sort);
+    Collection<FriendshipEntity> findAllBySourceUser(@Param("sourceId") Long sourceId, Sort sort);
 
     /**
      * find all follower
@@ -61,7 +61,7 @@ public interface FriendshipRepository extends JpaRepository<FriendshipEntity, Fr
      */
     @EntityGraph(value = "friendship.followers", type = EntityGraph.EntityGraphType.FETCH)
     @Query("from FriendshipEntity f where f.id.targetId = :targetId")
-    List<FriendshipEntity> findAllByTargetUser(@Param("targetId") Long targetId, Sort sort);
+    Collection<FriendshipEntity> findAllByTargetUser(@Param("targetId") Long targetId, Sort sort);
 
     /**
      * find all following friends
@@ -71,9 +71,9 @@ public interface FriendshipRepository extends JpaRepository<FriendshipEntity, Fr
      */
     @EntityGraph(value = "friendship.friends", type = EntityGraph.EntityGraphType.FETCH)
     @Query("from FriendshipEntity f where f.id.sourceId = :sourceId and f.id.targetId in :targetUserIds")
-    List<FriendshipEntity> findAllBySourceUserAndTargetUserIn(@Param("sourceId") Long sourceId,
-                                                              @Param("targetUserIds") List<Long> targetUserIds,
-                                                              Sort sort);
+    Collection<FriendshipEntity> findAllBySourceUserAndTargetUserIn(@Param("sourceId") Long sourceId,
+                                                                    @Param("targetUserIds") Collection<Long> targetUserIds,
+                                                                    Sort sort);
 
     /**
      * find all follower
@@ -83,7 +83,7 @@ public interface FriendshipRepository extends JpaRepository<FriendshipEntity, Fr
      */
     @EntityGraph(value = "friendship.followers", type = EntityGraph.EntityGraphType.FETCH)
     @Query("from FriendshipEntity f where f.id.targetId = :targetId and f.id.sourceId in :sourceUserIds")
-    List<FriendshipEntity> findAllByTargetUserAndSourceUserIn(@Param("targetId") Long targetId,
-                                                              @Param("sourceUserIds") List<Long> sourceUserIds,
-                                                              Sort sort);
+    Collection<FriendshipEntity> findAllByTargetUserAndSourceUserIn(@Param("targetId") Long targetId,
+                                                                    @Param("sourceUserIds") Collection<Long> sourceUserIds,
+                                                                    Sort sort);
 }

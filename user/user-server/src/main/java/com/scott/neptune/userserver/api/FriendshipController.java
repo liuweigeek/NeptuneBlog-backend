@@ -10,7 +10,6 @@ import com.scott.neptune.userserver.service.IFriendshipService;
 import com.scott.neptune.userserver.service.IUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -51,30 +50,43 @@ public class FriendshipController extends BaseController {
      * 获取指定用户与登录用户的关系
      *
      * @param userIds
+     * @param authUser
+     * @return
+     */
+    @ApiOperation(value = "获取指定用户与登录用户的关系")
+    @ApiImplicitParam(value = "要查询的用户ID列表，用[,]分割", paramType = "query")
+    @GetMapping
+    public ResponseEntity<Collection<RelationshipDto>> lookUpByIds(String userIds, @ApiIgnore AuthUserDto authUser) {
+        if (StringUtils.isBlank(userIds)) {
+            throw new RestException("请传入要查询的用户ID", HttpStatus.BAD_REQUEST);
+        }
+        List<Long> userIdList = userIdList = Arrays.stream(StringUtils.split(userIds, ","))
+                .map(Long::parseLong)
+                .collect(Collectors.toList());
+        Collection<RelationshipDto> relationshipList = friendshipService.getRelationshipByIds(userIdList, authUser.getId());
+        return ResponseEntity.ok(relationshipList);
+    }
+
+    /**
+     * 获取指定用户与登录用户的关系
+     *
      * @param usernames
      * @param authUser
      * @return
      */
     @ApiOperation(value = "获取指定用户与登录用户的关系")
-    @ApiImplicitParams(value = {
-            @ApiImplicitParam(value = "要查询的用户ID列表，用[,]分割", paramType = "query"),
-            @ApiImplicitParam(value = "要查询的用户名列表，用[,]分割", paramType = "query")
-    })
-    @GetMapping("/lookUp")
-    public ResponseEntity<List<RelationshipDto>> lookUp(String userIds, String usernames,
-                                                        @ApiIgnore AuthUserDto authUser) {
-        List<Long> userIdList = Collections.emptyList();
-        if (StringUtils.isNotBlank(userIds)) {
-            userIdList = Arrays.stream(StringUtils.split(userIds, ","))
-                    .map(Long::parseLong)
-                    .collect(Collectors.toList());
+    @ApiImplicitParam(value = "要查询的用户名列表，用[,]分割", paramType = "query")
+    @GetMapping("/username")
+    public ResponseEntity<Collection<RelationshipDto>> lookUpByUsernames(String usernames,
+                                                                         @ApiIgnore AuthUserDto authUser) {
+
+        if (StringUtils.isBlank(usernames)) {
+            throw new RestException("请传入要查询的用户名", HttpStatus.BAD_REQUEST);
         }
-        List<String> usernameList = Collections.emptyList();
-        if (StringUtils.isNotBlank(usernames)) {
-            usernameList = Arrays.stream(StringUtils.split(usernames, ","))
-                    .collect(Collectors.toList());
-        }
-        List<RelationshipDto> relationshipList = friendshipService.getRelationship(userIdList, usernameList, authUser.getId());
+
+        List<String> usernameList = usernameList = Arrays.stream(StringUtils.split(usernames, ","))
+                .collect(Collectors.toList());
+        Collection<RelationshipDto> relationshipList = friendshipService.getRelationshipByUsernames(usernameList, authUser.getId());
         return ResponseEntity.ok(relationshipList);
     }
 

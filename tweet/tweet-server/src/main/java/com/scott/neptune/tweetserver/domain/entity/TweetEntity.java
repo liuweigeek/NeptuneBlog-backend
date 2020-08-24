@@ -79,16 +79,16 @@ public class TweetEntity implements Serializable {
     private String source;
 
     /**
-     * 附加信息
-     */
-    @Embedded
-    private TweetEntitiesValObj entities;
-
-    /**
      * tweet类型
      */
     @Enumerated(EnumType.STRING)
     private TweetTypeEnum type;
+
+    /**
+     * 附加信息
+     */
+    @Embedded
+    private TweetEntitiesValObj entities;
 
     /**
      * 对话ID，如果当前Tweet是一条回复，则指向另一条Tweet
@@ -103,17 +103,17 @@ public class TweetEntity implements Serializable {
     private Long inReplyToUserId;
 
     /**
-     * 互动统计数据
-     */
-    @Embedded
-    private TweetPublicMetricsValObj publicMetrics;
-
-    /**
      * 被引用的Tweet
      */
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "referenced_tweet_id")
     private TweetEntity referencedTweet;
+
+    /**
+     * 互动统计数据
+     */
+    @Embedded
+    private TweetPublicMetricsValObj publicMetrics;
 
     @Transient
     private ConnectionStatusValObj connectionStatus;

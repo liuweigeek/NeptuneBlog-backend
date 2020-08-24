@@ -3,7 +3,7 @@ package com.scott.neptune.userserver.service;
 import com.scott.neptune.userclient.dto.AuthUserDto;
 import com.scott.neptune.userclient.dto.UserDto;
 
-import java.util.List;
+import java.util.Collection;
 
 /**
  * @Author: scott
@@ -25,13 +25,13 @@ public interface IUserService {
 
     UserDto findUserByEmail(String email, Long loginUserId);
 
-    List<UserDto> findAllUserByIdList(List<Long> ids, Long loginUserId);
+    Collection<UserDto> findAllUserByIdList(Collection<Long> ids, Long loginUserId);
 
-    List<UserDto> findAllUserByUsernameList(List<String> usernameList, Long loginUserId);
+    Collection<UserDto> findAllUserByUsernameList(Collection<String> usernameList, Long loginUserId);
 
     AuthUserDto findUserByUsernameForAuthenticate(String username);
 
-    List<UserDto> search(String keyword, Long loginUserId);
+    Collection<UserDto> search(String keyword, Long loginUserId);
 
     //TODO remove soon
 //    ServerResponse<List<UserAvatarEntity>> uploadAvatar(MultipartFile avatarFile, UserDto userDto);

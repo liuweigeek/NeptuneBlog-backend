@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import java.util.List;
+import java.util.Collection;
 
 /**
  * User服务的远程调用接口
@@ -54,7 +54,7 @@ public interface UserClient {
      * @return
      */
     @RequestMapping(path = "/users", method = RequestMethod.GET)
-    List<UserDto> findUsersByIds(String ids);
+    Collection<UserDto> findUsersByIds(String ids);
 
     /**
      * 获取用户列表
@@ -63,7 +63,7 @@ public interface UserClient {
      * @return
      */
     @RequestMapping(path = "/users/username", method = RequestMethod.GET)
-    List<UserDto> findUsersByUsernames(String usernames);
+    Collection<UserDto> findUsersByUsernames(String usernames);
 
     /**
      * 通过关键字搜索用户
@@ -72,7 +72,7 @@ public interface UserClient {
      * @return 用户列表
      */
     @RequestMapping(path = "/users/search", method = RequestMethod.GET)
-    List<UserDto> search(UserSearchRequest request);
+    Collection<UserDto> search(UserSearchRequest request);
 
     /**
      * 根据用户名获取指定用户,用于授权
@@ -84,7 +84,7 @@ public interface UserClient {
     AuthUserDto getUserByUsernameForAuthenticate(@PathVariable String username);
 
     @RequestMapping(path = "/ids/all", method = RequestMethod.GET)
-    List<Long> findAllFollowingIds(Long id);
+    Collection<Long> findAllFollowingIds(Long id);
 
     /**
      * 获取全部关注者用户ID列表
@@ -93,5 +93,5 @@ public interface UserClient {
      * @return
      */
     @RequestMapping(path = "/ids/all", method = RequestMethod.GET)
-    List<Long> findAllFollowerIds(Long id);
+    Collection<Long> findAllFollowerIds(Long id);
 }

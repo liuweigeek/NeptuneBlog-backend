@@ -36,12 +36,6 @@ public class TweetDto implements Serializable {
     private Long id;
 
     /**
-     * 发送人ID
-     */
-    @ApiModelProperty(hidden = true)
-    private Long userId;
-
-    /**
      * 发送内容
      */
     @NotEmpty(message = "发送内容不可为空")
@@ -49,10 +43,10 @@ public class TweetDto implements Serializable {
     private String text;
 
     /**
-     * 发送设备
+     * 发送人
      */
-    @ApiModelProperty(value = "设备")
-    private String source;
+    @ApiModelProperty(value = "发送人")
+    private UserDto author;
 
     /**
      * 发送时间
@@ -61,10 +55,41 @@ public class TweetDto implements Serializable {
     private Date createAt;
 
     /**
-     * 发送人
+     * 发送设备
      */
-    //TODO create a new object for simply
-    @ApiModelProperty(value = "发送人")
-    private UserDto author;
+    @ApiModelProperty(value = "设备")
+    private String source;
 
+    //TODO entities
+
+    /**
+     * 对话ID，如果当前Tweet是一条回复，则指向另一条Tweet
+     */
+    private Long conversationId;
+
+    /**
+     * 如果当前Tweet是一条回复，则该字段指向原Tweet的Author ID
+     */
+    private Long inReplyToUserId;
+
+    private TweetDto referencedTweet;
+
+    private PublicMetrics publicMetrics;
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PublicMetrics {
+
+        private static final long serialVersionUID = 1L;
+
+        private Long retweetCount;
+
+        private Long quoteCount;
+
+        private Long replyCount;
+
+        private Long likeCount;
+    }
 }

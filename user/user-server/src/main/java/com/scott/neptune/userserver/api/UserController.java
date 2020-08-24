@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -94,11 +95,11 @@ public class UserController extends BaseController {
      */
     @ApiOperation(value = "查询用户列表")
     @GetMapping
-    public ResponseEntity<List<UserDto>> findUsersByIds(String ids, AuthUserDto authUser) {
+    public ResponseEntity<Collection<UserDto>> findUsersByIds(String ids, AuthUserDto authUser) {
         List<Long> userIds = Stream.of(StringUtils.split(ids, ","))
                 .map(Long::parseLong)
                 .collect(Collectors.toList());
-        List<UserDto> userDtoList = userService.findAllUserByIdList(userIds, authUser.getId());
+        Collection<UserDto> userDtoList = userService.findAllUserByIdList(userIds, authUser.getId());
         return ResponseEntity.ok(userDtoList);
     }
 
@@ -111,11 +112,11 @@ public class UserController extends BaseController {
      */
     @ApiOperation(value = "查询用户列表")
     @GetMapping("/username")
-    public ResponseEntity<List<UserDto>> findUsersByUsernames(String usernames, AuthUserDto authUser) {
+    public ResponseEntity<Collection<UserDto>> findUsersByUsernames(String usernames, AuthUserDto authUser) {
 
         List<String> usernameList = Stream.of(StringUtils.split(usernames, ","))
                 .collect(Collectors.toList());
-        List<UserDto> userDtoList = userService.findAllUserByUsernameList(usernameList, authUser.getId());
+        Collection<UserDto> userDtoList = userService.findAllUserByUsernameList(usernameList, authUser.getId());
         return ResponseEntity.ok(userDtoList);
     }
 
@@ -128,8 +129,8 @@ public class UserController extends BaseController {
      */
     @ApiOperation(value = "通过关键字搜索用户")
     @GetMapping("/search")
-    public ResponseEntity<List<UserDto>> search(UserSearchRequest request, AuthUserDto authUser) {
-        List<UserDto> userDtoList = userService.search(request.getQ(), authUser.getId());
+    public ResponseEntity<Collection<UserDto>> search(UserSearchRequest request, AuthUserDto authUser) {
+        Collection<UserDto> userDtoList = userService.search(request.getQ(), authUser.getId());
         //TODO add relation state
         return ResponseEntity.ok(userDtoList);
     }

@@ -4,7 +4,7 @@ import com.scott.neptune.tweetclient.dto.TweetDto;
 import com.scott.neptune.tweetserver.domain.entity.TweetEntity;
 import org.springframework.data.domain.Page;
 
-import java.util.List;
+import java.util.Collection;
 
 /**
  * @Author: scott
@@ -18,11 +18,11 @@ public interface ITweetService {
 
     TweetDto findTweetById(Long tweetId);
 
-    List<TweetDto> findAllByIdList(List<Long> tweetIds);
+    Collection<TweetDto> findAllByIdList(Collection<Long> tweetIds);
 
-    Page<TweetDto> findByUserId(Long userId, long offset, int limit);
+    Page<TweetDto> findByAuthorId(Long authorId, long offset, int limit);
 
-    Page<TweetDto> findByUserIdList(List<Long> userIdList, long offset, int limit);
+    Page<TweetDto> findByAuthorIdList(Collection<Long> authorIdList, long offset, int limit);
 
     Page<TweetDto> findFollowingTweets(Long followerId, long offset, int limit);
 
@@ -30,6 +30,6 @@ public interface ITweetService {
 
     void deleteById(Long tweetId);
 
-    List<TweetDto> search(String keyword);
+    Collection<TweetDto> search(String keyword);
 
 }

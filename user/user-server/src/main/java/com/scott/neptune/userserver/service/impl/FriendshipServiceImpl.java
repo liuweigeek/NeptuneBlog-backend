@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -114,7 +115,7 @@ public class FriendshipServiceImpl implements IFriendshipService {
      * @return
      */
     @Override
-    public List<FriendshipDto> findAllFollowing(Long userId, List<Long> targetUserIds) {
+    public Collection<FriendshipDto> findAllFollowing(Long userId, Collection<Long> targetUserIds) {
         if (userId == null) {
             return Collections.emptyList();
         }
@@ -138,7 +139,7 @@ public class FriendshipServiceImpl implements IFriendshipService {
      * @return
      */
     @Override
-    public List<FriendshipDto> findAllFollowers(Long userId, List<Long> sourceUserIds) {
+    public Collection<FriendshipDto> findAllFollowers(Long userId, Collection<Long> sourceUserIds) {
         if (userId == null) {
             return Collections.emptyList();
         }
@@ -162,7 +163,7 @@ public class FriendshipServiceImpl implements IFriendshipService {
      * @return
      */
     @Override
-    public List<Long> findAllFollowingIds(Long userId, List<Long> targetUserIds) {
+    public Collection<Long> findAllFollowingIds(Long userId, Collection<Long> targetUserIds) {
         if (userId == null) {
             return Collections.emptyList();
         }
@@ -188,7 +189,7 @@ public class FriendshipServiceImpl implements IFriendshipService {
      * @return
      */
     @Override
-    public List<Long> findAllFollowersIds(Long userId, List<Long> sourceUserIds) {
+    public Collection<Long> findAllFollowersIds(Long userId, Collection<Long> sourceUserIds) {
         if (userId == null) {
             return Collections.emptyList();
         }
@@ -247,29 +248,16 @@ public class FriendshipServiceImpl implements IFriendshipService {
      * 查询指定用户与已登录用户的关系
      *
      * @param userIds
-     * @param usernames
      * @param authUserId
      * @return
      */
     @Override
-    public List<RelationshipDto> getRelationship(List<Long> userIds, List<String> usernames, Long authUserId) {
+    public Collection<RelationshipDto> getRelationshipByIds(Collection<Long> userIds, Long authUserId) {
 
-        List<Long> ids = Lists.newArrayListWithExpectedSize(userIds.size() + usernames.size());
-        if (CollectionUtils.isNotEmpty(userIds)) {
-            ids.addAll(userIds);
-        }
-        if (CollectionUtils.isNotEmpty(usernames)) {
-            List<Long> idFromUsernames = userRepository.findAllByUsernameIn(usernames)
-                    .stream().map(UserEntity::getId).collect(Collectors.toList());
-            if (CollectionUtils.isNotEmpty(idFromUsernames)) {
-                ids.addAll(idFromUsernames);
-            }
-        }
+        Collection<FriendshipEntity> friends = friendshipRepository.findAllBySourceUserAndTargetUserIn(authUserId, userIds, Sort.by(Sort.Order.desc("followDate")));
+        Collection<FriendshipEntity> followers = friendshipRepository.findAllByTargetUserAndSourceUserIn(authUserId, userIds, Sort.by(Sort.Order.desc("followDate")));
 
-        List<FriendshipEntity> friends = friendshipRepository.findAllBySourceUserAndTargetUserIn(authUserId, ids, Sort.by(Sort.Order.desc("followDate")));
-        List<FriendshipEntity> followers = friendshipRepository.findAllByTargetUserAndSourceUserIn(authUserId, ids, Sort.by(Sort.Order.desc("followDate")));
-
-        Map<Long, RelationshipDto> relationshipMap = Maps.newHashMapWithExpectedSize(ids.size());
+        Map<Long, RelationshipDto> relationshipMap = Maps.newHashMapWithExpectedSize(userIds.size());
         friends.forEach(entity -> {
             UserEntity targetUser = entity.getTargetUser();
             if (relationshipMap.containsKey(targetUser.getId())) {
@@ -292,5 +280,26 @@ public class FriendshipServiceImpl implements IFriendshipService {
         });
 
         return new ArrayList<>(relationshipMap.values());
+    }
+
+    /**
+     * 查询指定用户与已登录用户的关系
+     *
+     * @param usernames
+     * @param authUserId
+     * @return
+     */
+    @Override
+    public Collection<RelationshipDto> getRelationshipByUsernames(Collection<String> usernames, Long authUserId) {
+
+        List<Long> ids = Lists.newArrayListWithExpectedSize(usernames.size());
+        if (CollectionUtils.isNotEmpty(usernames)) {
+            List<Long> idFromUsernames = userRepository.findAllByUsernameIn(usernames)
+                    .stream().map(UserEntity::getId).collect(Collectors.toList());
+            if (CollectionUtils.isNotEmpty(idFromUsernames)) {
+                ids.addAll(idFromUsernames);
+            }
+        }
+        return this.getRelationshipByIds(ids, authUserId);
     }
 }

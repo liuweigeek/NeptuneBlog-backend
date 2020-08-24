@@ -4,7 +4,7 @@ import com.scott.neptune.userclient.dto.FriendshipDto;
 import com.scott.neptune.userclient.dto.RelationshipDto;
 import org.springframework.data.domain.Page;
 
-import java.util.List;
+import java.util.Collection;
 
 /**
  * @Author: scott
@@ -54,7 +54,7 @@ public interface IFriendshipService {
      * @param targetUserIds
      * @return
      */
-    List<FriendshipDto> findAllFollowing(Long userId, List<Long> targetUserIds);
+    Collection<FriendshipDto> findAllFollowing(Long userId, Collection<Long> targetUserIds);
 
     /**
      * 获取全部关注者
@@ -63,7 +63,7 @@ public interface IFriendshipService {
      * @param sourceUserIds
      * @return
      */
-    List<FriendshipDto> findAllFollowers(Long userId, List<Long> sourceUserIds);
+    Collection<FriendshipDto> findAllFollowers(Long userId, Collection<Long> sourceUserIds);
 
     /**
      * 获取全部已关注用户
@@ -72,7 +72,7 @@ public interface IFriendshipService {
      * @param targetUserIds
      * @return
      */
-    List<Long> findAllFollowingIds(Long userId, List<Long> targetUserIds);
+    Collection<Long> findAllFollowingIds(Long userId, Collection<Long> targetUserIds);
 
     /**
      * 获取全部关注者
@@ -81,7 +81,7 @@ public interface IFriendshipService {
      * @param sourceUserIds
      * @return
      */
-    List<Long> findAllFollowersIds(Long userId, List<Long> sourceUserIds);
+    Collection<Long> findAllFollowersIds(Long userId, Collection<Long> sourceUserIds);
 
     /**
      * 删除好友关系
@@ -104,10 +104,18 @@ public interface IFriendshipService {
      * 查询指定用户与已登录用户的关系
      *
      * @param userIds
+     * @param authUserId
+     * @return
+     */
+    Collection<RelationshipDto> getRelationshipByIds(Collection<Long> userIds, Long authUserId);
+
+    /**
+     * 查询指定用户与已登录用户的关系
+     *
      * @param usernames
      * @param authUserId
      * @return
      */
-    List<RelationshipDto> getRelationship(List<Long> userIds, List<String> usernames, Long authUserId);
+    Collection<RelationshipDto> getRelationshipByUsernames(Collection<String> usernames, Long authUserId);
 
 }
