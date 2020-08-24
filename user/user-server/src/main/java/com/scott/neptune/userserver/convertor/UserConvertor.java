@@ -2,9 +2,10 @@ package com.scott.neptune.userserver.convertor;
 
 import com.scott.neptune.common.base.BaseConvertor;
 import com.scott.neptune.userclient.dto.UserDto;
+import com.scott.neptune.userclient.enumerate.GenderEnum;
 import com.scott.neptune.userserver.domain.entity.UserEntity;
 import com.scott.neptune.userserver.domain.valueobject.UserAvatarValObj;
-import org.springframework.beans.BeanUtils;
+import com.scott.neptune.userserver.domain.valueobject.UserPublicMetricsValObj;
 import org.springframework.stereotype.Component;
 
 import java.util.function.Function;
@@ -22,7 +23,19 @@ public class UserConvertor extends BaseConvertor<UserEntity, UserDto> {
     protected Function<UserEntity, UserDto> functionConvertToDto() {
         return entity -> {
             UserDto dto = new UserDto();
-            BeanUtils.copyProperties(entity, dto);
+            dto.setId(entity.getId());
+            dto.setEmail(entity.getEmail());
+            dto.setUsername(entity.getUsername());
+            dto.setName(entity.getName());
+            dto.setDescription(entity.getDescription());
+            dto.setBirthday(entity.getBirthday());
+            dto.setGender(entity.getGender().getCode());
+            dto.setCreateAt(entity.getCreateAt());
+            dto.setLang(entity.getLang());
+            if (entity.getPublicMetrics() != null) {
+                dto.setFollowersCount(entity.getPublicMetrics().getFollowingCount());
+                dto.setFollowersCount(entity.getPublicMetrics().getFollowersCount());
+            }
             if (entity.getUserAvatarValObj() != null) {
                 dto.setSmallAvatar(entity.getUserAvatarValObj().getSmallAvatarUrl());
                 dto.setMediumAvatar(entity.getUserAvatarValObj().getMediumAvatarUrl());
@@ -36,7 +49,20 @@ public class UserConvertor extends BaseConvertor<UserEntity, UserDto> {
     protected Function<UserDto, UserEntity> functionConvertToEntity() {
         return dto -> {
             UserEntity entity = new UserEntity();
-            BeanUtils.copyProperties(dto, entity);
+            entity.setId(dto.getId());
+            entity.setEmail(dto.getEmail());
+            entity.setUsername(dto.getUsername());
+            entity.setName(dto.getName());
+            entity.setDescription(dto.getDescription());
+            entity.setBirthday(dto.getBirthday());
+            entity.setGender(GenderEnum.getEnum(dto.getGender()));
+            entity.setCreateAt(dto.getCreateAt());
+            entity.setLang(dto.getLang());
+            UserPublicMetricsValObj publicMetricsValObj = UserPublicMetricsValObj.builder()
+                    .followingCount(dto.getFollowingCount())
+                    .followersCount(dto.getFollowersCount())
+                    .build();
+            entity.setPublicMetrics(publicMetricsValObj);
             UserAvatarValObj userAvatarValObj = UserAvatarValObj.builder()
                     .smallAvatarUrl(dto.getSmallAvatar())
                     .mediumAvatarUrl(dto.getMediumAvatar())

@@ -16,6 +16,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 /**
  * @Author: scott
  * @Email: <a href="mailto:liuweigeek@outlook.com">Scott Lau</a>
@@ -40,11 +42,21 @@ public class RetweetServiceImpl implements IRetweetService {
      */
     @Override
     public TweetDto save(Long tweetId, Long authUserId) {
-        TweetEntity tweetEntity = tweetRepository.findById(tweetId)
+        TweetEntity originTweet = tweetRepository.findById(tweetId)
                 .orElseThrow(() -> new NeptuneBlogException("指定推文不存在"));
+
+        Optional<TweetEntity> existRetweet = tweetRepository.findOne((root, query, criteriaBuilder) ->
+                query.where(
+                        criteriaBuilder.and(
+                                criteriaBuilder.equal(root.get("referencedTweet").as(TweetEntity.class), originTweet),
+                                criteriaBuilder.equal(root.get("authorId").as(Long.class), authUserId))
+                ).getRestriction());
+        if (existRetweet.isPresent()) {
+            throw new NeptuneBlogException("请勿重复转推");
+        }
         TweetEntity retweetEntity = TweetEntity.builder()
                 .type(TweetTypeEnum.retweeted)
-                .referencedTweet(tweetEntity)
+                .referencedTweet(originTweet)
                 .authorId(authUserId)
                 .build();
         tweetRepository.save(retweetEntity);

@@ -31,7 +31,7 @@ public class AuthUser implements UserDetails {
 
     private String email;
 
-    private String nickname;
+    private String name;
 
     private boolean active;
 

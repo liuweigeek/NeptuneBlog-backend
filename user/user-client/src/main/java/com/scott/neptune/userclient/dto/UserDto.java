@@ -94,12 +94,6 @@ public class UserDto {
     private Date createAt;
 
     /**
-     * 最近登录时间
-     */
-    @ApiModelProperty(hidden = true)
-    private Date loginDate;
-
-    /**
      * 语言
      */
     @ApiModelProperty(value = "语言")
@@ -127,7 +121,7 @@ public class UserDto {
      * 正在关注用户数量
      */
     @ApiModelProperty(hidden = true)
-    private Integer friendsCount;
+    private Integer followingCount;
 
     /**
      * 关注者数量

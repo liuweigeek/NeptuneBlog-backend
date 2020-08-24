@@ -25,7 +25,7 @@ public enum GenderEnum {
     @Getter
     private final int code;
 
-    public GenderEnum getEnum(int code) {
+    public static GenderEnum getEnum(int code) {
         for (GenderEnum genderEnum : GenderEnum.values()) {
             if (genderEnum.getCode() == code) {
                 return genderEnum;

@@ -27,7 +27,7 @@ public class AuthUserDto {
 
     private String email;
 
-    private String nickname;
+    private String name;
 
     private boolean active;
 

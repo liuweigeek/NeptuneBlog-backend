@@ -3,8 +3,6 @@ package com.scott.neptune.userserver.convertor;
 import com.scott.neptune.common.base.BaseConvertor;
 import com.scott.neptune.userclient.dto.FriendshipDto;
 import com.scott.neptune.userserver.domain.entity.FriendshipEntity;
-import com.scott.neptune.userserver.domain.entity.UserEntity;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.function.Function;
@@ -22,9 +20,10 @@ public class FriendshipConvertor extends BaseConvertor<FriendshipEntity, Friends
     protected Function<FriendshipEntity, FriendshipDto> functionConvertToDto() {
         return entity -> {
             FriendshipDto dto = new FriendshipDto();
-            BeanUtils.copyProperties(entity, dto);
-            dto.setSourceId(entity.getSourceUser().getId());
-            dto.setTargetId(entity.getTargetUser().getId());
+            dto.setSourceId(entity.getId().getSourceId());
+            dto.setTargetId(entity.getId().getTargetId());
+            dto.setFollowDate(entity.getFollowDate());
+            dto.setFollowFrom(entity.getFollowFrom());
             return dto;
         };
     }
@@ -33,9 +32,12 @@ public class FriendshipConvertor extends BaseConvertor<FriendshipEntity, Friends
     protected Function<FriendshipDto, FriendshipEntity> functionConvertToEntity() {
         return dto -> {
             FriendshipEntity entity = new FriendshipEntity();
-            BeanUtils.copyProperties(dto, entity);
-            entity.setSourceUser(UserEntity.builder().id(dto.getSourceId()).build());
-            entity.setTargetUser(UserEntity.builder().id(dto.getTargetId()).build());
+
+            entity.setId(FriendshipEntity.FriendshipId.builder()
+                    .sourceId(dto.getSourceId()).targetId(dto.getTargetId())
+                    .build());
+            entity.setFollowDate(dto.getFollowDate());
+            entity.setFollowFrom(dto.getFollowFrom());
             return entity;
         };
     }

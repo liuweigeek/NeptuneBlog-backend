@@ -3,7 +3,6 @@ package com.scott.neptune.userserver.convertor;
 import com.scott.neptune.common.base.BaseConvertor;
 import com.scott.neptune.userclient.dto.AuthUserDto;
 import com.scott.neptune.userserver.domain.entity.UserEntity;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.function.Function;
@@ -21,8 +20,11 @@ public class AuthUserConvertor extends BaseConvertor<UserEntity, AuthUserDto> {
     protected Function<UserEntity, AuthUserDto> functionConvertToDto() {
         return entity -> {
             AuthUserDto dto = new AuthUserDto();
-            BeanUtils.copyProperties(entity, dto);
-            //TODO fill the authorization info
+            dto.setId(entity.getId());
+            dto.setUsername(entity.getUsername());
+            dto.setName(entity.getName());
+            dto.setEmail(entity.getEmail());
+            dto.setPassword(entity.getPassword());
             dto.setActive(true);
             dto.setLocked(false);
             dto.setExpired(false);
@@ -36,7 +38,11 @@ public class AuthUserConvertor extends BaseConvertor<UserEntity, AuthUserDto> {
     protected Function<AuthUserDto, UserEntity> functionConvertToEntity() {
         return dto -> {
             UserEntity entity = new UserEntity();
-            BeanUtils.copyProperties(dto, entity);
+            entity.setId(dto.getId());
+            entity.setUsername(dto.getUsername());
+            entity.setName(dto.getName());
+            entity.setEmail(dto.getEmail());
+            entity.setPassword(dto.getPassword());
             return entity;
         };
     }

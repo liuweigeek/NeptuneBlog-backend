@@ -124,6 +124,6 @@ public class UserEntity implements Serializable {
      * 正在关注和关注者统计
      */
     @Embedded
-    private UserPublicMetricsValObj friendshipCount;
+    private UserPublicMetricsValObj publicMetrics;
 
 }
