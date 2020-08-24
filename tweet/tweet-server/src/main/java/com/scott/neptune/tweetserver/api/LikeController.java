@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collections;
@@ -23,9 +24,10 @@ import java.util.List;
  */
 @Slf4j
 @RequiredArgsConstructor
-@Api(tags = "Favorite接口")
+@Api(tags = "Like接口")
 @RestController
-public class FavoritesController {
+@RequestMapping("/like")
+public class LikeController {
 
     private final ITweetService tweetService;
 
