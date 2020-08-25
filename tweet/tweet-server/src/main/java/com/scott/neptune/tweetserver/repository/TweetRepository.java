@@ -1,5 +1,6 @@
 package com.scott.neptune.tweetserver.repository;
 
+import com.scott.neptune.tweetclient.enumerate.TweetTypeEnum;
 import com.scott.neptune.tweetserver.domain.entity.TweetEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,10 +24,7 @@ public interface TweetRepository extends JpaRepository<TweetEntity, Long>,
 
     Page<TweetEntity> findByAuthorIdIn(@Param("authorIds") Collection<Long> authorIds, Pageable pageable);
 
-    @Query(value = "select t.* from t_tweet t where t.type = 'retweeted' and t.referenced_tweet_id = :tweetId", nativeQuery = true)
-    Page<TweetEntity> findRetweetsByTweetId(@Param("tweetId") Long tweetId, Pageable pageable);
-
-    @Query(value = "select t.* from t_tweet t where t.type = 'quoted' and t.referenced_tweet_id = :tweetId", nativeQuery = true)
-    Page<TweetEntity> findQuotesByTweetId(@Param("tweetId") Long tweetId, Pageable pageable);
+    @Query(value = "select t.* from t_tweet t where t.type = :type and t.referenced_tweet_id = :tweetId", nativeQuery = true)
+    Page<TweetEntity> findTweetsByTweetId(@Param("tweetId") Long tweetId, @Param("type") TweetTypeEnum type, Pageable pageable);
 
 }

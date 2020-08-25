@@ -48,7 +48,7 @@ public class RetweetController {
     }
 
     /**
-     * 查找指定推文的转推ø
+     * 查找指定推文的转推
      *
      * @param id      tweetId
      * @param command
@@ -56,7 +56,7 @@ public class RetweetController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<Page<TweetDto>> findRetweets(@PathVariable("id") Long id, OffsetPageCommand command) {
-        Page<TweetDto> retweets = retweetService.findRetweet(id, command.getOffset(), command.getLimit());
+        Page<TweetDto> retweets = retweetService.findRetweets(id, command.getOffset(), command.getLimit());
         return ResponseEntity.ok(retweets);
     }
 

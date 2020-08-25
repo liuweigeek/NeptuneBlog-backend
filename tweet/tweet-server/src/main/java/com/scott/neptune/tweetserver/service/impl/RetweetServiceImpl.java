@@ -2,6 +2,7 @@ package com.scott.neptune.tweetserver.service.impl;
 
 import com.scott.neptune.common.exception.NeptuneBlogException;
 import com.scott.neptune.common.model.OffsetPageable;
+import com.scott.neptune.common.util.AssertUtils;
 import com.scott.neptune.tweetclient.dto.TweetDto;
 import com.scott.neptune.tweetclient.enumerate.TweetTypeEnum;
 import com.scott.neptune.tweetserver.convertor.TweetConvertor;
@@ -49,6 +50,7 @@ public class RetweetServiceImpl implements IRetweetService {
                 query.where(
                         criteriaBuilder.and(
                                 criteriaBuilder.equal(root.get("referencedTweet").as(TweetEntity.class), originTweet),
+                                criteriaBuilder.equal(root.get("type").as(String.class), TweetTypeEnum.retweeted),
                                 criteriaBuilder.equal(root.get("authorId").as(Long.class), authUserId))
                 ).getRestriction());
         if (existRetweet.isPresent()) {
@@ -64,19 +66,16 @@ public class RetweetServiceImpl implements IRetweetService {
     }
 
     @Override
-    public Page<TweetDto> findRetweet(Long tweetId, long offset, int limit) {
-        if (tweetId == null) {
-            return null;
-        }
+    public Page<TweetDto> findRetweets(Long tweetId, long offset, int limit) {
+        AssertUtils.assertNotNull(tweetId, "请指定推文ID");
         Pageable pageable = OffsetPageable.of(offset, limit, Sort.by(Sort.Order.desc("createAt")));
-        return tweetRepository.findRetweetsByTweetId(tweetId, pageable).map(tweetConvertor::convertToDto);
+        return tweetRepository.findTweetsByTweetId(tweetId, TweetTypeEnum.retweeted, pageable)
+                .map(tweetConvertor::convertToDto);
     }
 
     @Override
     public void delete(Long tweetId, Long authUserId) {
-        if (tweetId == null) {
-            throw new NeptuneBlogException("请指定要取消转推的推文");
-        }
+        AssertUtils.assertNotNull(tweetId, "请指定要取消转推的推文");
         TweetEntity originTweet = tweetRepository.findById(tweetId)
                 .orElseThrow(() -> new NeptuneBlogException("指定推文不存在"));
 
@@ -84,6 +83,7 @@ public class RetweetServiceImpl implements IRetweetService {
                 query.where(
                         criteriaBuilder.and(
                                 criteriaBuilder.equal(root.get("referencedTweet").as(TweetEntity.class), originTweet),
+                                criteriaBuilder.equal(root.get("type").as(String.class), TweetTypeEnum.retweeted),
                                 criteriaBuilder.equal(root.get("authorId").as(Long.class), authUserId))
                 ).getRestriction())
                 .orElseThrow(() -> new NeptuneBlogException("指定转推不存在"));
