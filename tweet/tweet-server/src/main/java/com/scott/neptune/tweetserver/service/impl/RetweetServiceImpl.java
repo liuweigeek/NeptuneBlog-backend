@@ -69,7 +69,7 @@ public class RetweetServiceImpl implements IRetweetService {
     public Page<TweetDto> findRetweets(Long tweetId, long offset, int limit) {
         AssertUtils.assertNotNull(tweetId, "请指定推文ID");
         Pageable pageable = OffsetPageable.of(offset, limit, Sort.by(Sort.Order.desc("createAt")));
-        return tweetRepository.findTweetsByTweetId(tweetId, TweetTypeEnum.retweeted, pageable)
+        return tweetRepository.findTweetsByReferencedTweetId(tweetId, TweetTypeEnum.retweeted, pageable)
                 .map(tweetConvertor::convertToDto);
     }
 

@@ -1,6 +1,6 @@
 spring:
   application:
-    name: "@project.name@"
+    name: '@project.name@'
   profiles:
     active: dev
   cloud:
@@ -8,7 +8,7 @@ spring:
       server:
         git:
           uri: https://gitee.com/liuweigeek/NeptuneBlog-config-repo.git
-          #          uri: https://github.com/liuweigeek/NeptuneBlog-config-repo.git
+          #uri: https://github.com/liuweigeek/NeptuneBlog-config-repo.git
           search-paths: repo
           basedir: config-server/target/config
 management:

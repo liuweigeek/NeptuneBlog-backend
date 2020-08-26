@@ -95,7 +95,7 @@ public class TweetController extends BaseController {
      */
     @ApiOperation(value = "删除推文")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTweet(@PathVariable("id") Long id) {
+    public ResponseEntity<TweetDto> deleteTweet(@PathVariable("id") Long id) {
         TweetDto tweetDto = tweetService.findTweetById(id);
         if (tweetDto == null) {
             throw new RestException("指定推文不存在", HttpStatus.NOT_FOUND);

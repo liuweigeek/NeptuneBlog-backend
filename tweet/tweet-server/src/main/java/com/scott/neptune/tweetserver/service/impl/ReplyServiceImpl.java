@@ -54,7 +54,7 @@ public class ReplyServiceImpl implements IReplyService {
     public Page<TweetDto> findReplies(Long tweetId, long offset, int limit) {
         AssertUtils.assertNotNull(tweetId, "请指定推文ID");
         Pageable pageable = OffsetPageable.of(offset, limit, Sort.by(Sort.Order.desc("createAt")));
-        return tweetRepository.findTweetsByTweetId(tweetId, TweetTypeEnum.replied_to, pageable)
+        return tweetRepository.findTweetsByReferencedTweetId(tweetId, TweetTypeEnum.replied_to, pageable)
                 .map(tweetConvertor::convertToDto);
     }
 

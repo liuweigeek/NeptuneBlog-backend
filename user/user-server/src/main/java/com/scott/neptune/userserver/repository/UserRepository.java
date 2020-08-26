@@ -3,12 +3,9 @@ package com.scott.neptune.userserver.repository;
 import com.scott.neptune.userserver.domain.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.Collection;
-import java.util.Date;
 
 /**
  * @Author: scott
@@ -34,16 +31,5 @@ public interface UserRepository extends JpaRepository<UserEntity, Long>,
      * @return
      */
     Collection<UserEntity> findAllByUsernameIn(@Param("usernames") Collection<String> usernames);
-
-    /**
-     * 更新登录时间
-     *
-     * @param loginDate
-     * @param userId
-     * @return
-     */
-    @Modifying
-    @Query(value = "update UserEntity u set u.loginDate = :loginDate where u.id = :userId")
-    int updateLoginDateByUserId(@Param("loginDate") Date loginDate, @Param("userId") Long userId);
 
 }

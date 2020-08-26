@@ -1,6 +1,6 @@
 spring:
   application:
-    name: "@project.name@"
+    name: '@project.name@'
   profiles:
     active: dev
   cloud:
@@ -15,7 +15,8 @@ spring:
 eureka:
   instance:
     prefer-ip-address: true
-
+  client:
+    registerWithEureka: true
 neptune:
   oss:
     minio:
@@ -25,16 +26,3 @@ neptune:
       bucket: neptune-blog
   file:
     tempFolder: /Users/scott/Data/neptune_files
-  user:
-    avatar:
-      extension: png
-      sizes:
-        - sizeType: 1
-          height: 50
-          width: 50
-        - sizeType: 2
-          height: 200
-          width: 200
-        - sizeType: 3
-          height: 500
-          width: 500

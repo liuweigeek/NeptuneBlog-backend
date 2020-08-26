@@ -136,7 +136,7 @@ public class FriendshipController extends BaseController {
     @ApiOperation(value = "取消关注指定用户")
     @ApiImplicitParam(name = "userId", value = "要取消关注的用户ID", paramType = "query", required = true)
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteFriendship(@PathVariable("id") Long id, AuthUserDto authUser) {
+    public ResponseEntity<UserDto> deleteFriendship(@PathVariable("id") Long id, AuthUserDto authUser) {
         UserDto targetUser = userService.findUserById(id, authUser.getId());
 
         if (targetUser == null) {

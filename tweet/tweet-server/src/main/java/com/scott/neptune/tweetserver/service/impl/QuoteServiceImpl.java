@@ -51,6 +51,6 @@ public class QuoteServiceImpl implements IQuoteService {
     public Page<TweetDto> findQuotes(Long tweetId, long offset, int limit) {
         AssertUtils.assertNotNull(tweetId, "请指定推文ID");
         Pageable pageable = OffsetPageable.of(offset, limit, Sort.by(Sort.Order.desc("createAt")));
-        return tweetRepository.findTweetsByTweetId(tweetId, TweetTypeEnum.quoted, pageable).map(tweetConvertor::convertToDto);
+        return tweetRepository.findTweetsByReferencedTweetId(tweetId, TweetTypeEnum.quoted, pageable).map(tweetConvertor::convertToDto);
     }
 }

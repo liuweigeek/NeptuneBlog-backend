@@ -1,6 +1,6 @@
 spring:
   application:
-    name: "@project.name@"
+    name: '@project.name@'
   profiles:
     active: dev
   cloud:
@@ -15,3 +15,5 @@ spring:
 eureka:
   instance:
     prefer-ip-address: true
+  client:
+    registerWithEureka: true
