@@ -2,7 +2,6 @@ package com.scott.neptune.tweetserver.domain.entity;
 
 import com.scott.neptune.tweetclient.enumerate.TweetTypeEnum;
 import com.scott.neptune.tweetserver.domain.listener.TweetAuditingListener;
-import com.scott.neptune.tweetserver.domain.valueobject.ConnectionStatusValObj;
 import com.scott.neptune.tweetserver.domain.valueobject.TweetEntitiesValObj;
 import com.scott.neptune.tweetserver.domain.valueobject.TweetPublicMetricsValObj;
 import lombok.AllArgsConstructor;
@@ -26,7 +25,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -115,7 +113,7 @@ public class TweetEntity implements Serializable {
     @Embedded
     private TweetPublicMetricsValObj publicMetrics;
 
-    @Transient
-    private ConnectionStatusValObj connectionStatus;
+    /*@Transient
+    private ConnectionStatusValObj connectionStatus;*/
 
 }

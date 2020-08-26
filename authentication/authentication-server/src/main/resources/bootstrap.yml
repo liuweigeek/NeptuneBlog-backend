@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: "@project.name@"
+  profiles:
+    active: dev
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        service-id: config-server
+      override-none: false
+      fail-fast: true
+      name: ${spring.application.name}
+      profile: ${spring.profiles.active}
+eureka:
+  instance:
+    prefer-ip-address: true

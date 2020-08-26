@@ -27,13 +27,13 @@ public class UserPublicMetricsValObj implements Serializable {
     /**
      * 正在关注用户数量
      */
-    @Formula("select count(1) from t_friendship where follower_id = id")
+    @Formula("select count(1) from t_friendship where source_id = id")
     private Integer followingCount;
 
     /**
      * 关注者数量
      */
-    @Formula("select count(1) from t_friendship where follower_id = id")
+    @Formula("select count(1) from t_friendship where target_id = id")
     private Integer followersCount;
 
     private Integer tweetCount;
