@@ -1,5 +1,6 @@
 package com.scott.neptune.authenticationserver.service;
 
+import com.scott.neptune.authenticationclient.dto.LoginUserInfo;
 import com.scott.neptune.authenticationclient.jwt.JwtTokenProvider;
 import com.scott.neptune.authenticationserver.convertor.AuthUserConvertor;
 import com.scott.neptune.authenticationserver.domain.AuthUser;
@@ -9,7 +10,6 @@ import com.scott.neptune.userclient.client.UserClient;
 import com.scott.neptune.userclient.dto.AuthUserDto;
 import com.scott.neptune.userclient.dto.UserDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -44,22 +44,20 @@ public class AuthUserService implements UserDetailsService {
         return authUserConvertor.convertToDto(this.loadUserByUsername(username));
     }
 
-    public UserDto signIn(String username, String password) {
+    public LoginUserInfo signIn(String username, String password) {
 
-        AuthUser authUser = this.loadUserByUsername(username);
-
+        AuthUserDto authUser = this.loadAuthUserByUsername(username);
         //ensure it's includes field of password
         if (!passwordEncoder.matches(password, authUser.getPassword())) {
             throw new NeptuneBlogException("密码错误");
         }
-        String token = jwtTokenProvider.createToken(authUserConvertor.convertToDto(authUser), null);
-        UserDto userDto = new UserDto();
-        //TODO use convertor
-        BeanUtils.copyProperties(authUser, userDto);
-        return userDto;
+        String token = jwtTokenProvider.createToken(authUser, null);
+        LoginUserInfo loginUserInfo = LoginUserInfo.newInstance(userClient.getUserById(authUser.getId()));
+        loginUserInfo.setToken(token);
+        return loginUserInfo;
     }
 
-    public UserDto signUp(UserDto userDto) {
-        return userClient.addUser(userDto);
+    public LoginUserInfo signUp(UserDto userDto) {
+        return LoginUserInfo.newInstance(userClient.addUser(userDto));
     }
 }

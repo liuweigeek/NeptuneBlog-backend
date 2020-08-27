@@ -37,7 +37,7 @@ public class AuthUserArgumentResolver implements HandlerMethodArgumentResolver {
         //return (AuthUserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String token = webRequest.getHeader(jwtProperties.getHeader());
         String username = jwtTokenProvider.getUsername(token);
-        //TODO catch
+        //TODO cache
         return authClient.loadUserByUsername(username);
     }
 }

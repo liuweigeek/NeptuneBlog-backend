@@ -1,5 +1,6 @@
 package com.scott.neptune.authenticationserver.controller;
 
+import com.scott.neptune.authenticationclient.dto.LoginUserInfo;
 import com.scott.neptune.authenticationserver.service.AuthUserService;
 import com.scott.neptune.userclient.dto.AuthUserDto;
 import com.scott.neptune.userclient.dto.UserDto;
@@ -29,8 +30,8 @@ public class AuthController {
     }
 
     @PostMapping("/signIn")
-    public ResponseEntity<UserDto> signIn(String username, String password) {
-        UserDto userDto = authUserService.signIn(username, password);
+    public ResponseEntity<LoginUserInfo> signIn(String username, String password) {
+        LoginUserInfo userDto = authUserService.signIn(username, password);
         return ResponseEntity.ok(userDto);
     }
 
@@ -42,8 +43,8 @@ public class AuthController {
      */
     @ApiOperation(value = "用户注册")
     @PostMapping("/signUp")
-    public ResponseEntity<UserDto> signUp(@RequestBody UserDto userDto) {
-        UserDto newUser = authUserService.signUp(userDto);
+    public ResponseEntity<LoginUserInfo> signUp(@RequestBody UserDto userDto) {
+        LoginUserInfo newUser = authUserService.signUp(userDto);
         return ResponseEntity.ok(newUser);
     }
 

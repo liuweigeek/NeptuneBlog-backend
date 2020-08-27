@@ -3,7 +3,7 @@ package com.scott.neptune.userserver.service.impl;
 import com.scott.neptune.common.exception.NeptuneBlogException;
 import com.scott.neptune.userclient.dto.AuthUserDto;
 import com.scott.neptune.userclient.dto.UserDto;
-import com.scott.neptune.userserver.convertor.AuthUserConvertor;
+import com.scott.neptune.userserver.convertor.AuthUserEntityConvertor;
 import com.scott.neptune.userserver.convertor.UserConvertor;
 import com.scott.neptune.userserver.domain.entity.UserEntity;
 import com.scott.neptune.userserver.repository.UserRepository;
@@ -37,7 +37,7 @@ public class UserServiceImpl implements IUserService {
 
     private final UserRepository userRepository;
     private final UserConvertor userConvertor;
-    private final AuthUserConvertor authUserConvertor;
+    private final AuthUserEntityConvertor authUserEntityConvertor;
     private final PasswordEncoder passwordEncoder;
 
     /**
@@ -196,7 +196,7 @@ public class UserServiceImpl implements IUserService {
                 .withMatcher("username", ExampleMatcher.GenericPropertyMatchers.ignoreCase())
                 .withIgnoreNullValues();
         return userRepository.findOne(Example.of(UserEntity.builder().username(username).build(), usernameExampleMatcher))
-                .map(authUserConvertor::convertToDto)
+                .map(authUserEntityConvertor::convertToDto)
                 .orElseThrow(() -> new NeptuneBlogException("username not found"));
     }
 

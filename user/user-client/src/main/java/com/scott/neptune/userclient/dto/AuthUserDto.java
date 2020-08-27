@@ -39,4 +39,6 @@ public class AuthUserDto {
 
     private String[] authorities;
 
+    private String token;
+
 }

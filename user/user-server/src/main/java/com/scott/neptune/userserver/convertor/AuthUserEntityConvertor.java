@@ -14,7 +14,7 @@ import java.util.function.Function;
  * @Description: NeptuneBlog
  */
 @Component
-public class AuthUserConvertor extends BaseConvertor<UserEntity, AuthUserDto> {
+public class AuthUserEntityConvertor extends BaseConvertor<UserEntity, AuthUserDto> {
 
     @Override
     protected Function<UserEntity, AuthUserDto> functionConvertToDto() {
