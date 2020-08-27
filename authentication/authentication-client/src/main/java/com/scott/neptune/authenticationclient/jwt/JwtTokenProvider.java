@@ -1,18 +1,14 @@
-package com.scott.neptune.authenticationserver.jwt;
+package com.scott.neptune.authenticationclient.jwt;
 
-import com.scott.neptune.authenticationserver.convertor.AuthUserConvertor;
-import com.scott.neptune.authenticationserver.domain.AuthRole;
-import com.scott.neptune.authenticationserver.domain.AuthUser;
-import com.scott.neptune.authenticationserver.properties.JwtProperties;
-import com.scott.neptune.authenticationserver.service.AuthUserService;
+import com.scott.neptune.authenticationclient.properties.JwtProperties;
 import com.scott.neptune.common.exception.RestException;
+import com.scott.neptune.userclient.dto.AuthRoleDto;
+import com.scott.neptune.userclient.dto.AuthUserDto;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.spec.SecretKeySpec;
@@ -27,10 +23,8 @@ import java.util.List;
 public class JwtTokenProvider {
 
     private final JwtProperties jwtProperties;
-    private final AuthUserService authUserService;
-    private final AuthUserConvertor authUserConvertor;
 
-    public String createToken(AuthUser user, List<AuthRole> roles) {
+    public String createToken(AuthUserDto user, List<AuthRoleDto> roles) {
 
 //        Claims claims = Jwts.claims().setSubject(user.getUsername());
 //        claims.put(jwtProperties.getMd5Key(), roles);
@@ -54,11 +48,6 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public Authentication getAuthentication(String token) {
-        AuthUser authUser = authUserService.loadUserByUsername(getUsername(token));
-        return new UsernamePasswordAuthenticationToken(authUserConvertor.convertToDto(), "", authUser.getAuthorities());
-    }
-
     public String getUsername(String token) {
         return Jwts.parser().setSigningKey(jwtProperties.getSecret()).parseClaimsJws(token).getBody().getSubject();
     }
@@ -76,7 +65,7 @@ public class JwtTokenProvider {
             Jwts.parser().setSigningKey(jwtProperties.getSecret()).parseClaimsJws(token);
             return true;
         } catch (JwtException | IllegalArgumentException e) {
-            throw new RestException("Expired or invalid JWT token", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new RestException("Expired or invalid JWT token", HttpStatus.UNAUTHORIZED);
         }
     }
 

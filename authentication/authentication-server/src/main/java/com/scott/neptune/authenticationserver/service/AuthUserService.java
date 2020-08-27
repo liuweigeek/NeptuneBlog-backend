@@ -1,8 +1,8 @@
 package com.scott.neptune.authenticationserver.service;
 
+import com.scott.neptune.authenticationclient.jwt.JwtTokenProvider;
 import com.scott.neptune.authenticationserver.convertor.AuthUserConvertor;
 import com.scott.neptune.authenticationserver.domain.AuthUser;
-import com.scott.neptune.authenticationserver.jwt.JwtTokenProvider;
 import com.scott.neptune.common.exception.NeptuneBlogException;
 import com.scott.neptune.common.exception.RestException;
 import com.scott.neptune.userclient.client.UserClient;
@@ -40,6 +40,10 @@ public class AuthUserService implements UserDetailsService {
         return authUserConvertor.convertToEntity(authUserDto);
     }
 
+    public AuthUserDto loadAuthUserByUsername(String username) {
+        return authUserConvertor.convertToDto(this.loadUserByUsername(username));
+    }
+
     public UserDto signIn(String username, String password) {
 
         AuthUser authUser = this.loadUserByUsername(username);
@@ -48,7 +52,7 @@ public class AuthUserService implements UserDetailsService {
         if (!passwordEncoder.matches(password, authUser.getPassword())) {
             throw new NeptuneBlogException("密码错误");
         }
-        String token = jwtTokenProvider.createToken(authUser, null);
+        String token = jwtTokenProvider.createToken(authUserConvertor.convertToDto(authUser), null);
         UserDto userDto = new UserDto();
         //TODO use convertor
         BeanUtils.copyProperties(authUser, userDto);

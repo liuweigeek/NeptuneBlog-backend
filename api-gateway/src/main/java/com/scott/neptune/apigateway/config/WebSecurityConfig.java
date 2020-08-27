@@ -1,7 +1,6 @@
-package com.scott.neptune.authenticationserver.config;
+package com.scott.neptune.apigateway.config;
 
-import com.scott.neptune.authenticationserver.jwt.JwtTokenFilterConfigurer;
-import com.scott.neptune.authenticationserver.jwt.JwtTokenProvider;
+import com.scott.neptune.authenticationclient.jwt.JwtTokenProvider;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -35,12 +34,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().accessDeniedPage("/login")
                 .and()
                 .csrf().disable()
-                .apply(new JwtTokenFilterConfigurer(jwtTokenProvider));
+                .apply(new JwtTokenFilterConfig(jwtTokenProvider));
 
     }
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
+    public void configure(WebSecurity web) {
         web.ignoring().antMatchers("/v2/api-docs")
                 .antMatchers("/swagger-resources/**")
                 .antMatchers("/swagger-ui.html")
@@ -48,5 +47,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/webjars/**")
                 .antMatchers("/public");
     }
-
 }

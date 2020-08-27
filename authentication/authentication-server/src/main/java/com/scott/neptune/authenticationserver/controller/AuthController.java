@@ -1,9 +1,12 @@
 package com.scott.neptune.authenticationserver.controller;
 
 import com.scott.neptune.authenticationserver.service.AuthUserService;
+import com.scott.neptune.userclient.dto.AuthUserDto;
 import com.scott.neptune.userclient.dto.UserDto;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,8 +43,12 @@ public class AuthController {
     @ApiOperation(value = "用户注册")
     @PostMapping("/signUp")
     public ResponseEntity<UserDto> signUp(@RequestBody UserDto userDto) {
-
         UserDto newUser = authUserService.signUp(userDto);
         return ResponseEntity.ok(newUser);
+    }
+
+    @GetMapping("/username/{username}")
+    public ResponseEntity<AuthUserDto> loadUserByUsername(@PathVariable("username") String username) {
+        return ResponseEntity.ok(authUserService.loadAuthUserByUsername(username));
     }
 }

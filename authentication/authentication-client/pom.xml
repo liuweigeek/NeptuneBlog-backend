@@ -13,6 +13,10 @@
     <artifactId>authentication-client</artifactId>
     <packaging>jar</packaging>
 
+    <properties>
+        <jjwt.version>0.9.1</jjwt.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.scott.neptune</groupId>
@@ -34,6 +38,12 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>${jjwt.version}</version>
         </dependency>
 
     </dependencies>

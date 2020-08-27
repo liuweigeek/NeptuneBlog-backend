@@ -1,5 +1,7 @@
-package com.scott.neptune.authenticationserver.jwt;
+package com.scott.neptune.apigateway.filter;
 
+import com.scott.neptune.apigateway.util.SecurityUtils;
+import com.scott.neptune.authenticationclient.jwt.JwtTokenProvider;
 import com.scott.neptune.common.exception.RestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -30,7 +32,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         String token = jwtTokenProvider.resolveToken(httpServletRequest);
         try {
             if (token != null && jwtTokenProvider.validateToken(token)) {
-                Authentication auth = jwtTokenProvider.getAuthentication(token);
+                Authentication auth = SecurityUtils.getAuthentication(token);
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }
         } catch (RestException e) {

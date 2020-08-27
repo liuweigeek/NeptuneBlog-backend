@@ -1,5 +1,8 @@
-package com.scott.neptune.authenticationserver.jwt;
+package com.scott.neptune.apigateway.config;
 
+import com.scott.neptune.apigateway.filter.JwtTokenFilter;
+import com.scott.neptune.authenticationclient.jwt.JwtTokenProvider;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.DefaultSecurityFilterChain;
@@ -10,13 +13,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  * @Date: 2020/7/28 15:59
  * @Description:
  */
-public class JwtTokenFilterConfigurer extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
+@RequiredArgsConstructor
+public class JwtTokenFilterConfig extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
 
     private final JwtTokenProvider jwtTokenProvider;
-
-    public JwtTokenFilterConfigurer(JwtTokenProvider jwtTokenProvider) {
-        this.jwtTokenProvider = jwtTokenProvider;
-    }
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
