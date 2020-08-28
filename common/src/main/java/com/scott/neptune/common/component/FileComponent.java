@@ -3,6 +3,7 @@ package com.scott.neptune.common.component;
 import com.scott.neptune.common.base.BaseStorageInfo;
 import com.scott.neptune.common.component.oss.MinioComponent;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
  * @Description: NeptuneBlog
  */
 @RequiredArgsConstructor
+@ConditionalOnBean(name = "minioComponent")
 @Component
 public class FileComponent {
 

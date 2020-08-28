@@ -14,6 +14,7 @@ import io.minio.messages.DeleteObject;
 import io.minio.messages.Item;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -35,11 +36,12 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @RequiredArgsConstructor
+@ConditionalOnProperty(name = "neptune.oss.minio.endpoint")
 @Component
 public class MinioComponent {
 
-    private final MinioClient minioClient;
     private final MinioProperties minioProperties;
+    private final MinioClient minioClient;
 
     /**
      * 获取文件对象URL

@@ -2,6 +2,7 @@ package com.scott.neptune.authenticationclient.dto;
 
 import com.scott.neptune.userclient.dto.UserDto;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.beans.BeanUtils;
 
 /**
@@ -10,6 +11,7 @@ import org.springframework.beans.BeanUtils;
  * @Date: 2020/8/27 23:38
  * @Description:
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class LoginUserInfo extends UserDto {
 

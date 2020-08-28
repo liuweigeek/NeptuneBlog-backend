@@ -24,7 +24,7 @@ import java.nio.charset.StandardCharsets;
 @Slf4j
 @RequiredArgsConstructor
 @Configuration
-@ConditionalOnProperty(prefix = "neptune.oss.minio", name = "endpoint")
+@ConditionalOnProperty(name = "neptune.oss.minio.endpoint")
 public class MinioConfig {
 
     private final MinioProperties minioProperties;
