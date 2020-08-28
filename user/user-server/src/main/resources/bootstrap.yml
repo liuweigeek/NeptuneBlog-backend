@@ -15,12 +15,3 @@ spring:
 eureka:
   instance:
     prefer-ip-address: true
-neptune:
-  oss:
-    minio:
-      endpoint: http://localhost:9000
-      accessKey: scott
-      secretKey: 12345678
-      bucket: neptune-blog
-  file:
-    tempFolder: /Users/scott/Data/neptune_files

@@ -98,6 +98,18 @@
     </profiles>
 
     <build>
+        <resources>
+            <resource>
+                <filtering>true</filtering>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>application.properties</include>
+                    <include>application.yml</include>
+                    <include>bootstrap.properties</include>
+                    <include>bootstrap.yml</include>
+                </includes>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
