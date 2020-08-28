@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
@@ -43,7 +44,7 @@ public class UserAvatarController extends BaseController {
     @ApiOperation(value = "上传头像")
     @ApiImplicitParam(name = "file", value = "文件", required = true, paramType = "form", dataTypeClass = MultipartFile.class)
     @PostMapping("uploadAvatar")
-    public ResponseEntity<List<UserAvatarDto>> uploadAvatar(@RequestParam("file") MultipartFile file, AuthUserDto authUser) {
+    public ResponseEntity<List<UserAvatarDto>> uploadAvatar(@RequestParam("file") MultipartFile file, @ApiIgnore AuthUserDto authUser) {
         List<UserAvatarDto> userAvatarDtoList = avatarService.generateAvatar(authUser.getId(), file);
         return ResponseEntity.ok(userAvatarDtoList);
     }

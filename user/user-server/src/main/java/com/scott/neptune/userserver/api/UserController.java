@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.Collection;
 import java.util.List;
@@ -63,7 +64,7 @@ public class UserController extends BaseController {
      */
     @ApiOperation(value = "获取指定用户信息")
     @GetMapping("/{id}")
-    public ResponseEntity<UserDto> getUserById(@PathVariable("id") Long id, AuthUserDto authUser) {
+    public ResponseEntity<UserDto> getUserById(@PathVariable("id") Long id, @ApiIgnore AuthUserDto authUser) {
 
         return Optional.ofNullable(userService.findUserById(id, authUser.getId()))
                 .map(ResponseEntity::ok)
@@ -79,7 +80,7 @@ public class UserController extends BaseController {
      */
     @ApiOperation(value = "获取指定用户信息")
     @GetMapping("/username/{username}")
-    public ResponseEntity<UserDto> getUserByUsername(@PathVariable("username") String username, AuthUserDto authUser) {
+    public ResponseEntity<UserDto> getUserByUsername(@PathVariable("username") String username, @ApiIgnore AuthUserDto authUser) {
 
         return Optional.ofNullable(userService.findUserByUsername(username, authUser.getId()))
                 .map(ResponseEntity::ok)
@@ -95,7 +96,7 @@ public class UserController extends BaseController {
      */
     @ApiOperation(value = "查询用户列表")
     @GetMapping
-    public ResponseEntity<Collection<UserDto>> findUsersByIds(String ids, AuthUserDto authUser) {
+    public ResponseEntity<Collection<UserDto>> findUsersByIds(String ids, @ApiIgnore AuthUserDto authUser) {
         List<Long> userIds = Stream.of(StringUtils.split(ids, ","))
                 .map(Long::parseLong)
                 .collect(Collectors.toList());
@@ -112,7 +113,7 @@ public class UserController extends BaseController {
      */
     @ApiOperation(value = "查询用户列表")
     @GetMapping("/username")
-    public ResponseEntity<Collection<UserDto>> findUsersByUsernames(String usernames, AuthUserDto authUser) {
+    public ResponseEntity<Collection<UserDto>> findUsersByUsernames(String usernames, @ApiIgnore AuthUserDto authUser) {
 
         List<String> usernameList = Stream.of(StringUtils.split(usernames, ","))
                 .collect(Collectors.toList());
@@ -129,7 +130,7 @@ public class UserController extends BaseController {
      */
     @ApiOperation(value = "通过关键字搜索用户")
     @GetMapping("/search")
-    public ResponseEntity<Collection<UserDto>> search(UserSearchRequest request, AuthUserDto authUser) {
+    public ResponseEntity<Collection<UserDto>> search(UserSearchRequest request, @ApiIgnore AuthUserDto authUser) {
         Collection<UserDto> userDtoList = userService.search(request.getQ(), authUser.getId());
         //TODO add relation state
         return ResponseEntity.ok(userDtoList);

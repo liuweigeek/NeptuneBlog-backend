@@ -114,7 +114,7 @@ public class FriendshipController extends BaseController {
     @ApiOperation(value = "关注指定用户")
     @ApiImplicitParam(value = "要关注的用户ID", paramType = "query", required = true)
     @PostMapping
-    public ResponseEntity<FriendshipDto> addFriendship(@RequestParam Long id, AuthUserDto authUser) {
+    public ResponseEntity<FriendshipDto> addFriendship(@RequestParam Long id, @ApiIgnore AuthUserDto authUser) {
         UserDto targetUser = userService.findUserById(id, authUser.getId());
         if (targetUser == null) {
             throw new RestException("用户不存在", HttpStatus.NOT_FOUND);
@@ -136,7 +136,7 @@ public class FriendshipController extends BaseController {
     @ApiOperation(value = "取消关注指定用户")
     @ApiImplicitParam(name = "userId", value = "要取消关注的用户ID", paramType = "query", required = true)
     @DeleteMapping("/{id}")
-    public ResponseEntity<UserDto> deleteFriendship(@PathVariable("id") Long id, AuthUserDto authUser) {
+    public ResponseEntity<UserDto> deleteFriendship(@PathVariable("id") Long id, @ApiIgnore AuthUserDto authUser) {
         UserDto targetUser = userService.findUserById(id, authUser.getId());
 
         if (targetUser == null) {

@@ -4,8 +4,6 @@ import com.scott.neptune.common.property.FileProperties;
 import com.scott.neptune.common.util.FileUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.DisposableBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.stereotype.Component;
 
 import java.io.File;
 
@@ -16,8 +14,8 @@ import java.io.File;
  * @Description: NeptuneBlog
  */
 @RequiredArgsConstructor
-@ConditionalOnProperty(name = "neptune.file.tempFolder")
-@Component
+//@ConditionalOnProperty(name = "neptune.file.tempFolder")
+//@Component
 public class DestroyRunner implements DisposableBean {
 
     private final FileProperties fileProperties;
