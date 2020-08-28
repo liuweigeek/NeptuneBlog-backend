@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.Collection;
 import java.util.List;
@@ -94,6 +95,7 @@ public class TweetController extends BaseController {
      * @return
      */
     @ApiOperation(value = "删除推文")
+    @ApiImplicitParam(name = "id", value = "推文ID", paramType = "path", dataTypeClass = Long.class)
     @DeleteMapping("/{id}")
     public ResponseEntity<TweetDto> deleteTweet(@PathVariable("id") Long id) {
         TweetDto tweetDto = tweetService.findTweetById(id);
@@ -112,7 +114,7 @@ public class TweetController extends BaseController {
     @ApiOperation(value = "获取关注用户的推文")
     @GetMapping("/following")
     public ResponseEntity<Page<TweetDto>> getFollowingTweets(@RequestParam OffsetPageCommand command,
-                                                             AuthUserDto authUser) {
+                                                             @ApiIgnore AuthUserDto authUser) {
         //TODO parameters for pageable
         Page<TweetDto> tweetPage = tweetService.findFollowingTweets(authUser.getId(), command.getOffset(), command.getLimit());
         return ResponseEntity.ok(tweetPage);
@@ -125,6 +127,7 @@ public class TweetController extends BaseController {
      * @return
      */
     @ApiOperation(value = "获取指定用户的推文")
+    @ApiImplicitParam(name = "userId", value = "指定用户视角", paramType = "path", dataTypeClass = Long.class)
     //TODO rebuild the key for cache
     //@Cacheable(value = Constant.CacheKey.TWEET, key = "#userId+'.'+#postDto.getCurrent()+'.'+#postDto.getSize()")
     @GetMapping("/user/{userId}")
@@ -142,7 +145,7 @@ public class TweetController extends BaseController {
      * @return 用户列表
      */
     @ApiOperation(value = "通过关键字搜索用户")
-    @ApiImplicitParam(name = "keyword", value = "关键字", paramType = "path", required = true)
+    @ApiImplicitParam(name = "keyword", value = "关键字", paramType = "path", dataTypeClass = String.class, required = true)
     @GetMapping(value = "/search/{keyword}")
     public ResponseEntity<Collection<TweetDto>> search(@PathVariable String keyword) {
         Collection<TweetDto> tweetDtoList = tweetService.search(keyword);

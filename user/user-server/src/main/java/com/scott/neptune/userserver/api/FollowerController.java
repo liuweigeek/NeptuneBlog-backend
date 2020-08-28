@@ -6,6 +6,7 @@ import com.scott.neptune.userclient.dto.AuthUserDto;
 import com.scott.neptune.userclient.dto.FriendshipDto;
 import com.scott.neptune.userserver.service.IFriendshipService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -72,6 +73,7 @@ public class FollowerController extends BaseController {
      * @return
      */
     @ApiOperation(value = "获取关注者用户ID列表")
+    @ApiImplicitParam(name = "id", value = "指定用户视角", paramType = "form", dataTypeClass = Long.class)
     @GetMapping("/ids/all")
     public ResponseEntity<Collection<Long>> findAllFollowerIds(Long id, @ApiIgnore AuthUserDto authUser) {
         Long whomUserId = Optional.ofNullable(id)
@@ -87,6 +89,7 @@ public class FollowerController extends BaseController {
      * @return
      */
     @ApiOperation(value = "获取关注者用户列表")
+    @ApiImplicitParam(name = "id", value = "指定用户视角", paramType = "form", dataTypeClass = Long.class)
     @GetMapping("/all")
     public ResponseEntity<Collection<FriendshipDto>> findAllFollowerUsers(Long id, @ApiIgnore AuthUserDto authUser) {
         Long whomUserId = Optional.ofNullable(id)

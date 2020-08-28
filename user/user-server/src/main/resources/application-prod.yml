@@ -1,0 +1,76 @@
+server:
+  port: 8080
+spring:
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 50MB
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:mysql://serverhost:3306/db_neptune_blog?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC
+    username: scott
+    password: 12345678
+    hikari:
+      poolName: Hikari
+      auto-commit: false
+      data-source-properties:
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
+  jpa:
+    generate-ddl: false
+    show-sql: false
+    open-in-view: true
+    properties:
+      hibernate:
+        format_sql: true
+  redis:
+    host: serverhost
+    port: 6379
+    database: 0
+    timeout: 20000
+    jedis:
+      pool:
+        max-active: 8
+        max-wait: -1
+        max-idle: 8
+        min-idle: 0
+  rabbitmq:
+    host: serverhost
+    port: 5672
+    username: scott
+    password: 12345678
+    virtual-host: /
+  sleuth:
+    sampler:
+      probability: 0
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          strategy: SEMAPHORE
+          thread:
+            timeoutInMilliseconds: 80000
+  shareSecurityContext: true
+ribbon:
+  ReadTimeout: 20000
+  ConnectTimeout: 20000
+  eager-load:
+    enabled: true
+    clients: tweet
+logging:
+  level:
+    org.springframework.cloud.openfeign: error
+    org.springframework.cloud.bus: error
+    com.scott.neptune: error
+neptune:
+  oss:
+    minio:
+      endpoint: http://serverhost:9000
+      accessKey: scott
+      secretKey: 12345678
+      bucket: neptune-blog
+  file:
+    tempFolder: /Users/scott/Data/neptune_files

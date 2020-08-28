@@ -63,6 +63,7 @@ public class UserController extends BaseController {
      * @return 用户信息
      */
     @ApiOperation(value = "获取指定用户信息")
+    @ApiImplicitParam(name = "id", value = "用户ID", paramType = "path", dataTypeClass = Long.class)
     @GetMapping("/{id}")
     public ResponseEntity<UserDto> getUserById(@PathVariable("id") Long id, @ApiIgnore AuthUserDto authUser) {
 
@@ -79,6 +80,7 @@ public class UserController extends BaseController {
      * @return 用户信息
      */
     @ApiOperation(value = "获取指定用户信息")
+    @ApiImplicitParam(name = "username", value = "用户名", paramType = "path", dataTypeClass = String.class)
     @GetMapping("/username/{username}")
     public ResponseEntity<UserDto> getUserByUsername(@PathVariable("username") String username, @ApiIgnore AuthUserDto authUser) {
 
@@ -95,6 +97,7 @@ public class UserController extends BaseController {
      * @return
      */
     @ApiOperation(value = "查询用户列表")
+    @ApiImplicitParam(name = "ids", value = "用户ID列表", paramType = "form", dataTypeClass = String.class)
     @GetMapping
     public ResponseEntity<Collection<UserDto>> findUsersByIds(String ids, @ApiIgnore AuthUserDto authUser) {
         List<Long> userIds = Stream.of(StringUtils.split(ids, ","))
@@ -112,6 +115,7 @@ public class UserController extends BaseController {
      * @return
      */
     @ApiOperation(value = "查询用户列表")
+    @ApiImplicitParam(name = "usernames", value = "用户名列表", paramType = "form", dataTypeClass = String.class)
     @GetMapping("/username")
     public ResponseEntity<Collection<UserDto>> findUsersByUsernames(String usernames, @ApiIgnore AuthUserDto authUser) {
 
@@ -143,7 +147,7 @@ public class UserController extends BaseController {
      * @return
      */
     @ApiOperation(value = "根据用户名获取指定用户,用于授权")
-    @ApiImplicitParam(value = "用户名", paramType = "path", required = true)
+    @ApiImplicitParam(name = "username", value = "用户名", paramType = "path", dataTypeClass = String.class)
     @GetMapping("/authenticate/{username}")
     public ResponseEntity<AuthUserDto> getUserByUsernameForAuthenticate(@PathVariable String username) {
         AuthUserDto authUserDto = userService.findUserByUsernameForAuthenticate(username);

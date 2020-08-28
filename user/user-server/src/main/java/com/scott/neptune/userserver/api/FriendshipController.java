@@ -54,13 +54,13 @@ public class FriendshipController extends BaseController {
      * @return
      */
     @ApiOperation(value = "获取指定用户与登录用户的关系")
-    @ApiImplicitParam(value = "要查询的用户ID列表，用[,]分割", paramType = "query")
+    @ApiImplicitParam(name = "userIds", value = "要查询的用户ID列表，用[,]分割", paramType = "query", dataTypeClass = String.class)
     @GetMapping
     public ResponseEntity<Collection<RelationshipDto>> lookUpByIds(String userIds, @ApiIgnore AuthUserDto authUser) {
         if (StringUtils.isBlank(userIds)) {
             throw new RestException("请传入要查询的用户ID", HttpStatus.BAD_REQUEST);
         }
-        List<Long> userIdList = userIdList = Arrays.stream(StringUtils.split(userIds, ","))
+        List<Long> userIdList = Arrays.stream(StringUtils.split(userIds, ","))
                 .map(Long::parseLong)
                 .collect(Collectors.toList());
         Collection<RelationshipDto> relationshipList = friendshipService.getRelationshipByIds(userIdList, authUser.getId());
@@ -75,7 +75,7 @@ public class FriendshipController extends BaseController {
      * @return
      */
     @ApiOperation(value = "获取指定用户与登录用户的关系")
-    @ApiImplicitParam(value = "要查询的用户名列表，用[,]分割", paramType = "query")
+    @ApiImplicitParam(name = "usernames", value = "要查询的用户名列表，用[,]分割", paramType = "query", dataTypeClass = String.class)
     @GetMapping("/username")
     public ResponseEntity<Collection<RelationshipDto>> lookUpByUsernames(String usernames,
                                                                          @ApiIgnore AuthUserDto authUser) {
@@ -98,7 +98,7 @@ public class FriendshipController extends BaseController {
      * @return
      */
     @ApiOperation(value = "获取指定用户与登录用户的关系")
-    @ApiImplicitParam(value = "要查询的用户ID", paramType = "query")
+    @ApiImplicitParam(name = "id", value = "要查询的用户ID", paramType = "query", dataTypeClass = Long.class)
     @GetMapping("/{id}")
     public ResponseEntity<RelationshipDto> getFriendshipById(@PathVariable("id") Long id, @ApiIgnore AuthUserDto authUser) {
         return ResponseEntity.ok(new RelationshipDto());
@@ -112,7 +112,7 @@ public class FriendshipController extends BaseController {
      * @return
      */
     @ApiOperation(value = "关注指定用户")
-    @ApiImplicitParam(value = "要关注的用户ID", paramType = "query", required = true)
+    @ApiImplicitParam(name = "id", value = "要关注的用户ID", paramType = "query", dataTypeClass = Long.class, required = true)
     @PostMapping
     public ResponseEntity<FriendshipDto> addFriendship(@RequestParam Long id, @ApiIgnore AuthUserDto authUser) {
         UserDto targetUser = userService.findUserById(id, authUser.getId());
@@ -134,7 +134,7 @@ public class FriendshipController extends BaseController {
      * @return
      */
     @ApiOperation(value = "取消关注指定用户")
-    @ApiImplicitParam(name = "userId", value = "要取消关注的用户ID", paramType = "query", required = true)
+    @ApiImplicitParam(name = "id", value = "要取消关注的用户ID", paramType = "query", dataTypeClass = Long.class, required = true)
     @DeleteMapping("/{id}")
     public ResponseEntity<UserDto> deleteFriendship(@PathVariable("id") Long id, @ApiIgnore AuthUserDto authUser) {
         UserDto targetUser = userService.findUserById(id, authUser.getId());

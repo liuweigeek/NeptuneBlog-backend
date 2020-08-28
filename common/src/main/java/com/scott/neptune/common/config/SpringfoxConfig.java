@@ -1,9 +1,11 @@
 package com.scott.neptune.common.config;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.oas.annotations.EnableOpenApi;
 import springfox.documentation.schema.ScalarType;
 import springfox.documentation.service.ParameterType;
 import springfox.documentation.spi.DocumentationType;
@@ -17,8 +19,8 @@ import springfox.documentation.swagger.web.UiConfigurationBuilder;
 
 import static java.util.Collections.singletonList;
 
-//@Configuration
-//@EnableOpenApi
+@Configuration
+@EnableOpenApi
 public class SpringfoxConfig {
 
     @Bean
@@ -27,7 +29,7 @@ public class SpringfoxConfig {
         return new Docket(DocumentationType.OAS_30)
                 .apiInfo(new ApiInfoBuilder()
                         .title("Neptune Blog")
-                        .description("A book store with web api")
+                        .description("Neptune Blog")
                         .version("1.0")
                         .build())
                 .select()

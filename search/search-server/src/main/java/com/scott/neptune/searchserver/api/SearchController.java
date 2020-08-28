@@ -1,4 +1,4 @@
-package com.scott.neptune.searchserver.api.web;
+package com.scott.neptune.searchserver.api;
 
 import com.scott.neptune.common.annotation.RedisLock;
 import com.scott.neptune.common.base.BaseController;
@@ -43,7 +43,7 @@ public class SearchController extends BaseController {
 
     @RedisLock
     @ApiOperation(value = "搜索用户和推文")
-    @ApiImplicitParam(value = "关键字", paramType = "path", required = true)
+    @ApiImplicitParam(name = "keyword", value = "关键字", paramType = "path", dataTypeClass = String.class, required = true)
     @GetMapping("/{keyword}")
     public ResponseEntity<Map<String, Collection>> searchByKeyword(@PathVariable("keyword") String keyword) {
 

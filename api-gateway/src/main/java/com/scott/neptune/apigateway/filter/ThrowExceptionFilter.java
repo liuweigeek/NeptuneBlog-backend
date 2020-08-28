@@ -32,7 +32,7 @@ public class ThrowExceptionFilter extends SendErrorFilter {
             ExceptionHolder exception = findZuulException(requestContext.getThrowable());
             log.error("网关异常: ", exception.getThrowable());
 
-            ServerResponse<Void> errorResponse = ServerResponse.createByErrorMessage("服务不可用，请稍后再试");
+            ServerResponse errorResponse = ServerResponse.createByErrorMessage("服务不可用，请稍后再试");
             HttpServletResponse response = requestContext.getResponse();
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.getWriter().println(objectMapper.writeValueAsString(errorResponse));
