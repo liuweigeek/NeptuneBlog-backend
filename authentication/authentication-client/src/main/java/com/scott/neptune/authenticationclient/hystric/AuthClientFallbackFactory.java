@@ -4,14 +4,12 @@ import com.scott.neptune.authenticationclient.client.AuthClient;
 import com.scott.neptune.common.exception.NeptuneBlogException;
 import feign.hystrix.FallbackFactory;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.stereotype.Component;
 
 /**
  * @author scott
  */
 @Slf4j
-@EnableHystrix
 @Component
 public class AuthClientFallbackFactory implements FallbackFactory<AuthClient> {
 

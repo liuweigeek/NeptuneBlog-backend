@@ -2,12 +2,9 @@ spring:
   profiles:
     active: dev
   application:
-    name: user-server
+    name: api-gateway
   messages:
     basename: i18n/messages
-  jackson:
-    serialization:
-      FAIL_ON_EMPTY_BEANS: false
 #  cloud:
 #    config:
 #      discovery:
@@ -20,6 +17,11 @@ spring:
 eureka:
   instance:
     prefer-ip-address: true
-feign:
-  hystrix:
-    enabled: true
+zuul:
+  SendErrorFilter.error.disable: true
+  routes:
+    authenticate-server: /auth/**
+    user-server: /user/**
+    tweet-server: /tweet/**
+    search-server: /search/**
+    mail-server: /mail/**

@@ -1,5 +1,5 @@
 server:
-  port: 8763
+  port: 8080
 eureka:
   client:
     serviceUrl:
@@ -9,28 +9,6 @@ spring:
     multipart:
       max-file-size: 20MB
       max-request-size: 50MB
-  datasource:
-    type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mysql://localhost:3306/db_neptune_blog?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC
-    username: root
-    password: 12345678
-    hikari:
-      poolName: Hikari
-      auto-commit: false
-      data-source-properties:
-        cachePrepStmts: true
-        prepStmtCacheSize: 250
-        prepStmtCacheSqlLimit: 2048
-        useServerPrepStmts: true
-  jpa:
-    generate-ddl: true
-    show-sql: true
-    hibernate:
-      ddl-auto: update
-    open-in-view: true
-    properties:
-      hibernate:
-        format_sql: true
   redis:
     host: localhost
     port: 6379
@@ -38,14 +16,14 @@ spring:
     timeout: 20000
     jedis:
       pool:
-        max-active: 8
+        max-active: 0
         max-wait: -1
         max-idle: 8
         min-idle: 0
   rabbitmq:
     host: localhost
     port: 5672
-    username: root
+    username: scott
     password: 12345678
     virtual-host: /
   sleuth:
@@ -55,6 +33,12 @@ spring:
     base-url: http://localhost:9411/
     sender:
       type: web
+zuul:
+  #  sensitiveHeaders: "*"
+  host:
+    connect-timeout-millis: 60000
+    socket-timeout-millis: 60000
+    connection-request-timeout-millis: 60000
 hystrix:
   shareSecurityContext: true
 ribbon:
@@ -62,21 +46,11 @@ ribbon:
   ConnectTimeout: 30000
   eager-load:
     enabled: true
-    clients: tweet
 logging:
   level:
     org.springframework.cloud.openfeign: debug
     org.springframework.cloud.bus: debug
     com.scott.neptune: debug
-neptune:
-  oss:
-    minio:
-      endpoint: http://localhost:9000
-      accessKey: root
-      secretKey: 12345678
-      bucket: neptune-blog
-  file:
-    tempFolder: /Users/scott/Data/neptune_files
 management:
   endpoints:
     web:

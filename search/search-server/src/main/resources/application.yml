@@ -2,7 +2,7 @@ spring:
   profiles:
     active: dev
   application:
-    name: user-server
+    name: search-server
   messages:
     basename: i18n/messages
   jackson:
@@ -17,9 +17,9 @@ spring:
 #      fail-fast: true
 #      name: ${spring.application.name}
 #      profile: ${spring.profiles.active}
-eureka:
-  instance:
-    prefer-ip-address: true
 feign:
   hystrix:
     enabled: true
+eureka:
+  instance:
+    prefer-ip-address: true

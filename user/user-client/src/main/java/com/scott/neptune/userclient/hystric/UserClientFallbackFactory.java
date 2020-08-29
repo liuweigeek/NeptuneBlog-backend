@@ -7,7 +7,6 @@ import com.scott.neptune.userclient.dto.AuthUserDto;
 import com.scott.neptune.userclient.dto.UserDto;
 import feign.hystrix.FallbackFactory;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -16,7 +15,6 @@ import java.util.Collection;
  * @author scott
  */
 @Slf4j
-@EnableHystrix
 @Component
 public class UserClientFallbackFactory implements FallbackFactory<UserClient> {
 

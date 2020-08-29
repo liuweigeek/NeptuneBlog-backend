@@ -29,17 +29,6 @@ spring:
     properties:
       hibernate:
         format_sql: true
-  redis:
-    host: serverhost
-    port: 6379
-    database: 0
-    timeout: 20000
-    jedis:
-      pool:
-        max-active: 8
-        max-wait: -1
-        max-idle: 8
-        min-idle: 0
   rabbitmq:
     host: serverhost
     port: 5672
@@ -56,18 +45,9 @@ ribbon:
   ConnectTimeout: 20000
   eager-load:
     enabled: true
-    clients: tweet
+    clients: user
 logging:
   level:
     org.springframework.cloud.openfeign: error
     org.springframework.cloud.bus: error
     com.scott.neptune: error
-neptune:
-  oss:
-    minio:
-      endpoint: http://serverhost:9000
-      accessKey: root
-      secretKey: 12345678
-      bucket: neptune-blog
-  file:
-    tempFolder: /Users/scott/Data/neptune_files

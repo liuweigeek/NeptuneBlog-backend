@@ -4,7 +4,6 @@ import com.scott.neptune.tweetclient.client.TweetClient;
 import com.scott.neptune.tweetclient.dto.TweetDto;
 import feign.hystrix.FallbackFactory;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -14,7 +13,6 @@ import java.util.Collections;
  * @author scott
  */
 @Slf4j
-@EnableHystrix
 @Component
 public class TweetClientFallbackFactory implements FallbackFactory<TweetClient> {
 
