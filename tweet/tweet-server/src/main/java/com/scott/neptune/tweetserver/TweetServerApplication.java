@@ -1,5 +1,6 @@
 package com.scott.neptune.tweetserver;
 
+import com.scott.neptune.common.constant.Constant;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -10,10 +11,10 @@ import org.springframework.context.annotation.ComponentScan;
 /**
  * @author scott
  */
-@EntityScan(basePackages = "com.scott.neptune")
-@ComponentScan(basePackages = "com.scott.neptune")
+@EntityScan(basePackages = Constant.BASE_PACKAGE)
+@ComponentScan(basePackages = Constant.BASE_PACKAGE)
+@EnableFeignClients(basePackages = Constant.BASE_PACKAGE)
 @EnableDiscoveryClient
-@EnableFeignClients(basePackages = "com.scott.neptune")
 @SpringBootApplication
 public class TweetServerApplication {
 

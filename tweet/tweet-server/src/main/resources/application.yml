@@ -17,9 +17,9 @@ spring:
 #      fail-fast: true
 #      name: ${spring.application.name}
 #      profile: ${spring.profiles.active}
-feign:
-  hystrix:
-    enabled: true
 eureka:
   instance:
     prefer-ip-address: true
+feign:
+  hystrix:
+    enabled: true

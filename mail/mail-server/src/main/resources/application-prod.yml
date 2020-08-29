@@ -3,7 +3,7 @@ server:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://scott:12345678@eureka-server:8761/eureka/
+      defaultZone: http://eureka-server:8761/eureka/
 spring:
   rabbitmq:
     host: serverhost

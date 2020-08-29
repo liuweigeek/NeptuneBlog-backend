@@ -1,5 +1,6 @@
 package com.scott.neptune.mailserver;
 
+import com.scott.neptune.common.constant.Constant;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -12,8 +13,8 @@ import org.springframework.context.annotation.ComponentScan;
  * @Date: 2019/10/25 13:42
  * @Description:
  */
-@EntityScan(basePackages = "com.scott.neptune")
-@ComponentScan(basePackages = "com.scott.neptune")
+@EntityScan(basePackages = Constant.BASE_PACKAGE)
+@ComponentScan(basePackages = Constant.BASE_PACKAGE)
 @EnableDiscoveryClient
 @SpringBootApplication
 public class MailServerApplication {
