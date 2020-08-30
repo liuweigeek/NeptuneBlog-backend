@@ -102,12 +102,6 @@
             <resource>
                 <filtering>true</filtering>
                 <directory>src/main/resources</directory>
-                <includes>
-                    <include>application.properties</include>
-                    <include>application.yml</include>
-                    <include>bootstrap.properties</include>
-                    <include>bootstrap.yml</include>
-                </includes>
             </resource>
         </resources>
         <plugins>
@@ -127,11 +121,6 @@
                 <configuration>
                     <skipTests>true</skipTests>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>3.2.0</version>
             </plugin>
         </plugins>
     </build>

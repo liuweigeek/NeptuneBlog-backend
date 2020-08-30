@@ -68,6 +68,15 @@ logging:
     org.springframework.cloud.openfeign: debug
     org.springframework.cloud.bus: debug
     com.scott.neptune: debug
+neptune:
+  oss:
+    minio:
+      endpoint: http://localhost:9000
+      accessKey: root
+      secretKey: 12345678
+      bucket: neptune-blog
+  file:
+    tempFolder: /Users/scott/Data/neptune_files/tweet
 management:
   endpoints:
     web:
