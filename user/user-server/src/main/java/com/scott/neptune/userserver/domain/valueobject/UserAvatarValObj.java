@@ -27,7 +27,7 @@ public class UserAvatarValObj implements Serializable {
     @Column(name = "small_avatar_url")
     private String smallAvatarUrl;
 
-    @Column(name = "mediuml_avatar_url")
+    @Column(name = "medium_avatar_url")
     private String mediumAvatarUrl;
 
     @Column(name = "large_avatar_url")

@@ -1,58 +1,52 @@
-create schema db_neptune_blog collate utf8mb4_0900_ai_ci;
+create database db_neptune_blog default character set utf8mb4 collate utf8mb4_unicode_ci;
 
 use db_neptune_blog;
 
-create table t_friend_relation
+create table t_friendship
 (
-    follow_date datetime    null,
-    follow_from varchar(32) null,
-    from_id     varchar(32) not null,
-    to_id       varchar(32) not null,
-    primary key (from_id, to_id)
+    source_id   bigint       not null,
+    target_id   bigint       not null,
+    follow_date datetime(6)  null,
+    follow_from varchar(255) null,
+    primary key (source_id, target_id)
 );
 
-create table t_post
+create table t_tweet
 (
-    id          varchar(32)   not null
+    id                  bigint auto_increment
         primary key,
-    content     varchar(1024) null,
-    create_date datetime      null,
-    device      varchar(32)   null,
-    update_date datetime      null,
-    user_id     varchar(255)  null
+    author_id           bigint       null,
+    conversation_id     bigint       null,
+    create_at           datetime(6)  null,
+    in_reply_to_user_id bigint       null,
+    like_count          bigint       null,
+    quote_count         bigint       null,
+    reply_count         bigint       null,
+    retweet_count       bigint       null,
+    source              varchar(255) null,
+    text                varchar(255) null,
+    type                varchar(255) null,
+    referenced_tweet_id bigint       null
 );
 
 create table t_user
 (
-    id            varchar(32)  not null
+    id                bigint auto_increment
         primary key,
-    email         varchar(50)  null,
-    lang_key      varchar(6)   null,
-    login_date    datetime     null,
-    password      varchar(64)  null,
-    nickname      varchar(32)  null,
-    register_date datetime     null,
-    sex           tinyint      not null,
-    token         varchar(256) null,
-    username      varchar(32)  null,
-    birthday      datetime     null,
-    constraint UK_i6qjjoe560mee5ajdg7v1o6mi
-        unique (email),
-    constraint UK_jhib4legehrm4yscx9t3lirqi
-        unique (username)
+    birthday          datetime(6)  null,
+    create_at         datetime(6)  null,
+    description       varchar(255) null,
+    email             varchar(255) null,
+    gender            varchar(255) null,
+    lang              varchar(255) null,
+    name              varchar(255) null,
+    password          varchar(255) null,
+    pinned_tweet_id   bigint       null,
+    profile_image_url varchar(255) null,
+    liked_count       int          null,
+    tweet_count       int          null,
+    large_avatar_url  varchar(255) null,
+    medium_avatar_url varchar(255) null,
+    small_avatar_url  varchar(255) null,
+    username          varchar(255) null
 );
-
-create table t_user_avatar
-(
-    user_id   varchar(32)  not null,
-    size_type tinyint(1)   not null,
-    url       varchar(500) null,
-    primary key (user_id, size_type)
-);
-
-create index idx_size
-    on t_user_avatar (size_type);
-
-create index idx_user_id
-    on t_user_avatar (user_id);
-
