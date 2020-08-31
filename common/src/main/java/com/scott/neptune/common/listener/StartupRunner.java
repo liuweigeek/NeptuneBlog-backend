@@ -4,6 +4,8 @@ import com.scott.neptune.common.property.FileProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 
@@ -14,8 +16,8 @@ import java.io.File;
  * @Description: NeptuneBlog
  */
 @RequiredArgsConstructor
-//@ConditionalOnProperty(name = "neptune.file.tempFolder")
-//@Component
+@ConditionalOnProperty(name = "neptune.file.tempFolder")
+@Component
 public class StartupRunner implements ApplicationRunner {
 
     private final FileProperties fileProperties;

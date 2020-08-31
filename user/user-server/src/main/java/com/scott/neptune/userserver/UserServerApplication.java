@@ -14,7 +14,7 @@ import org.springframework.context.annotation.ComponentScan;
  * @Date: 2019/9/23 09:13
  * @Description:
  */
-@EntityScan(basePackages = Constant.BASE_PACKAGE)
+@EntityScan(basePackages = "com.scott.neptune.userserver.domain.entity")
 @ComponentScan(basePackages = Constant.BASE_PACKAGE)
 @EnableFeignClients(basePackages = Constant.BASE_PACKAGE)
 @EnableDiscoveryClient

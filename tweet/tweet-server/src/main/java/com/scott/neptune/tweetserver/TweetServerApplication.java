@@ -11,7 +11,7 @@ import org.springframework.context.annotation.ComponentScan;
 /**
  * @author scott
  */
-@EntityScan(basePackages = Constant.BASE_PACKAGE)
+@EntityScan(basePackages = "com.scott.neptune.tweetserver.domain.entity")
 @ComponentScan(basePackages = Constant.BASE_PACKAGE)
 @EnableFeignClients(basePackages = Constant.BASE_PACKAGE)
 @EnableDiscoveryClient

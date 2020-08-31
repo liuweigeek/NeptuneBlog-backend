@@ -57,7 +57,11 @@ public interface TweetRepository extends JpaRepository<TweetEntity, Long>,
      * @return
      */
     @Modifying
-    Boolean updatePublicMetricsRetweetCountById(@Param("id") Long tweetId);
+    @Query(value = "update t_tweet t\n" +
+            "    left join (select id, count(1) count from t_tweet where type = 'retweeted' group by id) m on m.id = t.id\n" +
+            "set t.retweet_count = m.count\n" +
+            "where t.id = :id", nativeQuery = true)
+    Integer updatePublicMetricsRetweetCountById(@Param("id") Long tweetId);
 
     /**
      * 更新quote统计数量
@@ -66,7 +70,12 @@ public interface TweetRepository extends JpaRepository<TweetEntity, Long>,
      * @return
      */
     @Modifying
-    Boolean updatePublicMetricsQuoteCountById(@Param("id") Long tweetId);
+    @Query(value = "update t_tweet t\n" +
+            "    " +
+            "left join (select id, count(1) count from t_tweet where type = 'quoted' group by id) m on m.id = t.id\n" +
+            "set t.retweet_count = m.count\n" +
+            "where t.id = :id", nativeQuery = true)
+    Integer updatePublicMetricsQuoteCountById(@Param("id") Long tweetId);
 
     /**
      * 更新reply统计数量
@@ -74,8 +83,8 @@ public interface TweetRepository extends JpaRepository<TweetEntity, Long>,
      * @param tweetId
      * @return
      */
-    @Modifying
-    Boolean updatePublicMetricsReplyCountById(@Param("id") Long tweetId);
+    //@Modifying
+    //Boolean updatePublicMetricsReplyCountById(@Param("id") Long tweetId);
 
     /**
      * 更新like统计数量
@@ -83,7 +92,7 @@ public interface TweetRepository extends JpaRepository<TweetEntity, Long>,
      * @param tweetId
      * @return
      */
-    @Modifying
-    Boolean updatePublicMetricsLikeCountById(@Param("id") Long tweetId);
+    //@Modifying
+    //Boolean updatePublicMetricsLikeCountById(@Param("id") Long tweetId);
 
 }

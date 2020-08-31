@@ -2,7 +2,6 @@ package com.scott.neptune.tweetserver.domain.entity;
 
 import com.scott.neptune.tweetclient.enumerate.TweetTypeEnum;
 import com.scott.neptune.tweetserver.domain.listener.TweetAuditingListener;
-import com.scott.neptune.tweetserver.domain.valueobject.TweetEntitiesValObj;
 import com.scott.neptune.tweetserver.domain.valueobject.TweetPublicMetricsValObj;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,12 +10,14 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
+import javax.persistence.ConstraintMode;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -85,8 +86,8 @@ public class TweetEntity implements Serializable {
     /**
      * 附加信息
      */
-    @Embedded
-    private TweetEntitiesValObj entities;
+    /*@Embedded
+    private TweetEntitiesValObj entities;*/
 
     /**
      * 对话ID，如果当前Tweet是一条回复，则指向另一条Tweet
@@ -104,7 +105,7 @@ public class TweetEntity implements Serializable {
      * 被引用的Tweet
      */
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "referenced_tweet_id")
+    @JoinColumn(name = "referenced_tweet_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private TweetEntity referencedTweet;
 
     /**
