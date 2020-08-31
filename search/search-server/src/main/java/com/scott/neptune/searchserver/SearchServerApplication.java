@@ -3,7 +3,6 @@ package com.scott.neptune.searchserver;
 import com.scott.neptune.common.constant.Constant;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
@@ -14,7 +13,6 @@ import org.springframework.context.annotation.ComponentScan;
  * @Date: 2019/10/21 23:51
  * @Description:
  */
-@EntityScan(basePackages = Constant.BASE_PACKAGE)
 @ComponentScan(basePackages = Constant.BASE_PACKAGE)
 @EnableFeignClients(basePackages = Constant.BASE_PACKAGE)
 @EnableDiscoveryClient
