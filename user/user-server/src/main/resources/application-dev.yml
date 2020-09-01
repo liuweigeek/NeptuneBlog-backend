@@ -22,6 +22,10 @@ spring:
         prepStmtCacheSize: 250
         prepStmtCacheSqlLimit: 2048
         useServerPrepStmts: true
+      idle-timeout: 300000
+      max-lifetime: 600000
+      minimum-idle: 5
+      maximum-pool-size: 30
   jpa:
     generate-ddl: true
     show-sql: true
