@@ -91,9 +91,6 @@ public class UserServiceImpl implements IUserService {
         UserEntity userEntity = userConvertor.convertToEntity(userDto);
         userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
 
-        //TODO create by event
-        userEntity.setCreateAt(new Date());
-
         userRepository.save(userEntity);
         return userConvertor.convertToDto(userEntity);
     }
