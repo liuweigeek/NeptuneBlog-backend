@@ -26,7 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Slf4j
 @RequiredArgsConstructor
-@Transactional(readOnly = true, rollbackFor = Exception.class)
+@Transactional(rollbackFor = Exception.class)
 @Service
 public class ReplyServiceImpl implements IReplyService {
 

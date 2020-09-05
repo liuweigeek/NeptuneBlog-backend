@@ -53,6 +53,7 @@ public class UserConvertor extends BaseConvertor<UserEntity, UserDto> {
             entity.setEmail(dto.getEmail());
             entity.setUsername(dto.getUsername());
             entity.setName(dto.getName());
+            entity.setPassword(dto.getPassword());
             entity.setDescription(dto.getDescription());
             entity.setBirthday(dto.getBirthday());
             entity.setGender(GenderEnum.getEnum(dto.getGender()));

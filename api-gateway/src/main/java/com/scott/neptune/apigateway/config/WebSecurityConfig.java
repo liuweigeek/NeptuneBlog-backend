@@ -1,5 +1,6 @@
 package com.scott.neptune.apigateway.config;
 
+import com.scott.neptune.apigateway.filter.JwtTokenFilter;
 import com.scott.neptune.authenticationclient.jwt.JwtTokenProvider;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -8,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -24,18 +26,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authorizeRequests()//
-                .antMatchers("/auth/auth/signIn", "/auth/auth/signUp").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .exceptionHandling().accessDeniedPage("/login")
-                .and()
                 .csrf().disable()
-                .apply(new JwtTokenFilterConfig(jwtTokenProvider));
-
+                .logout().disable()
+                .formLogin().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .anonymous()
+                .and()
+                .addFilterAfter(new JwtTokenFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
+                .authorizeRequests()
+                .antMatchers("/auth-server/auth/signIn", "/auth-server/auth/signUp").permitAll()
+                .anyRequest().authenticated();
     }
 
     @Override

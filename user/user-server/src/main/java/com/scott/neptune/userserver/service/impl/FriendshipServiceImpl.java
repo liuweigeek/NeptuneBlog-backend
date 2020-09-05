@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
-@Transactional(readOnly = true, rollbackFor = Exception.class)
+@Transactional(rollbackFor = Exception.class)
 @Service
 public class FriendshipServiceImpl implements IFriendshipService {
 

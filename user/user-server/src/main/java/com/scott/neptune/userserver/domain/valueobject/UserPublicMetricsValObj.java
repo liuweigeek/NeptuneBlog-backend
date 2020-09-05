@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Formula;
 
 import javax.persistence.Embeddable;
 import java.io.Serializable;
@@ -27,13 +26,13 @@ public class UserPublicMetricsValObj implements Serializable {
     /**
      * 正在关注用户数量
      */
-    @Formula("select count(1) from t_friendship where source_id = id")
+//    @Formula("select count(1) from friendship where sourceId = id")
     private Integer followingCount;
 
     /**
      * 关注者数量
      */
-    @Formula("select count(1) from t_friendship where target_id = id")
+//    @Formula("select count(1) from friendship where targetId = id")
     private Integer followersCount;
 
     private Integer tweetCount;

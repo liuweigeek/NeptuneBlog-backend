@@ -1,14 +1,12 @@
 package com.scott.neptune.authenticationclient.jwt;
 
 import com.scott.neptune.authenticationclient.properties.JwtProperties;
-import com.scott.neptune.common.exception.RestException;
 import com.scott.neptune.userclient.dto.AuthRoleDto;
 import com.scott.neptune.userclient.dto.AuthUserDto;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.spec.SecretKeySpec;
@@ -60,13 +58,9 @@ public class JwtTokenProvider {
         return null;
     }
 
-    public boolean validateToken(String token) {
-        try {
-            Jwts.parser().setSigningKey(jwtProperties.getSecret()).parseClaimsJws(token);
-            return true;
-        } catch (JwtException | IllegalArgumentException e) {
-            throw new RestException("Expired or invalid JWT token", HttpStatus.UNAUTHORIZED);
-        }
+    public boolean validateToken(String token) throws JwtException, IllegalArgumentException {
+        Jwts.parser().setSigningKey(jwtProperties.getSecret()).parseClaimsJws(token);
+        return true;
     }
 
 }

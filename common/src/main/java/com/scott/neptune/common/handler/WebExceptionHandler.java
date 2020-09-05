@@ -11,6 +11,8 @@ import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -26,7 +28,13 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class WebExceptionHandler {
 
-    //TODO needs this? @ResponseBody
+    @ExceptionHandler(NoHandlerFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<ApiErrorResponse> handleException(Exception e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ApiErrorResponse.builder().message("资源不存在").build());
+    }
+
     @ExceptionHandler(RestException.class)
     public ResponseEntity<ApiErrorResponse> handleException(RestException e) {
         return ResponseEntity.status(e.getHttpStatus())

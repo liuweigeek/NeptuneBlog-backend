@@ -18,10 +18,12 @@ eureka:
   instance:
     prefer-ip-address: true
 zuul:
-  SendErrorFilter.error.disable: true
+  SendErrorFilter:
+    error:
+      disable: true
   routes:
-    authenticate-server: /auth/**
-    user-server: /user/**
-    tweet-server: /tweet/**
-    search-server: /search/**
-    mail-server: /mail/**
+    authenticate-server: /auth-server/**
+    user-server: /user-server/**
+    tweet-server: /tweet-server/**
+    search-server: /search-server/**
+    mail-server: /mail-server/**
