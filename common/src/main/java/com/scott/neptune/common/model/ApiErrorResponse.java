@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 /**
  * @Author: scott
  * @Email: <a href="mailto:liuweigeek@outlook.com">Scott Lau</a>
@@ -15,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ApiErrorResponse {
+public class ApiErrorResponse implements Serializable {
 
     private String message;
 }

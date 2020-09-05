@@ -1,9 +1,10 @@
 package com.scott.neptune.mailserver.service.impl;
 
-import com.scott.neptune.common.response.ServerResponse;
+import com.scott.neptune.common.exception.NeptuneBlogException;
 import com.scott.neptune.mailserver.service.IEmailService;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -23,6 +24,7 @@ import java.util.Map;
  * @Description: NeptuneBlog
  */
 @Slf4j
+@RequiredArgsConstructor
 @Service
 public class EmailServiceImpl implements IEmailService {
 
@@ -32,13 +34,8 @@ public class EmailServiceImpl implements IEmailService {
     @Value("${spring.mail.username}")
     private String fromAddress;
 
-    public EmailServiceImpl(JavaMailSender mailSender, Configuration freemarkerConfig) {
-        this.mailSender = mailSender;
-        this.freemarkerConfig = freemarkerConfig;
-    }
-
     @Override
-    public ServerResponse sendSimpleMessage(String to, String subject, String content) {
+    public void sendSimpleMessage(String to, String subject, String content) {
 
         try {
             SimpleMailMessage message = new SimpleMailMessage();
@@ -48,15 +45,14 @@ public class EmailServiceImpl implements IEmailService {
             message.setText(content);
             mailSender.send(message);
             log.info("send email success, to: {} subject: {}", to, subject);
-            return ServerResponse.createBySuccess();
         } catch (Exception e) {
             log.info("send email failed, to: {}, subject: {}, error info: ", to, subject, e);
-            return ServerResponse.createByErrorMessage("发送失败");
+            throw new NeptuneBlogException("发送失败");
         }
     }
 
     @Override
-    public ServerResponse sendTemplateMessage(String to, String subject) {
+    public void sendTemplateMessage(String to, String subject) {
         MimeMessage message = mailSender.createMimeMessage();
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
@@ -71,12 +67,10 @@ public class EmailServiceImpl implements IEmailService {
             String html = FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
             helper.setText(html, true);
             mailSender.send(message);
-
             log.info("send email success, to: {} subject: {}", to, subject);
-            return ServerResponse.createBySuccess();
         } catch (Exception e) {
             log.info("send email failed, to: {}, subject: {}, error info: ", to, subject, e);
-            return ServerResponse.createByErrorMessage("发送失败");
+            throw new NeptuneBlogException("发送失败");
         }
     }
 }

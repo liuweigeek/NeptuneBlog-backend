@@ -39,7 +39,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 jwtTokenProvider.validateToken(token);
             } catch (JwtException | IllegalArgumentException e) {
                 SecurityContextHolder.clearContext();
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "无效的token");
                 throw new RestException("无效的token", HttpStatus.UNAUTHORIZED);
             }
             Authentication auth = SecurityUtils.getAuthentication(token);

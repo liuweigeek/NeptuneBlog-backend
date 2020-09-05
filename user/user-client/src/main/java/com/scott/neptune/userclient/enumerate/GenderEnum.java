@@ -1,7 +1,12 @@
 package com.scott.neptune.userclient.enumerate;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.Arrays;
 
 /**
  * @Author: scott
@@ -9,28 +14,28 @@ import lombok.Getter;
  * @Date: 2020/8/7 10:04
  * @Description: 性别
  */
+@Getter
 @AllArgsConstructor
 public enum GenderEnum {
 
     /**
      * 男
      */
-    MALE(1),
+    MALE("male"),
 
     /**
      * 女
      */
-    FEMALE(2);
+    FEMALE("female");
 
-    @Getter
-    private final int code;
+    @JsonValue
+    private final String value;
 
-    public static GenderEnum getEnum(int code) {
-        for (GenderEnum genderEnum : GenderEnum.values()) {
-            if (genderEnum.getCode() == code) {
-                return genderEnum;
-            }
-        }
-        return null;
+    @JsonCreator
+    public static GenderEnum getEnum(String value) {
+        return Arrays.stream(GenderEnum.values())
+                .filter(gender -> StringUtils.equals(gender.getValue(), value))
+                .findFirst()
+                .orElse(null);
     }
 }

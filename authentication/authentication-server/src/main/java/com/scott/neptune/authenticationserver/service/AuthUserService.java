@@ -4,7 +4,6 @@ import com.scott.neptune.authenticationclient.dto.LoginUserInfo;
 import com.scott.neptune.authenticationclient.jwt.JwtTokenProvider;
 import com.scott.neptune.authenticationserver.convertor.AuthUserConvertor;
 import com.scott.neptune.authenticationserver.domain.AuthUser;
-import com.scott.neptune.common.exception.NeptuneBlogException;
 import com.scott.neptune.common.exception.RestException;
 import com.scott.neptune.userclient.client.UserClient;
 import com.scott.neptune.userclient.dto.AuthUserDto;
@@ -49,7 +48,7 @@ public class AuthUserService implements UserDetailsService {
         AuthUserDto authUser = this.loadAuthUserByUsername(username);
         //ensure it's includes field of password
         if (!passwordEncoder.matches(password, authUser.getPassword())) {
-            throw new NeptuneBlogException("密码错误");
+            throw new RestException("密码错误", HttpStatus.UNAUTHORIZED);
         }
         String token = jwtTokenProvider.createToken(authUser, null);
         LoginUserInfo loginUserInfo = LoginUserInfo.newInstance(userClient.getUserById(authUser.getId()));

@@ -4,11 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.util.concurrent.RateLimiter;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
-import com.scott.neptune.common.response.ResponseCode;
-import com.scott.neptune.common.response.ServerResponse;
+import com.scott.neptune.common.exception.RestException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletResponse;
@@ -52,10 +51,7 @@ public class RateLimiterFilter extends ZuulFilter {
             requestContext.setSendZuulResponse(false);
             try {
                 HttpServletResponse response = requestContext.getResponse();
-                response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-                ServerResponse noLoginResponse = ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),
-                        "系统繁忙，请稍后再试");
-                response.getWriter().println(objectMapper.writeValueAsString(noLoginResponse));
+                throw new RestException("系统繁忙，请稍后再试", HttpStatus.TOO_MANY_REQUESTS);
             } catch (Exception e) {
                 log.error("拦截器异常", e);
             }

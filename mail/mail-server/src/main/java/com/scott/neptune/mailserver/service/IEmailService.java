@@ -1,7 +1,5 @@
 package com.scott.neptune.mailserver.service;
 
-import com.scott.neptune.common.response.ServerResponse;
-
 /**
  * @Author: scott
  * @Email: <a href="mailto:liuweigeek@outlook.com">Scott Lau</a>
@@ -10,7 +8,7 @@ import com.scott.neptune.common.response.ServerResponse;
  */
 public interface IEmailService {
 
-    ServerResponse sendSimpleMessage(String to, String subject, String content);
+    void sendSimpleMessage(String to, String subject, String content);
 
-    ServerResponse sendTemplateMessage(String to, String subject);
+    void sendTemplateMessage(String to, String subject);
 }

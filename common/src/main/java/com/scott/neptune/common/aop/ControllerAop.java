@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import com.scott.neptune.common.annotation.RedisLock;
 import com.scott.neptune.common.constant.Constant;
-import com.scott.neptune.common.response.ServerResponse;
+import com.scott.neptune.common.exception.RestException;
 import com.scott.neptune.common.util.HeaderUtils;
 import com.scott.neptune.common.util.JsonUtils;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -23,11 +23,9 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -69,33 +67,11 @@ public class ControllerAop {
                     redisTemplate.delete(redisLockKey);
                 }
             } else {
-                ServerResponse result = ServerResponse.createByErrorMessage("操作进行中，请勿重复提交");
-                writeResponse(result);
-                return null;
+                throw new RestException("操作进行中，请勿重复提交", HttpStatus.BAD_REQUEST);
             }
         } else {
-            ServerResponse result = ServerResponse.createByErrorMessage("系统中间件[redis]失败，请联系管理员以修复");
-            writeResponse(result);
-            return null;
+            throw new RestException("系统中间件[redis]失败，请联系管理员以修复", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    }
-
-    private void writeResponse(ServerResponse result) {
-        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        if (Objects.isNull(requestAttributes)) {
-            return;
-        }
-        try {
-            HttpServletResponse response = requestAttributes.getResponse();
-            if (Objects.isNull(response)) {
-                return;
-            }
-            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.getWriter().println(objectMapper.writeValueAsString(result));
-        } catch (Exception e) {
-            log.error("write response exception: ", e);
-        }
-
     }
 
     /**

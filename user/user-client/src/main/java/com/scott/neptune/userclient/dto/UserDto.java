@@ -1,5 +1,6 @@
 package com.scott.neptune.userclient.dto;
 
+import com.scott.neptune.userclient.enumerate.GenderEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -85,7 +86,7 @@ public class UserDto {
      */
     @NotNull(message = "性别不可为空", groups = Register.class)
     @ApiModelProperty(value = "性别")
-    private Integer gender;
+    private GenderEnum gender;
 
     /**
      * 注册时间

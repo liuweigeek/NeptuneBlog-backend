@@ -1,7 +1,10 @@
 package com.scott.neptune.apigateway.config;
 
 import com.scott.neptune.apigateway.filter.JwtTokenFilter;
+import com.scott.neptune.apigateway.handler.ApiAuthenticationEntryPoint;
+import com.scott.neptune.apigateway.handler.ApiAuthenticationFailureHandler;
 import com.scott.neptune.authenticationclient.jwt.JwtTokenProvider;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,16 +14,15 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+@RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtTokenProvider jwtTokenProvider;
-
-    public WebSecurityConfig(JwtTokenProvider jwtTokenProvider) {
-        this.jwtTokenProvider = jwtTokenProvider;
-    }
+    private final ApiAuthenticationEntryPoint apiAuthenticationEntryPoint;
+    private final ApiAuthenticationFailureHandler apiAuthenticationFailureHandler;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -28,10 +30,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .logout().disable()
-                .formLogin().disable()
+                .formLogin()
+                .failureHandler(apiAuthenticationFailureHandler)
+                .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .anonymous()
+                .exceptionHandling()
+                .authenticationEntryPoint(apiAuthenticationEntryPoint)
                 .and()
                 .addFilterAfter(new JwtTokenFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()

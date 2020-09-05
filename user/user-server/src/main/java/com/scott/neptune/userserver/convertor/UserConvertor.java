@@ -2,7 +2,6 @@ package com.scott.neptune.userserver.convertor;
 
 import com.scott.neptune.common.base.BaseConvertor;
 import com.scott.neptune.userclient.dto.UserDto;
-import com.scott.neptune.userclient.enumerate.GenderEnum;
 import com.scott.neptune.userserver.domain.entity.UserEntity;
 import com.scott.neptune.userserver.domain.valueobject.UserAvatarValObj;
 import com.scott.neptune.userserver.domain.valueobject.UserPublicMetricsValObj;
@@ -29,7 +28,7 @@ public class UserConvertor extends BaseConvertor<UserEntity, UserDto> {
             dto.setName(entity.getName());
             dto.setDescription(entity.getDescription());
             dto.setBirthday(entity.getBirthday());
-            dto.setGender(entity.getGender().getCode());
+            dto.setGender(entity.getGender());
             dto.setCreateAt(entity.getCreateAt());
             dto.setLang(entity.getLang());
             if (entity.getPublicMetrics() != null) {
@@ -56,7 +55,7 @@ public class UserConvertor extends BaseConvertor<UserEntity, UserDto> {
             entity.setPassword(dto.getPassword());
             entity.setDescription(dto.getDescription());
             entity.setBirthday(dto.getBirthday());
-            entity.setGender(GenderEnum.getEnum(dto.getGender()));
+            entity.setGender(dto.getGender());
             entity.setCreateAt(dto.getCreateAt());
             entity.setLang(dto.getLang());
             UserPublicMetricsValObj publicMetricsValObj = UserPublicMetricsValObj.builder()
