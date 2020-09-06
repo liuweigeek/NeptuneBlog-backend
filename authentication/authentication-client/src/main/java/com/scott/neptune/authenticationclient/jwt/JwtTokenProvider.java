@@ -52,8 +52,8 @@ public class JwtTokenProvider {
 
     public String resolveToken(HttpServletRequest req) {
         String bearerToken = req.getHeader(jwtProperties.getHeader());
-        if (bearerToken != null && bearerToken.startsWith(jwtProperties.getHeaderPrefix())) {
-            return bearerToken.substring(7);
+        if (bearerToken != null && bearerToken.startsWith(jwtProperties.getHeaderPrefix() + " ")) {
+            return bearerToken.substring(jwtProperties.getHeaderPrefix().length() + 1);
         }
         return null;
     }

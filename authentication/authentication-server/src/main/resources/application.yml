@@ -1,6 +1,6 @@
 spring:
   application:
-    name: authenticate-server
+    name: authentication-server
   profiles:
     active: dev
 #  cloud:

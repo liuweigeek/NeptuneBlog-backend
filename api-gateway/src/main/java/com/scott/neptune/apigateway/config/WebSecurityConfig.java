@@ -1,6 +1,7 @@
 package com.scott.neptune.apigateway.config;
 
 import com.scott.neptune.apigateway.filter.JwtTokenFilter;
+import com.scott.neptune.apigateway.handler.ApiAccessDeniedHandler;
 import com.scott.neptune.apigateway.handler.ApiAuthenticationEntryPoint;
 import com.scott.neptune.apigateway.handler.ApiAuthenticationFailureHandler;
 import com.scott.neptune.authenticationclient.jwt.JwtTokenProvider;
@@ -23,6 +24,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtTokenProvider jwtTokenProvider;
     private final ApiAuthenticationEntryPoint apiAuthenticationEntryPoint;
     private final ApiAuthenticationFailureHandler apiAuthenticationFailureHandler;
+    private final ApiAccessDeniedHandler apiAccessDeniedHandler;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -36,6 +38,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .exceptionHandling()
+                .accessDeniedHandler(apiAccessDeniedHandler)
                 .authenticationEntryPoint(apiAuthenticationEntryPoint)
                 .and()
                 .addFilterAfter(new JwtTokenFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)

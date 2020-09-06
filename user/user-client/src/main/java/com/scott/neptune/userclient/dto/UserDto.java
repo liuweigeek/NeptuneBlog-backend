@@ -1,5 +1,6 @@
 package com.scott.neptune.userclient.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.scott.neptune.userclient.enumerate.GenderEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -77,6 +78,7 @@ public class UserDto {
     /**
      * 出生日期
      */
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @NotNull(message = "出生日期", groups = Register.class)
     @ApiModelProperty(value = "出生日期")
     private Date birthday;

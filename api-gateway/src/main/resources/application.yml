@@ -22,7 +22,7 @@ zuul:
     error:
       disable: true
   routes:
-    authenticate-server: /auth-server/**
+    authentication-server: /auth-server/**
     user-server: /user-server/**
     tweet-server: /tweet-server/**
     search-server: /search-server/**

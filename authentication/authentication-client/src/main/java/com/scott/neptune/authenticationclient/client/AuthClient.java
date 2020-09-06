@@ -1,8 +1,8 @@
 package com.scott.neptune.authenticationclient.client;
 
+import com.scott.neptune.authenticationclient.hystric.AuthClientFallbackFactory;
 import com.scott.neptune.common.config.FeignConfig;
 import com.scott.neptune.userclient.dto.AuthUserDto;
-import com.scott.neptune.userclient.hystric.UserClientFallbackFactory;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
  *
  * @author scott
  */
-@FeignClient(name = "authentication-server", configuration = FeignConfig.class, fallbackFactory = UserClientFallbackFactory.class)
+@FeignClient(name = "authentication-server", configuration = FeignConfig.class, fallbackFactory = AuthClientFallbackFactory.class)
 public interface AuthClient {
 
-    @RequestMapping(path = "/username/{username}", method = RequestMethod.GET)
+    @RequestMapping(path = "/auth/username/{username}", method = RequestMethod.GET)
     AuthUserDto loadUserByUsername(@PathVariable("username") String username);
 }
