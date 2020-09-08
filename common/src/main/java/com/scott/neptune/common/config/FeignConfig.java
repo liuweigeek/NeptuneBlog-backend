@@ -2,8 +2,8 @@ package com.scott.neptune.common.config;
 
 import com.scott.neptune.common.exception.NeptuneBlogException;
 import com.scott.neptune.common.exception.RestException;
-import com.scott.neptune.common.model.ApiErrorResponse;
 import feign.Contract;
+import feign.Util;
 import feign.codec.Decoder;
 import feign.codec.Encoder;
 import feign.codec.ErrorDecoder;
@@ -19,6 +19,8 @@ import org.springframework.cloud.openfeign.support.SpringMvcContract;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
+
+import java.nio.charset.StandardCharsets;
 
 /**
  * @Author: scott
@@ -49,11 +51,12 @@ public class FeignConfig {
     }
 
     @Bean
-    public ErrorDecoder apiErrorResponseDecoder(Decoder decoder) {
+    public ErrorDecoder apiErrorResponseDecoder() {
         return (methodKey, response) -> {
             try {
-                ApiErrorResponse apiErrorResponse = (ApiErrorResponse) decoder.decode(response, ApiErrorResponse.class);
-                return new RestException(apiErrorResponse.getMessage(), HttpStatus.BAD_REQUEST);
+                String body = Util.toString(response.body().asReader(StandardCharsets.UTF_8));
+                log.error("feign exception, status: {}, body: {}", response.status(), body);
+                return new RestException("系统服务异常，请稍后再试", HttpStatus.INTERNAL_SERVER_ERROR);
             } catch (Exception e) {
                 log.error("decoding feign response exception: ", e);
                 return new NeptuneBlogException("系统服务异常，请稍后再试", e);

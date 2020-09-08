@@ -1,7 +1,6 @@
 package com.scott.neptune.common.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,10 +13,20 @@ import java.io.Serializable;
  * @Description:
  */
 @Data
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor
+@JsonInclude(value = JsonInclude.Include.NON_NULL)
 public class ApiErrorResponse implements Serializable {
 
+    private int status;
+
     private String message;
+
+    private ApiErrorResponse(int status, String message) {
+        this.status = status;
+        this.message = message;
+    }
+
+    public static ApiErrorResponse createByMessage(String message) {
+        return new ApiErrorResponse(0, message);
+    }
 }
