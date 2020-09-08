@@ -31,9 +31,9 @@ public class WebExceptionHandler {
 
     @ExceptionHandler(NoHandlerFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<ApiErrorResponse> handleException(Exception e) {
+    public ResponseEntity<ApiErrorResponse> handleException(NoHandlerFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(ApiErrorResponse.createByMessage("资源不存在"));
+                .body(ApiErrorResponse.createByMessage("资源[" + e.getRequestURL() + "]不存在"));
     }
 
     @ExceptionHandler(RestException.class)

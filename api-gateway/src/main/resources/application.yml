@@ -5,6 +5,10 @@ spring:
     name: api-gateway
   messages:
     basename: i18n/messages
+  mvc:
+    throw-exception-if-no-handler-found: true
+  resources:
+    add-mappings: false
 #  cloud:
 #    config:
 #      discovery:
@@ -27,3 +31,5 @@ zuul:
     tweet-server: /tweet-server/**
     search-server: /search-server/**
     mail-server: /mail-server/**
+
+
