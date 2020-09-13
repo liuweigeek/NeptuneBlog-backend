@@ -44,12 +44,12 @@ public class FollowingController extends BaseController {
      */
     @ApiOperation(value = "获取已关注用户ID列表")
     @GetMapping("/ids")
-    public ResponseEntity<Page<FriendshipDto>> findFollowingIds(FriendshipQueryRequest request, @ApiIgnore AuthUserDto authUser) {
+    public ResponseEntity<Page<Long>> findFollowingIds(FriendshipQueryRequest request, @ApiIgnore AuthUserDto authUser) {
 
         Long whomUserId = Optional.ofNullable(request.getUserId())
                 .orElseGet(authUser::getId);
-        //TODO only query ids
-        return ResponseEntity.ok(friendshipService.findFollowing(whomUserId, request.getOffset(), request.getLimit()));
+        return ResponseEntity.ok(friendshipService.findFollowing(whomUserId, request.getOffset(), request.getLimit())
+                .map(FriendshipDto::getTargetId));
     }
 
     /**

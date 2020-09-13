@@ -1,5 +1,7 @@
 package com.scott.neptune.userclient.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.google.common.collect.Lists;
 import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
@@ -8,7 +10,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang.StringUtils;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -34,17 +38,23 @@ public class RelationshipDto {
     private String name;
 
     @Builder.Default
-    private List<String> connections = Lists.newArrayListWithExpectedSize(6);
+    private List<ConnectionEnum> connections = Lists.newArrayListWithExpectedSize(6);
 
-    public RelationshipDto(Long id, String username, String name, String connection) {
+    public RelationshipDto(Long id, String username, String name) {
         this.id = id;
         this.username = username;
         this.name = name;
-        this.connections.add(connection);
     }
 
-    public void addConnection(String connection) {
-        this.connections.add(connection);
+    public RelationshipDto(Long id, String username, String name, ConnectionEnum connectionEnum) {
+        this.id = id;
+        this.username = username;
+        this.name = name;
+        this.connections.add(connectionEnum);
+    }
+
+    public void addConnection(ConnectionEnum connectionEnum) {
+        this.connections.add(connectionEnum);
     }
 
     @Getter
@@ -76,6 +86,15 @@ public class RelationshipDto {
          */
         MUTING("muting");
 
+        @JsonValue
         private final String name;
+
+        @JsonCreator
+        public static ConnectionEnum getEnum(String name) {
+            return Arrays.stream(ConnectionEnum.values())
+                    .filter(connection -> StringUtils.equals(connection.getName(), name))
+                    .findFirst()
+                    .orElse(null);
+        }
     }
 }

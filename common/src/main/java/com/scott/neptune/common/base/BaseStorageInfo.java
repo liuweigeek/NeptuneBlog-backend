@@ -3,6 +3,7 @@ package com.scott.neptune.common.base;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 /**
@@ -48,12 +49,10 @@ public abstract class BaseStorageInfo {
         private final String folder;
 
         public static BusinessTypeEnum getEnum(int code) {
-            for (BusinessTypeEnum businessTypeEnum : BusinessTypeEnum.values()) {
-                if (businessTypeEnum.getCode() == code) {
-                    return businessTypeEnum;
-                }
-            }
-            return null;
+            return Arrays.stream(BusinessTypeEnum.values())
+                    .filter(businessType -> businessType.getCode() == code)
+                    .findFirst()
+                    .orElse(null);
         }
 
         public static BusinessTypeEnum getEnumOrDefault(int code) {

@@ -10,6 +10,8 @@ package com.scott.neptune.userclient.enumerate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.Arrays;
+
 /**
  * 关系类型
  */
@@ -31,11 +33,9 @@ public enum FriendshipEnum {
     private final String value;
 
     public static FriendshipEnum getEnum(int code) {
-        for (FriendshipEnum friendshipEnum : FriendshipEnum.values()) {
-            if (friendshipEnum.getCode() == code) {
-                return friendshipEnum;
-            }
-        }
-        return null;
+        return Arrays.stream(FriendshipEnum.values())
+                .filter(friendship -> friendship.getCode() == code)
+                .findFirst()
+                .orElse(null);
     }
 }

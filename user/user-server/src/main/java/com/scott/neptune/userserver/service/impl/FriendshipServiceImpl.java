@@ -1,7 +1,6 @@
 package com.scott.neptune.userserver.service.impl;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.scott.neptune.common.exception.NeptuneBlogException;
 import com.scott.neptune.common.model.OffsetPageable;
 import com.scott.neptune.userclient.dto.FriendshipDto;
@@ -254,30 +253,21 @@ public class FriendshipServiceImpl implements IFriendshipService {
     @Override
     public Collection<RelationshipDto> getRelationshipByIds(Collection<Long> userIds, Long authUserId) {
 
-        Collection<FriendshipEntity> friends = friendshipRepository.findAllBySourceUserAndTargetUserIn(authUserId, userIds, Sort.by(Sort.Order.desc("followDate")));
-        Collection<FriendshipEntity> followers = friendshipRepository.findAllByTargetUserAndSourceUserIn(authUserId, userIds, Sort.by(Sort.Order.desc("followDate")));
+        Collection<UserEntity> users = userRepository.findAllByIdIn(userIds);
 
-        Map<Long, RelationshipDto> relationshipMap = Maps.newHashMapWithExpectedSize(userIds.size());
-        friends.forEach(entity -> {
-            UserEntity targetUser = entity.getTargetUser();
-            if (relationshipMap.containsKey(targetUser.getId())) {
-                relationshipMap.get(targetUser.getId()).addConnection(RelationshipDto.ConnectionEnum.FOLLOWING.getName());
-            } else {
-                relationshipMap.put(targetUser.getId(), new RelationshipDto(targetUser.getId(),
-                        targetUser.getUsername(), targetUser.getName(),
-                        RelationshipDto.ConnectionEnum.FOLLOWING.getName()));
-            }
-        });
-        followers.forEach(entity -> {
-            UserEntity sourceUser = entity.getTargetUser();
-            if (relationshipMap.containsKey(sourceUser.getId())) {
-                relationshipMap.get(sourceUser.getId()).addConnection(RelationshipDto.ConnectionEnum.FOLLOWED_BY.getName());
-            } else {
-                relationshipMap.put(sourceUser.getId(), new RelationshipDto(sourceUser.getId(),
-                        sourceUser.getUsername(), sourceUser.getName(),
-                        RelationshipDto.ConnectionEnum.FOLLOWED_BY.getName()));
-            }
-        });
+        Collection<UserEntity> following = friendshipRepository
+                .findAllBySourceUserAndTargetUserIn(authUserId, userIds, Sort.by(Sort.Order.desc("followDate")))
+                .stream().map(FriendshipEntity::getTargetUser).collect(Collectors.toList());
+        Collection<UserEntity> followers = friendshipRepository
+                .findAllByTargetUserAndSourceUserIn(authUserId, userIds, Sort.by(Sort.Order.desc("followDate")))
+                .stream().map(FriendshipEntity::getSourceUser).collect(Collectors.toList());
+
+        Map<Long, RelationshipDto> relationshipMap = users.stream()
+                .collect(Collectors.toMap(UserEntity::getId, user -> new RelationshipDto(user.getId(),
+                        user.getUsername(), user.getName())));
+
+        following.forEach(entity -> relationshipMap.get(entity.getId()).addConnection(RelationshipDto.ConnectionEnum.FOLLOWING));
+        followers.forEach(entity -> relationshipMap.get(entity.getId()).addConnection(RelationshipDto.ConnectionEnum.FOLLOWED_BY));
 
         return new ArrayList<>(relationshipMap.values());
     }

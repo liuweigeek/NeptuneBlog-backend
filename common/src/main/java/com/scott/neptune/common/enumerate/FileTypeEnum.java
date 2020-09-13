@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Arrays;
+
 /**
  * @Author: scott
  * @Email: <a href="mailto:liuweigeek@outlook.com">Scott Lau</a>
@@ -109,11 +111,9 @@ public enum FileTypeEnum {
     }
 
     public static FileTypeEnum getEnum(String type) {
-        for (FileTypeEnum fileTypeEnum : FileTypeEnum.values()) {
-            if (StringUtils.equals(fileTypeEnum.getType(), type)) {
-                return fileTypeEnum;
-            }
-        }
-        return null;
+        return Arrays.stream(FileTypeEnum.values())
+                .filter(fileType -> StringUtils.equals(fileType.getType(), type))
+                .findFirst()
+                .orElse(null);
     }
 }

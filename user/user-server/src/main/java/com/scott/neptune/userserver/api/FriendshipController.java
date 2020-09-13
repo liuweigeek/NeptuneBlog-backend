@@ -13,6 +13,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,9 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -101,7 +104,11 @@ public class FriendshipController extends BaseController {
     @ApiImplicitParam(name = "id", value = "要查询的用户ID", paramType = "query", dataTypeClass = Long.class)
     @GetMapping("/{id}")
     public ResponseEntity<RelationshipDto> getFriendshipById(@PathVariable("id") Long id, @ApiIgnore AuthUserDto authUser) {
-        return ResponseEntity.ok(new RelationshipDto());
+        Collection<RelationshipDto> relationshipList = friendshipService.getRelationshipByIds(Collections.singleton(id), authUser.getId());
+        if (CollectionUtils.isEmpty(relationshipList)) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+        return ResponseEntity.ok(Objects.requireNonNull(relationshipList.stream().findFirst().orElse(null)));
     }
 
     /**

@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * @Author: scott
@@ -76,12 +77,10 @@ public class UserAvatarDto implements Serializable {
          * @return
          */
         public static SizeTypeEnum getEnum(int code) {
-            for (SizeTypeEnum sizeTypeEnum : SizeTypeEnum.values()) {
-                if (sizeTypeEnum.getCode() == code) {
-                    return sizeTypeEnum;
-                }
-            }
-            return MEDIUM;
+            return Arrays.stream(SizeTypeEnum.values())
+                    .filter(sizeType -> sizeType.getCode() == code)
+                    .findFirst()
+                    .orElse(null);
         }
 
     }
