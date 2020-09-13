@@ -36,6 +36,9 @@ public abstract class BaseConvertor<ENTITY, DTO> {
      * @return
      */
     public DTO convertToDto(ENTITY entity) {
+        if (entity == null) {
+            return null;
+        }
         return convertToDto().apply(entity);
     }
 
@@ -45,6 +48,9 @@ public abstract class BaseConvertor<ENTITY, DTO> {
      * @return
      */
     public ENTITY convertToEntity(DTO dto) {
+        if (dto == null) {
+            return null;
+        }
         return convertToEntity().apply(dto);
     }
 

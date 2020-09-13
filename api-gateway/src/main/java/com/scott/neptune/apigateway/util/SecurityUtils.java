@@ -16,11 +16,11 @@ import org.springframework.security.core.authority.AuthorityUtils;
  */
 public class SecurityUtils {
 
-    private static final AuthClient AUTH_CLIENT = SpringContextUtils.getBean(AuthClient.class);
-    private static final JwtTokenProvider JWT_TOKEN_PROVIDER = SpringContextUtils.getBean(JwtTokenProvider.class);
+    private static final AuthClient authClient = SpringContextUtils.getBean(AuthClient.class);
+    private static final JwtTokenProvider jwtTokenProvider = SpringContextUtils.getBean(JwtTokenProvider.class);
 
     public static Authentication getAuthentication(String token) {
-        AuthUserDto authUser = AUTH_CLIENT.loadUserByUsername(JWT_TOKEN_PROVIDER.getUsername(token));
+        AuthUserDto authUser = authClient.loadUserByUsername(jwtTokenProvider.getUsername(token));
         return new UsernamePasswordAuthenticationToken(authUser, "",
                 AuthorityUtils.createAuthorityList(authUser.getAuthorities()));
     }

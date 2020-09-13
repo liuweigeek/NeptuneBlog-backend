@@ -10,6 +10,7 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Collections;
 
 /**
  * @Author: scott
@@ -46,6 +47,9 @@ public class AuthUser implements UserDetails {
     @Override
     @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        if (authorities == null) {
+            return Collections.emptyList();
+        }
         return AuthorityUtils.createAuthorityList(authorities);
     }
 

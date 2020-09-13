@@ -24,6 +24,6 @@ public class ApiAuthenticationEntryPoint implements AuthenticationEntryPoint {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType("application/json;charset=utf-8");
         ObjectMapper objectMapper = new ObjectMapper();
-        response.getWriter().write(objectMapper.writeValueAsString(ApiErrorResponse.createByMessage("授权失败，请稍后再试")));
+        response.getWriter().write(objectMapper.writeValueAsString(ApiErrorResponse.createByMessage("无权访问，请检查登录状态")));
     }
 }

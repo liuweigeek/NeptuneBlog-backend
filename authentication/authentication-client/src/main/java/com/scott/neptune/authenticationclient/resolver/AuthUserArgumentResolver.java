@@ -2,7 +2,7 @@ package com.scott.neptune.authenticationclient.resolver;
 
 import com.scott.neptune.authenticationclient.client.AuthClient;
 import com.scott.neptune.authenticationclient.jwt.JwtTokenProvider;
-import com.scott.neptune.authenticationclient.properties.JwtProperties;
+import com.scott.neptune.authenticationclient.property.JwtProperties;
 import com.scott.neptune.common.util.SpringContextUtils;
 import com.scott.neptune.userclient.dto.AuthUserDto;
 import lombok.extern.slf4j.Slf4j;

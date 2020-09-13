@@ -1,4 +1,4 @@
-package com.scott.neptune.authenticationclient.properties;
+package com.scott.neptune.authenticationclient.property;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

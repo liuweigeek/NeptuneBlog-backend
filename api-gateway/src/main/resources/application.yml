@@ -31,5 +31,8 @@ zuul:
     tweet-server: /tweet-server/**
     search-server: /search-server/**
     mail-server: /mail-server/**
-
-
+jwt:
+  header: Authorization
+  headerPrefix: Bearer
+  secret: 6AJvUN7UaP0sqkT0
+  expiration: 604800

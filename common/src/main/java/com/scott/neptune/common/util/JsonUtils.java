@@ -36,7 +36,7 @@ public class JsonUtils extends ObjectMapper {
     private static JsonUtils mapper;
 
     public JsonUtils() {
-        this(Include.NON_EMPTY);
+        this(Include.NON_NULL);
     }
 
     public JsonUtils(Include include) {

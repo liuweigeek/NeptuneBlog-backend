@@ -1,6 +1,6 @@
 package com.scott.neptune.authenticationclient.jwt;
 
-import com.scott.neptune.authenticationclient.properties.JwtProperties;
+import com.scott.neptune.authenticationclient.property.JwtProperties;
 import com.scott.neptune.userclient.dto.AuthRoleDto;
 import com.scott.neptune.userclient.dto.AuthUserDto;
 import io.jsonwebtoken.JwtException;

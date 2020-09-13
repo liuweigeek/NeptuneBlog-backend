@@ -1,6 +1,5 @@
 package com.scott.neptune.common.aop;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import com.scott.neptune.common.annotation.RedisLock;
 import com.scott.neptune.common.constant.Constant;
@@ -42,7 +41,6 @@ import java.util.concurrent.TimeUnit;
 public class ControllerAop {
 
     private final RedisTemplate<String, Object> redisTemplate;
-    private final ObjectMapper objectMapper;
 
     /**
      * 防止重复提交 在关键操作controller上添加注解@RedisLock
