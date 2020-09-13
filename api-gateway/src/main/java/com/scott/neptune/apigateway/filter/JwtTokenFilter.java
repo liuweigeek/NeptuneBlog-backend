@@ -40,8 +40,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 Authentication auth = SecurityUtils.getAuthentication(token);
                 SecurityContextHolder.getContext().setAuthentication(auth);
             } catch (JwtException | IllegalArgumentException e) {
-//                SecurityContextHolder.clearContext();
-                log.info("无效的token: {}", token);
+                log.error("无效的token: {}", token);
             }
         }
         filterChain.doFilter(request, response);
