@@ -115,7 +115,6 @@ public class TweetController extends BaseController {
     @GetMapping("/following")
     public ResponseEntity<Page<TweetDto>> getFollowingTweets(@RequestParam OffsetPageCommand command,
                                                              @ApiIgnore AuthUserDto authUser) {
-        //TODO parameters for pageable
         Page<TweetDto> tweetPage = tweetService.findFollowingTweets(authUser.getId(), command.getOffset(), command.getLimit());
         return ResponseEntity.ok(tweetPage);
     }

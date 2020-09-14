@@ -1,4 +1,4 @@
-package com.scott.neptune.userserver.convertor;
+package com.scott.neptune.userclient.convertor;
 
 import com.scott.neptune.userclient.dto.RelationshipDto;
 import lombok.extern.slf4j.Slf4j;

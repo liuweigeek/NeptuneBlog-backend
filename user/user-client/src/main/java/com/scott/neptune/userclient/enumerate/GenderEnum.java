@@ -1,6 +1,7 @@
 package com.scott.neptune.userclient.enumerate;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,8 +32,8 @@ public enum GenderEnum {
     @JsonValue
     private final String value;
 
-    @JsonCreator
-    public static GenderEnum getEnum(String value) {
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static GenderEnum getEnum(@JsonProperty("value") String value) {
         return Arrays.stream(GenderEnum.values())
                 .filter(gender -> StringUtils.equals(gender.getValue(), value))
                 .findFirst()

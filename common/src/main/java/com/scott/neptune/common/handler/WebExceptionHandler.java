@@ -50,6 +50,7 @@ public class WebExceptionHandler {
 
     @ExceptionHandler(FeignException.class)
     public ResponseEntity<ApiErrorResponse> handleException(FeignException e) {
+        log.error("feign exception: ", e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(ApiErrorResponse.createByMessage("服务当前不可用，请稍后再试"));
     }

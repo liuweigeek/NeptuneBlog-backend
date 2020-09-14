@@ -1,23 +1,22 @@
-package com.scott.neptune.userserver.config;
+package com.scott.neptune.userclient.config;
 
-import com.scott.neptune.userserver.convertor.RelationshipConnectionMvcConverter;
-import com.scott.neptune.userserver.convertor.UserGenderMvcConverter;
+import com.scott.neptune.userclient.convertor.RelationshipConnectionMvcConverter;
+import com.scott.neptune.userclient.convertor.UserGenderMvcConverter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * @Author: scott
- * @Email: <a href="mailto:liuweigeek@outlook.com">Scott Lau</a>
- * @Date: 2020/9/3 16:41
- * @Description:
+ * @Date: 2020/2/1 18:10
+ * @Description: Web配置
  */
 @Configuration
 public class UserWebConfig implements WebMvcConfigurer {
 
     @Override
     public void addFormatters(FormatterRegistry registry) {
-        registry.addConverter(new UserGenderMvcConverter());
         registry.addConverter(new RelationshipConnectionMvcConverter());
+        registry.addConverter(new UserGenderMvcConverter());
     }
 }

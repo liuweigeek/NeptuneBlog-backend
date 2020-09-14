@@ -35,7 +35,7 @@ public class JwtTokenProvider {
         byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(jwtProperties.getSecret());
         Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
 
-        return Jwts.builder()
+        return jwtProperties.getHeaderPrefix() + " " + Jwts.builder()
                 .setId(Long.toString(user.getId()))
                 .setSubject(user.getUsername())
 //                .setClaims(claims)

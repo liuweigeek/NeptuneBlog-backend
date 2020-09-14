@@ -89,7 +89,7 @@ public class RelationshipDto {
         @JsonValue
         private final String name;
 
-        @JsonCreator
+        @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
         public static ConnectionEnum getEnum(String name) {
             return Arrays.stream(ConnectionEnum.values())
                     .filter(connection -> StringUtils.equals(connection.getName(), name))

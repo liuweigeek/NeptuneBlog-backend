@@ -46,7 +46,6 @@ public class AuthUserService implements UserDetailsService {
     public LoginUserInfo signIn(String username, String password) {
 
         AuthUserDto authUser = this.loadAuthUserByUsername(username);
-        //ensure it's includes field of password
         if (!passwordEncoder.matches(password, authUser.getPassword())) {
             throw new RestException("密码错误", HttpStatus.UNAUTHORIZED);
         }
