@@ -35,4 +35,4 @@
 邮件模块，使用Eureka Client
 
 ## ❤️ Contributing
-<a href="https://www.buymeacoffee.com/liuweigeek" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Us A Coffee" style="height: auto !important;width: auto !important;" ></a>
+<a href="https://www.buymeacoffee.com/liuweigeek" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/yellow_img.png" alt="Buy Us A Coffee" style="height: auto !important;width: auto !important;" ></a>
