@@ -60,6 +60,13 @@ spring:
     sender:
       type: web
 hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          strategy: SEMAPHORE
+          thread:
+            timeoutInMilliseconds: 120000
   shareSecurityContext: true
 ribbon:
   ReadTimeout: 30000

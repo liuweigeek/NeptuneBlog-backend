@@ -26,12 +26,12 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class HystrixConfig {
 
-    @Bean
+    /*@Bean
     public Customizer<HystrixCircuitBreakerFactory> defaultConfig() {
         return factory -> factory.configureDefault(id -> HystrixCommand.Setter
                 .withGroupKey(HystrixCommandGroupKey.Factory.asKey(id))
                 .andCommandPropertiesDefaults(HystrixCommandProperties.Setter()
                         .withExecutionIsolationStrategy(HystrixCommandProperties.ExecutionIsolationStrategy.SEMAPHORE)
                         .withExecutionTimeoutInMilliseconds(10000)));
-    }
+    }*/
 }

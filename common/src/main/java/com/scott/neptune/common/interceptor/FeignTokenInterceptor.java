@@ -35,8 +35,9 @@ public class FeignTokenInterceptor implements RequestInterceptor {
 
     private HttpServletRequest getHttpServletRequest() {
         try {
-            return ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+            return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         } catch (Exception e) {
+            log.error("get HttpServletRequest failed: ", e);
             return null;
         }
     }

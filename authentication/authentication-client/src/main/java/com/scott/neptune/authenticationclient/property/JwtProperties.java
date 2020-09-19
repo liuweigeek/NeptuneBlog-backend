@@ -19,7 +19,7 @@ public class JwtProperties {
     /**
      * JWT验证请求头
      */
-    private String header = "Authorization";
+    private String header = "authorization";
 
     /**
      * 密匙头

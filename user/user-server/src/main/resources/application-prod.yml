@@ -54,6 +54,13 @@ spring:
     sampler:
       probability: 0
 hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          strategy: SEMAPHORE
+          thread:
+            timeoutInMilliseconds: 80000
   shareSecurityContext: true
 ribbon:
   ReadTimeout: 20000
