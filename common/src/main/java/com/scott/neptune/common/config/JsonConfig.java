@@ -1,11 +1,6 @@
 package com.scott.neptune.common.config;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
@@ -13,7 +8,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplicat
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 
 import java.time.format.DateTimeFormatter;
@@ -30,7 +24,7 @@ public class JsonConfig {
     private static final String TIME_FORMAT = "HH:mm:ss";
     private static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
-    @Bean
+    /*@Bean
     public ObjectMapper objectMapper(Jackson2ObjectMapperBuilder builder) {
         ObjectMapper objectMapper = builder.createXmlMapper(false).build();
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
@@ -39,7 +33,7 @@ public class JsonConfig {
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         objectMapper.configure(DeserializationFeature.FAIL_ON_INVALID_SUBTYPE, false);
         return objectMapper;
-    }
+    }*/
 
     @Bean
     @ConditionalOnWebApplication

@@ -9,6 +9,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Collection;
 
@@ -83,8 +84,14 @@ public interface UserClient {
     @RequestMapping(path = "/users/authenticate/{username}", method = RequestMethod.GET)
     AuthUserDto getUserByUsernameForAuthenticate(@PathVariable String username);
 
-    @RequestMapping(path = "/ids/all", method = RequestMethod.GET)
-    Collection<Long> findAllFollowingIds(Long id);
+    /**
+     * 获取全部已关注用户ID列表
+     *
+     * @param id 指定用户视角
+     * @return
+     */
+    @RequestMapping(path = "/following/ids/all", method = RequestMethod.GET)
+    Collection<Long> findAllFollowingIds(@RequestParam("userId") Long id);
 
     /**
      * 获取全部关注者用户ID列表
@@ -92,6 +99,6 @@ public interface UserClient {
      * @param id 指定用户视角
      * @return
      */
-    @RequestMapping(path = "/ids/all", method = RequestMethod.GET)
-    Collection<Long> findAllFollowerIds(Long id);
+    @RequestMapping(path = "/followers/ids/all", method = RequestMethod.GET)
+    Collection<Long> findAllFollowerIds(@RequestParam("userId") Long id);
 }

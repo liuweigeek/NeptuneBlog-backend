@@ -22,9 +22,8 @@ eureka:
   instance:
     prefer-ip-address: true
 zuul:
-  SendErrorFilter:
-    error:
-      disable: true
+  SendErrorFilter.error.disable: true
+  sensitiveHeaders: "*"
   routes:
     authentication-server: /auth-server/**
     user-server: /user-server/**

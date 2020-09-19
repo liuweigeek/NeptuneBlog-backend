@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -40,7 +39,7 @@ public class QuoteController {
      * @return
      */
     @PostMapping
-    public ResponseEntity<TweetDto> addQuoteTweet(@RequestParam QuoteTweetCommand command, AuthUserDto authUser) {
+    public ResponseEntity<TweetDto> addQuoteTweet(QuoteTweetCommand command, AuthUserDto authUser) {
         return ResponseEntity.ok(quoteService.save(command.getText(), command.getOriginTweetId(), authUser.getId()));
     }
 

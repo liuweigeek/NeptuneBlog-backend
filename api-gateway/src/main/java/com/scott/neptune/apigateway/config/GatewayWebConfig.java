@@ -21,4 +21,5 @@ public class GatewayWebConfig implements WebMvcConfigurer {
                 .allowedOrigins("*")
                 .allowedHeaders("*");
     }
+    
 }

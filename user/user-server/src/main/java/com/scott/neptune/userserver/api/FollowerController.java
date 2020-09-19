@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -76,7 +77,7 @@ public class FollowerController extends BaseController {
     @ApiOperation(value = "获取关注者用户ID列表")
     @ApiImplicitParam(name = "id", value = "指定用户视角", paramType = "form", dataTypeClass = Long.class)
     @GetMapping("/ids/all")
-    public ResponseEntity<Collection<Long>> findAllFollowerIds(Long id, @ApiIgnore AuthUserDto authUser) {
+    public ResponseEntity<Collection<Long>> findAllFollowerIds(@RequestParam("userId") Long id, @ApiIgnore AuthUserDto authUser) {
         Long whomUserId = Optional.ofNullable(id)
                 .orElseGet(authUser::getId);
         return ResponseEntity.ok(friendshipService.findAllFollowersIds(whomUserId, null));
@@ -92,7 +93,7 @@ public class FollowerController extends BaseController {
     @ApiOperation(value = "获取关注者用户列表")
     @ApiImplicitParam(name = "id", value = "指定用户视角", paramType = "form", dataTypeClass = Long.class)
     @GetMapping("/all")
-    public ResponseEntity<Collection<FriendshipDto>> findAllFollowerUsers(Long id, @ApiIgnore AuthUserDto authUser) {
+    public ResponseEntity<Collection<FriendshipDto>> findAllFollowerUsers(@RequestParam("userId") Long id, @ApiIgnore AuthUserDto authUser) {
         Long whomUserId = Optional.ofNullable(id)
                 .orElseGet(authUser::getId);
         return ResponseEntity.ok(friendshipService.findAllFollowers(whomUserId, null));

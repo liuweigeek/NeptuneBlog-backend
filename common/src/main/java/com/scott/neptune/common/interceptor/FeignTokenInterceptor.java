@@ -28,14 +28,14 @@ public class FeignTokenInterceptor implements RequestInterceptor {
             log.warn("cannot get request from RequestContextHolder");
             return;
         }
-        String currentUserId = request.getHeader(Constant.Login.CURRENT_USER);
+        String currentUserId = request.getHeader(Constant.Auth.AUTHORIZATION_HEADER);
         //将获取Token对应的值往下一个服务传递
-        requestTemplate.header(Constant.Login.CURRENT_USER, currentUserId);
+        requestTemplate.header(Constant.Auth.AUTHORIZATION_HEADER, currentUserId);
     }
 
     private HttpServletRequest getHttpServletRequest() {
         try {
-            return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+            return ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         } catch (Exception e) {
             return null;
         }

@@ -113,7 +113,7 @@ public class TweetController extends BaseController {
      */
     @ApiOperation(value = "获取关注用户的推文")
     @GetMapping("/following")
-    public ResponseEntity<Page<TweetDto>> getFollowingTweets(@RequestParam OffsetPageCommand command,
+    public ResponseEntity<Page<TweetDto>> getFollowingTweets(OffsetPageCommand command,
                                                              @ApiIgnore AuthUserDto authUser) {
         Page<TweetDto> tweetPage = tweetService.findFollowingTweets(authUser.getId(), command.getOffset(), command.getLimit());
         return ResponseEntity.ok(tweetPage);
@@ -131,7 +131,7 @@ public class TweetController extends BaseController {
     //@Cacheable(value = Constant.CacheKey.TWEET, key = "#userId+'.'+#postDto.getCurrent()+'.'+#postDto.getSize()")
     @GetMapping("/user/{userId}")
     public ResponseEntity<Page<TweetDto>> findByUserId(@PathVariable("userId") Long userId,
-                                                       @RequestParam OffsetPageCommand command) {
+                                                       OffsetPageCommand command) {
         //TODO parameters for pageable
         Page<TweetDto> tweetPage = tweetService.findByAuthorId(userId, command.getOffset(), command.getLimit());
         return ResponseEntity.ok(tweetPage);

@@ -86,7 +86,7 @@ public class ControllerAop {
             String uri = request.getRequestURI();
 
             sb.append("-").append(uri);
-            String token = HeaderUtils.get(request, Constant.Login.CURRENT_USER);
+            String token = HeaderUtils.get(request, Constant.Auth.AUTHORIZATION_HEADER);
             sb.append("-").append(token);
         }
         String methodName = pjp.getSignature().getName();

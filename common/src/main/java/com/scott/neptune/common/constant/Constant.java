@@ -9,8 +9,8 @@ public class Constant {
 
     public final static String BASE_PACKAGE = "com.scott.neptune";
 
-    public interface Login {
-        String CURRENT_USER = "current_user";
+    public interface Auth {
+        String AUTHORIZATION_HEADER = "Authorization";
     }
 
     public interface CacheKey {

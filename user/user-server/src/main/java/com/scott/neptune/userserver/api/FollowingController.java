@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -78,7 +79,7 @@ public class FollowingController extends BaseController {
     @ApiOperation(value = "获取全部已关注用户ID列表")
     @ApiImplicitParam(name = "id", value = "指定用户视角", paramType = "form", dataTypeClass = Long.class)
     @GetMapping("/ids/all")
-    public ResponseEntity<Collection<Long>> findAllFollowingIds(Long id, @ApiIgnore AuthUserDto authUser) {
+    public ResponseEntity<Collection<Long>> findAllFollowingIds(@RequestParam("userId") Long id, @ApiIgnore AuthUserDto authUser) {
 
         Long whomUserId = Optional.ofNullable(id)
                 .orElseGet(authUser::getId);
@@ -95,7 +96,7 @@ public class FollowingController extends BaseController {
     @ApiOperation(value = "获取全部已关注用户列表")
     @ApiImplicitParam(name = "id", value = "指定用户视角", paramType = "form", dataTypeClass = Long.class)
     @GetMapping("/all")
-    public ResponseEntity<Collection<FriendshipDto>> findAllFollowingUsers(Long id, @ApiIgnore AuthUserDto authUser) {
+    public ResponseEntity<Collection<FriendshipDto>> findAllFollowingUsers(@RequestParam("userId") Long id, @ApiIgnore AuthUserDto authUser) {
 
         Long whomUserId = Optional.ofNullable(id)
                 .orElseGet(authUser::getId);

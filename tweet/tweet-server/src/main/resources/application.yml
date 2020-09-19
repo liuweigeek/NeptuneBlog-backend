@@ -27,3 +27,8 @@ eureka:
 feign:
   hystrix:
     enabled: true
+jwt:
+  header: Authorization
+  headerPrefix: Bearer
+  secret: 6AJvUN7UaP0sqkT0
+  expiration: 604800

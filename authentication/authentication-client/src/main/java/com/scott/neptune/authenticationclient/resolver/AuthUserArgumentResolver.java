@@ -1,12 +1,14 @@
 package com.scott.neptune.authenticationclient.resolver;
 
-import com.scott.neptune.authenticationclient.client.AuthClient;
 import com.scott.neptune.authenticationclient.jwt.JwtTokenProvider;
 import com.scott.neptune.authenticationclient.property.JwtProperties;
+import com.scott.neptune.common.exception.RestException;
 import com.scott.neptune.common.util.SpringContextUtils;
 import com.scott.neptune.userclient.dto.AuthUserDto;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.MethodParameter;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -21,7 +23,6 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 @Slf4j
 public class AuthUserArgumentResolver implements HandlerMethodArgumentResolver {
 
-    private final AuthClient authClient = SpringContextUtils.getBean(AuthClient.class);
     private final JwtProperties jwtProperties = SpringContextUtils.getBean(JwtProperties.class);
     private final JwtTokenProvider jwtTokenProvider = SpringContextUtils.getBean(JwtTokenProvider.class);
 
@@ -33,11 +34,11 @@ public class AuthUserArgumentResolver implements HandlerMethodArgumentResolver {
     @Override
     public AuthUserDto resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
                                        NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
-
-        //return (AuthUserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String token = webRequest.getHeader(jwtProperties.getHeader());
-        String username = jwtTokenProvider.getUsername(token);
-        //TODO cache
-        return authClient.loadUserByUsername(username);
+        String bearerToken = webRequest.getHeader(jwtProperties.getHeader());
+        if (StringUtils.isBlank(bearerToken) || !StringUtils.startsWith(bearerToken, jwtProperties.getHeaderPrefix() + " ")) {
+            throw new RestException("无权访问，请检查登录状态", HttpStatus.UNAUTHORIZED);
+        }
+        String claimsJws = bearerToken.substring(jwtProperties.getHeaderPrefix().length() + 1);
+        return jwtTokenProvider.getAutoUser(claimsJws);
     }
 }
