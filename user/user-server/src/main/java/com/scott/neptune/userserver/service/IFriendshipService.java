@@ -34,18 +34,34 @@ public interface IFriendshipService {
     /**
      * 获取关注列表
      *
-     * @param userId 当前登陆用户Id
+     * @param userId 用户Id
      * @return 关注列表
      */
     Page<FriendshipDto> findFollowing(Long userId, long offset, int limit);
 
     /**
+     * 获取关注列表
+     *
+     * @param username 用户名
+     * @return 关注列表
+     */
+    Page<FriendshipDto> findFollowing(String username, long offset, int limit);
+
+    /**
      * 获取关注者列表
      *
-     * @param userId 当前登陆用户Id
+     * @param userId 用户Id
      * @return 关注者列表
      */
     Page<FriendshipDto> findFollowers(Long userId, long offset, int limit);
+
+    /**
+     * 获取关注者列表
+     *
+     * @param username 用户名
+     * @return 关注者列表
+     */
+    Page<FriendshipDto> findFollowers(String username, long offset, int limit);
 
     /**
      * 获取全部已关注用户

@@ -3,6 +3,7 @@ package com.scott.neptune.tweetserver.api;
 import com.scott.neptune.common.base.BaseController;
 import com.scott.neptune.common.command.OffsetPageCommand;
 import com.scott.neptune.common.exception.RestException;
+import com.scott.neptune.tweetclient.command.TweetSearchRequest;
 import com.scott.neptune.tweetclient.dto.TweetDto;
 import com.scott.neptune.tweetserver.service.ITweetService;
 import com.scott.neptune.userclient.dto.AuthUserDto;
@@ -140,14 +141,13 @@ public class TweetController extends BaseController {
     /**
      * 通过关键字搜索推文
      *
-     * @param keyword 关键字
+     * @param request 关键字
      * @return 用户列表
      */
     @ApiOperation(value = "通过关键字搜索用户")
-    @ApiImplicitParam(name = "keyword", value = "关键字", paramType = "path", dataTypeClass = String.class, required = true)
-    @GetMapping(value = "/search/{keyword}")
-    public ResponseEntity<Collection<TweetDto>> search(@PathVariable String keyword) {
-        Collection<TweetDto> tweetDtoList = tweetService.search(keyword);
+    @GetMapping(value = "/search")
+    public ResponseEntity<Collection<TweetDto>> search(TweetSearchRequest request) {
+        Collection<TweetDto> tweetDtoList = tweetService.search(request.getQ());
         return ResponseEntity.ok(tweetDtoList);
     }
 }

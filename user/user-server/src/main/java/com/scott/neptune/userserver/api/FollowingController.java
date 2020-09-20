@@ -47,9 +47,9 @@ public class FollowingController extends BaseController {
     @GetMapping("/ids")
     public ResponseEntity<Page<Long>> findFollowingIds(FriendshipQueryRequest request, @ApiIgnore AuthUserDto authUser) {
 
-        Long whomUserId = Optional.ofNullable(request.getUserId())
-                .orElseGet(authUser::getId);
-        return ResponseEntity.ok(friendshipService.findFollowing(whomUserId, request.getOffset(), request.getLimit())
+        String whomUsername = Optional.ofNullable(request.getUsername())
+                .orElseGet(authUser::getUsername);
+        return ResponseEntity.ok(friendshipService.findFollowing(whomUsername, request.getOffset(), request.getLimit())
                 .map(FriendshipDto::getTargetId));
     }
 
@@ -64,9 +64,9 @@ public class FollowingController extends BaseController {
     @GetMapping
     public ResponseEntity<Page<FriendshipDto>> findFollowingUsers(FriendshipQueryRequest request, @ApiIgnore AuthUserDto authUser) {
 
-        Long whomUserId = Optional.ofNullable(request.getUserId())
-                .orElseGet(authUser::getId);
-        return ResponseEntity.ok(friendshipService.findFollowing(whomUserId, request.getOffset(), request.getLimit()));
+        String whomUsername = Optional.ofNullable(request.getUsername())
+                .orElseGet(authUser::getUsername);
+        return ResponseEntity.ok(friendshipService.findFollowing(whomUsername, request.getOffset(), request.getLimit()));
     }
 
     /**

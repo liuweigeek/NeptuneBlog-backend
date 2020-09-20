@@ -2,7 +2,10 @@ package com.scott.neptune.common.command;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 /**
  * @Author: scott
@@ -11,6 +14,9 @@ import lombok.Data;
  * @Description:
  */
 @Data
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
 @ApiModel(value = "offset page command", description = "分页请求")
 public class OffsetPageCommand {
 

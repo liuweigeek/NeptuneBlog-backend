@@ -1,4 +1,4 @@
-package com.scott.neptune.userclient.command;
+package com.scott.neptune.tweetclient.command;
 
 import com.scott.neptune.common.command.OffsetPageCommand;
 import io.swagger.annotations.ApiModel;
@@ -22,8 +22,8 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "user search request", description = "用户搜索请求")
-public class UserSearchRequest extends OffsetPageCommand {
+@ApiModel(value = "tweet search request", description = "推文搜索请求")
+public class TweetSearchRequest extends OffsetPageCommand {
 
     private static final long serialVersionUID = 1L;
 

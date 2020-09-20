@@ -119,9 +119,9 @@ public class FriendshipController extends BaseController {
      * @return
      */
     @ApiOperation(value = "关注指定用户")
-    @ApiImplicitParam(name = "id", value = "要关注的用户ID", paramType = "query", dataTypeClass = Long.class, required = true)
+    @ApiImplicitParam(name = "userId", value = "要关注的用户ID", paramType = "query", dataTypeClass = Long.class, required = true)
     @PostMapping
-    public ResponseEntity<FriendshipDto> addFriendship(@RequestParam Long id, @ApiIgnore AuthUserDto authUser) {
+    public ResponseEntity<UserDto> addFriendship(@RequestParam("userId") Long id, @ApiIgnore AuthUserDto authUser) {
         UserDto targetUser = userService.findUserById(id, authUser.getId());
         if (targetUser == null) {
             throw new RestException("用户不存在", HttpStatus.NOT_FOUND);
@@ -130,7 +130,8 @@ public class FriendshipController extends BaseController {
                 .sourceId(authUser.getId())
                 .targetId(targetUser.getId())
                 .build();
-        return ResponseEntity.status(HttpStatus.CREATED).body(friendshipService.save(friendshipDto));
+        friendshipService.save(friendshipDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(targetUser);
     }
 
     /**
@@ -141,9 +142,9 @@ public class FriendshipController extends BaseController {
      * @return
      */
     @ApiOperation(value = "取消关注指定用户")
-    @ApiImplicitParam(name = "id", value = "要取消关注的用户ID", paramType = "query", dataTypeClass = Long.class, required = true)
-    @DeleteMapping("/{id}")
-    public ResponseEntity<UserDto> deleteFriendship(@PathVariable("id") Long id, @ApiIgnore AuthUserDto authUser) {
+    @ApiImplicitParam(name = "userId", value = "要取消关注的用户ID", paramType = "path", dataTypeClass = Long.class, required = true)
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<UserDto> deleteFriendship(@PathVariable("userId") Long id, @ApiIgnore AuthUserDto authUser) {
         UserDto targetUser = userService.findUserById(id, authUser.getId());
 
         if (targetUser == null) {

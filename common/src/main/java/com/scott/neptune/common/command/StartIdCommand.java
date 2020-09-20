@@ -1,6 +1,7 @@
 package com.scott.neptune.common.command;
 
 import lombok.Data;
+import lombok.experimental.SuperBuilder;
 
 /**
  * @Author: scott
@@ -9,6 +10,7 @@ import lombok.Data;
  * @Description:
  */
 @Data
+@SuperBuilder
 public class StartIdCommand<T> {
 
     private static final long serialVersionUID = 1L;

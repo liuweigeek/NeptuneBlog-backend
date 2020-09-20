@@ -5,12 +5,13 @@ import com.scott.neptune.common.exception.NeptuneBlogException;
 import com.scott.neptune.common.model.OffsetPageable;
 import com.scott.neptune.userclient.dto.FriendshipDto;
 import com.scott.neptune.userclient.dto.RelationshipDto;
+import com.scott.neptune.userclient.dto.UserDto;
 import com.scott.neptune.userserver.convertor.FriendshipConvertor;
 import com.scott.neptune.userserver.domain.entity.FriendshipEntity;
 import com.scott.neptune.userserver.domain.entity.UserEntity;
 import com.scott.neptune.userserver.repository.FriendshipRepository;
-import com.scott.neptune.userserver.repository.UserRepository;
 import com.scott.neptune.userserver.service.IFriendshipService;
+import com.scott.neptune.userserver.service.IUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -34,7 +35,7 @@ import java.util.stream.Collectors;
 @Service
 public class FriendshipServiceImpl implements IFriendshipService {
 
-    private final UserRepository userRepository;
+    private final IUserService userService;
     private final FriendshipRepository friendshipRepository;
     private final FriendshipConvertor friendshipConvertor;
 
@@ -91,6 +92,15 @@ public class FriendshipServiceImpl implements IFriendshipService {
         return friendshipRepository.findFriends(userId, pageable).map(friendshipConvertor.convertToDto());
     }
 
+    @Override
+    public Page<FriendshipDto> findFollowing(String username, long offset, int limit) {
+        UserDto userDto = userService.findUserByUsername(username, null);
+        if (userDto == null) {
+            return Page.empty();
+        }
+        return this.findFollowing(userDto.getId(), offset, limit);
+    }
+
     /**
      * 获取关注者列表
      *
@@ -104,6 +114,15 @@ public class FriendshipServiceImpl implements IFriendshipService {
         }
         Pageable pageable = OffsetPageable.of(offset, limit, Sort.by(Sort.Order.desc("followDate")));
         return friendshipRepository.findFollowers(userId, pageable).map(friendshipConvertor.convertToDto());
+    }
+
+    @Override
+    public Page<FriendshipDto> findFollowers(String username, long offset, int limit) {
+        UserDto userDto = userService.findUserByUsername(username, null);
+        if (userDto == null) {
+            return Page.empty();
+        }
+        return this.findFollowers(userDto.getId(), offset, limit);
     }
 
     /**
@@ -253,7 +272,7 @@ public class FriendshipServiceImpl implements IFriendshipService {
     @Override
     public Collection<RelationshipDto> getRelationshipByIds(Collection<Long> userIds, Long authUserId) {
 
-        Collection<UserEntity> users = userRepository.findAllByIdIn(userIds);
+        Collection<UserDto> users = userService.findAllUserByIdList(userIds, authUserId);
 
         Collection<UserEntity> following = friendshipRepository
                 .findAllBySourceUserAndTargetUserIn(authUserId, userIds, Sort.by(Sort.Order.desc("followDate")))
@@ -263,7 +282,7 @@ public class FriendshipServiceImpl implements IFriendshipService {
                 .stream().map(FriendshipEntity::getSourceUser).collect(Collectors.toList());
 
         Map<Long, RelationshipDto> relationshipMap = users.stream()
-                .collect(Collectors.toMap(UserEntity::getId, user -> new RelationshipDto(user.getId(),
+                .collect(Collectors.toMap(UserDto::getId, user -> new RelationshipDto(user.getId(),
                         user.getUsername(), user.getName())));
 
         following.forEach(entity -> relationshipMap.get(entity.getId()).addConnection(RelationshipDto.ConnectionEnum.FOLLOWING));
@@ -284,8 +303,8 @@ public class FriendshipServiceImpl implements IFriendshipService {
 
         List<Long> ids = Lists.newArrayListWithExpectedSize(usernames.size());
         if (CollectionUtils.isNotEmpty(usernames)) {
-            List<Long> idFromUsernames = userRepository.findAllByUsernameIn(usernames)
-                    .stream().map(UserEntity::getId).collect(Collectors.toList());
+            List<Long> idFromUsernames = userService.findAllUserByUsernameList(usernames, authUserId)
+                    .stream().map(UserDto::getId).collect(Collectors.toList());
             if (CollectionUtils.isNotEmpty(idFromUsernames)) {
                 ids.addAll(idFromUsernames);
             }
