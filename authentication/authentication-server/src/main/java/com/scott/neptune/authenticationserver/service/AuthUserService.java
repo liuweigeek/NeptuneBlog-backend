@@ -56,6 +56,11 @@ public class AuthUserService implements UserDetailsService {
     }
 
     public LoginUserInfo signUp(UserDto userDto) {
-        return LoginUserInfo.newInstance(userClient.addUser(userDto));
+        UserDto signUpUser = userClient.addUser(userDto);
+        AuthUserDto authUser = this.loadAuthUserByUsername(signUpUser.getUsername());
+        String token = jwtTokenProvider.createToken(authUser, null);
+        LoginUserInfo loginUserInfo = LoginUserInfo.newInstance(signUpUser);
+        loginUserInfo.setToken(token);
+        return loginUserInfo;
     }
 }

@@ -37,7 +37,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "t_friendship")
+@Table(name = "tb_friendship")
 @NamedEntityGraphs(value = {
         @NamedEntityGraph(name = "friendship.id"),
         @NamedEntityGraph(name = "friendship.all", attributeNodes = {@NamedAttributeNode("sourceUser"), @NamedAttributeNode("targetUser")}),

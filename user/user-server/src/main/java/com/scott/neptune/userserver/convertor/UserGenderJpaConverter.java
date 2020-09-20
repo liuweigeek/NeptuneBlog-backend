@@ -18,6 +18,9 @@ public class UserGenderJpaConverter implements AttributeConverter<GenderEnum, St
 
     @Override
     public String convertToDatabaseColumn(GenderEnum attribute) {
+        if (attribute == null) {
+            return null;
+        }
         return attribute.getValue();
     }
 

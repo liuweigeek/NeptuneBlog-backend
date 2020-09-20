@@ -47,7 +47,7 @@ public interface TweetRepository extends JpaRepository<TweetEntity, Long>,
      * @param pageable
      * @return
      */
-    @Query(value = "select t.* from t_tweet t where t.type = :type and t.referenced_tweet_id = :tweetId", nativeQuery = true)
+    @Query(value = "select t.* from tb_tweet t where t.type = :type and t.referenced_tweet_id = :tweetId", nativeQuery = true)
     Page<TweetEntity> findTweetsByReferencedTweetId(@Param("tweetId") Long tweetId, @Param("type") TweetTypeEnum type, Pageable pageable);
 
     /**
@@ -57,8 +57,8 @@ public interface TweetRepository extends JpaRepository<TweetEntity, Long>,
      * @return
      */
     @Modifying
-    @Query(value = "update t_tweet t\n" +
-            "    left join (select id, count(1) count from t_tweet where type = 'retweeted' group by id) m on m.id = t.id\n" +
+    @Query(value = "update tb_tweet t\n" +
+            "    left join (select id, count(1) count from tb_tweet where type = 'retweeted' group by id) m on m.id = t.id\n" +
             "set t.retweet_count = m.count\n" +
             "where t.id = :id", nativeQuery = true)
     Integer updatePublicMetricsRetweetCountById(@Param("id") Long tweetId);
@@ -70,9 +70,9 @@ public interface TweetRepository extends JpaRepository<TweetEntity, Long>,
      * @return
      */
     @Modifying
-    @Query(value = "update t_tweet t\n" +
+    @Query(value = "update tb_tweet t\n" +
             "    " +
-            "left join (select id, count(1) count from t_tweet where type = 'quoted' group by id) m on m.id = t.id\n" +
+            "left join (select id, count(1) count from tb_tweet where type = 'quoted' group by id) m on m.id = t.id\n" +
             "set t.retweet_count = m.count\n" +
             "where t.id = :id", nativeQuery = true)
     Integer updatePublicMetricsQuoteCountById(@Param("id") Long tweetId);

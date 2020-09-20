@@ -1,7 +1,8 @@
 package com.scott.neptune.common.config;
 
-import com.scott.neptune.common.exception.NeptuneBlogException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scott.neptune.common.exception.RestException;
+import com.scott.neptune.common.model.ApiErrorResponse;
 import feign.Contract;
 import feign.Util;
 import feign.codec.Decoder;
@@ -33,6 +34,7 @@ import java.nio.charset.StandardCharsets;
 @Configuration
 public class FeignConfig {
 
+    private final ObjectMapper objectMapper;
     private final ObjectFactory<HttpMessageConverters> messageConverters;
 
     @Bean
@@ -54,12 +56,12 @@ public class FeignConfig {
     public ErrorDecoder apiErrorResponseDecoder() {
         return (methodKey, response) -> {
             try {
-                String body = Util.toString(response.body().asReader(StandardCharsets.UTF_8));
-                log.error("feign exception, status: {}, body: {}", response.status(), body);
-                return new RestException("系统服务异常，请稍后再试", HttpStatus.INTERNAL_SERVER_ERROR);
+                ApiErrorResponse errorResponse = objectMapper.readValue(Util.toString(response.body().asReader(StandardCharsets.UTF_8)), ApiErrorResponse.class);
+                log.error("feign exception, status: {}, body: {}", response.status(), errorResponse.getMessage());
+                return new RestException(errorResponse.getMessage(), HttpStatus.valueOf(response.status()));
             } catch (Exception e) {
                 log.error("decoding feign response exception: ", e);
-                return new NeptuneBlogException("系统服务异常，请稍后再试", e);
+                return new RestException("系统服务异常，请稍后再试", HttpStatus.INTERNAL_SERVER_ERROR);
             }
         };
     }

@@ -42,7 +42,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Entity
 @EntityListeners(TweetAuditingListener.class)
-@Table(name = "t_tweet")
+@Table(name = "tb_tweet")
 public class TweetEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;

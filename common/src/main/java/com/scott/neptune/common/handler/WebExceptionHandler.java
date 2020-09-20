@@ -82,4 +82,18 @@ public class WebExceptionHandler {
                 .body(ApiErrorResponse.createByMessage(message));
     }
 
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<ApiErrorResponse> handleException(RuntimeException e) {
+        log.error("runtime exception: ", e);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ApiErrorResponse.createByMessage("服务当前不可用，请稍后再试"));
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiErrorResponse> handleException(Exception e) {
+        log.error("exception: ", e);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ApiErrorResponse.createByMessage("服务当前不可用，请稍后再试"));
+    }
+
 }

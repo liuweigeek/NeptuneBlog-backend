@@ -25,6 +25,9 @@ public class JpaConverterJson implements AttributeConverter<Object, String> {
 
     @Override
     public String convertToDatabaseColumn(Object attribute) {
+        if (attribute == null) {
+            return null;
+        }
         try {
             return objectMapper.writeValueAsString(attribute);
         } catch (JsonProcessingException e) {

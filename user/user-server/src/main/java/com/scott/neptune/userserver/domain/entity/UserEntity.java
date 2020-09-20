@@ -36,7 +36,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity
 @EntityListeners(UserAuditingListener.class)
-@Table(name = "t_user")
+@Table(name = "tb_user")
 public class UserEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
