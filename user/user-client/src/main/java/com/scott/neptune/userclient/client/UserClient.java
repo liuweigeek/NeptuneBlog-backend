@@ -6,7 +6,9 @@ import com.scott.neptune.userclient.dto.AuthUserDto;
 import com.scott.neptune.userclient.dto.UserDto;
 import com.scott.neptune.userclient.hystric.UserClientFallbackFactory;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,7 +30,7 @@ public interface UserClient {
      * @return 保存结果
      */
     @RequestMapping(path = "/users", method = RequestMethod.POST)
-    UserDto addUser(UserDto userDto);
+    UserDto addUser(@RequestBody UserDto userDto);
 
     /**
      * 获取指定用户信息
@@ -55,7 +57,7 @@ public interface UserClient {
      * @return
      */
     @RequestMapping(path = "/users", method = RequestMethod.GET)
-    Collection<UserDto> findUsersByIds(String ids);
+    Collection<UserDto> findUsersByIds(@RequestParam String ids);
 
     /**
      * 获取用户列表
@@ -64,7 +66,7 @@ public interface UserClient {
      * @return
      */
     @RequestMapping(path = "/users/username", method = RequestMethod.GET)
-    Collection<UserDto> findUsersByUsernames(String usernames);
+    Collection<UserDto> findUsersByUsernames(@RequestParam String usernames);
 
     /**
      * 通过关键字搜索用户
@@ -73,7 +75,7 @@ public interface UserClient {
      * @return 用户列表
      */
     @RequestMapping(path = "/users/search", method = RequestMethod.GET)
-    Collection<UserDto> search(UserSearchRequest request);
+    Collection<UserDto> search(@SpringQueryMap UserSearchRequest request);
 
     /**
      * 根据用户名获取指定用户,用于授权

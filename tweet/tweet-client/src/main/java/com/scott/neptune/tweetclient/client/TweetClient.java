@@ -5,6 +5,7 @@ import com.scott.neptune.tweetclient.command.TweetSearchRequest;
 import com.scott.neptune.tweetclient.dto.TweetDto;
 import com.scott.neptune.tweetclient.hystric.TweetClientFallbackFactory;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -25,6 +26,6 @@ public interface TweetClient {
      * @return Tweet列表
      */
     @RequestMapping(path = "/tweets/search", method = RequestMethod.GET)
-    Collection<TweetDto> search(TweetSearchRequest request);
+    Collection<TweetDto> search(@SpringQueryMap TweetSearchRequest request);
 
 }
