@@ -15,7 +15,7 @@ services:
       - /Users/scott/Data/docker/mysql/data:/var/lib/mysql
 
   redis:
-    image: redis:6.0.6
+    image: redis:6.0.8
     container_name: redis
     ports:
       - 6379:6379
