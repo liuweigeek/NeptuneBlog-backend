@@ -82,7 +82,7 @@ public interface UserClient {
      * @return
      */
     @RequestMapping(path = "/users/authenticate/{username}", method = RequestMethod.GET)
-    AuthUserDto getUserByUsernameForAuthenticate(@PathVariable String username);
+    AuthUserDto getUserByUsernameForAuthenticate(@PathVariable("username") String username);
 
     /**
      * 获取全部已关注用户ID列表

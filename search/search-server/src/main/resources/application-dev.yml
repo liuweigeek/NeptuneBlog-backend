@@ -18,15 +18,27 @@ spring:
     sender:
       type: web
 hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          strategy: SEMAPHORE
+          thread:
+            timeoutInMilliseconds: 120000
   shareSecurityContext: true
 ribbon:
   ReadTimeout: 30000
   ConnectTimeout: 30000
   eager-load:
     enabled: true
-    clients: user, tweet
+    clients: user-server, tweet-server
 logging:
   level:
     org.springframework.cloud.openfeign: debug
     org.springframework.cloud.bus: debug
     com.scott.neptune: debug
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

@@ -65,9 +65,6 @@ hystrix:
 ribbon:
   ReadTimeout: 20000
   ConnectTimeout: 20000
-  eager-load:
-    enabled: true
-    clients: tweet
 logging:
   level:
     org.springframework.cloud.openfeign: error

@@ -5,9 +5,6 @@ spring:
     name: mail-server
   messages:
     basename: i18n/messages
-  jackson:
-    serialization:
-      FAIL_ON_EMPTY_BEANS: false
 #  cloud:
 #    config:
 #      discovery:

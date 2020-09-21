@@ -2,13 +2,11 @@ package com.scott.neptune.authenticationclient.resolver;
 
 import com.scott.neptune.authenticationclient.jwt.JwtTokenProvider;
 import com.scott.neptune.authenticationclient.property.JwtProperties;
-import com.scott.neptune.common.exception.RestException;
 import com.scott.neptune.common.util.SpringContextUtils;
 import com.scott.neptune.userclient.dto.AuthUserDto;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.MethodParameter;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -35,10 +33,10 @@ public class AuthUserArgumentResolver implements HandlerMethodArgumentResolver {
     public AuthUserDto resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
                                        NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         String bearerToken = webRequest.getHeader(jwtProperties.getHeader());
-        if (StringUtils.isBlank(bearerToken) || !StringUtils.startsWith(bearerToken, jwtProperties.getHeaderPrefix() + " ")) {
-            throw new RestException("无权访问，请检查登录状态", HttpStatus.UNAUTHORIZED);
+        if (StringUtils.isNotBlank(bearerToken) && StringUtils.startsWith(bearerToken, jwtProperties.getHeaderPrefix() + " ")) {
+            String claimsJws = bearerToken.substring(jwtProperties.getHeaderPrefix().length() + 1);
+            return jwtTokenProvider.getAutoUser(claimsJws);
         }
-        String claimsJws = bearerToken.substring(jwtProperties.getHeaderPrefix().length() + 1);
-        return jwtTokenProvider.getAutoUser(claimsJws);
+        return new AuthUserDto();
     }
 }

@@ -133,7 +133,6 @@ public class TweetController extends BaseController {
     @GetMapping("/user/{userId}")
     public ResponseEntity<Page<TweetDto>> findByUserId(@PathVariable("userId") Long userId,
                                                        OffsetPageCommand command) {
-        //TODO parameters for pageable
         Page<TweetDto> tweetPage = tweetService.findByAuthorId(userId, command.getOffset(), command.getLimit());
         return ResponseEntity.ok(tweetPage);
     }

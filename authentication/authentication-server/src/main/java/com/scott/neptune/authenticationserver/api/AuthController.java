@@ -1,4 +1,4 @@
-package com.scott.neptune.authenticationserver.controller;
+package com.scott.neptune.authenticationserver.api;
 
 import com.scott.neptune.authenticationclient.dto.LoginUserInfo;
 import com.scott.neptune.authenticationserver.service.AuthUserService;

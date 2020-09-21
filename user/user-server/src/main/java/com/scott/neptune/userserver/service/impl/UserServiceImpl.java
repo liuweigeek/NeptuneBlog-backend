@@ -212,8 +212,8 @@ public class UserServiceImpl implements IUserService {
                 query.where(
                         criteriaBuilder.or(
                                 criteriaBuilder.like(root.get("username").as(String.class), "%" + keyword + "%"),
-                                criteriaBuilder.like(root.get("nickname").as(String.class), "%" + keyword + "%"),
-                                criteriaBuilder.like(root.get("email").as(String.class), "%" + keyword + "%"))
+                                criteriaBuilder.like(root.get("name").as(String.class), "%" + keyword + "%"),
+                                criteriaBuilder.equal(root.get("email").as(String.class), keyword))
                 ).orderBy(criteriaBuilder.asc(root.get("createAt").as(Date.class)))
                         .getRestriction()).stream()
                 .map(userConvertor.convertToDto())

@@ -14,13 +14,20 @@ spring:
     sampler:
       probability: 0
 hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          strategy: SEMAPHORE
+          thread:
+            timeoutInMilliseconds: 80000
   shareSecurityContext: true
 ribbon:
   ReadTimeout: 20000
   ConnectTimeout: 20000
   eager-load:
     enabled: true
-    clients: user, tweet
+    clients: user-server, tweet-server
 logging:
   level:
     org.springframework.cloud.openfeign: error
