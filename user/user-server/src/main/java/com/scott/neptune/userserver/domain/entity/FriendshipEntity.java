@@ -90,6 +90,8 @@ public class FriendshipEntity implements Serializable {
     @Embeddable
     public static class FriendshipId implements Serializable {
 
+        private static final long serialVersionUID = 1L;
+
         @Column(name = "source_id")
         private Long sourceId;
 

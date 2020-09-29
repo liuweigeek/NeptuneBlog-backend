@@ -32,6 +32,8 @@ public class AvatarProperties {
     @Builder
     public static class AvatarSizeValObj implements Serializable {
 
+        private static final long serialVersionUID = 1L;
+
         private Integer sizeType;
         private String sizeName;
         private Integer width;

@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,7 +28,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ApiModel(value = "relationship", description = "与登录用户的关系")
-public class RelationshipDto {
+public class RelationshipDto implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

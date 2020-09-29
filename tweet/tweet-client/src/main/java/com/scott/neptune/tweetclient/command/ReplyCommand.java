@@ -1,5 +1,7 @@
 package com.scott.neptune.tweetclient.command;
 
+import java.io.Serializable;
+
 import io.swagger.annotations.ApiModel;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +15,7 @@ import lombok.Data;
 @Data
 @Builder
 @ApiModel(value = "quote tweet request", description = "转推请求")
-public class ReplyCommand {
+public class ReplyCommand implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

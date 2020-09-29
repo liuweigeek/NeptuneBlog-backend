@@ -15,6 +15,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.groups.Default;
+
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -29,7 +31,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel(value = "user", description = "用户对象")
-public class UserDto {
+public class UserDto implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

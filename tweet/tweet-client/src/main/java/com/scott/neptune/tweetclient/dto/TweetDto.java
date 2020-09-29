@@ -80,7 +80,7 @@ public class TweetDto implements Serializable {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class PublicMetrics {
+    public static class PublicMetrics implements Serializable {
 
         private static final long serialVersionUID = 1L;
 

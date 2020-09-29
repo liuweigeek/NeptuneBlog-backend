@@ -43,6 +43,9 @@ public class TweetEntitiesValObj implements Serializable {
 
     @Data
     public static class Annotation implements Serializable {
+
+        private static final long serialVersionUID = 1L;
+
         private Integer start;
         private Integer end;
         private Double probability;
@@ -52,6 +55,9 @@ public class TweetEntitiesValObj implements Serializable {
 
     @Data
     public static class Cashtag implements Serializable {
+
+        private static final long serialVersionUID = 1L;
+
         private Integer start;
         private Integer end;
         private String tag;
@@ -59,6 +65,9 @@ public class TweetEntitiesValObj implements Serializable {
 
     @Data
     public static class Hashtag implements Serializable {
+
+        private static final long serialVersionUID = 1L;
+
         private Integer start;
         private Integer end;
         private String tag;
@@ -66,6 +75,9 @@ public class TweetEntitiesValObj implements Serializable {
 
     @Data
     public static class Mention implements Serializable {
+
+        private static final long serialVersionUID = 1L;
+
         private Integer start;
         private Integer end;
         private String tag;
@@ -73,6 +85,9 @@ public class TweetEntitiesValObj implements Serializable {
 
     @Data
     public static class Url implements Serializable {
+
+        private static final long serialVersionUID = 1L;
+
         private Integer start;
         private Integer end;
         private String url;

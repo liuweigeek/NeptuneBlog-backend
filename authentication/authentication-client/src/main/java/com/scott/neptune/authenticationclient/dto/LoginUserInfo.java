@@ -15,6 +15,8 @@ import org.springframework.beans.BeanUtils;
 @Data
 public class LoginUserInfo extends UserDto {
 
+    private static final long serialVersionUID = 1L;
+
     private String token;
 
     public static LoginUserInfo newInstance(UserDto userDto) {

@@ -11,6 +11,8 @@ import lombok.Getter;
 @Getter
 public class NeptuneBlogException extends RuntimeException {
 
+    private static final long serialVersionUID = 1L;
+
     private final static int DEFAULT_CODE = 0;
 
     private final String message;

@@ -27,6 +27,9 @@ public class VerifyFileTypeUtils {
      * 图片文件头信息与格式字符串
      */
     private final static Map<String, String> IMG_TYPE_MAP = new HashMap<String, String>() {
+
+        private static final long serialVersionUID = 1L;
+
         {
             put("ffd8ff", FileTypeConst.JPG);   //JPEG (jpg)
             put("89504e", FileTypeConst.PNG);   //PNG (png)
@@ -43,6 +46,9 @@ public class VerifyFileTypeUtils {
      * Office文件头信息与格式字符串
      */
     private final static Map<String, String> OFFICE_TYPE_MAP = new HashMap<String, String>() {
+
+        private static final long serialVersionUID = 1L;
+
         {
             put("d0cf11", FileTypeConst.OFFICE);    //Office 97-2003 (doc,xls,ppt)
             put("504b03", FileTypeConst.OFFICE);    //Office (docx,xlsx,pptx)
@@ -53,6 +59,9 @@ public class VerifyFileTypeUtils {
      * Office文件后缀名字符串
      */
     private final static List<String> OFFICE_TYPE_EXTEND_LIST = new ArrayList<String>() {
+
+        private static final long serialVersionUID = 1L;
+
         {
             add(FileTypeConst.DOC);
             add(FileTypeConst.DOCX);
@@ -68,6 +77,9 @@ public class VerifyFileTypeUtils {
      * 常用文件头信息与格式字符串
      */
     private final static Map<String, String> FILE_TYPE_MAP = new HashMap<String, String>() {
+
+        private static final long serialVersionUID = 1L;
+
         {
             put("ffd8ff", FileTypeConst.JPG);       //JPEG (jpg)
             put("89504e", FileTypeConst.PNG);       //PNG (png)
@@ -89,6 +101,9 @@ public class VerifyFileTypeUtils {
      * 文件后缀与文件类型对应信息
      */
     private final static Map<String, String> TYPE_NAME_MAP = new HashMap<String, String>() {
+
+        private static final long serialVersionUID = 1L;
+
         {
             put(FileTypeConst.DOC, "word");
             put(FileTypeConst.DOCX, "word");

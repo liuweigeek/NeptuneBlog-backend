@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -22,7 +23,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @ApiModel(value = "friendship", description = "关注关系")
-public class FriendshipDto {
+public class FriendshipDto implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
