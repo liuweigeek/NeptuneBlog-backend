@@ -35,7 +35,6 @@ public class JwtTokenProvider {
         Date now = new Date();
         Date expirationDate = new Date(now.getTime() + jwtProperties.getExpiration() * 1000);
 
-
         Claims claims = Jwts.claims().setSubject(user.getUsername());
         claims.put(CLAIM_KEY_USER_ID, user.getId());
         claims.put(CLAIM_KEY_USERNAME, user.getUsername());
@@ -58,21 +57,25 @@ public class JwtTokenProvider {
         return Jwts.parser().setSigningKey(signingKey).parseClaimsJws(claimsJws).getBody().getSubject();
     }
 
+    public String getClaimsJws(HttpServletRequest req) {
+        String bearerToken = req.getHeader(jwtProperties.getHeader());
+        return getClaimsJws(bearerToken);
+    }
+
+    public String getClaimsJws(String bearerToken) {
+        if (StringUtils.isNotBlank(bearerToken) && StringUtils.startsWith(bearerToken, jwtProperties.getHeaderPrefix() + " ")) {
+            return bearerToken.substring(jwtProperties.getHeaderPrefix().length() + 1);
+        }
+        return null;
+    }
+
     public AuthUserDto getAutoUser(String claimsJws) {
         Key signingKey = generateSigningKey(jwtProperties.getSecret());
         Claims claims = Jwts.parser().setSigningKey(signingKey).parseClaimsJws(claimsJws).getBody();
         Long userId = claims.get(CLAIM_KEY_USER_ID, Long.class);
         String username = claims.get(CLAIM_KEY_USERNAME, String.class);
         String email = claims.get(CLAIM_KEY_EMAIL, String.class);
-        return AuthUserDto.builder().id(userId).username(username).email(email).build();
-    }
-
-    public String resolveToken(HttpServletRequest req) {
-        String bearerToken = req.getHeader(jwtProperties.getHeader());
-        if (StringUtils.isNotBlank(bearerToken) && StringUtils.startsWith(bearerToken, jwtProperties.getHeaderPrefix() + " ")) {
-            return bearerToken.substring(jwtProperties.getHeaderPrefix().length() + 1);
-        }
-        return null;
+        return AuthUserDto.builder().id(userId).username(username).email(email).authorities(new String[]{}).build();
     }
 
     public boolean validateToken(String token) throws JwtException, IllegalArgumentException {

@@ -32,14 +32,14 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        String token = jwtTokenProvider.resolveToken(request);
-        if (StringUtils.isNotBlank(token)) {
+        String claimsJws = jwtTokenProvider.getClaimsJws(request);
+        if (StringUtils.isNotBlank(claimsJws)) {
             try {
-                jwtTokenProvider.validateToken(token);
-                Authentication auth = SecurityUtils.getAuthentication(token);
+                jwtTokenProvider.validateToken(claimsJws);
+                Authentication auth = SecurityUtils.getAuthentication(claimsJws);
                 SecurityContextHolder.getContext().setAuthentication(auth);
             } catch (JwtException | IllegalArgumentException e) {
-                log.error("无效的token: {}", token);
+                log.error("无效的token: {}", claimsJws);
             }
         }
         filterChain.doFilter(request, response);

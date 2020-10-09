@@ -1,10 +1,10 @@
 package com.scott.neptune.common.command;
 
-import java.io.Serializable;
-
 import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
+
+import java.io.Serializable;
 
 /**
  * @Author: scott
@@ -14,7 +14,7 @@ import lombok.experimental.SuperBuilder;
  */
 @Data
 @SuperBuilder
-public class StartIdCommand<T> implements Serializable{
+public class StartIdCommand<T> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

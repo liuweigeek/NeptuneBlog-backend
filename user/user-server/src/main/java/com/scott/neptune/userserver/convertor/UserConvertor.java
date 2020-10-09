@@ -32,7 +32,7 @@ public class UserConvertor extends BaseConvertor<UserEntity, UserDto> {
             dto.setCreateAt(entity.getCreateAt());
             dto.setLang(entity.getLang());
             if (entity.getPublicMetrics() != null) {
-                dto.setFollowersCount(entity.getPublicMetrics().getFollowingCount());
+                dto.setFollowingCount(entity.getPublicMetrics().getFollowingCount());
                 dto.setFollowersCount(entity.getPublicMetrics().getFollowersCount());
             }
             if (entity.getUserAvatarValObj() != null) {

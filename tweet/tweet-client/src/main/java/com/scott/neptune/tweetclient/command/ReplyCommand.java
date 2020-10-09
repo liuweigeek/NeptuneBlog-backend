@@ -1,10 +1,10 @@
 package com.scott.neptune.tweetclient.command;
 
-import java.io.Serializable;
-
 import io.swagger.annotations.ApiModel;
 import lombok.Builder;
 import lombok.Data;
+
+import java.io.Serializable;
 
 /**
  * @Author: scott

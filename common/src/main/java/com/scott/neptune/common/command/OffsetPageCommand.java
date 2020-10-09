@@ -1,7 +1,5 @@
 package com.scott.neptune.common.command;
 
-import java.io.Serializable;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -9,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import java.io.Serializable;
 
 /**
  * @Author: scott

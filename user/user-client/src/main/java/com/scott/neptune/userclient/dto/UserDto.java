@@ -15,7 +15,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.groups.Default;
-
 import java.io.Serializable;
 import java.util.Date;
 

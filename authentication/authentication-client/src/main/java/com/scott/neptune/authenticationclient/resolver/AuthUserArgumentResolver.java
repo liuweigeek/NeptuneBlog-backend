@@ -32,9 +32,10 @@ public class AuthUserArgumentResolver implements HandlerMethodArgumentResolver {
     @Override
     public AuthUserDto resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
                                        NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
+
         String bearerToken = webRequest.getHeader(jwtProperties.getHeader());
-        if (StringUtils.isNotBlank(bearerToken) && StringUtils.startsWith(bearerToken, jwtProperties.getHeaderPrefix() + " ")) {
-            String claimsJws = bearerToken.substring(jwtProperties.getHeaderPrefix().length() + 1);
+        String claimsJws = jwtTokenProvider.getClaimsJws(bearerToken);
+        if (StringUtils.isNotBlank(claimsJws)) {
             return jwtTokenProvider.getAutoUser(claimsJws);
         }
         return new AuthUserDto();
