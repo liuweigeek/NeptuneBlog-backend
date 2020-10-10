@@ -6,7 +6,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -49,50 +48,5 @@ public interface TweetRepository extends JpaRepository<TweetEntity, Long>,
      */
     @Query(value = "select t.* from tb_tweet t where t.type = :type and t.referenced_tweet_id = :tweetId", nativeQuery = true)
     Page<TweetEntity> findTweetsByReferencedTweetId(@Param("tweetId") Long tweetId, @Param("type") TweetTypeEnum type, Pageable pageable);
-
-    /**
-     * 更新retweet统计数量
-     *
-     * @param tweetId
-     * @return
-     */
-    @Modifying
-    @Query(value = "update tb_tweet t\n" +
-            "    left join (select id, count(1) count from tb_tweet where type = 'retweeted' group by id) m on m.id = t.id\n" +
-            "set t.retweet_count = m.count\n" +
-            "where t.id = :id", nativeQuery = true)
-    Integer updatePublicMetricsRetweetCountById(@Param("id") Long tweetId);
-
-    /**
-     * 更新quote统计数量
-     *
-     * @param tweetId
-     * @return
-     */
-    @Modifying
-    @Query(value = "update tb_tweet t\n" +
-            "    " +
-            "left join (select id, count(1) count from tb_tweet where type = 'quoted' group by id) m on m.id = t.id\n" +
-            "set t.retweet_count = m.count\n" +
-            "where t.id = :id", nativeQuery = true)
-    Integer updatePublicMetricsQuoteCountById(@Param("id") Long tweetId);
-
-    /**
-     * 更新reply统计数量
-     *
-     * @param tweetId
-     * @return
-     */
-    //@Modifying
-    //Boolean updatePublicMetricsReplyCountById(@Param("id") Long tweetId);
-
-    /**
-     * 更新like统计数量
-     *
-     * @param tweetId
-     * @return
-     */
-    //@Modifying
-    //Boolean updatePublicMetricsLikeCountById(@Param("id") Long tweetId);
 
 }

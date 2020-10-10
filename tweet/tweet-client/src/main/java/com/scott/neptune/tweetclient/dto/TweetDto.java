@@ -84,12 +84,12 @@ public class TweetDto implements Serializable {
 
         private static final long serialVersionUID = 1L;
 
-        private Long retweetCount;
+        private Integer retweetCount;
 
-        private Long quoteCount;
+        private Integer quoteCount;
 
-        private Long replyCount;
+        private Integer replyCount;
 
-        private Long likeCount;
+        private Integer likeCount;
     }
 }

@@ -22,7 +22,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long>,
      * @param ids 用户ID列表
      * @return
      */
-    Collection<UserEntity> findAllByIdIn(Collection<Long> ids);
+    Collection<UserEntity> findAllByIdIn(@Param("ids") Collection<Long> ids);
 
     /**
      * 根据用户名列表获取全部用户

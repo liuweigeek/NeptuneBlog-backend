@@ -1,5 +1,7 @@
 package com.scott.neptune.tweetserver.service;
 
+import com.scott.neptune.tweetclient.dto.LikeDto;
+
 /**
  * @Author: scott
  * @Email: <a href="mailto:liuweigeek@outlook.com">Scott Lau</a>
@@ -7,5 +9,9 @@ package com.scott.neptune.tweetserver.service;
  * @Description: Reply tweet
  */
 public interface ILikeService {
+
+    LikeDto save(LikeDto likeDto);
+
+    void delete(Long tweetId, Long userId);
 
 }

@@ -30,7 +30,7 @@ public class TweetEntitiesValObj implements Serializable {
     private List<Annotation> annotations;
 
     @Convert(converter = JpaConverterJson.class)
-    private List<Cashtag> cashtags;
+    private List<Cashtag> cashags;
 
     @Convert(converter = JpaConverterJson.class)
     private List<Hashtag> hashtags;

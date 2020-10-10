@@ -1,12 +1,21 @@
 package com.scott.neptune.tweetserver.domain.valueobject;
 
+import com.scott.neptune.tweetserver.domain.entity.TweetEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import javax.persistence.ConstraintMode;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.MapsId;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import java.io.Serializable;
 
 /**
@@ -19,20 +28,31 @@ import java.io.Serializable;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Embeddable
+@Entity
+@Table(name = "tb_tweet_public_metrics")
 public class TweetPublicMetricsValObj implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @Column(name = "tweet_id")
+    private Long tweetId;
+
+    @MapsId("tweetId")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tweet_id", referencedColumnName = "id",
+            foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    private TweetEntity tweet;
+
     @Column(name = "retweet_count")
-    private Long retweetCount;
+    private Integer retweetCount;
 
     @Column(name = "quote_count")
-    private Long quoteCount;
+    private Integer quoteCount;
 
     @Column(name = "reply_count")
-    private Long replyCount;
+    private Integer replyCount;
 
     @Column(name = "like_count")
-    private Long likeCount;
+    private Integer likeCount;
 }

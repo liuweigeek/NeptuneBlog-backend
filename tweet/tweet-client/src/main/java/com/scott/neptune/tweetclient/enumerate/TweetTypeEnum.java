@@ -23,6 +23,6 @@ public enum TweetTypeEnum {
     /**
      * quoted
      */
-    quoted;
+    quoted
 
 }

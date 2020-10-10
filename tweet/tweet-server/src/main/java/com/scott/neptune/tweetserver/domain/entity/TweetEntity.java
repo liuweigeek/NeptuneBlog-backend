@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.ConstraintMode;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
@@ -23,6 +22,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -111,7 +112,8 @@ public class TweetEntity implements Serializable {
     /**
      * 互动统计数据
      */
-    @Embedded
+    @OneToOne(fetch = FetchType.EAGER, mappedBy = "tweet")
+    @PrimaryKeyJoinColumn
     private TweetPublicMetricsValObj publicMetrics;
 
     /*@Transient

@@ -49,11 +49,11 @@ public class FriendshipServiceImpl implements IFriendshipService {
     public FriendshipDto save(FriendshipDto friendshipDto) {
 
         FriendshipEntity friendshipEntity = friendshipConvertor.convertToEntity(friendshipDto);
-        //TODO more clearly?
-        return friendshipRepository.findById(FriendshipEntity.FriendshipId.builder()
-                .sourceId(friendshipEntity.getSourceUser().getId())
-                .targetId(friendshipEntity.getTargetUser().getId())
-                .build())
+        return friendshipRepository.findById(
+                FriendshipEntity.FriendshipId.builder()
+                        .sourceId(friendshipDto.getSourceId())
+                        .targetId(friendshipDto.getTargetId())
+                        .build())
                 .map(friendshipConvertor.convertToDto())
                 .orElseGet(() -> {
                     friendshipEntity.setFollowDate(new Date());

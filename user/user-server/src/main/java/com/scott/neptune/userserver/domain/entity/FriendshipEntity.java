@@ -55,7 +55,7 @@ public class FriendshipEntity implements Serializable {
      * 关注人
      */
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("source_id")
+    @MapsId("sourceId")
     @JoinColumn(name = "source_id", referencedColumnName = "id",
             foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private UserEntity sourceUser;
@@ -64,7 +64,7 @@ public class FriendshipEntity implements Serializable {
      * 被关注人
      */
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("target_id")
+    @MapsId("targetId")
     @JoinColumn(name = "target_id", referencedColumnName = "id",
             foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private UserEntity targetUser;
