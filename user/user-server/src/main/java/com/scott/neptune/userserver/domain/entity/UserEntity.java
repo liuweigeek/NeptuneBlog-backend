@@ -52,18 +52,21 @@ public class UserEntity implements Serializable {
     private Long id;
 
     /**
-     * 用户昵称
-     */
-    private String name;
-
-    /**
      * 用户名
      */
+    @Column(name = "username", length = 30)
     private String username;
+
+    /**
+     * 用户昵称
+     */
+    @Column(name = "name", length = 30)
+    private String name;
 
     /**
      * 邮箱
      */
+    @Column(name = "email", length = 60)
     private String email;
 
     /**
@@ -76,11 +79,13 @@ public class UserEntity implements Serializable {
     /**
      * 自我介绍
      */
+    @Column(name = "description", length = 300)
     private String description;
 
     /**
      * 密码
      */
+    @Column(name = "password", length = 80)
     private String password;
 
     /**
@@ -94,6 +99,7 @@ public class UserEntity implements Serializable {
      *
      * @see GenderEnum
      */
+    @Column(name = "gender", length = 10)
     private GenderEnum gender;
 
     /**
@@ -105,13 +111,13 @@ public class UserEntity implements Serializable {
     /**
      * 背景图片
      */
-    @Column(name = "profile_image_url")
+    @Column(name = "profile_image_url", length = 300)
     private String profileImageUrl;
 
     /**
      * 语言
      */
-    @Column(name = "lang")
+    @Column(name = "lang", length = 6)
     private String lang;
 
     /**

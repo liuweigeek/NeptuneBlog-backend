@@ -58,6 +58,7 @@ public class TweetEntity implements Serializable {
     /**
      * 发送内容
      */
+    @Column(name = "text", length = 500)
     private String text;
 
     /**
@@ -76,11 +77,13 @@ public class TweetEntity implements Serializable {
     /**
      * 发送设备
      */
+    @Column(name = "source", length = 50)
     private String source;
 
     /**
      * tweet类型
      */
+    @Column(name = "type", length = 10)
     @Enumerated(EnumType.STRING)
     private TweetTypeEnum type;
 

@@ -64,6 +64,7 @@ public class LikeEntity implements Serializable {
     /**
      * 点赞设备
      */
+    @Column(name = "source", length = 50)
     private String source;
 
     @Data

@@ -79,7 +79,7 @@ public class FriendshipEntity implements Serializable {
     /**
      * 关注来源
      */
-    @Column(name = "follow_from")
+    @Column(name = "follow_from", length = 50)
     private String followFrom;
 
     @Data
