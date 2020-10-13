@@ -4,9 +4,24 @@ import com.scott.neptune.userclient.enumerate.GenderEnum;
 import com.scott.neptune.userserver.domain.listener.UserAuditingListener;
 import com.scott.neptune.userserver.domain.valueobject.UserAvatarValObj;
 import com.scott.neptune.userserver.domain.valueobject.UserPublicMetricsValObj;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import java.io.Serializable;
 import java.util.Date;
 
