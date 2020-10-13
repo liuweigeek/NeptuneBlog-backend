@@ -70,7 +70,7 @@ public class UserController extends BaseController {
 
         return Optional.ofNullable(userService.findUserById(id, authUser.getId()))
                 .map(ResponseEntity::ok)
-                .orElseThrow(() -> new RestException("用户不存在", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new RestException("指定用户不存在", HttpStatus.NOT_FOUND));
     }
 
     /**
@@ -87,7 +87,7 @@ public class UserController extends BaseController {
 
         return Optional.ofNullable(userService.findUserByUsername(username, authUser.getId()))
                 .map(ResponseEntity::ok)
-                .orElseThrow(() -> new RestException("用户不存在", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new RestException("指定用户不存在", HttpStatus.NOT_FOUND));
     }
 
     /**

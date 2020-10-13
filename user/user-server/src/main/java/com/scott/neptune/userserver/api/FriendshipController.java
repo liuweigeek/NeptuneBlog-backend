@@ -124,7 +124,7 @@ public class FriendshipController extends BaseController {
     public ResponseEntity<UserDto> addFriendship(@RequestParam("userId") Long id, @ApiIgnore AuthUserDto authUser) {
         UserDto targetUser = userService.findUserById(id, authUser.getId());
         if (targetUser == null) {
-            throw new RestException("用户不存在", HttpStatus.NOT_FOUND);
+            throw new RestException("指定用户不存在", HttpStatus.NOT_FOUND);
         }
         FriendshipDto friendshipDto = FriendshipDto.builder()
                 .sourceId(authUser.getId())
@@ -148,7 +148,7 @@ public class FriendshipController extends BaseController {
         UserDto targetUser = userService.findUserById(id, authUser.getId());
 
         if (targetUser == null) {
-            throw new RestException("用户不存在", HttpStatus.NOT_FOUND);
+            throw new RestException("指定用户不存在", HttpStatus.NOT_FOUND);
         }
         friendshipService.delete(authUser.getId(), id);
         return ResponseEntity.noContent().build();

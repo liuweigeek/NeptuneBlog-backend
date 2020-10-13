@@ -95,7 +95,7 @@ public class UserServiceImpl implements IUserService {
         userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
         userRepository.save(userEntity);
         UserPublicMetricsValObj userPublicMetrics = UserPublicMetricsValObj.builder()
-                .userId(userEntity.getId())
+                .user(userEntity)
                 .followingCount(0)
                 .followersCount(0)
                 .tweetCount(0)
@@ -139,7 +139,7 @@ public class UserServiceImpl implements IUserService {
 
         return userRepository.findOne(Example.of(UserEntity.builder().username(username).build(), usernameExampleMatcher))
                 .map(userConvertor.convertToDto())
-                .orElseThrow(() -> new NeptuneBlogException("username not found"));
+                .orElseThrow(() -> new NeptuneBlogException("指定用户不存在"));
     }
 
 
@@ -160,7 +160,7 @@ public class UserServiceImpl implements IUserService {
 
         return userRepository.findOne(Example.of(UserEntity.builder().email(email).build(), usernameExampleMatcher))
                 .map(userConvertor.convertToDto())
-                .orElseThrow(() -> new NeptuneBlogException("email not found"));
+                .orElseThrow(() -> new NeptuneBlogException("指定用户不存在"));
     }
 
     /**
@@ -205,7 +205,7 @@ public class UserServiceImpl implements IUserService {
                 .withIgnoreNullValues();
         return userRepository.findOne(Example.of(UserEntity.builder().username(username).build(), usernameExampleMatcher))
                 .map(authUserEntityConvertor::convertToDto)
-                .orElseThrow(() -> new NeptuneBlogException("username not found"));
+                .orElseThrow(() -> new NeptuneBlogException("指定用户不存在"));
     }
 
     /**

@@ -36,10 +36,9 @@ public class UserPublicMetricsValObj implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Column(name = "user_id")
     private Long userId;
 
-    @MapsId("userId")
+    @MapsId
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id",
             foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
@@ -48,13 +47,13 @@ public class UserPublicMetricsValObj implements Serializable {
     /**
      * 正在关注用户数量
      */
-    @Formula("(select count(*) from tb_friendship t where t.source_id = userId)")
+    @Formula("(select count(*) from tb_friendship t where t.source_id = user_id)")
     private Integer followingCount;
 
     /**
      * 关注者数量
      */
-    @Formula("(select count(*) from tb_friendship t where t.target_id = userId)")
+    @Formula("(select count(*) from tb_friendship t where t.target_id = user_id)")
     private Integer followersCount;
 
     @Column(name = "tweet_count")
