@@ -2,11 +2,13 @@ package com.scott.neptune.userserver.service.impl;
 
 import com.google.common.collect.Lists;
 import com.scott.neptune.common.exception.NeptuneBlogException;
+import com.scott.neptune.common.exception.RestException;
 import com.scott.neptune.common.model.OffsetPageable;
 import com.scott.neptune.userclient.dto.FriendshipDto;
 import com.scott.neptune.userclient.dto.RelationshipDto;
 import com.scott.neptune.userclient.dto.UserDto;
 import com.scott.neptune.userserver.convertor.FriendshipConvertor;
+import com.scott.neptune.userserver.convertor.UserConvertor;
 import com.scott.neptune.userserver.domain.entity.FriendshipEntity;
 import com.scott.neptune.userserver.domain.entity.UserEntity;
 import com.scott.neptune.userserver.repository.FriendshipRepository;
@@ -18,15 +20,11 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -38,6 +36,7 @@ public class FriendshipServiceImpl implements IFriendshipService {
     private final IUserService userService;
     private final FriendshipRepository friendshipRepository;
     private final FriendshipConvertor friendshipConvertor;
+    private final UserConvertor userConvertor;
 
     /**
      * 保存好友关系
@@ -56,6 +55,14 @@ public class FriendshipServiceImpl implements IFriendshipService {
                         .build())
                 .map(friendshipConvertor.convertToDto())
                 .orElseGet(() -> {
+                    UserEntity sourceUser = Optional.ofNullable(userService.findUserById(friendshipDto.getSourceId(), null))
+                            .map(userConvertor::convertToEntity)
+                            .orElseThrow(() -> new RestException("当前用户不存在", HttpStatus.NOT_FOUND));
+                    UserEntity targetUser = Optional.ofNullable(userService.findUserById(friendshipDto.getTargetId(), null))
+                            .map(userConvertor::convertToEntity)
+                            .orElseThrow(() -> new RestException("该用户不存在", HttpStatus.NOT_FOUND));
+                    friendshipEntity.setSourceUser(sourceUser);
+                    friendshipEntity.setTargetUser(targetUser);
                     friendshipEntity.setFollowDate(new Date());
                     friendshipRepository.save(friendshipEntity);
                     return friendshipConvertor.convertToDto(friendshipEntity);
@@ -89,7 +96,7 @@ public class FriendshipServiceImpl implements IFriendshipService {
             return Page.empty();
         }
         Pageable pageable = OffsetPageable.of(offset, limit, Sort.by(Sort.Order.desc("followDate")));
-        return friendshipRepository.findFriends(userId, pageable).map(friendshipConvertor.convertToDto());
+        return friendshipRepository.findFollowing(userId, pageable).map(friendshipConvertor.convertToDto());
     }
 
     @Override

@@ -92,10 +92,8 @@ public class FriendshipEntity implements Serializable {
 
         private static final long serialVersionUID = 1L;
 
-        @Column(name = "source_id")
         private Long sourceId;
 
-        @Column(name = "target_id")
         private Long targetId;
     }
 

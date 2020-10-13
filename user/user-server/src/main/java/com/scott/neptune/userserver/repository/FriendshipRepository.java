@@ -30,7 +30,7 @@ public interface FriendshipRepository extends JpaRepository<FriendshipEntity, Fr
      */
     @EntityGraph(value = "friendship.following", type = EntityGraph.EntityGraphType.FETCH)
     @Query("from FriendshipEntity f where f.id.sourceId = :sourceId")
-    Page<FriendshipEntity> findFriends(@Param("sourceId") Long sourceId, Pageable pageable);
+    Page<FriendshipEntity> findFollowing(@Param("sourceId") Long sourceId, Pageable pageable);
 
     /**
      * find follower
