@@ -28,16 +28,28 @@ public class FriendshipDto implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 关注人
+     * 关注人ID
      */
     @ApiModelProperty(value = "关注人")
     private Long sourceId;
 
     /**
-     * 被关注人
+     * 被关注人ID
      */
     @ApiModelProperty(value = "被关注人")
     private Long targetId;
+
+    /**
+     * 关注人
+     */
+    @ApiModelProperty(value = "关注人")
+    private UserDto sourceUser;
+
+    /**
+     * 被关注人
+     */
+    @ApiModelProperty(value = "被关注人")
+    private UserDto targetUser;
 
     /**
      * 关注时间

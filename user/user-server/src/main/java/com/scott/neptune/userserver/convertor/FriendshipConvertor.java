@@ -3,6 +3,7 @@ package com.scott.neptune.userserver.convertor;
 import com.scott.neptune.common.base.BaseConvertor;
 import com.scott.neptune.userclient.dto.FriendshipDto;
 import com.scott.neptune.userserver.domain.entity.FriendshipEntity;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.function.Function;
@@ -13,8 +14,11 @@ import java.util.function.Function;
  * @Date: 2019/9/30 21:53
  * @Description: NeptuneBlog
  */
+@RequiredArgsConstructor
 @Component
 public class FriendshipConvertor extends BaseConvertor<FriendshipEntity, FriendshipDto> {
+
+    private final UserConvertor userConvertor;
 
     @Override
     protected Function<FriendshipEntity, FriendshipDto> functionConvertToDto() {
@@ -22,6 +26,8 @@ public class FriendshipConvertor extends BaseConvertor<FriendshipEntity, Friends
             FriendshipDto dto = new FriendshipDto();
             dto.setSourceId(entity.getId().getSourceId());
             dto.setTargetId(entity.getId().getTargetId());
+            dto.setSourceUser(userConvertor.convertToDto(entity.getSourceUser()));
+            dto.setTargetUser(userConvertor.convertToDto(entity.getTargetUser()));
             dto.setFollowDate(entity.getFollowDate());
             dto.setFollowFrom(entity.getFollowFrom());
             return dto;
@@ -32,10 +38,11 @@ public class FriendshipConvertor extends BaseConvertor<FriendshipEntity, Friends
     protected Function<FriendshipDto, FriendshipEntity> functionConvertToEntity() {
         return dto -> {
             FriendshipEntity entity = new FriendshipEntity();
-
             entity.setId(FriendshipEntity.FriendshipId.builder()
                     .sourceId(dto.getSourceId()).targetId(dto.getTargetId())
                     .build());
+            entity.setSourceUser(userConvertor.convertToEntity(dto.getSourceUser()));
+            entity.setTargetUser(userConvertor.convertToEntity(dto.getTargetUser()));
             entity.setFollowDate(dto.getFollowDate());
             entity.setFollowFrom(dto.getFollowFrom());
             return entity;

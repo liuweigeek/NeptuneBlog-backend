@@ -7,7 +7,7 @@ import com.scott.neptune.tweetserver.domain.valueobject.TweetPublicMetricsValObj
 import com.scott.neptune.userclient.client.UserClient;
 import com.scott.neptune.userclient.dto.UserDto;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
