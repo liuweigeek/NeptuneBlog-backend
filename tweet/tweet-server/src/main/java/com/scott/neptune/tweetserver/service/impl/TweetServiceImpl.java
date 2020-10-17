@@ -56,7 +56,7 @@ public class TweetServiceImpl implements ITweetService {
         tweetEntity.setAuthorId(authUserId);
         tweetRepository.save(tweetEntity);
         TweetPublicMetricsValObj tweetPublicMetricsValObj = TweetPublicMetricsValObj.builder()
-                .tweetId(tweetEntity.getId())
+                .tweet(tweetEntity)
                 .retweetCount(0)
                 .quoteCount(0)
                 .replyCount(0)

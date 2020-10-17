@@ -39,7 +39,7 @@ public class TweetConvertor extends BaseConvertor<TweetEntity, TweetDto> {
             dto.setSource(entity.getSource());
             dto.setConversationId(entity.getConversationId());
             dto.setInReplyToUserId(entity.getInReplyToUserId());
-            dto.setReferencedTweet(this.functionConvertToDto().apply(entity.getReferencedTweet()));
+            dto.setReferencedTweet(this.convertToDto(entity.getReferencedTweet()));
             if (entity.getPublicMetrics() != null) {
                 TweetDto.PublicMetrics publicMetrics = new TweetDto.PublicMetrics();
                 publicMetrics.setRetweetCount(entity.getPublicMetrics().getRetweetCount());
@@ -68,7 +68,7 @@ public class TweetConvertor extends BaseConvertor<TweetEntity, TweetDto> {
             entity.setSource(dto.getSource());
             entity.setConversationId(dto.getConversationId());
             entity.setInReplyToUserId(dto.getInReplyToUserId());
-            entity.setReferencedTweet(this.functionConvertToEntity().apply(dto.getReferencedTweet()));
+            entity.setReferencedTweet(this.convertToEntity(dto.getReferencedTweet()));
             if (entity.getPublicMetrics() != null) {
                 TweetPublicMetricsValObj publicMetrics = new TweetPublicMetricsValObj();
                 publicMetrics.setRetweetCount(dto.getPublicMetrics().getRetweetCount());
@@ -93,7 +93,7 @@ public class TweetConvertor extends BaseConvertor<TweetEntity, TweetDto> {
                     .collect(Collectors.toMap(UserDto::getId, userDto -> userDto));
             return entities.stream()
                     .map(entity -> {
-                        TweetDto dto = this.functionConvertToDto().apply(entity);
+                        TweetDto dto = this.convertToDto(entity);
                         dto.setAuthor(authorMap.get(entity.getAuthorId()));
                         return dto;
                     })
@@ -107,7 +107,7 @@ public class TweetConvertor extends BaseConvertor<TweetEntity, TweetDto> {
             retrieveAuthor = false;
             return dtos.stream()
                     .map(dto -> {
-                        TweetEntity entity = functionConvertToEntity().apply(dto);
+                        TweetEntity entity = this.convertToEntity(dto);
                         entity.setAuthorId(Optional.ofNullable(dto.getAuthor())
                                 .map(UserDto::getId)
                                 .orElse(null));
