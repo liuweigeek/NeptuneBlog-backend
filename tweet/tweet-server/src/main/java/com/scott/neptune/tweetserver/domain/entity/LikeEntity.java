@@ -46,7 +46,7 @@ public class LikeEntity implements Serializable {
     private LikeId id;
 
     /**
-     * 被关注人
+     * TweetId
      */
     @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("tweetId")
@@ -77,10 +77,8 @@ public class LikeEntity implements Serializable {
 
         private static final long serialVersionUID = 1L;
 
-        @Column(name = "tweet_id")
         private Long tweetId;
 
-        @Column(name = "user_id")
         private Long userId;
     }
 }
