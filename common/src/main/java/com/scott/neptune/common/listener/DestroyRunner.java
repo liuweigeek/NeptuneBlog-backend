@@ -3,7 +3,10 @@ package com.scott.neptune.common.listener;
 import com.scott.neptune.common.property.FileProperties;
 import com.scott.neptune.common.util.FileUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.DisposableBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextClosedEvent;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 
@@ -14,14 +17,14 @@ import java.io.File;
  * @Description: NeptuneBlog
  */
 @RequiredArgsConstructor
-//@ConditionalOnProperty(name = "neptune.file.tempFolder")
-//@Component
-public class DestroyRunner implements DisposableBean {
+@ConditionalOnProperty(name = "neptune.file.tempFolder")
+@Component
+public class DestroyRunner implements ApplicationListener<ContextClosedEvent> {
 
     private final FileProperties fileProperties;
 
     @Override
-    public void destroy() {
+    public void onApplicationEvent(ContextClosedEvent event) {
         clearTempFolder();
     }
 

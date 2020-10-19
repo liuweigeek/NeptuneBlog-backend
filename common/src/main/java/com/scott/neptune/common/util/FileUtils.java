@@ -15,7 +15,6 @@ import java.io.File;
  */
 public class FileUtils {
 
-    private static final String DEFAULT_DIR = "default";
     private static final String PATH_SEPARATOR = File.separator;
     private static final String FILE_EXTENSION_DOT = ".";
 
@@ -53,7 +52,7 @@ public class FileUtils {
      * @return
      */
     public static String getRandomFileNameByExtension(String extension, String prefix) {
-        return prefix + getRandomFileNameByExtension(extension);
+        return prefix + "-" + getRandomFileNameByExtension(extension);
     }
 
     /**
@@ -109,7 +108,7 @@ public class FileUtils {
      * @return
      */
     public static File transferToFile(String folder, MultipartFile multipartFile) {
-        return transferToFile(folder, multipartFile, multipartFile.getOriginalFilename());
+        return transferToFile(folder, multipartFile, getRandomNameByOriginName(multipartFile.getOriginalFilename()));
     }
 
     /**
@@ -132,7 +131,7 @@ public class FileUtils {
 
     public static void deleteFile(File file) {
         if (file.exists()) {
-            file.exists();
+            file.delete();
         }
     }
 

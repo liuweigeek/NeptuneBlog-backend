@@ -29,3 +29,19 @@ jwt:
   headerPrefix: Bearer
   secret: 6AJvUN7UaP0sqkT0
   expiration: 604800
+neptune:
+  user:
+    avatar:
+      extension: png
+      small:
+        name: small
+        width: 60
+        height: 60
+      medium:
+        name: medium
+        width: 200
+        height: 200
+      large:
+        name: large
+        width: 500
+        height: 500

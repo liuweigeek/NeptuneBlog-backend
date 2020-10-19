@@ -2,7 +2,7 @@ package com.scott.neptune.userserver.api;
 
 import com.scott.neptune.common.base.BaseController;
 import com.scott.neptune.userclient.dto.AuthUserDto;
-import com.scott.neptune.userclient.dto.UserAvatarDto;
+import com.scott.neptune.userclient.dto.UserDto;
 import com.scott.neptune.userserver.service.IAvatarService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
-
-import java.util.List;
 
 /**
  * @Author: scott
@@ -43,9 +41,9 @@ public class UserAvatarController extends BaseController {
      */
     @ApiOperation(value = "上传头像")
     @ApiImplicitParam(name = "file", value = "文件", required = true, paramType = "form", dataTypeClass = MultipartFile.class)
-    @PostMapping("uploadAvatar")
-    public ResponseEntity<List<UserAvatarDto>> uploadAvatar(@RequestParam("file") MultipartFile file, @ApiIgnore AuthUserDto authUser) {
-        List<UserAvatarDto> userAvatarDtoList = avatarService.generateAvatar(authUser.getId(), file);
-        return ResponseEntity.ok(userAvatarDtoList);
+    @PostMapping
+    public ResponseEntity<UserDto> uploadAvatar(@RequestParam("file") MultipartFile file, @ApiIgnore AuthUserDto authUser) {
+        UserDto userDto = avatarService.generateAvatar(authUser.getId(), file);
+        return ResponseEntity.ok(userDto);
     }
 }

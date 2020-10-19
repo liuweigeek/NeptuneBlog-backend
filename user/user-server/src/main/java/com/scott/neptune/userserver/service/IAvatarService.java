@@ -1,10 +1,9 @@
 package com.scott.neptune.userserver.service;
 
-import com.scott.neptune.userclient.dto.UserAvatarDto;
+import com.scott.neptune.userclient.dto.UserDto;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.util.List;
 
 /**
  * @Author: scott
@@ -14,7 +13,7 @@ import java.util.List;
  */
 public interface IAvatarService {
 
-    List<UserAvatarDto> generateAvatar(Long userId, MultipartFile imageFile);
+    UserDto generateAvatar(Long userId, MultipartFile imageFile);
 
-    List<UserAvatarDto> generateAvatar(Long userId, File imageFile);
+    UserDto generateAvatar(Long userId, File imageFile);
 }

@@ -84,7 +84,7 @@ neptune:
       secretKey: 12345678
       bucket: neptune-blog
   file:
-    tempFolder: /Users/scott/Data/neptune_files
+    tempFolder: /Users/scott/Data/neptune_files/user
 management:
   endpoints:
     web:

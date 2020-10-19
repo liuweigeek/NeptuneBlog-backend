@@ -16,7 +16,7 @@
 
     <properties>
         <springfox-boot-starter.version>3.0.0</springfox-boot-starter.version>
-        <minio.version>7.1.0</minio.version>
+        <minio.version>7.1.4</minio.version>
         <thumbnailator.version>0.4.11</thumbnailator.version>
         <lombok.version>1.18.12</lombok.version>
         <guava.version>29.0-jre</guava.version>

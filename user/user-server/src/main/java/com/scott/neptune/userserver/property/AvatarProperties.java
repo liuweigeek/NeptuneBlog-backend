@@ -8,8 +8,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @Author: scott
@@ -20,11 +18,17 @@ import java.util.List;
 @Data
 @Component
 @ConfigurationProperties(prefix = "neptune.user.avatar")
-public class AvatarProperties {
+public class AvatarProperties implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private String extension;
 
-    private List<AvatarSizeValObj> sizes = new ArrayList<>();
+    private AvatarSizeValObj small;
+
+    private AvatarSizeValObj medium;
+
+    private AvatarSizeValObj large;
 
     @Data
     @AllArgsConstructor
@@ -34,8 +38,7 @@ public class AvatarProperties {
 
         private static final long serialVersionUID = 1L;
 
-        private Integer sizeType;
-        private String sizeName;
+        private String name;
         private Integer width;
         private Integer height;
     }

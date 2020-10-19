@@ -1,6 +1,5 @@
 package com.scott.neptune.common.component;
 
-import com.scott.neptune.common.base.BaseStorageInfo;
 import com.scott.neptune.common.component.oss.MinioComponent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -27,13 +26,13 @@ public class FileComponent {
     /**
      * 上传文件
      *
-     * @param storageInfo
+     * @param folder
      * @param file
      * @param filename
      * @return
      */
-    public String saveFile(BaseStorageInfo storageInfo, File file, String filename) {
-        return minioComponent.saveObject(storageInfo.buildFolder() + "/" + filename, file);
+    public String saveFile(String folder, File file, String filename) {
+        return minioComponent.saveObject(folder + "/" + filename, file);
     }
 
     /**
@@ -50,14 +49,14 @@ public class FileComponent {
     /**
      * 批量上传文件
      *
-     * @param storageInfo
+     * @param folder
      * @param fileList
      * @param filenames
      * @return
      */
-    public List<String> saveFiles(BaseStorageInfo storageInfo, List<File> fileList, List<String> filenames) {
+    public List<String> saveFiles(String folder, List<File> fileList, List<String> filenames) {
         List<String> fileFullPaths = filenames.stream()
-                .map(filename -> storageInfo.buildFolder() + "/" + filename)
+                .map(filename -> folder + "/" + filename)
                 .collect(Collectors.toList());
         return minioComponent.saveObjects(fileFullPaths, fileList);
     }
@@ -77,13 +76,13 @@ public class FileComponent {
     /**
      * 上传文件
      *
-     * @param storageInfo
+     * @param folder
      * @param file
      * @param filename
      * @return
      */
-    public String saveMultipartFile(BaseStorageInfo storageInfo, MultipartFile file, String filename) {
-        return minioComponent.saveMultipartObject(storageInfo.buildFolder() + "/" + filename, file);
+    public String saveMultipartFile(String folder, MultipartFile file, String filename) {
+        return minioComponent.saveMultipartObject(folder + "/" + filename, file);
     }
 
     /**
@@ -100,14 +99,14 @@ public class FileComponent {
     /**
      * 批量上传文件
      *
-     * @param storageInfo
+     * @param folder
      * @param fileList
      * @param filenames
      * @return
      */
-    public List<String> saveMultipartFiles(BaseStorageInfo storageInfo, List<MultipartFile> fileList, List<String> filenames) {
+    public List<String> saveMultipartFiles(String folder, List<MultipartFile> fileList, List<String> filenames) {
         List<String> fileFullPaths = filenames.stream()
-                .map(filename -> storageInfo.buildFolder() + "/" + filename)
+                .map(filename -> folder + "/" + filename)
                 .collect(Collectors.toList());
         return minioComponent.saveMultipartObjects(fileFullPaths, fileList);
     }
@@ -126,24 +125,24 @@ public class FileComponent {
     /**
      * 删除文件
      *
-     * @param storageInfo
+     * @param folder
      * @param filename
      * @return
      */
-    public boolean deleteFile(BaseStorageInfo storageInfo, String filename) {
-        return minioComponent.deleteObject(storageInfo.buildFolder() + "/" + filename);
+    public boolean deleteFile(String folder, String filename) {
+        return minioComponent.deleteObject(folder + "/" + filename);
     }
 
     /**
      * 批量删除文件
      *
-     * @param storageInfo
+     * @param folder
      * @param filenames
      * @return
      */
-    public boolean deleteFiles(BaseStorageInfo storageInfo, List<String> filenames) {
+    public boolean deleteFiles(String folder, List<String> filenames) {
         List<String> fileFullPaths = filenames.stream()
-                .map(filename -> storageInfo.buildFolder() + "/" + filename)
+                .map(filename -> folder + "/" + filename)
                 .collect(Collectors.toList());
         return minioComponent.deleteObjects(fileFullPaths);
     }
