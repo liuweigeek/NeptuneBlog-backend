@@ -143,6 +143,7 @@ public class TweetServiceImpl implements ITweetService {
     @Override
     public Page<TweetDto> findFollowingTweets(Long followerId, long offset, int limit) {
         Collection<Long> followingIds = userClient.findAllFollowingIds(followerId);
+        followingIds.add(followerId);
         if (CollectionUtils.isEmpty(followingIds)) {
             return Page.empty();
         }
