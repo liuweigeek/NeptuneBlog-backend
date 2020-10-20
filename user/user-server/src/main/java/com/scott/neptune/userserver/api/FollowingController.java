@@ -49,7 +49,7 @@ public class FollowingController extends BaseController {
 
         String whomUsername = Optional.ofNullable(request.getUsername())
                 .orElseGet(authUser::getUsername);
-        return ResponseEntity.ok(friendshipService.findFollowing(whomUsername, request.getOffset(), request.getLimit())
+        return ResponseEntity.ok(friendshipService.findFollowing(whomUsername, false, request.getOffset(), request.getLimit())
                 .map(FriendshipDto::getTargetId));
     }
 
@@ -66,7 +66,7 @@ public class FollowingController extends BaseController {
 
         String whomUsername = Optional.ofNullable(request.getUsername())
                 .orElseGet(authUser::getUsername);
-        return ResponseEntity.ok(friendshipService.findFollowing(whomUsername, request.getOffset(), request.getLimit()));
+        return ResponseEntity.ok(friendshipService.findFollowing(whomUsername, true, request.getOffset(), request.getLimit()));
     }
 
     /**
@@ -100,6 +100,6 @@ public class FollowingController extends BaseController {
 
         Long whomUserId = Optional.ofNullable(id)
                 .orElseGet(authUser::getId);
-        return ResponseEntity.ok(friendshipService.findAllFollowing(whomUserId, null));
+        return ResponseEntity.ok(friendshipService.findAllFollowing(whomUserId, null, false));
     }
 }

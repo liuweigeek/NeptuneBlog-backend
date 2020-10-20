@@ -3,6 +3,7 @@ package com.scott.neptune.userserver.service.impl;
 import com.scott.neptune.common.exception.NeptuneBlogException;
 import com.scott.neptune.userclient.dto.AuthUserDto;
 import com.scott.neptune.userclient.dto.UserDto;
+import com.scott.neptune.userserver.component.FriendshipComponent;
 import com.scott.neptune.userserver.convertor.AuthUserEntityConvertor;
 import com.scott.neptune.userserver.convertor.UserConvertor;
 import com.scott.neptune.userserver.domain.entity.UserEntity;
@@ -23,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -42,6 +44,7 @@ public class UserServiceImpl implements IUserService {
     private final UserConvertor userConvertor;
     private final AuthUserEntityConvertor authUserEntityConvertor;
     private final PasswordEncoder passwordEncoder;
+    private final FriendshipComponent friendshipComponent;
 
     /**
      * 判断指定用户名是否存在
@@ -113,12 +116,19 @@ public class UserServiceImpl implements IUserService {
      * @return 用户对象
      */
     @Override
-    public UserDto findUserById(Long userId, Long loginUserId) {
+    public UserDto findUserById(Long userId, Long loginUserId, boolean includeRelations) {
         if (userId == null) {
             throw new NeptuneBlogException("请指定要查询的用户");
         }
         return userRepository.findById(userId)
-                .map(userConvertor.convertToDto())
+                .map(entity -> {
+                    if (includeRelations) {
+                        UserDto dto = userConvertor.convertToDto(entity);
+                        return friendshipComponent.fillUserConnection(dto, loginUserId);
+                    } else {
+                        return userConvertor.convertToDto(entity);
+                    }
+                })
                 .orElseThrow(() -> new NeptuneBlogException("指定用户不存在"));
     }
 
@@ -129,7 +139,7 @@ public class UserServiceImpl implements IUserService {
      * @return 用户对象
      */
     @Override
-    public UserDto findUserByUsername(String username, Long loginUserId) {
+    public UserDto findUserByUsername(String username, Long loginUserId, boolean includeRelations) {
         if (StringUtils.isBlank(username)) {
             throw new NeptuneBlogException("请指定要查询的用户");
         }
@@ -138,7 +148,14 @@ public class UserServiceImpl implements IUserService {
                 .withIgnoreNullValues();
 
         return userRepository.findOne(Example.of(UserEntity.builder().username(username).build(), usernameExampleMatcher))
-                .map(userConvertor.convertToDto())
+                .map(entity -> {
+                    if (includeRelations) {
+                        UserDto dto = userConvertor.convertToDto(entity);
+                        return friendshipComponent.fillUserConnection(dto, loginUserId);
+                    } else {
+                        return userConvertor.convertToDto(entity);
+                    }
+                })
                 .orElseThrow(() -> new NeptuneBlogException("指定用户不存在"));
     }
 
@@ -150,7 +167,7 @@ public class UserServiceImpl implements IUserService {
      * @return 用户对象
      */
     @Override
-    public UserDto findUserByEmail(String email, Long loginUserId) {
+    public UserDto findUserByEmail(String email, Long loginUserId, boolean includeRelations) {
         if (StringUtils.isBlank(email)) {
             throw new NeptuneBlogException("请指定要查询的用户");
         }
@@ -159,7 +176,14 @@ public class UserServiceImpl implements IUserService {
                 .withIgnoreNullValues();
 
         return userRepository.findOne(Example.of(UserEntity.builder().email(email).build(), usernameExampleMatcher))
-                .map(userConvertor.convertToDto())
+                .map(entity -> {
+                    if (includeRelations) {
+                        UserDto dto = userConvertor.convertToDto(entity);
+                        return friendshipComponent.fillUserConnection(dto, loginUserId);
+                    } else {
+                        return userConvertor.convertToDto(entity);
+                    }
+                })
                 .orElseThrow(() -> new NeptuneBlogException("指定用户不存在"));
     }
 
@@ -170,13 +194,17 @@ public class UserServiceImpl implements IUserService {
      * @return 用户对象列表
      */
     @Override
-    public Collection<UserDto> findAllUserByIdList(Collection<Long> ids, Long loginUserId) {
+    public Collection<UserDto> findAllUserByIdList(Collection<Long> ids, Long loginUserId, boolean includeRelations) {
         if (CollectionUtils.isEmpty(ids)) {
             return Collections.emptyList();
         }
-        return userRepository.findAllByIdIn(ids).stream()
+        List<UserDto> userDtoList = userRepository.findAllByIdIn(ids).stream()
                 .map(userConvertor.convertToDto())
                 .collect(Collectors.toList());
+        if (includeRelations) {
+            return friendshipComponent.fillUserConnections(userDtoList, loginUserId);
+        }
+        return userDtoList;
     }
 
     /**
@@ -186,13 +214,17 @@ public class UserServiceImpl implements IUserService {
      * @return 用户对象列表
      */
     @Override
-    public Collection<UserDto> findAllUserByUsernameList(Collection<String> usernameList, Long loginUserId) {
+    public Collection<UserDto> findAllUserByUsernameList(Collection<String> usernameList, Long loginUserId, boolean includeRelations) {
         if (CollectionUtils.isEmpty(usernameList)) {
             return Collections.emptyList();
         }
-        return userRepository.findAllByUsernameIn(usernameList).stream()
+        List<UserDto> userDtoList = userRepository.findAllByUsernameIn(usernameList).stream()
                 .map(userConvertor.convertToDto())
                 .collect(Collectors.toList());
+        if (includeRelations) {
+            return friendshipComponent.fillUserConnections(userDtoList, loginUserId);
+        }
+        return userDtoList;
     }
 
     @Override
@@ -215,11 +247,11 @@ public class UserServiceImpl implements IUserService {
      * @return 用户列表
      */
     @Override
-    public Collection<UserDto> search(String keyword, Long loginUserId) {
+    public Collection<UserDto> search(String keyword, Long loginUserId, boolean includeRelations) {
         if (StringUtils.isBlank(keyword)) {
             return Collections.emptyList();
         }
-        return userRepository.findAll((root, query, criteriaBuilder) ->
+        List<UserDto> userDtoList = userRepository.findAll((root, query, criteriaBuilder) ->
                 query.where(
                         criteriaBuilder.or(
                                 criteriaBuilder.like(root.get("username").as(String.class), "%" + keyword + "%"),
@@ -229,6 +261,10 @@ public class UserServiceImpl implements IUserService {
                         .getRestriction()).stream()
                 .map(userConvertor.convertToDto())
                 .collect(Collectors.toList());
+        if (includeRelations) {
+            return friendshipComponent.fillUserConnections(userDtoList, loginUserId);
+        }
+        return userDtoList;
     }
 
     /**

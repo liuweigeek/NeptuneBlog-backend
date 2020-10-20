@@ -130,5 +130,4 @@ public class UserEntity implements Serializable {
      */
     @OneToOne(fetch = FetchType.EAGER, mappedBy = "user")
     private UserPublicMetricsValObj publicMetrics;
-
 }

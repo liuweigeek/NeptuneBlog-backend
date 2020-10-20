@@ -1,6 +1,6 @@
 package com.scott.neptune.userclient.config;
 
-import com.scott.neptune.userclient.convertor.RelationshipConnectionMvcConverter;
+import com.scott.neptune.userclient.convertor.UserConnectionMvcConverter;
 import com.scott.neptune.userclient.convertor.UserGenderMvcConverter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
@@ -16,7 +16,7 @@ public class UserWebConfig implements WebMvcConfigurer {
 
     @Override
     public void addFormatters(FormatterRegistry registry) {
-        registry.addConverter(new RelationshipConnectionMvcConverter());
+        registry.addConverter(new UserConnectionMvcConverter());
         registry.addConverter(new UserGenderMvcConverter());
     }
 }

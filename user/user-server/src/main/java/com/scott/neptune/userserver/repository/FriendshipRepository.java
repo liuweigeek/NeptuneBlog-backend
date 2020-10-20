@@ -69,7 +69,7 @@ public interface FriendshipRepository extends JpaRepository<FriendshipEntity, Fr
      * @param sourceId
      * @return
      */
-    @EntityGraph(value = "friendship.friends", type = EntityGraph.EntityGraphType.FETCH)
+    @EntityGraph(value = "friendship.following", type = EntityGraph.EntityGraphType.FETCH)
     @Query("from FriendshipEntity f where f.id.sourceId = :sourceId and f.id.targetId in :targetUserIds")
     Collection<FriendshipEntity> findAllBySourceUserAndTargetUserIn(@Param("sourceId") Long sourceId,
                                                                     @Param("targetUserIds") Collection<Long> targetUserIds,

@@ -1,6 +1,6 @@
 package com.scott.neptune.userclient.convertor;
 
-import com.scott.neptune.userclient.dto.RelationshipDto;
+import com.scott.neptune.userclient.enumerate.UserConnectionEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.converter.Converter;
 
@@ -12,9 +12,9 @@ import org.springframework.core.convert.converter.Converter;
  * @Description:
  */
 @Slf4j
-public class RelationshipConnectionMvcConverter implements Converter<String, RelationshipDto.ConnectionEnum> {
+public class UserConnectionMvcConverter implements Converter<String, UserConnectionEnum> {
     @Override
-    public RelationshipDto.ConnectionEnum convert(String name) {
-        return RelationshipDto.ConnectionEnum.getEnum(name);
+    public UserConnectionEnum convert(String name) {
+        return UserConnectionEnum.getEnum(name);
     }
 }

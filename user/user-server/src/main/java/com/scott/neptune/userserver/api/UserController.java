@@ -68,7 +68,7 @@ public class UserController extends BaseController {
     @GetMapping("/{id}")
     public ResponseEntity<UserDto> getUserById(@PathVariable("id") Long id, @ApiIgnore AuthUserDto authUser) {
 
-        return Optional.ofNullable(userService.findUserById(id, authUser.getId()))
+        return Optional.ofNullable(userService.findUserById(id, authUser.getId(), true))
                 .map(ResponseEntity::ok)
                 .orElseThrow(() -> new RestException("指定用户不存在", HttpStatus.NOT_FOUND));
     }
@@ -85,7 +85,7 @@ public class UserController extends BaseController {
     @GetMapping("/username/{username}")
     public ResponseEntity<UserDto> getUserByUsername(@PathVariable("username") String username, @ApiIgnore AuthUserDto authUser) {
 
-        return Optional.ofNullable(userService.findUserByUsername(username, authUser.getId()))
+        return Optional.ofNullable(userService.findUserByUsername(username, authUser.getId(), true))
                 .map(ResponseEntity::ok)
                 .orElseThrow(() -> new RestException("指定用户不存在", HttpStatus.NOT_FOUND));
     }
@@ -104,7 +104,7 @@ public class UserController extends BaseController {
         List<Long> userIds = Stream.of(StringUtils.split(ids, ","))
                 .map(Long::parseLong)
                 .collect(Collectors.toList());
-        Collection<UserDto> userDtoList = userService.findAllUserByIdList(userIds, authUser.getId());
+        Collection<UserDto> userDtoList = userService.findAllUserByIdList(userIds, authUser.getId(), true);
         return ResponseEntity.ok(userDtoList);
     }
 
@@ -122,7 +122,7 @@ public class UserController extends BaseController {
 
         List<String> usernameList = Stream.of(StringUtils.split(usernames, ","))
                 .collect(Collectors.toList());
-        Collection<UserDto> userDtoList = userService.findAllUserByUsernameList(usernameList, authUser.getId());
+        Collection<UserDto> userDtoList = userService.findAllUserByUsernameList(usernameList, authUser.getId(), true);
         return ResponseEntity.ok(userDtoList);
     }
 
@@ -136,7 +136,7 @@ public class UserController extends BaseController {
     @ApiOperation(value = "通过关键字搜索用户")
     @GetMapping("/search")
     public ResponseEntity<Collection<UserDto>> search(UserSearchRequest request, @ApiIgnore AuthUserDto authUser) {
-        Collection<UserDto> userDtoList = userService.search(request.getQ(), authUser.getId());
+        Collection<UserDto> userDtoList = userService.search(request.getQ(), authUser.getId(), true);
         //TODO add relation state
         return ResponseEntity.ok(userDtoList);
     }

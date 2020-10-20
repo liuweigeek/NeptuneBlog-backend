@@ -19,19 +19,19 @@ public interface IUserService {
 
     UserDto save(UserDto userDto);
 
-    UserDto findUserById(Long userId, Long loginUserId);
+    UserDto findUserById(Long userId, Long loginUserId, boolean includeRelations);
 
-    UserDto findUserByUsername(String username, Long loginUserId);
+    UserDto findUserByUsername(String username, Long loginUserId, boolean includeRelations);
 
-    UserDto findUserByEmail(String email, Long loginUserId);
+    UserDto findUserByEmail(String email, Long loginUserId, boolean includeRelations);
 
-    Collection<UserDto> findAllUserByIdList(Collection<Long> ids, Long loginUserId);
+    Collection<UserDto> findAllUserByIdList(Collection<Long> ids, Long loginUserId, boolean includeRelations);
 
-    Collection<UserDto> findAllUserByUsernameList(Collection<String> usernameList, Long loginUserId);
+    Collection<UserDto> findAllUserByUsernameList(Collection<String> usernameList, Long loginUserId, boolean includeRelations);
 
     AuthUserDto findUserByUsernameForAuthenticate(String username);
 
-    Collection<UserDto> search(String keyword, Long loginUserId);
+    Collection<UserDto> search(String keyword, Long loginUserId, boolean includeRelations);
 
     //TODO remove soon
 //    ServerResponse<List<UserAvatarEntity>> uploadAvatar(MultipartFile avatarFile, UserDto userDto);

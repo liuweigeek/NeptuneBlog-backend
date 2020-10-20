@@ -1,7 +1,9 @@
 package com.scott.neptune.userclient.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.google.common.collect.Lists;
 import com.scott.neptune.userclient.enumerate.GenderEnum;
+import com.scott.neptune.userclient.enumerate.UserConnectionEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -16,6 +18,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.groups.Default;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 
 /**
@@ -132,6 +135,13 @@ public class UserDto implements Serializable {
      */
     @ApiModelProperty(hidden = true)
     private Integer followersCount;
+
+    @Builder.Default
+    private Collection<UserConnectionEnum> connections = Lists.newArrayListWithExpectedSize(2);
+
+    public void addConnection(UserConnectionEnum connectionEnum) {
+        this.connections.add(connectionEnum);
+    }
 
     public interface Register extends Default {
     }

@@ -37,7 +37,7 @@ public interface IFriendshipService {
      * @param userId 用户Id
      * @return 关注列表
      */
-    Page<FriendshipDto> findFollowing(Long userId, long offset, int limit);
+    Page<FriendshipDto> findFollowing(Long userId, boolean includeRelations, long offset, int limit);
 
     /**
      * 获取关注列表
@@ -45,7 +45,7 @@ public interface IFriendshipService {
      * @param username 用户名
      * @return 关注列表
      */
-    Page<FriendshipDto> findFollowing(String username, long offset, int limit);
+    Page<FriendshipDto> findFollowing(String username, boolean includeRelations, long offset, int limit);
 
     /**
      * 获取关注者列表
@@ -53,7 +53,7 @@ public interface IFriendshipService {
      * @param userId 用户Id
      * @return 关注者列表
      */
-    Page<FriendshipDto> findFollowers(Long userId, long offset, int limit);
+    Page<FriendshipDto> findFollowers(Long userId, boolean includeRelations, long offset, int limit);
 
     /**
      * 获取关注者列表
@@ -61,7 +61,7 @@ public interface IFriendshipService {
      * @param username 用户名
      * @return 关注者列表
      */
-    Page<FriendshipDto> findFollowers(String username, long offset, int limit);
+    Page<FriendshipDto> findFollowers(String username, boolean includeRelations, long offset, int limit);
 
     /**
      * 获取全部已关注用户
@@ -70,7 +70,7 @@ public interface IFriendshipService {
      * @param targetUserIds
      * @return
      */
-    Collection<FriendshipDto> findAllFollowing(Long userId, Collection<Long> targetUserIds);
+    Collection<FriendshipDto> findAllFollowing(Long userId, Collection<Long> targetUserIds, boolean includeRelations);
 
     /**
      * 获取全部关注者
@@ -79,7 +79,7 @@ public interface IFriendshipService {
      * @param sourceUserIds
      * @return
      */
-    Collection<FriendshipDto> findAllFollowers(Long userId, Collection<Long> sourceUserIds);
+    Collection<FriendshipDto> findAllFollowers(Long userId, Collection<Long> sourceUserIds, boolean includeRelations);
 
     /**
      * 获取全部已关注用户

@@ -40,7 +40,7 @@ import java.util.Date;
 @Table(name = "tb_friendship")
 @NamedEntityGraphs(value = {
         @NamedEntityGraph(name = "friendship.id"),
-        @NamedEntityGraph(name = "friendship.all", attributeNodes = {@NamedAttributeNode("sourceUser"), @NamedAttributeNode("targetUser")}),
+        @NamedEntityGraph(name = "friendship.all", includeAllAttributes = true),
         @NamedEntityGraph(name = "friendship.following", attributeNodes = {@NamedAttributeNode("targetUser")}),
         @NamedEntityGraph(name = "friendship.followers", attributeNodes = {@NamedAttributeNode("sourceUser")})
 })

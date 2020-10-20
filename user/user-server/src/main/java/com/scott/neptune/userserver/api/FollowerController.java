@@ -48,7 +48,7 @@ public class FollowerController extends BaseController {
     public ResponseEntity<Page<Long>> findFollowerIds(FriendshipQueryRequest request, @ApiIgnore AuthUserDto authUser) {
         String whomUsername = Optional.ofNullable(request.getUsername())
                 .orElseGet(authUser::getUsername);
-        return ResponseEntity.ok(friendshipService.findFollowers(whomUsername, request.getOffset(), request.getLimit())
+        return ResponseEntity.ok(friendshipService.findFollowers(whomUsername, false, request.getOffset(), request.getLimit())
                 .map(FriendshipDto::getSourceId));
     }
 
@@ -64,7 +64,7 @@ public class FollowerController extends BaseController {
     public ResponseEntity<Page<FriendshipDto>> findFollowerUsers(FriendshipQueryRequest request, @ApiIgnore AuthUserDto authUser) {
         String whomUsername = Optional.ofNullable(request.getUsername())
                 .orElseGet(authUser::getUsername);
-        return ResponseEntity.ok(friendshipService.findFollowers(whomUsername, request.getOffset(), request.getLimit()));
+        return ResponseEntity.ok(friendshipService.findFollowers(whomUsername, true, request.getOffset(), request.getLimit()));
     }
 
     /**
@@ -96,6 +96,6 @@ public class FollowerController extends BaseController {
     public ResponseEntity<Collection<FriendshipDto>> findAllFollowerUsers(@RequestParam("userId") Long id, @ApiIgnore AuthUserDto authUser) {
         Long whomUserId = Optional.ofNullable(id)
                 .orElseGet(authUser::getId);
-        return ResponseEntity.ok(friendshipService.findAllFollowers(whomUserId, null));
+        return ResponseEntity.ok(friendshipService.findAllFollowers(whomUserId, null, false));
     }
 }
