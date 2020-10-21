@@ -124,7 +124,8 @@ public class UserServiceImpl implements IUserService {
                 .map(entity -> {
                     if (includeRelations) {
                         UserDto dto = userConvertor.convertToDto(entity);
-                        return friendshipComponent.fillUserConnection(dto, loginUserId);
+                        friendshipComponent.fillUserConnection(dto, loginUserId);
+                        return dto;
                     } else {
                         return userConvertor.convertToDto(entity);
                     }
@@ -151,7 +152,8 @@ public class UserServiceImpl implements IUserService {
                 .map(entity -> {
                     if (includeRelations) {
                         UserDto dto = userConvertor.convertToDto(entity);
-                        return friendshipComponent.fillUserConnection(dto, loginUserId);
+                        friendshipComponent.fillUserConnection(dto, loginUserId);
+                        return dto;
                     } else {
                         return userConvertor.convertToDto(entity);
                     }
@@ -179,7 +181,8 @@ public class UserServiceImpl implements IUserService {
                 .map(entity -> {
                     if (includeRelations) {
                         UserDto dto = userConvertor.convertToDto(entity);
-                        return friendshipComponent.fillUserConnection(dto, loginUserId);
+                        friendshipComponent.fillUserConnection(dto, loginUserId);
+                        return dto;
                     } else {
                         return userConvertor.convertToDto(entity);
                     }
@@ -202,7 +205,7 @@ public class UserServiceImpl implements IUserService {
                 .map(userConvertor.convertToDto())
                 .collect(Collectors.toList());
         if (includeRelations) {
-            return friendshipComponent.fillUserConnections(userDtoList, loginUserId);
+            friendshipComponent.fillUserConnections(userDtoList, loginUserId);
         }
         return userDtoList;
     }
@@ -222,7 +225,7 @@ public class UserServiceImpl implements IUserService {
                 .map(userConvertor.convertToDto())
                 .collect(Collectors.toList());
         if (includeRelations) {
-            return friendshipComponent.fillUserConnections(userDtoList, loginUserId);
+            friendshipComponent.fillUserConnections(userDtoList, loginUserId);
         }
         return userDtoList;
     }
@@ -262,41 +265,8 @@ public class UserServiceImpl implements IUserService {
                 .map(userConvertor.convertToDto())
                 .collect(Collectors.toList());
         if (includeRelations) {
-            return friendshipComponent.fillUserConnections(userDtoList, loginUserId);
+            friendshipComponent.fillUserConnections(userDtoList, loginUserId);
         }
         return userDtoList;
     }
-
-    /**
-     * 上传头像
-     *
-     * @param avatarFile 头像文件
-     * @param userDto    用户
-     * @return 上传结果
-     */
-/*    @Override
-    public ServerResponse<List<UserAvatarEntity>> uploadAvatar(MultipartFile avatarFile, UserDto userDto) {
-        ServerResponse<List<UserAvatarDto>> uploadAvatarRes = fileClient.uploadAvatar(avatarFile);
-        if (uploadAvatarRes.isFailed()) {
-            return ServerResponse.createByErrorMessage(uploadAvatarRes.getMsg());
-        }
-        List<UserAvatarDto> avatarDtoList = uploadAvatarRes.getData();
-        String mediumAvatar = null;
-        for (UserAvatarDto avatarDto : avatarDtoList) {
-            avatarDto.setUserId(userDto.getId());
-            mediumAvatar = avatarDto.getUrl();
-        }
-        List<UserAvatarEntity> avatarEntityList = userAvatarConvertor.convertToEntityList(avatarDtoList);
-        userAvatarService.delete(UserAvatarEntity.builder().userId(userDto.getId()).build());
-        try {
-            userAvatarService.saveList(avatarEntityList);
-            UserEntity userEntity = userConvertor.convertToEntity(userDto);
-            userEntity.setAvatar(mediumAvatar);
-            entityManager.merge(userEntity);
-            return ServerResponse.createBySuccess();
-        } catch (Exception e) {
-            log.error("uploadAvatar exception: ", e);
-            return ServerResponse.createByErrorMessage("保存头像失败");
-        }
-    }*/
 }

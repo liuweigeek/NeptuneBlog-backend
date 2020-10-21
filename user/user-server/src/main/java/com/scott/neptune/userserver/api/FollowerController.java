@@ -3,7 +3,7 @@ package com.scott.neptune.userserver.api;
 import com.scott.neptune.common.base.BaseController;
 import com.scott.neptune.userclient.command.FriendshipQueryRequest;
 import com.scott.neptune.userclient.dto.AuthUserDto;
-import com.scott.neptune.userclient.dto.FriendshipDto;
+import com.scott.neptune.userclient.dto.UserRelationshipDto;
 import com.scott.neptune.userserver.service.IFriendshipService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -49,7 +49,7 @@ public class FollowerController extends BaseController {
         String whomUsername = Optional.ofNullable(request.getUsername())
                 .orElseGet(authUser::getUsername);
         return ResponseEntity.ok(friendshipService.findFollowers(whomUsername, false, request.getOffset(), request.getLimit())
-                .map(FriendshipDto::getSourceId));
+                .map(UserRelationshipDto::getId));
     }
 
     /**
@@ -61,7 +61,7 @@ public class FollowerController extends BaseController {
      */
     @ApiOperation(value = "获取关注者用户列表")
     @GetMapping
-    public ResponseEntity<Page<FriendshipDto>> findFollowerUsers(FriendshipQueryRequest request, @ApiIgnore AuthUserDto authUser) {
+    public ResponseEntity<Page<UserRelationshipDto>> findFollowerUsers(FriendshipQueryRequest request, @ApiIgnore AuthUserDto authUser) {
         String whomUsername = Optional.ofNullable(request.getUsername())
                 .orElseGet(authUser::getUsername);
         return ResponseEntity.ok(friendshipService.findFollowers(whomUsername, true, request.getOffset(), request.getLimit()));
@@ -93,7 +93,7 @@ public class FollowerController extends BaseController {
     @ApiOperation(value = "获取关注者用户列表")
     @ApiImplicitParam(name = "id", value = "指定用户视角", paramType = "form", dataTypeClass = Long.class)
     @GetMapping("/all")
-    public ResponseEntity<Collection<FriendshipDto>> findAllFollowerUsers(@RequestParam("userId") Long id, @ApiIgnore AuthUserDto authUser) {
+    public ResponseEntity<Collection<UserRelationshipDto>> findAllFollowerUsers(@RequestParam("userId") Long id, @ApiIgnore AuthUserDto authUser) {
         Long whomUserId = Optional.ofNullable(id)
                 .orElseGet(authUser::getId);
         return ResponseEntity.ok(friendshipService.findAllFollowers(whomUserId, null, false));

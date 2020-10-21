@@ -1,6 +1,7 @@
 package com.scott.neptune.userserver.component;
 
 import com.scott.neptune.userclient.dto.UserDto;
+import com.scott.neptune.userclient.dto.UserRelationshipDto;
 import com.scott.neptune.userclient.enumerate.UserConnectionEnum;
 import com.scott.neptune.userserver.repository.FriendshipRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,13 +21,12 @@ public class FriendshipComponent {
 
     private final FriendshipRepository friendshipRepository;
 
-    public UserDto fillUserConnection(UserDto user, Long authUserId) {
+    public void fillUserConnection(UserDto user, Long authUserId) {
         List<UserDto> singleUserList = Collections.singletonList(user);
         this.fillUserConnections(singleUserList, authUserId);
-        return singleUserList.get(0);
     }
 
-    public Collection<UserDto> fillUserConnections(Collection<UserDto> userDtoList, Long authUserId) {
+    public void fillUserConnections(Collection<UserDto> userDtoList, Long authUserId) {
 
         List<Long> userIds = userDtoList.stream().map(UserDto::getId).collect(Collectors.toList());
 
@@ -41,7 +41,29 @@ public class FriendshipComponent {
                 userDto.addConnection(UserConnectionEnum.FOLLOWED_BY);
             }
         });
-        return userDtoList;
+    }
+
+    public void fillUserRelationshipConnection(UserRelationshipDto userRelationship, Long authUserId) {
+        List<UserRelationshipDto> singleUserList = Collections.singletonList(userRelationship);
+        this.fillUserRelationshipConnections(singleUserList, authUserId);
+    }
+
+    public void fillUserRelationshipConnections(Collection<UserRelationshipDto> userRelationshipList,
+                                                Long authUserId) {
+
+        List<Long> userIds = userRelationshipList.stream().map(UserRelationshipDto::getId).collect(Collectors.toList());
+
+        Collection<Long> followingIds = filtrateFollowingIds(userIds, authUserId);
+        Collection<Long> followerIds = filtrateFollowerIds(userIds, authUserId);
+
+        userRelationshipList.forEach(userDto -> {
+            if (followingIds.contains(userDto.getId())) {
+                userDto.addConnection(UserConnectionEnum.FOLLOWING);
+            }
+            if (followerIds.contains(userDto.getId())) {
+                userDto.addConnection(UserConnectionEnum.FOLLOWED_BY);
+            }
+        });
     }
 
     public Collection<Long> filtrateFollowingIds(Collection<Long> userIds, Long authUserId) {

@@ -4,8 +4,8 @@ import com.scott.neptune.common.exception.NeptuneBlogException;
 import com.scott.neptune.common.exception.RestException;
 import com.scott.neptune.common.model.OffsetPageable;
 import com.scott.neptune.userclient.dto.FriendshipDto;
-import com.scott.neptune.userclient.dto.RelationshipDto;
 import com.scott.neptune.userclient.dto.UserDto;
+import com.scott.neptune.userclient.dto.UserRelationshipDto;
 import com.scott.neptune.userclient.enumerate.UserConnectionEnum;
 import com.scott.neptune.userserver.component.FriendshipComponent;
 import com.scott.neptune.userserver.convertor.FriendshipConvertor;
@@ -98,25 +98,29 @@ public class FriendshipServiceImpl implements IFriendshipService {
      * @return 关注列表
      */
     @Override
-    public Page<FriendshipDto> findFollowing(Long userId, boolean includeRelations, long offset, int limit) {
+    public Page<UserRelationshipDto> findFollowing(Long userId, boolean includeRelations, long offset, int limit) {
         if (userId == null) {
             return Page.empty();
         }
         Pageable pageable = OffsetPageable.of(offset, limit, Sort.by(Sort.Order.desc("followDate")));
-        Page<FriendshipDto> friendshipDtoPage = friendshipRepository.findFollowing(userId, pageable).map(friendshipConvertor::convertToDto);
-        if (includeRelations) {
-            List<UserDto> userList = friendshipDtoPage.getContent().stream().map(FriendshipDto::getTargetUser).collect(Collectors.toList());
-            friendshipComponent.fillUserConnections(userList, userId);
-            Map<Long, Collection<UserConnectionEnum>> collectionMap = userList.stream()
-                    .collect(Collectors.toMap(UserDto::getId, UserDto::getConnections));
+        Page<UserRelationshipDto> friendshipDtoPage = friendshipRepository.findFollowing(userId, pageable)
+                .map(friendshipEntity -> {
+                    FriendshipDto friendshipDto = friendshipConvertor.convertToDto(friendshipEntity);
+                    return UserRelationshipDto.createFrom(friendshipDto, friendshipDto.getTargetUser());
+                });
 
-            friendshipDtoPage.getContent().forEach(friendshipDto -> friendshipDto.getTargetUser().setConnections(collectionMap.get(friendshipDto.getTargetId())));
+        if (includeRelations) {
+            List<UserRelationshipDto> userList = friendshipDtoPage.getContent();
+            friendshipComponent.fillUserRelationshipConnections(userList, userId);
+            Map<Long, Collection<UserConnectionEnum>> collectionMap = userList.stream()
+                    .collect(Collectors.toMap(UserRelationshipDto::getId, UserRelationshipDto::getConnections));
+            friendshipDtoPage.getContent().forEach(userRelationshipDto -> userRelationshipDto.setConnections(collectionMap.get(userRelationshipDto.getId())));
         }
         return friendshipDtoPage;
     }
 
     @Override
-    public Page<FriendshipDto> findFollowing(String username, boolean includeRelations, long offset, int limit) {
+    public Page<UserRelationshipDto> findFollowing(String username, boolean includeRelations, long offset, int limit) {
         UserDto userDto = userService.findUserByUsername(username, null, false);
         if (userDto == null) {
             return Page.empty();
@@ -131,26 +135,29 @@ public class FriendshipServiceImpl implements IFriendshipService {
      * @return 关注者列表
      */
     @Override
-    public Page<FriendshipDto> findFollowers(Long userId, boolean includeRelations, long offset, int limit) {
+    public Page<UserRelationshipDto> findFollowers(Long userId, boolean includeRelations, long offset, int limit) {
         if (userId == null) {
             return Page.empty();
         }
         Pageable pageable = OffsetPageable.of(offset, limit, Sort.by(Sort.Order.desc("followDate")));
-        Page<FriendshipDto> friendshipDtoPage = friendshipRepository.findFollowers(userId, pageable)
-                .map(friendshipConvertor::convertToDto);
-        if (includeRelations) {
-            List<UserDto> userList = friendshipDtoPage.getContent().stream().map(FriendshipDto::getSourceUser).collect(Collectors.toList());
-            friendshipComponent.fillUserConnections(userList, userId);
-            Map<Long, Collection<UserConnectionEnum>> collectionMap = userList.stream()
-                    .collect(Collectors.toMap(UserDto::getId, UserDto::getConnections));
+        Page<UserRelationshipDto> friendshipDtoPage = friendshipRepository.findFollowers(userId, pageable)
+                .map(friendshipEntity -> {
+                    FriendshipDto friendshipDto = friendshipConvertor.convertToDto(friendshipEntity);
+                    return UserRelationshipDto.createFrom(friendshipDto, friendshipDto.getSourceUser());
+                });
 
-            friendshipDtoPage.getContent().forEach(friendshipDto -> friendshipDto.getSourceUser().setConnections(collectionMap.get(friendshipDto.getTargetId())));
+        if (includeRelations) {
+            List<UserRelationshipDto> userList = friendshipDtoPage.getContent();
+            friendshipComponent.fillUserRelationshipConnections(userList, userId);
+            Map<Long, Collection<UserConnectionEnum>> collectionMap = userList.stream()
+                    .collect(Collectors.toMap(UserRelationshipDto::getId, UserRelationshipDto::getConnections));
+            friendshipDtoPage.getContent().forEach(userRelationshipDto -> userRelationshipDto.setConnections(collectionMap.get(userRelationshipDto.getId())));
         }
         return friendshipDtoPage;
     }
 
     @Override
-    public Page<FriendshipDto> findFollowers(String username, boolean includeRelations, long offset, int limit) {
+    public Page<UserRelationshipDto> findFollowers(String username, boolean includeRelations, long offset, int limit) {
         UserDto userDto = userService.findUserByUsername(username, null, false);
         if (userDto == null) {
             return Page.empty();
@@ -166,30 +173,31 @@ public class FriendshipServiceImpl implements IFriendshipService {
      * @return
      */
     @Override
-    public Collection<FriendshipDto> findAllFollowing(Long userId, Collection<Long> targetUserIds, boolean includeRelations) {
+    public Collection<UserRelationshipDto> findAllFollowing(Long userId, Collection<Long> targetUserIds, boolean includeRelations) {
         if (userId == null) {
             return Collections.emptyList();
         }
-        Collection<FriendshipDto> friendshipDtoList;
+        Collection<UserRelationshipDto> userRelationshipList;
         if (CollectionUtils.isEmpty(targetUserIds)) {
-            friendshipDtoList = friendshipRepository.findAllBySourceUser(userId, Sort.by(Sort.Order.desc("followDate"))).stream()
-                    .map(friendshipConvertor::convertToDto)
+            userRelationshipList = friendshipRepository.findAllBySourceUser(userId, Sort.by(Sort.Order.desc("followDate"))).stream()
+                    .map(friendshipEntity -> {
+                        FriendshipDto friendshipDto = friendshipConvertor.convertToDto(friendshipEntity);
+                        return UserRelationshipDto.createFrom(friendshipDto, friendshipDto.getTargetUser());
+                    })
                     .collect(Collectors.toList());
         } else {
-            friendshipDtoList = friendshipRepository.findAllBySourceUserAndTargetUserIn(userId, targetUserIds,
+            userRelationshipList = friendshipRepository.findAllBySourceUserAndTargetUserIn(userId, targetUserIds,
                     Sort.by(Sort.Order.desc("followDate"))).stream()
-                    .map(friendshipConvertor::convertToDto)
+                    .map(friendshipEntity -> {
+                        FriendshipDto friendshipDto = friendshipConvertor.convertToDto(friendshipEntity);
+                        return UserRelationshipDto.createFrom(friendshipDto, friendshipDto.getTargetUser());
+                    })
                     .collect(Collectors.toList());
         }
         if (includeRelations) {
-            List<UserDto> userList = friendshipDtoList.stream().map(FriendshipDto::getTargetUser).collect(Collectors.toList());
-            friendshipComponent.fillUserConnections(userList, userId);
-            Map<Long, Collection<UserConnectionEnum>> collectionMap = userList.stream()
-                    .collect(Collectors.toMap(UserDto::getId, UserDto::getConnections));
-
-            friendshipDtoList.forEach(friendshipDto -> friendshipDto.getTargetUser().setConnections(collectionMap.get(friendshipDto.getTargetId())));
+            friendshipComponent.fillUserRelationshipConnections(userRelationshipList, userId);
         }
-        return friendshipDtoList;
+        return userRelationshipList;
     }
 
     /**
@@ -200,30 +208,31 @@ public class FriendshipServiceImpl implements IFriendshipService {
      * @return
      */
     @Override
-    public Collection<FriendshipDto> findAllFollowers(Long userId, Collection<Long> sourceUserIds, boolean includeRelations) {
+    public Collection<UserRelationshipDto> findAllFollowers(Long userId, Collection<Long> sourceUserIds, boolean includeRelations) {
         if (userId == null) {
             return Collections.emptyList();
         }
-        List<FriendshipDto> friendshipDtoList;
+        List<UserRelationshipDto> userRelationshipList;
         if (CollectionUtils.isEmpty(sourceUserIds)) {
-            friendshipDtoList = friendshipRepository.findAllByTargetUser(userId, Sort.by(Sort.Order.desc("followDate"))).stream()
-                    .map(friendshipConvertor::convertToDto)
+            userRelationshipList = friendshipRepository.findAllByTargetUser(userId, Sort.by(Sort.Order.desc("followDate"))).stream()
+                    .map(friendshipEntity -> {
+                        FriendshipDto friendshipDto = friendshipConvertor.convertToDto(friendshipEntity);
+                        return UserRelationshipDto.createFrom(friendshipDto, friendshipDto.getSourceUser());
+                    })
                     .collect(Collectors.toList());
         } else {
-            friendshipDtoList = friendshipRepository.findAllByTargetUserAndSourceUserIn(userId, sourceUserIds,
+            userRelationshipList = friendshipRepository.findAllByTargetUserAndSourceUserIn(userId, sourceUserIds,
                     Sort.by(Sort.Order.desc("followDate"))).stream()
-                    .map(friendshipConvertor::convertToDto)
+                    .map(friendshipEntity -> {
+                        FriendshipDto friendshipDto = friendshipConvertor.convertToDto(friendshipEntity);
+                        return UserRelationshipDto.createFrom(friendshipDto, friendshipDto.getSourceUser());
+                    })
                     .collect(Collectors.toList());
         }
         if (includeRelations) {
-            List<UserDto> userList = friendshipDtoList.stream().map(FriendshipDto::getSourceUser).collect(Collectors.toList());
-            friendshipComponent.fillUserConnections(userList, userId);
-            Map<Long, Collection<UserConnectionEnum>> collectionMap = userList.stream()
-                    .collect(Collectors.toMap(UserDto::getId, UserDto::getConnections));
-
-            friendshipDtoList.forEach(friendshipDto -> friendshipDto.getSourceUser().setConnections(collectionMap.get(friendshipDto.getTargetId())));
+            friendshipComponent.fillUserRelationshipConnections(userRelationshipList, userId);
         }
-        return friendshipDtoList;
+        return userRelationshipList;
     }
 
     /**
@@ -323,11 +332,10 @@ public class FriendshipServiceImpl implements IFriendshipService {
      * @return
      */
     @Override
-    public Collection<RelationshipDto> getRelationshipByIds(Collection<Long> userIds, Long authUserId) {
-
+    public Collection<UserRelationshipDto> getRelationshipByIds(Collection<Long> userIds, Long authUserId) {
         Collection<UserDto> userDtoList = userService.findAllUserByIdList(userIds, authUserId, true);
         return userDtoList.stream()
-                .map(user -> new RelationshipDto(user.getId(), user.getUsername(), user.getName(), user.getConnections()))
+                .map(user -> new UserRelationshipDto(user.getId(), user.getUsername(), user.getName(), user.getConnections()))
                 .collect(Collectors.toList());
     }
 
@@ -339,7 +347,7 @@ public class FriendshipServiceImpl implements IFriendshipService {
      * @return
      */
     @Override
-    public Collection<RelationshipDto> getRelationshipByUsernames(Collection<String> usernames, Long authUserId) {
+    public Collection<UserRelationshipDto> getRelationshipByUsernames(Collection<String> usernames, Long authUserId) {
         List<Long> ids = userService.findAllUserByUsernameList(usernames, authUserId, false)
                 .stream().map(UserDto::getId).collect(Collectors.toList());
         return this.getRelationshipByIds(ids, authUserId);

@@ -4,8 +4,8 @@ import com.scott.neptune.common.base.BaseController;
 import com.scott.neptune.common.exception.RestException;
 import com.scott.neptune.userclient.dto.AuthUserDto;
 import com.scott.neptune.userclient.dto.FriendshipDto;
-import com.scott.neptune.userclient.dto.RelationshipDto;
 import com.scott.neptune.userclient.dto.UserDto;
+import com.scott.neptune.userclient.dto.UserRelationshipDto;
 import com.scott.neptune.userserver.service.IFriendshipService;
 import com.scott.neptune.userserver.service.IUserService;
 import io.swagger.annotations.Api;
@@ -59,14 +59,14 @@ public class FriendshipController extends BaseController {
     @ApiOperation(value = "获取指定用户与登录用户的关系")
     @ApiImplicitParam(name = "ids", value = "要查询的用户ID列表，用[,]分割", paramType = "query", dataTypeClass = String.class)
     @GetMapping
-    public ResponseEntity<Collection<RelationshipDto>> lookUpByIds(@RequestParam("ids") String userIds, @ApiIgnore AuthUserDto authUser) {
+    public ResponseEntity<Collection<UserRelationshipDto>> lookUpByIds(@RequestParam("ids") String userIds, @ApiIgnore AuthUserDto authUser) {
         if (StringUtils.isBlank(userIds)) {
             throw new RestException("请传入要查询的用户ID", HttpStatus.BAD_REQUEST);
         }
         List<Long> userIdList = Arrays.stream(StringUtils.split(userIds, ","))
                 .map(Long::parseLong)
                 .collect(Collectors.toList());
-        Collection<RelationshipDto> relationshipList = friendshipService.getRelationshipByIds(userIdList, authUser.getId());
+        Collection<UserRelationshipDto> relationshipList = friendshipService.getRelationshipByIds(userIdList, authUser.getId());
         return ResponseEntity.ok(relationshipList);
     }
 
@@ -80,8 +80,8 @@ public class FriendshipController extends BaseController {
     @ApiOperation(value = "获取指定用户与登录用户的关系")
     @ApiImplicitParam(name = "usernames", value = "要查询的用户名列表，用[,]分割", paramType = "query", dataTypeClass = String.class)
     @GetMapping("/username")
-    public ResponseEntity<Collection<RelationshipDto>> lookUpByUsernames(@RequestParam("usernames") String usernames,
-                                                                         @ApiIgnore AuthUserDto authUser) {
+    public ResponseEntity<Collection<UserRelationshipDto>> lookUpByUsernames(@RequestParam("usernames") String usernames,
+                                                                             @ApiIgnore AuthUserDto authUser) {
 
         if (StringUtils.isBlank(usernames)) {
             throw new RestException("请传入要查询的用户名", HttpStatus.BAD_REQUEST);
@@ -89,7 +89,7 @@ public class FriendshipController extends BaseController {
 
         List<String> usernameList = Arrays.stream(StringUtils.split(usernames, ","))
                 .collect(Collectors.toList());
-        Collection<RelationshipDto> relationshipList = friendshipService.getRelationshipByUsernames(usernameList, authUser.getId());
+        Collection<UserRelationshipDto> relationshipList = friendshipService.getRelationshipByUsernames(usernameList, authUser.getId());
         return ResponseEntity.ok(relationshipList);
     }
 
@@ -103,8 +103,8 @@ public class FriendshipController extends BaseController {
     @ApiOperation(value = "获取指定用户与登录用户的关系")
     @ApiImplicitParam(name = "id", value = "要查询的用户ID", paramType = "query", dataTypeClass = Long.class)
     @GetMapping("/{id}")
-    public ResponseEntity<RelationshipDto> lookUpById(@PathVariable("id") Long id, @ApiIgnore AuthUserDto authUser) {
-        Collection<RelationshipDto> relationshipList = friendshipService.getRelationshipByIds(Collections.singleton(id), authUser.getId());
+    public ResponseEntity<UserRelationshipDto> lookUpById(@PathVariable("id") Long id, @ApiIgnore AuthUserDto authUser) {
+        Collection<UserRelationshipDto> relationshipList = friendshipService.getRelationshipByIds(Collections.singleton(id), authUser.getId());
         if (CollectionUtils.isEmpty(relationshipList)) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
