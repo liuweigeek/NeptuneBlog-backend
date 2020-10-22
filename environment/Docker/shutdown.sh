@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 echo 'stoping all containers for NeptuneBlog'
 

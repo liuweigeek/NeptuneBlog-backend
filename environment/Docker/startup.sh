@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 echo 'starting all containers for NeptuneBlog'
 
