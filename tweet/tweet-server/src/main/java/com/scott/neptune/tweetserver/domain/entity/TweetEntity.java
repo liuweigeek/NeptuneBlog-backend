@@ -70,7 +70,7 @@ public class TweetEntity implements Serializable {
     /**
      * 发送时间
      */
-    @Column(name = "create_at")
+    @Column(name = "create_at", columnDefinition = "TIMESTAMP")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createAt;
 

@@ -5,7 +5,7 @@ create table tb_friendship
 (
     source_id   bigint      not null,
     target_id   bigint      not null,
-    follow_date datetime(6) null,
+    follow_date timestamp   null,
     follow_from varchar(50) null,
     primary key (source_id, target_id)
 );
@@ -14,7 +14,7 @@ create table tb_like
 (
     tweet_id  bigint      not null,
     user_id   bigint      not null,
-    create_at datetime(6) null,
+    create_at timestamp   null,
     source    varchar(50) null,
     primary key (tweet_id, user_id)
 );
@@ -25,7 +25,7 @@ create table tb_tweet
         primary key,
     author_id           bigint       null,
     conversation_id     bigint       null,
-    create_at           datetime(6)  null,
+    create_at           timestamp    null,
     in_reply_to_user_id bigint       null,
     source              varchar(50)  null,
     text                varchar(500) null,
@@ -47,8 +47,8 @@ create table tb_user
 (
     id                bigint auto_increment
         primary key,
-    birthday          datetime(6)  null,
-    create_at         datetime(6)  null,
+    birthday          date         null,
+    create_at         timestamp    null,
     description       varchar(300) null,
     email             varchar(60)  null,
     gender            varchar(10)  null,
@@ -70,4 +70,3 @@ create table tb_user_public_metrics
     liked_count int    null,
     tweet_count int    null
 );
-

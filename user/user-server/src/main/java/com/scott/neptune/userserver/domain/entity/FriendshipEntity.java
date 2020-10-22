@@ -20,8 +20,6 @@ import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
 import javax.persistence.NamedEntityGraphs;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -72,8 +70,7 @@ public class FriendshipEntity implements Serializable {
     /**
      * 关注时间
      */
-    @Column(name = "follow_date")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "follow_date", columnDefinition = "TIMESTAMP")
     private Date followDate;
 
     /**

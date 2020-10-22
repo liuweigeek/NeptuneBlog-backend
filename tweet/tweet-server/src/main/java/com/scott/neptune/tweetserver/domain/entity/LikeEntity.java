@@ -57,7 +57,7 @@ public class LikeEntity implements Serializable {
     /**
      * 点赞时间
      */
-    @Column(name = "create_at")
+    @Column(name = "create_at", columnDefinition = "TIMESTAMP")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createAt;
 

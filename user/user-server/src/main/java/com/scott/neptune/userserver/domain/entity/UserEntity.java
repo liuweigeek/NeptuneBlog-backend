@@ -71,7 +71,7 @@ public class UserEntity implements Serializable {
     /**
      * 注册时间
      */
-    @Column(name = "create_at")
+    @Column(name = "create_at", columnDefinition = "TIMESTAMP")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createAt;
 
@@ -90,7 +90,8 @@ public class UserEntity implements Serializable {
     /**
      * 出生日期
      */
-    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "birthday")
+    @Temporal(TemporalType.DATE)
     private Date birthday;
 
     /**
