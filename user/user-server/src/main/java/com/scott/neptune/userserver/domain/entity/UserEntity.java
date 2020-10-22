@@ -18,7 +18,11 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.NamedEntityGraphs;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -39,6 +43,9 @@ import java.util.Date;
 @Entity
 @EntityListeners(UserAuditingListener.class)
 @Table(name = "tb_user")
+@NamedEntityGraphs(value = {
+        @NamedEntityGraph(name = "user.metrics", attributeNodes = {@NamedAttributeNode("publicMetrics")})
+})
 public class UserEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -129,6 +136,7 @@ public class UserEntity implements Serializable {
     /**
      * 正在关注和关注者统计
      */
-    @OneToOne(fetch = FetchType.EAGER, mappedBy = "user")
+    @PrimaryKeyJoinColumn
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "user")
     private UserPublicMetricsValObj publicMetrics;
 }

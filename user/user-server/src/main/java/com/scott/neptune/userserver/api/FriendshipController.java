@@ -146,11 +146,10 @@ public class FriendshipController extends BaseController {
     @DeleteMapping("/{userId}")
     public ResponseEntity<UserDto> deleteFriendship(@PathVariable("userId") Long id, @ApiIgnore AuthUserDto authUser) {
         UserDto targetUser = userService.findUserById(id, authUser.getId(), false);
-
         if (targetUser == null) {
             throw new RestException("指定用户不存在", HttpStatus.NOT_FOUND);
         }
         friendshipService.delete(authUser.getId(), id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(targetUser);
     }
 }

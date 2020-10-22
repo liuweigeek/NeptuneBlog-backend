@@ -1,9 +1,10 @@
 package com.scott.neptune.userserver.service;
 
-import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import javax.annotation.Resource;
 
 /**
  * @Author: scott
@@ -11,11 +12,11 @@ import org.springframework.boot.test.context.SpringBootTest;
  * @Date: 2020/8/26 21:39
  * @Description:
  */
-@RequiredArgsConstructor
 @SpringBootTest
 class IUserServiceTest {
 
-    private final IUserService userService;
+    @Resource
+    private IUserService userService;
 
     @Test
     void existsByUsername() {
