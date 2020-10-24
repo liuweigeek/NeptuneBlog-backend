@@ -36,10 +36,11 @@ public class UserPublicMetricsValObj implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
+    @Column(name = "user_id")
     private Long userId;
 
     @MapsId
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", referencedColumnName = "id",
             foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private UserEntity user;

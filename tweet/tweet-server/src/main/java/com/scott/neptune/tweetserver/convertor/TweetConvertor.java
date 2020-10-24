@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 public class TweetConvertor extends BaseConvertor<TweetEntity, TweetDto> {
 
     private final UserClient userClient;
+    //TODO issue in single instance mode
     private boolean retrieveAuthor = true;
 
     @Override

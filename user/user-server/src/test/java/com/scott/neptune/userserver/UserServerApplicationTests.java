@@ -9,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import javax.annotation.Resource;
 
 @SpringBootTest
-public class UserServerApplicationTests {
+class UserServerApplicationTests {
 
     @Resource
     private IUserService userService;

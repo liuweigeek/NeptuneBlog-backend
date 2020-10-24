@@ -43,13 +43,13 @@ public class FriendshipDto implements Serializable {
      * 关注人
      */
     @ApiModelProperty(value = "关注人")
-    private UserDto sourceUser;
+    private RelationshipUserDto sourceUser;
 
     /**
      * 被关注人
      */
     @ApiModelProperty(value = "被关注人")
-    private UserDto targetUser;
+    private RelationshipUserDto targetUser;
 
     /**
      * 关注时间

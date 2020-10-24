@@ -1,7 +1,7 @@
 package com.scott.neptune.userserver.service;
 
 import com.scott.neptune.userclient.dto.FriendshipDto;
-import com.scott.neptune.userclient.dto.UserRelationshipDto;
+import com.scott.neptune.userclient.dto.RelationshipUserDto;
 import org.springframework.data.domain.Page;
 
 import java.util.Collection;
@@ -37,7 +37,7 @@ public interface IFriendshipService {
      * @param userId 用户Id
      * @return 关注列表
      */
-    Page<UserRelationshipDto> findFollowing(Long userId, boolean includeRelations, long offset, int limit);
+    Page<RelationshipUserDto> findFollowing(Long userId, boolean includeRelations, long offset, int limit);
 
     /**
      * 获取关注列表
@@ -45,7 +45,7 @@ public interface IFriendshipService {
      * @param username 用户名
      * @return 关注列表
      */
-    Page<UserRelationshipDto> findFollowing(String username, boolean includeRelations, long offset, int limit);
+    Page<RelationshipUserDto> findFollowing(String username, boolean includeRelations, long offset, int limit);
 
     /**
      * 获取关注者列表
@@ -53,7 +53,7 @@ public interface IFriendshipService {
      * @param userId 用户Id
      * @return 关注者列表
      */
-    Page<UserRelationshipDto> findFollowers(Long userId, boolean includeRelations, long offset, int limit);
+    Page<RelationshipUserDto> findFollowers(Long userId, boolean includeRelations, long offset, int limit);
 
     /**
      * 获取关注者列表
@@ -61,7 +61,7 @@ public interface IFriendshipService {
      * @param username 用户名
      * @return 关注者列表
      */
-    Page<UserRelationshipDto> findFollowers(String username, boolean includeRelations, long offset, int limit);
+    Page<RelationshipUserDto> findFollowers(String username, boolean includeRelations, long offset, int limit);
 
     /**
      * 获取全部已关注用户
@@ -70,7 +70,7 @@ public interface IFriendshipService {
      * @param targetUserIds
      * @return
      */
-    Collection<UserRelationshipDto> findAllFollowing(Long userId, Collection<Long> targetUserIds, boolean includeRelations);
+    Collection<RelationshipUserDto> findAllFollowing(Long userId, Collection<Long> targetUserIds, boolean includeRelations);
 
     /**
      * 获取全部关注者
@@ -79,7 +79,7 @@ public interface IFriendshipService {
      * @param sourceUserIds
      * @return
      */
-    Collection<UserRelationshipDto> findAllFollowers(Long userId, Collection<Long> sourceUserIds, boolean includeRelations);
+    Collection<RelationshipUserDto> findAllFollowers(Long userId, Collection<Long> sourceUserIds, boolean includeRelations);
 
     /**
      * 获取全部已关注用户
@@ -123,7 +123,7 @@ public interface IFriendshipService {
      * @param authUserId
      * @return
      */
-    Collection<UserRelationshipDto> getRelationshipByIds(Collection<Long> userIds, Long authUserId);
+    Collection<RelationshipUserDto> getRelationshipByIds(Collection<Long> userIds, Long authUserId);
 
     /**
      * 查询指定用户与已登录用户的关系
@@ -132,6 +132,6 @@ public interface IFriendshipService {
      * @param authUserId
      * @return
      */
-    Collection<UserRelationshipDto> getRelationshipByUsernames(Collection<String> usernames, Long authUserId);
+    Collection<RelationshipUserDto> getRelationshipByUsernames(Collection<String> usernames, Long authUserId);
 
 }

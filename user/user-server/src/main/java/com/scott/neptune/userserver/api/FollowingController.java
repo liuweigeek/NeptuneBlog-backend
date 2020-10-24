@@ -3,7 +3,7 @@ package com.scott.neptune.userserver.api;
 import com.scott.neptune.common.base.BaseController;
 import com.scott.neptune.userclient.command.FriendshipQueryRequest;
 import com.scott.neptune.userclient.dto.AuthUserDto;
-import com.scott.neptune.userclient.dto.UserRelationshipDto;
+import com.scott.neptune.userclient.dto.RelationshipUserDto;
 import com.scott.neptune.userserver.service.IFriendshipService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -50,7 +50,7 @@ public class FollowingController extends BaseController {
         String whomUsername = Optional.ofNullable(request.getUsername())
                 .orElseGet(authUser::getUsername);
         return ResponseEntity.ok(friendshipService.findFollowing(whomUsername, false, request.getOffset(), request.getLimit())
-                .map(UserRelationshipDto::getId));
+                .map(RelationshipUserDto::getId));
     }
 
     /**
@@ -62,7 +62,7 @@ public class FollowingController extends BaseController {
      */
     @ApiOperation(value = "获取已关注用户列表")
     @GetMapping
-    public ResponseEntity<Page<UserRelationshipDto>> findFollowingUsers(FriendshipQueryRequest request, @ApiIgnore AuthUserDto authUser) {
+    public ResponseEntity<Page<RelationshipUserDto>> findFollowingUsers(FriendshipQueryRequest request, @ApiIgnore AuthUserDto authUser) {
 
         String whomUsername = Optional.ofNullable(request.getUsername())
                 .orElseGet(authUser::getUsername);
@@ -96,7 +96,7 @@ public class FollowingController extends BaseController {
     @ApiOperation(value = "获取全部已关注用户列表")
     @ApiImplicitParam(name = "id", value = "指定用户视角", paramType = "form", dataTypeClass = Long.class)
     @GetMapping("/all")
-    public ResponseEntity<Collection<UserRelationshipDto>> findAllFollowingUsers(@RequestParam("userId") Long id, @ApiIgnore AuthUserDto authUser) {
+    public ResponseEntity<Collection<RelationshipUserDto>> findAllFollowingUsers(@RequestParam("userId") Long id, @ApiIgnore AuthUserDto authUser) {
 
         Long whomUserId = Optional.ofNullable(id)
                 .orElseGet(authUser::getId);

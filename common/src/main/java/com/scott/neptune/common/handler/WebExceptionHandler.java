@@ -44,14 +44,14 @@ public class WebExceptionHandler {
 
     @ExceptionHandler(NeptuneBlogException.class)
     public ResponseEntity<ApiErrorResponse> handleException(NeptuneBlogException e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
                 .body(ApiErrorResponse.createByMessage(e.getMessage()));
     }
 
     @ExceptionHandler(FeignException.class)
     public ResponseEntity<ApiErrorResponse> handleException(FeignException e) {
         log.error("feign exception: ", e);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
                 .body(ApiErrorResponse.createByMessage("服务当前不可用，请稍后再试"));
     }
 

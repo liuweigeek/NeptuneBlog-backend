@@ -137,6 +137,6 @@ public class UserEntity implements Serializable {
      * 正在关注和关注者统计
      */
     @PrimaryKeyJoinColumn
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "user")
+    @OneToOne(fetch = FetchType.LAZY, optional = false, mappedBy = "user")
     private UserPublicMetricsValObj publicMetrics;
 }

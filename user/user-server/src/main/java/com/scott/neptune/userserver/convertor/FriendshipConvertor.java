@@ -18,7 +18,7 @@ import java.util.function.Function;
 @Component
 public class FriendshipConvertor extends BaseConvertor<FriendshipEntity, FriendshipDto> {
 
-    private final UserConvertor userConvertor;
+    private final RelationshipUserConvertor relationshipUserConvertor;
 
     @Override
     protected Function<FriendshipEntity, FriendshipDto> functionConvertToDto() {
@@ -26,8 +26,8 @@ public class FriendshipConvertor extends BaseConvertor<FriendshipEntity, Friends
             FriendshipDto dto = new FriendshipDto();
             dto.setSourceId(entity.getId().getSourceId());
             dto.setTargetId(entity.getId().getTargetId());
-            dto.setSourceUser(userConvertor.convertToDto(entity.getSourceUser()));
-            dto.setTargetUser(userConvertor.convertToDto(entity.getTargetUser()));
+            dto.setSourceUser(relationshipUserConvertor.convertToDto(entity.getSourceUser()));
+            dto.setTargetUser(relationshipUserConvertor.convertToDto(entity.getTargetUser()));
             dto.setFollowDate(entity.getFollowDate());
             dto.setFollowFrom(entity.getFollowFrom());
             return dto;
@@ -41,8 +41,8 @@ public class FriendshipConvertor extends BaseConvertor<FriendshipEntity, Friends
             entity.setId(FriendshipEntity.FriendshipId.builder()
                     .sourceId(dto.getSourceId()).targetId(dto.getTargetId())
                     .build());
-            entity.setSourceUser(userConvertor.convertToEntity(dto.getSourceUser()));
-            entity.setTargetUser(userConvertor.convertToEntity(dto.getTargetUser()));
+            entity.setSourceUser(relationshipUserConvertor.convertToEntity(dto.getSourceUser()));
+            entity.setTargetUser(relationshipUserConvertor.convertToEntity(dto.getTargetUser()));
             entity.setFollowDate(dto.getFollowDate());
             entity.setFollowFrom(dto.getFollowFrom());
             return entity;

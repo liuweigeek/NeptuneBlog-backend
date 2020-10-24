@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class ThrowExceptionFilter extends ZuulFilter {
+public class ZuulExceptionFilter extends ZuulFilter {
 
     private static final String ERROR_STATUS_CODE_KEY = "throwable";
 
@@ -55,7 +55,7 @@ public class ThrowExceptionFilter extends ZuulFilter {
 
                 ApiErrorResponse apiErrorResponse = ApiErrorResponse.createByMessage("服务不可用，请稍后再试");
                 HttpServletResponse response = ctx.getResponse();
-                response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+                response.setStatus(HttpStatus.SERVICE_UNAVAILABLE.value());
                 response.setContentType("application/json;charset=UTF-8");
                 response.getWriter().println(objectMapper.writeValueAsString(apiErrorResponse));
                 ctx.setSendZuulResponse(false);

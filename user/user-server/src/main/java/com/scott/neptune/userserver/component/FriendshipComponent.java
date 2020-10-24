@@ -1,7 +1,7 @@
 package com.scott.neptune.userserver.component;
 
+import com.scott.neptune.userclient.dto.RelationshipUserDto;
 import com.scott.neptune.userclient.dto.UserDto;
-import com.scott.neptune.userclient.dto.UserRelationshipDto;
 import com.scott.neptune.userclient.enumerate.UserConnectionEnum;
 import com.scott.neptune.userserver.repository.FriendshipRepository;
 import lombok.RequiredArgsConstructor;
@@ -43,15 +43,15 @@ public class FriendshipComponent {
         });
     }
 
-    public void fillUserRelationshipConnection(UserRelationshipDto userRelationship, Long authUserId) {
-        List<UserRelationshipDto> singleUserList = Collections.singletonList(userRelationship);
+    public void fillUserRelationshipConnection(RelationshipUserDto userRelationship, Long authUserId) {
+        List<RelationshipUserDto> singleUserList = Collections.singletonList(userRelationship);
         this.fillUserRelationshipConnections(singleUserList, authUserId);
     }
 
-    public void fillUserRelationshipConnections(Collection<UserRelationshipDto> userRelationshipList,
+    public void fillUserRelationshipConnections(Collection<RelationshipUserDto> userRelationshipList,
                                                 Long authUserId) {
 
-        List<Long> userIds = userRelationshipList.stream().map(UserRelationshipDto::getId).collect(Collectors.toList());
+        List<Long> userIds = userRelationshipList.stream().map(RelationshipUserDto::getId).collect(Collectors.toList());
 
         Collection<Long> followingIds = filtrateFollowingIds(userIds, authUserId);
         Collection<Long> followerIds = filtrateFollowerIds(userIds, authUserId);

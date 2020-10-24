@@ -19,7 +19,7 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false, of = {"id"})
 @NoArgsConstructor
-public class UserRelationshipDto implements Serializable {
+public class RelationshipUserDto implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -41,7 +41,7 @@ public class UserRelationshipDto implements Serializable {
 
     private Collection<UserConnectionEnum> connections = Lists.newArrayListWithExpectedSize(2);
 
-    public UserRelationshipDto(Long id, String username, String name,
+    public RelationshipUserDto(Long id, String username, String name,
                                String smallAvatar, String mediumAvatar, String largeAvatar) {
         this.id = id;
         this.username = username;
@@ -51,7 +51,7 @@ public class UserRelationshipDto implements Serializable {
         this.largeAvatar = largeAvatar;
     }
 
-    public UserRelationshipDto(Long id, String username, String name,
+    public RelationshipUserDto(Long id, String username, String name,
                                String smallAvatar, String mediumAvatar, String largeAvatar,
                                Date followDate, String followFrom) {
         this.id = id;
@@ -64,14 +64,14 @@ public class UserRelationshipDto implements Serializable {
         this.followFrom = followFrom;
     }
 
-    public UserRelationshipDto(Long id, String username, String name, UserConnectionEnum connectionEnum) {
+    public RelationshipUserDto(Long id, String username, String name, UserConnectionEnum connectionEnum) {
         this.id = id;
         this.username = username;
         this.name = name;
         this.connections.add(connectionEnum);
     }
 
-    public UserRelationshipDto(Long id, String username, String name, Collection<UserConnectionEnum> connections) {
+    public RelationshipUserDto(Long id, String username, String name, Collection<UserConnectionEnum> connections) {
         this.id = id;
         this.username = username;
         this.name = name;
@@ -82,10 +82,9 @@ public class UserRelationshipDto implements Serializable {
         this.connections.add(connectionEnum);
     }
 
-    public static UserRelationshipDto createFrom(FriendshipDto friendshipDto, UserDto userDto) {
-        return new UserRelationshipDto(userDto.getId(), userDto.getUsername(), userDto.getName(),
-                userDto.getSmallAvatar(), userDto.getMediumAvatar(), userDto.getLargeAvatar(),
-                friendshipDto.getFollowDate(), friendshipDto.getFollowFrom());
+    public void addRelationInfo(Date followDate, String followFrom) {
+        this.followDate = followDate;
+        this.followFrom = followFrom;
     }
 
 }

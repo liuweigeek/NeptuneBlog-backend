@@ -61,7 +61,7 @@ public class FeignConfig {
                 return new RestException(errorResponse.getMessage(), HttpStatus.valueOf(response.status()));
             } catch (Exception e) {
                 log.error("decoding feign response exception: ", e);
-                return new RestException("系统服务异常，请稍后再试", HttpStatus.INTERNAL_SERVER_ERROR);
+                return new RestException("系统服务异常，请稍后再试", HttpStatus.SERVICE_UNAVAILABLE);
             }
         };
     }

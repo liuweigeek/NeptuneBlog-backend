@@ -68,7 +68,7 @@ public class ControllerAop {
                 throw new RestException("操作进行中，请勿重复提交", HttpStatus.BAD_REQUEST);
             }
         } else {
-            throw new RestException("系统中间件[redis]失败，请联系管理员以修复", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new RestException("系统中间件[redis]失败，请联系管理员以修复", HttpStatus.SERVICE_UNAVAILABLE);
         }
     }
 
