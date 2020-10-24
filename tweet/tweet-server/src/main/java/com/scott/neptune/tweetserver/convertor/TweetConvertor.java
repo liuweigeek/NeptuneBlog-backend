@@ -4,17 +4,9 @@ import com.scott.neptune.common.base.BaseConvertor;
 import com.scott.neptune.tweetclient.dto.TweetDto;
 import com.scott.neptune.tweetserver.domain.entity.TweetEntity;
 import com.scott.neptune.tweetserver.domain.valueobject.TweetPublicMetricsValObj;
-import com.scott.neptune.userclient.client.UserClient;
-import com.scott.neptune.userclient.dto.UserDto;
-import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Optional;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * @Author: scott
@@ -22,13 +14,8 @@ import java.util.stream.Collectors;
  * @Date: 2019/9/30 21:53
  * @Description: NeptuneBlog
  */
-@RequiredArgsConstructor
 @Component
 public class TweetConvertor extends BaseConvertor<TweetEntity, TweetDto> {
-
-    private final UserClient userClient;
-    //TODO issue in single instance mode
-    private boolean retrieveAuthor = true;
 
     @Override
     protected Function<TweetEntity, TweetDto> functionConvertToDto() {
@@ -48,12 +35,6 @@ public class TweetConvertor extends BaseConvertor<TweetEntity, TweetDto> {
                 publicMetrics.setReplyCount(entity.getPublicMetrics().getReplyCount());
                 publicMetrics.setLikeCount(entity.getPublicMetrics().getLikeCount());
                 dto.setPublicMetrics(publicMetrics);
-            }
-            if (retrieveAuthor && entity.getAuthorId() != null) {
-                UserDto author = userClient.getUserById(entity.getAuthorId());
-                if (author != null) {
-                    dto.setAuthor(author);
-                }
             }
             return dto;
         };
@@ -82,39 +63,6 @@ public class TweetConvertor extends BaseConvertor<TweetEntity, TweetDto> {
                 entity.setAuthorId(dto.getAuthor().getId());
             }
             return entity;
-        };
-    }
-
-    @Override
-    protected Function<Collection<TweetEntity>, Collection<TweetDto>> functionConvertToDtoList() {
-        return entities -> {
-            retrieveAuthor = false;
-            Collection<Long> authorIds = entities.stream().map(TweetEntity::getAuthorId).collect(Collectors.toList());
-            Map<Long, UserDto> authorMap = userClient.findUsersByIds(StringUtils.join(authorIds, ",")).stream()
-                    .collect(Collectors.toMap(UserDto::getId, userDto -> userDto));
-            return entities.stream()
-                    .map(entity -> {
-                        TweetDto dto = this.convertToDto(entity);
-                        dto.setAuthor(authorMap.get(entity.getAuthorId()));
-                        return dto;
-                    })
-                    .collect(Collectors.toList());
-        };
-    }
-
-    @Override
-    protected Function<Collection<TweetDto>, Collection<TweetEntity>> functionConvertToEntityList() {
-        return dtos -> {
-            retrieveAuthor = false;
-            return dtos.stream()
-                    .map(dto -> {
-                        TweetEntity entity = this.convertToEntity(dto);
-                        entity.setAuthorId(Optional.ofNullable(dto.getAuthor())
-                                .map(UserDto::getId)
-                                .orElse(null));
-                        return entity;
-                    })
-                    .collect(Collectors.toList());
         };
     }
 }

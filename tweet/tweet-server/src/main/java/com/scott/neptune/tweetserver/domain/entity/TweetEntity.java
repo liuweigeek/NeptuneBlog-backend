@@ -115,8 +115,9 @@ public class TweetEntity implements Serializable {
     /**
      * 互动统计数据
      */
-    @OneToOne(fetch = FetchType.EAGER, mappedBy = "tweet")
+    //TODO needs to be optimized
     @PrimaryKeyJoinColumn
+    @OneToOne(fetch = FetchType.EAGER, mappedBy = "tweet")
     private TweetPublicMetricsValObj publicMetrics;
 
     /*@Transient

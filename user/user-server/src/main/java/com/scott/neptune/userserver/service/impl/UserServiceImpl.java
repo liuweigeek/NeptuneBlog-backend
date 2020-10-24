@@ -5,6 +5,7 @@ import com.scott.neptune.userclient.dto.AuthUserDto;
 import com.scott.neptune.userclient.dto.UserDto;
 import com.scott.neptune.userserver.component.FriendshipComponent;
 import com.scott.neptune.userserver.convertor.AuthUserEntityConvertor;
+import com.scott.neptune.userserver.convertor.SimpleUserConvertor;
 import com.scott.neptune.userserver.convertor.UserConvertor;
 import com.scott.neptune.userserver.domain.entity.UserEntity;
 import com.scott.neptune.userserver.domain.valueobject.UserPublicMetricsValObj;
@@ -42,6 +43,7 @@ public class UserServiceImpl implements IUserService {
     private final UserRepository userRepository;
     private final UserPublicMetricsRepository userPublicMetricsRepository;
     private final UserConvertor userConvertor;
+    private final SimpleUserConvertor simpleUserConvertor;
     private final AuthUserEntityConvertor authUserEntityConvertor;
     private final PasswordEncoder passwordEncoder;
     private final FriendshipComponent friendshipComponent;
@@ -202,7 +204,7 @@ public class UserServiceImpl implements IUserService {
             return Collections.emptyList();
         }
         List<UserDto> userDtoList = userRepository.findAllByIdIn(ids).stream()
-                .map(userConvertor.convertToDto())
+                .map(simpleUserConvertor.convertToDto())
                 .collect(Collectors.toList());
         if (includeRelations) {
             friendshipComponent.fillUserConnections(userDtoList, loginUserId);
@@ -222,7 +224,7 @@ public class UserServiceImpl implements IUserService {
             return Collections.emptyList();
         }
         List<UserDto> userDtoList = userRepository.findAllByUsernameIn(usernameList).stream()
-                .map(userConvertor.convertToDto())
+                .map(simpleUserConvertor.convertToDto())
                 .collect(Collectors.toList());
         if (includeRelations) {
             friendshipComponent.fillUserConnections(userDtoList, loginUserId);
@@ -262,7 +264,7 @@ public class UserServiceImpl implements IUserService {
                                 criteriaBuilder.equal(root.get("email").as(String.class), keyword))
                 ).orderBy(criteriaBuilder.asc(root.get("createAt").as(Date.class)))
                         .getRestriction()).stream()
-                .map(userConvertor.convertToDto())
+                .map(simpleUserConvertor.convertToDto())
                 .collect(Collectors.toList());
         if (includeRelations) {
             friendshipComponent.fillUserConnections(userDtoList, loginUserId);

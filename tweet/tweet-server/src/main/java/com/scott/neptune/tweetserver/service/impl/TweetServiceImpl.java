@@ -10,6 +10,7 @@ import com.scott.neptune.tweetserver.repository.TweetPublicMetricsRepository;
 import com.scott.neptune.tweetserver.repository.TweetRepository;
 import com.scott.neptune.tweetserver.service.ITweetService;
 import com.scott.neptune.userclient.client.UserClient;
+import com.scott.neptune.userclient.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -24,6 +25,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -79,7 +81,12 @@ public class TweetServiceImpl implements ITweetService {
             return null;
         }
         return tweetRepository.findById(tweetId)
-                .map(tweetConvertor.convertToDto())
+                .map(entity -> {
+                    TweetDto tweetDto = tweetConvertor.convertToDto(entity);
+                    UserDto author = userClient.getUserById(entity.getAuthorId());
+                    tweetDto.setAuthor(author);
+                    return tweetDto;
+                })
                 .orElseThrow(() -> new NeptuneBlogException("指定推文不存在"));
     }
 
@@ -95,7 +102,18 @@ public class TweetServiceImpl implements ITweetService {
             return Collections.emptyList();
         }
         List<TweetEntity> tweetEntities = tweetRepository.findAllById(tweetIds);
-        return tweetConvertor.convertToDtoList(tweetEntities);
+
+        Collection<Long> authorIds = tweetEntities.stream()
+                .map(TweetEntity::getAuthorId).distinct().collect(Collectors.toList());
+        Map<Long, UserDto> authorMap = userClient.findUsersByIds(StringUtils.join(authorIds, ",")).stream()
+                .collect(Collectors.toMap(UserDto::getId, userDto -> userDto));
+        return tweetEntities.stream()
+                .map(entity -> {
+                    TweetDto dto = tweetConvertor.convertToDto(entity);
+                    dto.setAuthor(authorMap.get(entity.getAuthorId()));
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
 
     /**
@@ -112,7 +130,15 @@ public class TweetServiceImpl implements ITweetService {
             return Page.empty();
         }
         Pageable pageable = OffsetPageable.of(offset, limit, Sort.by(Sort.Order.desc("createAt")));
-        return tweetRepository.findByAuthorId(authorId, pageable).map(tweetConvertor::convertToDto);
+
+        Page<TweetEntity> tweetEntityPage = tweetRepository.findByAuthorId(authorId, pageable);
+        Map<Long, UserDto> authorMap = userClient.findUsersByIds(Long.toString(authorId)).stream()
+                .collect(Collectors.toMap(UserDto::getId, userDto -> userDto));
+        return tweetEntityPage.map(entity -> {
+            TweetDto dto = tweetConvertor.convertToDto(entity);
+            dto.setAuthor(authorMap.get(entity.getAuthorId()));
+            return dto;
+        });
     }
 
     /**
@@ -129,7 +155,17 @@ public class TweetServiceImpl implements ITweetService {
             return Page.empty();
         }
         Pageable pageable = OffsetPageable.of(offset, limit, Sort.by(Sort.Order.desc("createAt")));
-        return tweetRepository.findByAuthorIdIn(authorIdList, pageable).map(tweetConvertor.convertToDto());
+        Page<TweetEntity> tweetEntityPage = tweetRepository.findByAuthorIdIn(authorIdList, pageable);
+        Collection<Long> authorIds = tweetEntityPage.getContent().stream()
+                .map(TweetEntity::getAuthorId).distinct().collect(Collectors.toList());
+        Map<Long, UserDto> authorMap = userClient.findUsersByIds(StringUtils.join(authorIds, ",")).stream()
+                .collect(Collectors.toMap(UserDto::getId, userDto -> userDto));
+        return tweetEntityPage.map(entity -> {
+            TweetDto dto = tweetConvertor.convertToDto(entity);
+            dto.setAuthor(authorMap.get(entity.getAuthorId()));
+            return dto;
+        });
+
     }
 
     /**
@@ -148,7 +184,18 @@ public class TweetServiceImpl implements ITweetService {
             return Page.empty();
         }
         Pageable pageable = OffsetPageable.of(offset, limit, Sort.by(Sort.Order.desc("createAt")));
-        return tweetRepository.findByAuthorIdIn(followingIds, pageable).map(tweetConvertor.convertToDto());
+        Page<TweetEntity> tweetEntityPage = tweetRepository.findByAuthorIdIn(followingIds, pageable);
+        Collection<Long> authorIds = tweetEntityPage.getContent().stream()
+                .map(TweetEntity::getAuthorId).distinct().collect(Collectors.toList());
+        Map<Long, UserDto> authorMap = userClient.findUsersByIds(StringUtils.join(authorIds, ",")).stream()
+                .collect(Collectors.toMap(UserDto::getId, userDto -> userDto));
+        return tweetEntityPage.map(entity -> {
+            TweetDto dto = tweetConvertor.convertToDto(entity);
+            dto.setAuthor(authorMap.get(entity.getAuthorId()));
+            return dto;
+        });
+
+
     }
 
     /**
@@ -194,13 +241,22 @@ public class TweetServiceImpl implements ITweetService {
         if (StringUtils.isBlank(keyword)) {
             return Collections.emptyList();
         }
-        return tweetRepository.findAll((root, query, criteriaBuilder) ->
-                query.where(
-                        criteriaBuilder.or(
-                                criteriaBuilder.like(root.get("text").as(String.class), "%" + keyword + "%")))
+        List<TweetEntity> tweetEntities = tweetRepository.findAll((root, query, criteriaBuilder) ->
+                query.where(criteriaBuilder.like(root.get("text").as(String.class), "%" + keyword + "%"))
                         .orderBy(criteriaBuilder.desc(root.get("createAt").as(Date.class)))
-                        .getRestriction()).stream()
-                .map(tweetConvertor.convertToDto())
+                        .getRestriction()
+        );
+
+        Collection<Long> authorIds = tweetEntities.stream()
+                .map(TweetEntity::getAuthorId).distinct().collect(Collectors.toList());
+        Map<Long, UserDto> authorMap = userClient.findUsersByIds(StringUtils.join(authorIds, ",")).stream()
+                .collect(Collectors.toMap(UserDto::getId, userDto -> userDto));
+        return tweetEntities.stream()
+                .map(entity -> {
+                    TweetDto dto = tweetConvertor.convertToDto(entity);
+                    dto.setAuthor(authorMap.get(entity.getAuthorId()));
+                    return dto;
+                })
                 .collect(Collectors.toList());
     }
 

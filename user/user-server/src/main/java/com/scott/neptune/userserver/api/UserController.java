@@ -104,7 +104,7 @@ public class UserController extends BaseController {
         List<Long> userIds = Stream.of(StringUtils.split(ids, ","))
                 .map(Long::parseLong)
                 .collect(Collectors.toList());
-        Collection<UserDto> userDtoList = userService.findAllUserByIdList(userIds, authUser.getId(), true);
+        Collection<UserDto> userDtoList = userService.findAllUserByIdList(userIds, authUser.getId(), false);
         return ResponseEntity.ok(userDtoList);
     }
 
