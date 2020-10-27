@@ -21,6 +21,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.criteria.JoinType;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -101,8 +102,12 @@ public class TweetServiceImpl implements ITweetService {
         if (CollectionUtils.isEmpty(tweetIds)) {
             return Collections.emptyList();
         }
-        List<TweetEntity> tweetEntities = tweetRepository.findAllById(tweetIds);
-
+        Collection<TweetEntity> tweetEntities = tweetRepository.findAll((root, query, criteriaBuilder) -> {
+            if (Long.class != query.getResultType()) {
+                root.fetch("publicMetrics", JoinType.LEFT);
+            }
+            return query.where(root.get("id").as(Long.class).in(tweetIds)).getRestriction();
+        });
         Collection<Long> authorIds = tweetEntities.stream()
                 .map(TweetEntity::getAuthorId).distinct().collect(Collectors.toList());
         Map<Long, UserDto> authorMap = userClient.findUsersByIds(StringUtils.join(authorIds, ",")).stream()
@@ -130,8 +135,12 @@ public class TweetServiceImpl implements ITweetService {
             return Page.empty();
         }
         Pageable pageable = OffsetPageable.of(offset, limit, Sort.by(Sort.Order.desc("createAt")));
-
-        Page<TweetEntity> tweetEntityPage = tweetRepository.findByAuthorId(authorId, pageable);
+        Page<TweetEntity> tweetEntityPage = tweetRepository.findAll((root, query, criteriaBuilder) -> {
+            if (Long.class != query.getResultType()) {
+                root.fetch("publicMetrics", JoinType.LEFT);
+            }
+            return query.where(criteriaBuilder.equal(root.get("authorId").as(Long.class), authorId)).getRestriction();
+        }, pageable);
         Map<Long, UserDto> authorMap = userClient.findUsersByIds(Long.toString(authorId)).stream()
                 .collect(Collectors.toMap(UserDto::getId, userDto -> userDto));
         return tweetEntityPage.map(entity -> {
@@ -155,7 +164,12 @@ public class TweetServiceImpl implements ITweetService {
             return Page.empty();
         }
         Pageable pageable = OffsetPageable.of(offset, limit, Sort.by(Sort.Order.desc("createAt")));
-        Page<TweetEntity> tweetEntityPage = tweetRepository.findByAuthorIdIn(authorIdList, pageable);
+        Page<TweetEntity> tweetEntityPage = tweetRepository.findAll((root, query, criteriaBuilder) -> {
+            if (Long.class != query.getResultType()) {
+                root.fetch("publicMetrics", JoinType.LEFT);
+            }
+            return query.where(root.get("authorId").as(Long.class).in(authorIdList)).getRestriction();
+        }, pageable);
         Collection<Long> authorIds = tweetEntityPage.getContent().stream()
                 .map(TweetEntity::getAuthorId).distinct().collect(Collectors.toList());
         Map<Long, UserDto> authorMap = userClient.findUsersByIds(StringUtils.join(authorIds, ",")).stream()
@@ -184,7 +198,12 @@ public class TweetServiceImpl implements ITweetService {
             return Page.empty();
         }
         Pageable pageable = OffsetPageable.of(offset, limit, Sort.by(Sort.Order.desc("createAt")));
-        Page<TweetEntity> tweetEntityPage = tweetRepository.findByAuthorIdIn(followingIds, pageable);
+        Page<TweetEntity> tweetEntityPage = tweetRepository.findAll((root, query, criteriaBuilder) -> {
+            if (Long.class != query.getResultType()) {
+                root.fetch("publicMetrics", JoinType.LEFT);
+            }
+            return query.where(root.get("authorId").as(Long.class).in(followingIds)).getRestriction();
+        }, pageable);
         Collection<Long> authorIds = tweetEntityPage.getContent().stream()
                 .map(TweetEntity::getAuthorId).distinct().collect(Collectors.toList());
         Map<Long, UserDto> authorMap = userClient.findUsersByIds(StringUtils.join(authorIds, ",")).stream()
@@ -241,11 +260,14 @@ public class TweetServiceImpl implements ITweetService {
         if (StringUtils.isBlank(keyword)) {
             return Collections.emptyList();
         }
-        List<TweetEntity> tweetEntities = tweetRepository.findAll((root, query, criteriaBuilder) ->
-                query.where(criteriaBuilder.like(root.get("text").as(String.class), "%" + keyword + "%"))
-                        .orderBy(criteriaBuilder.desc(root.get("createAt").as(Date.class)))
-                        .getRestriction()
-        );
+        List<TweetEntity> tweetEntities = tweetRepository.findAll((root, query, criteriaBuilder) -> {
+            if (Long.class != query.getResultType()) {
+                root.fetch("publicMetrics", JoinType.LEFT);
+            }
+            return query.where(criteriaBuilder.like(root.get("text").as(String.class), "%" + keyword + "%"))
+                    .orderBy(criteriaBuilder.desc(root.get("createAt").as(Date.class)))
+                    .getRestriction();
+        });
 
         Collection<Long> authorIds = tweetEntities.stream()
                 .map(TweetEntity::getAuthorId).distinct().collect(Collectors.toList());
