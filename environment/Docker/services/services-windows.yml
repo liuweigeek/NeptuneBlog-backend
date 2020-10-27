@@ -32,7 +32,7 @@ services:
       - 15672:15672
       - 5672:5672
     volumes:
-      - D:\docker\rabbitmq\data:/var/lib/rabbitmq
+      - D:\docker\rabbitmq\data:/var/lib/rabbitmq/mnesia
     logging:
       driver: "json-file"
       options:
