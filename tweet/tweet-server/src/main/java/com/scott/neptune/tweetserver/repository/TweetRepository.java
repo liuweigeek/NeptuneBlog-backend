@@ -9,8 +9,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.Collection;
-
 /**
  * @Author: scott
  * @Email: <a href="mailto:liuweigeek@outlook.com">Scott Lau</a>
@@ -19,24 +17,6 @@ import java.util.Collection;
  */
 public interface TweetRepository extends JpaRepository<TweetEntity, Long>,
         JpaSpecificationExecutor<TweetEntity> {
-
-    /**
-     * 查询指定用户的Tweets
-     *
-     * @param authorId
-     * @param pageable
-     * @return
-     */
-    Page<TweetEntity> findByAuthorId(@Param("authorId") Long authorId, Pageable pageable);
-
-    /**
-     * 查询多个用户的Tweets
-     *
-     * @param authorIds
-     * @param pageable
-     * @return
-     */
-    Page<TweetEntity> findByAuthorIdIn(@Param("authorIds") Collection<Long> authorIds, Pageable pageable);
 
     /**
      * 查找指定Tweet相关的retweet，quote，reply

@@ -67,7 +67,10 @@ public class TweetServiceImpl implements ITweetService {
                 .build();
         tweetPublicMetricsRepository.save(tweetPublicMetricsValObj);
         tweetEntity.setPublicMetrics(tweetPublicMetricsValObj);
-        return tweetConvertor.convertToDto(tweetEntity);
+        tweetDto = tweetConvertor.convertToDto(tweetEntity);
+        UserDto author = userClient.getUserById(tweetEntity.getAuthorId());
+        tweetDto.setAuthor(author);
+        return tweetDto;
     }
 
     /**
