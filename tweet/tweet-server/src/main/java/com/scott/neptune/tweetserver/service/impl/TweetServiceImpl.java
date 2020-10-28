@@ -182,7 +182,6 @@ public class TweetServiceImpl implements ITweetService {
             dto.setAuthor(authorMap.get(entity.getAuthorId()));
             return dto;
         });
-
     }
 
     /**
@@ -196,28 +195,7 @@ public class TweetServiceImpl implements ITweetService {
     @Override
     public Page<TweetDto> findFollowingTweets(Long followerId, long offset, int limit) {
         Collection<Long> followingIds = userClient.findAllFollowingIds(followerId);
-        followingIds.add(followerId);
-        if (CollectionUtils.isEmpty(followingIds)) {
-            return Page.empty();
-        }
-        Pageable pageable = OffsetPageable.of(offset, limit, Sort.by(Sort.Order.desc("createAt")));
-        Page<TweetEntity> tweetEntityPage = tweetRepository.findAll((root, query, criteriaBuilder) -> {
-            if (Long.class != query.getResultType()) {
-                root.fetch("publicMetrics", JoinType.LEFT);
-            }
-            return query.where(root.get("authorId").as(Long.class).in(followingIds)).getRestriction();
-        }, pageable);
-        Collection<Long> authorIds = tweetEntityPage.getContent().stream()
-                .map(TweetEntity::getAuthorId).distinct().collect(Collectors.toList());
-        Map<Long, UserDto> authorMap = userClient.findUsersByIds(StringUtils.join(authorIds, ",")).stream()
-                .collect(Collectors.toMap(UserDto::getId, userDto -> userDto));
-        return tweetEntityPage.map(entity -> {
-            TweetDto dto = tweetConvertor.convertToDto(entity);
-            dto.setAuthor(authorMap.get(entity.getAuthorId()));
-            return dto;
-        });
-
-
+        return this.findByAuthorIdList(followingIds, offset, limit);
     }
 
     /**

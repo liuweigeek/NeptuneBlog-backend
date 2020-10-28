@@ -116,7 +116,7 @@ public class TweetEntity implements Serializable {
      * 互动统计数据
      */
     @PrimaryKeyJoinColumn
-    @OneToOne(fetch = FetchType.EAGER, mappedBy = "tweet")
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "tweet")
     private TweetPublicMetricsValObj publicMetrics;
 
     /*@Transient
