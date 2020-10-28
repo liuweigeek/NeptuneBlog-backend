@@ -106,9 +106,7 @@ public class TweetServiceImpl implements ITweetService {
             return Collections.emptyList();
         }
         Collection<TweetEntity> tweetEntities = tweetRepository.findAll((root, query, criteriaBuilder) -> {
-            if (Long.class != query.getResultType()) {
-                root.fetch("publicMetrics", JoinType.LEFT);
-            }
+            root.fetch("publicMetrics", JoinType.LEFT);
             return query.where(root.get("id").as(Long.class).in(tweetIds)).getRestriction();
         });
         Collection<Long> authorIds = tweetEntities.stream()

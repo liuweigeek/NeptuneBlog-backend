@@ -21,6 +21,7 @@ public class CacheConfig extends CachingConfigurerSupport {
 
     @Bean
     public RedisCacheManager redisCacheManager(LettuceConnectionFactory lettuceConnectionFactory) {
-        return RedisCacheManager.builder(lettuceConnectionFactory).build();
+        return RedisCacheManager.builder(lettuceConnectionFactory)
+                .build();
     }
 }

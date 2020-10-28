@@ -16,12 +16,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.criteria.JoinType;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -122,15 +124,16 @@ public class UserServiceImpl implements IUserService {
         if (userId == null) {
             throw new NeptuneBlogException("请指定要查询的用户");
         }
-        return userRepository.findById(userId)
-                .map(entity -> {
+        return userRepository.findOne((root, query, criteriaBuilder) -> {
+            root.fetch("publicMetrics", JoinType.LEFT);
+            return query.where(criteriaBuilder.equal(root.get("id").as(Long.class), userId)).getRestriction();
+        })
+                .map(userConvertor::convertToDto)
+                .map(userDto -> {
                     if (includeRelations) {
-                        UserDto dto = userConvertor.convertToDto(entity);
-                        friendshipComponent.fillUserConnection(dto, loginUserId);
-                        return dto;
-                    } else {
-                        return userConvertor.convertToDto(entity);
+                        friendshipComponent.fillUserConnection(userDto, loginUserId);
                     }
+                    return userDto;
                 })
                 .orElseThrow(() -> new NeptuneBlogException("指定用户不存在"));
     }
@@ -146,19 +149,17 @@ public class UserServiceImpl implements IUserService {
         if (StringUtils.isBlank(username)) {
             throw new NeptuneBlogException("请指定要查询的用户");
         }
-        ExampleMatcher usernameExampleMatcher = ExampleMatcher.matching()
-                .withMatcher("username", ExampleMatcher.GenericPropertyMatchers.ignoreCase())
-                .withIgnoreNullValues();
 
-        return userRepository.findOne(Example.of(UserEntity.builder().username(username).build(), usernameExampleMatcher))
-                .map(entity -> {
+        return userRepository.findOne((root, query, criteriaBuilder) -> {
+            root.fetch("publicMetrics", JoinType.LEFT);
+            return query.where(criteriaBuilder.equal(root.get("username").as(String.class), username)).getRestriction();
+        })
+                .map(userConvertor::convertToDto)
+                .map(userDto -> {
                     if (includeRelations) {
-                        UserDto dto = userConvertor.convertToDto(entity);
-                        friendshipComponent.fillUserConnection(dto, loginUserId);
-                        return dto;
-                    } else {
-                        return userConvertor.convertToDto(entity);
+                        friendshipComponent.fillUserConnection(userDto, loginUserId);
                     }
+                    return userDto;
                 })
                 .orElseThrow(() -> new NeptuneBlogException("指定用户不存在"));
     }
@@ -175,19 +176,17 @@ public class UserServiceImpl implements IUserService {
         if (StringUtils.isBlank(email)) {
             throw new NeptuneBlogException("请指定要查询的用户");
         }
-        ExampleMatcher usernameExampleMatcher = ExampleMatcher.matching()
-                .withMatcher("email", ExampleMatcher.GenericPropertyMatchers.ignoreCase())
-                .withIgnoreNullValues();
 
-        return userRepository.findOne(Example.of(UserEntity.builder().email(email).build(), usernameExampleMatcher))
-                .map(entity -> {
+        return userRepository.findOne((root, query, criteriaBuilder) -> {
+            root.fetch("publicMetrics", JoinType.LEFT);
+            return query.where(criteriaBuilder.equal(root.get("email").as(String.class), email)).getRestriction();
+        })
+                .map(userConvertor::convertToDto)
+                .map(userDto -> {
                     if (includeRelations) {
-                        UserDto dto = userConvertor.convertToDto(entity);
-                        friendshipComponent.fillUserConnection(dto, loginUserId);
-                        return dto;
-                    } else {
-                        return userConvertor.convertToDto(entity);
+                        friendshipComponent.fillUserConnection(userDto, loginUserId);
                     }
+                    return userDto;
                 })
                 .orElseThrow(() -> new NeptuneBlogException("指定用户不存在"));
     }
@@ -198,14 +197,16 @@ public class UserServiceImpl implements IUserService {
      * @param ids 用户ID列表
      * @return 用户对象列表
      */
+    @CachePut(cacheNames = "user-all", key = "#ids")
     @Override
     public Collection<UserDto> findAllUserByIdList(Collection<Long> ids, Long loginUserId, boolean includeRelations) {
         if (CollectionUtils.isEmpty(ids)) {
             return Collections.emptyList();
         }
-        List<UserDto> userDtoList = userRepository.findAllByIdIn(ids).stream()
+        Collection<UserDto> userDtoList = userRepository.findAll((root, query, criteriaBuilder) -> query.where(root.get("id").as(Long.class).in(ids)).getRestriction()).stream()
                 .map(simpleUserConvertor.convertToDto())
                 .collect(Collectors.toList());
+
         if (includeRelations) {
             friendshipComponent.fillUserConnections(userDtoList, loginUserId);
         }
@@ -223,7 +224,7 @@ public class UserServiceImpl implements IUserService {
         if (CollectionUtils.isEmpty(usernameList)) {
             return Collections.emptyList();
         }
-        List<UserDto> userDtoList = userRepository.findAllByUsernameIn(usernameList).stream()
+        Collection<UserDto> userDtoList = userRepository.findAll((root, query, criteriaBuilder) -> query.where(root.get("username").as(String.class).in(usernameList)).getRestriction()).stream()
                 .map(simpleUserConvertor.convertToDto())
                 .collect(Collectors.toList());
         if (includeRelations) {
