@@ -19,7 +19,7 @@ import com.scott.neptune.userserver.service.IUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -177,7 +177,7 @@ public class FriendshipServiceImpl implements IFriendshipService {
      * @param targetUserIds
      * @return
      */
-    @CachePut(cacheNames = "followingUsers-all", key = "#userId")
+    @Cacheable(cacheNames = "following:users:all", key = "#userId")
     @Override
     public Collection<RelationshipUserDto> findAllFollowing(Long userId, Collection<Long> targetUserIds, boolean includeRelations) {
         if (userId == null) {
@@ -252,7 +252,7 @@ public class FriendshipServiceImpl implements IFriendshipService {
      * @param targetUserIds
      * @return
      */
-    @CachePut(cacheNames = "followingIds-all", key = "#userId")
+    @Cacheable(cacheNames = "following:ids:all", key = "#userId")
     @Override
     public Collection<Long> findAllFollowingIds(Long userId, Collection<Long> targetUserIds) {
         if (userId == null) {

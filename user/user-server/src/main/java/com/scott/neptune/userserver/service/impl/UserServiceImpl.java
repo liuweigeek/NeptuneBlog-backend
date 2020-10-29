@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -197,7 +197,7 @@ public class UserServiceImpl implements IUserService {
      * @param ids 用户ID列表
      * @return 用户对象列表
      */
-    @CachePut(cacheNames = "user-all", key = "#ids")
+    @Cacheable(cacheNames = "user:all", key = "#ids")
     @Override
     public Collection<UserDto> findAllUserByIdList(Collection<Long> ids, Long loginUserId, boolean includeRelations) {
         if (CollectionUtils.isEmpty(ids)) {

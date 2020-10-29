@@ -12,8 +12,4 @@ public class Constant {
     public interface Auth {
         String AUTHORIZATION_HEADER = "authorization";
     }
-
-    public interface CacheKey {
-        String TWEET = "tweet";
-    }
 }

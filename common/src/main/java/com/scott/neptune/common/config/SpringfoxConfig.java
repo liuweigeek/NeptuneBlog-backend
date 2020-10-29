@@ -27,7 +27,6 @@ public class SpringfoxConfig {
 
     @Bean
     public Docket petApi() {
-        //TODO load parameters from properties
         return new Docket(DocumentationType.OAS_30)
                 .apiInfo(new ApiInfoBuilder()
                         .title("Neptune Blog")
