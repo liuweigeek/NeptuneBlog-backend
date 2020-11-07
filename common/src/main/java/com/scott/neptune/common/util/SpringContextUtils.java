@@ -27,6 +27,13 @@ public class SpringContextUtils implements ApplicationContextAware, DisposableBe
     }
 
     /**
+     * 实现ApplicationContextAware接口, 注入Context到静态变量中.
+     */
+    public void setApplicationContext(ApplicationContext applicationContext) {
+        SpringContextUtils.applicationContext = applicationContext;
+    }
+
+    /**
      * 从静态变量applicationContext中取得Bean, 自动转型为所赋值对象的类型.
      */
     @SuppressWarnings("unchecked")
@@ -53,13 +60,6 @@ public class SpringContextUtils implements ApplicationContextAware, DisposableBe
         applicationContext = null;
     }
 
-    /**
-     * 实现ApplicationContextAware接口, 注入Context到静态变量中.
-     */
-    public void setApplicationContext(ApplicationContext applicationContext) {
-        SpringContextUtils.applicationContext = applicationContext;
-    }
-
     public static boolean containsBean(String name) {
         return applicationContext.containsBean(name);
     }
@@ -73,17 +73,17 @@ public class SpringContextUtils implements ApplicationContextAware, DisposableBe
     }
 
     /**
+     * 检查ApplicationContext不为空.
+     */
+    private static void assertContextInjected() {
+        Validate.validState(applicationContext != null, "applicaitonContext属性未注入, 请在applicationContext.xml中定义SpringContextHolder.");
+    }
+
+    /**
      * 实现DisposableBean接口, 在Context关闭时清理静态变量.
      */
     @Override
     public void destroy() throws Exception {
         SpringContextUtils.clearHolder();
-    }
-
-    /**
-     * 检查ApplicationContext不为空.
-     */
-    private static void assertContextInjected() {
-        Validate.validState(applicationContext != null, "applicaitonContext属性未注入, 请在applicationContext.xml中定义SpringContextHolder.");
     }
 }

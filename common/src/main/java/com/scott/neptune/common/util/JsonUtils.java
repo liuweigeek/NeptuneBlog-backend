@@ -89,6 +89,37 @@ public class JsonUtils extends ObjectMapper {
     }
 
     /**
+     * 对象转换为JSON字符串
+     *
+     * @param object
+     * @return
+     */
+    public static String toJsonString(Object object) {
+        return JsonUtils.getInstance().toJson(object);
+    }
+
+    /**
+     * 打印美化的Json
+     *
+     * @param object
+     * @return
+     */
+    public static String toPrettyJsonString(Object object) {
+        return JsonUtils.getInstance().toPrettyJson(object);
+    }
+
+    /**
+     * JSON字符串转换为对象
+     *
+     * @param jsonString
+     * @param clazz
+     * @return
+     */
+    public static Object fromJsonString(String jsonString, Class<?> clazz) {
+        return JsonUtils.getInstance().fromJson(jsonString, clazz);
+    }
+
+    /**
      * Object可以是POJO，也可以是Collection或数组。
      * 如果对象为Null, 返回"null".
      * 如果集合为空集合, 返回"[]".
@@ -110,7 +141,6 @@ public class JsonUtils extends ObjectMapper {
             return null;
         }
     }
-
 
     /**
      * 反序列化POJO或简单Collection如List<String>.
@@ -217,38 +247,6 @@ public class JsonUtils extends ObjectMapper {
      */
     public ObjectMapper getMapper() {
         return this;
-    }
-
-    /**
-     * 对象转换为JSON字符串
-     *
-     * @param object
-     * @return
-     */
-    public static String toJsonString(Object object) {
-        return JsonUtils.getInstance().toJson(object);
-    }
-
-    /**
-     * 打印美化的Json
-     *
-     * @param object
-     * @return
-     */
-    public static String toPrettyJsonString(Object object) {
-        return JsonUtils.getInstance().toPrettyJson(object);
-    }
-
-
-    /**
-     * JSON字符串转换为对象
-     *
-     * @param jsonString
-     * @param clazz
-     * @return
-     */
-    public static Object fromJsonString(String jsonString, Class<?> clazz) {
-        return JsonUtils.getInstance().fromJson(jsonString, clazz);
     }
 
 }

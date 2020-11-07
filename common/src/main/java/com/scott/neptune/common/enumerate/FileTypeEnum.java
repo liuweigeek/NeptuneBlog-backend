@@ -85,22 +85,17 @@ public enum FileTypeEnum {
      */
     MP3("mp3", new String[]{}, "mp3", Category.MEDIA);
 
-    /**
-     * file category
-     */
-    interface Category {
-        String OFFICE = "office";
-        String IMAGE = "image";
-        String MEDIA = "media";
-    }
-
     private final String type;
-
     private final String[] headCode;
-
     private final String extensionName;
-
     private final String category;
+
+    public static FileTypeEnum getEnum(String type) {
+        return Arrays.stream(FileTypeEnum.values())
+                .filter(fileType -> StringUtils.equals(fileType.getType(), type))
+                .findFirst()
+                .orElse(null);
+    }
 
     public boolean isOfficeFile() {
         return StringUtils.equals(Category.OFFICE, this.category);
@@ -110,10 +105,12 @@ public enum FileTypeEnum {
         return StringUtils.equals(Category.IMAGE, this.category);
     }
 
-    public static FileTypeEnum getEnum(String type) {
-        return Arrays.stream(FileTypeEnum.values())
-                .filter(fileType -> StringUtils.equals(fileType.getType(), type))
-                .findFirst()
-                .orElse(null);
+    /**
+     * file category
+     */
+    interface Category {
+        String OFFICE = "office";
+        String IMAGE = "image";
+        String MEDIA = "media";
     }
 }
