@@ -6,7 +6,6 @@ import com.scott.neptune.tweetclient.dto.TweetDto;
 import com.scott.neptune.tweetserver.service.ILikeService;
 import com.scott.neptune.tweetserver.service.ITweetService;
 import com.scott.neptune.userclient.dto.AuthUserDto;
-import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * @Author: scott
@@ -27,7 +25,6 @@ import springfox.documentation.annotations.ApiIgnore;
  */
 @Slf4j
 @RequiredArgsConstructor
-@Api(tags = "Like接口")
 @RestController
 @RequestMapping("/like")
 public class LikeController {
@@ -43,7 +40,7 @@ public class LikeController {
      * @return
      */
     @PostMapping
-    public ResponseEntity<LikeDto> addFriendship(@RequestParam("tweetId") Long id, @ApiIgnore AuthUserDto authUser) {
+    public ResponseEntity<LikeDto> addFriendship(@RequestParam("tweetId") Long id, AuthUserDto authUser) {
         TweetDto tweet = tweetService.findTweetById(id);
         if (tweet == null) {
             throw new RestException("推文不存在", HttpStatus.NOT_FOUND);
@@ -64,7 +61,7 @@ public class LikeController {
      * @return
      */
     @DeleteMapping("/{tweetId}")
-    public ResponseEntity<LikeDto> deleteFriendship(@PathVariable("tweetId") Long id, @ApiIgnore AuthUserDto authUser) {
+    public ResponseEntity<LikeDto> deleteFriendship(@PathVariable("tweetId") Long id, AuthUserDto authUser) {
         TweetDto tweet = tweetService.findTweetById(id);
         if (tweet == null) {
             throw new RestException("推文不存在", HttpStatus.NOT_FOUND);

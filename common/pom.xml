@@ -15,7 +15,6 @@
     <packaging>jar</packaging>
 
     <properties>
-        <springfox-boot-starter.version>3.0.0</springfox-boot-starter.version>
         <minio.version>7.1.4</minio.version>
         <thumbnailator.version>0.4.11</thumbnailator.version>
         <lombok.version>1.18.12</lombok.version>
@@ -90,12 +89,6 @@
             <groupId>com.fasterxml.jackson.module</groupId>
             <artifactId>jackson-module-jaxb-annotations</artifactId>
             <version>${jackson-module-jaxb-annotations.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-boot-starter</artifactId>
-            <version>${springfox-boot-starter.version}</version>
         </dependency>
 
         <dependency>

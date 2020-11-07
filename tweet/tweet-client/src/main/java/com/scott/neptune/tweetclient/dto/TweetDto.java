@@ -1,8 +1,6 @@
 package com.scott.neptune.tweetclient.dto;
 
 import com.scott.neptune.userclient.dto.UserDto;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,7 +22,6 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = false, of = {"id"})
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "tweet", description = "推文对象")
 public class TweetDto implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -32,32 +29,27 @@ public class TweetDto implements Serializable {
     /**
      * ID
      */
-    @ApiModelProperty(hidden = true)
     private Long id;
 
     /**
      * 发送内容
      */
     @NotEmpty(message = "发送内容不可为空")
-    @ApiModelProperty(value = "内容")
     private String text;
 
     /**
      * 发送人
      */
-    @ApiModelProperty(value = "发送人")
     private UserDto author;
 
     /**
      * 发送时间
      */
-    @ApiModelProperty(value = "发送时间")
     private Date createAt;
 
     /**
      * 发送设备
      */
-    @ApiModelProperty(value = "设备")
     private String source;
 
     //TODO entities

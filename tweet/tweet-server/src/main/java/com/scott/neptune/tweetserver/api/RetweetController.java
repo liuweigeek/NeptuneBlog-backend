@@ -4,7 +4,6 @@ import com.scott.neptune.common.command.OffsetPageCommand;
 import com.scott.neptune.tweetclient.dto.TweetDto;
 import com.scott.neptune.tweetserver.service.IRetweetService;
 import com.scott.neptune.userclient.dto.AuthUserDto;
-import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -28,7 +27,6 @@ import java.util.Collections;
  */
 @Slf4j
 @RequiredArgsConstructor
-@Api(tags = "Retweet接口")
 @RestController
 @RequestMapping("/retweet")
 public class RetweetController {

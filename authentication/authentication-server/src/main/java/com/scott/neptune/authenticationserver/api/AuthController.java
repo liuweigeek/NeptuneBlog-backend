@@ -4,7 +4,6 @@ import com.scott.neptune.authenticationclient.dto.LoginUserInfo;
 import com.scott.neptune.authenticationserver.service.AuthUserService;
 import com.scott.neptune.userclient.dto.AuthUserDto;
 import com.scott.neptune.userclient.dto.UserDto;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,7 +40,6 @@ public class AuthController {
      * @param userDto 用户对象
      * @return 注册结果
      */
-    @ApiOperation(value = "用户注册")
     @PostMapping("/signUp")
     public ResponseEntity<LoginUserInfo> signUp(@RequestBody UserDto userDto) {
         LoginUserInfo newUser = authUserService.signUp(userDto);

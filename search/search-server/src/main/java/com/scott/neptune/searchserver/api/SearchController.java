@@ -8,9 +8,6 @@ import com.scott.neptune.tweetclient.dto.TweetDto;
 import com.scott.neptune.userclient.client.UserClient;
 import com.scott.neptune.userclient.command.UserSearchRequest;
 import com.scott.neptune.userclient.dto.UserDto;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,7 +26,6 @@ import java.util.Map;
  * @Description: NeptuneBlog
  */
 @Slf4j
-@Api(tags = "搜索接口 - 面向前端")
 @RestController
 @RequestMapping("/search")
 public class SearchController extends BaseController {
@@ -43,8 +39,6 @@ public class SearchController extends BaseController {
     }
 
     @RedisLock
-    @ApiOperation(value = "搜索用户和推文")
-    @ApiImplicitParam(name = "query", value = "关键字", paramType = "query", dataTypeClass = String.class, required = true)
     @GetMapping
     public ResponseEntity<Map<String, Object>> searchByKeyword(@RequestParam("q") String query) {
 

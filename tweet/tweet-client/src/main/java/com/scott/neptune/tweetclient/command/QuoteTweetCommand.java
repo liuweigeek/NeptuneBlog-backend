@@ -1,6 +1,5 @@
 package com.scott.neptune.tweetclient.command;
 
-import io.swagger.annotations.ApiModel;
 import lombok.Builder;
 import lombok.Data;
 
@@ -14,7 +13,6 @@ import java.io.Serializable;
  */
 @Data
 @Builder
-@ApiModel(value = "quote tweet request", description = "转推请求")
 public class QuoteTweetCommand implements Serializable {
 
     private static final long serialVersionUID = 1L;

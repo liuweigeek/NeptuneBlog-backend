@@ -7,9 +7,6 @@ import com.scott.neptune.tweetclient.command.TweetSearchRequest;
 import com.scott.neptune.tweetclient.dto.TweetDto;
 import com.scott.neptune.tweetserver.service.ITweetService;
 import com.scott.neptune.userclient.dto.AuthUserDto;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -24,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.Collection;
 import java.util.List;
@@ -38,7 +34,6 @@ import java.util.stream.Stream;
  */
 @Slf4j
 @RequiredArgsConstructor
-@Api(tags = "推文接口")
 @RestController
 @RequestMapping("/tweets")
 public class TweetController extends BaseController {
@@ -82,7 +77,6 @@ public class TweetController extends BaseController {
      * @param tweetDto
      * @return
      */
-    @ApiOperation(value = "发送推文")
     @PostMapping
     public ResponseEntity<TweetDto> addTweet(@RequestBody TweetDto tweetDto, AuthUserDto authUser) {
         TweetDto tweet = tweetService.save(tweetDto, authUser.getId());
@@ -95,8 +89,6 @@ public class TweetController extends BaseController {
      * @param id
      * @return
      */
-    @ApiOperation(value = "删除推文")
-    @ApiImplicitParam(name = "id", value = "推文ID", paramType = "path", dataTypeClass = Long.class)
     @DeleteMapping("/{id}")
     public ResponseEntity<TweetDto> deleteTweet(@PathVariable("id") Long id) {
         TweetDto tweetDto = tweetService.findTweetById(id);
@@ -112,10 +104,9 @@ public class TweetController extends BaseController {
      *
      * @return
      */
-    @ApiOperation(value = "获取关注用户的推文")
     @GetMapping("/following")
     public ResponseEntity<Page<TweetDto>> getFollowingTweets(OffsetPageCommand command,
-                                                             @ApiIgnore AuthUserDto authUser) {
+                                                             AuthUserDto authUser) {
         Page<TweetDto> tweetPage = tweetService.findFollowingTweets(authUser.getId(), command.getOffset(), command.getLimit());
         return ResponseEntity.ok(tweetPage);
     }
@@ -126,8 +117,6 @@ public class TweetController extends BaseController {
      * @param userId
      * @return
      */
-    @ApiOperation(value = "获取指定用户的推文")
-    @ApiImplicitParam(name = "userId", value = "指定用户视角", paramType = "path", dataTypeClass = Long.class)
     //TODO rebuild the key for cache
     //@Cacheable(value = Constant.CacheKey.TWEET, key = "#userId+'.'+#postDto.getCurrent()+'.'+#postDto.getSize()")
     @GetMapping("/user/{userId}")
@@ -143,7 +132,6 @@ public class TweetController extends BaseController {
      * @param request 关键字
      * @return 用户列表
      */
-    @ApiOperation(value = "通过关键字搜索用户")
     @GetMapping(value = "/search")
     public ResponseEntity<Collection<TweetDto>> search(TweetSearchRequest request) {
         Collection<TweetDto> tweetDtoList = tweetService.search(request.getQ());

@@ -5,9 +5,6 @@ import com.scott.neptune.userclient.command.FriendshipQueryRequest;
 import com.scott.neptune.userclient.dto.AuthUserDto;
 import com.scott.neptune.userclient.dto.RelationshipUserDto;
 import com.scott.neptune.userserver.service.IFriendshipService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -16,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -29,7 +25,6 @@ import java.util.Optional;
  */
 @Slf4j
 @RequiredArgsConstructor
-@Api(tags = "已关注好友接口")
 @RestController
 @RequestMapping("/following")
 public class FollowingController extends BaseController {
@@ -43,9 +38,8 @@ public class FollowingController extends BaseController {
      * @param authUser 已登录用户
      * @return
      */
-    @ApiOperation(value = "获取已关注用户ID列表")
     @GetMapping("/ids")
-    public ResponseEntity<Page<Long>> findFollowingIds(FriendshipQueryRequest request, @ApiIgnore AuthUserDto authUser) {
+    public ResponseEntity<Page<Long>> findFollowingIds(FriendshipQueryRequest request, AuthUserDto authUser) {
 
         String whomUsername = Optional.ofNullable(request.getUsername())
                 .orElseGet(authUser::getUsername);
@@ -60,9 +54,8 @@ public class FollowingController extends BaseController {
      * @param authUser 已登录用户
      * @return
      */
-    @ApiOperation(value = "获取已关注用户列表")
     @GetMapping
-    public ResponseEntity<Page<RelationshipUserDto>> findFollowingUsers(FriendshipQueryRequest request, @ApiIgnore AuthUserDto authUser) {
+    public ResponseEntity<Page<RelationshipUserDto>> findFollowingUsers(FriendshipQueryRequest request, AuthUserDto authUser) {
 
         String whomUsername = Optional.ofNullable(request.getUsername())
                 .orElseGet(authUser::getUsername);
@@ -76,10 +69,8 @@ public class FollowingController extends BaseController {
      * @param authUser 已登录用户
      * @return
      */
-    @ApiOperation(value = "获取全部已关注用户ID列表")
-    @ApiImplicitParam(name = "id", value = "指定用户视角", paramType = "form", dataTypeClass = Long.class)
     @GetMapping("/ids/all")
-    public ResponseEntity<Collection<Long>> findAllFollowingIds(@RequestParam("userId") Long id, @ApiIgnore AuthUserDto authUser) {
+    public ResponseEntity<Collection<Long>> findAllFollowingIds(@RequestParam("userId") Long id, AuthUserDto authUser) {
 
         Long whomUserId = Optional.ofNullable(id)
                 .orElseGet(authUser::getId);
@@ -93,10 +84,8 @@ public class FollowingController extends BaseController {
      * @param authUser 已登录用户
      * @return
      */
-    @ApiOperation(value = "获取全部已关注用户列表")
-    @ApiImplicitParam(name = "id", value = "指定用户视角", paramType = "form", dataTypeClass = Long.class)
     @GetMapping("/all")
-    public ResponseEntity<Collection<RelationshipUserDto>> findAllFollowingUsers(@RequestParam("userId") Long id, @ApiIgnore AuthUserDto authUser) {
+    public ResponseEntity<Collection<RelationshipUserDto>> findAllFollowingUsers(@RequestParam("userId") Long id, AuthUserDto authUser) {
 
         Long whomUserId = Optional.ofNullable(id)
                 .orElseGet(authUser::getId);

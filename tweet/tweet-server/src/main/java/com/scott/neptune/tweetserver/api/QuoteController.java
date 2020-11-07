@@ -5,7 +5,6 @@ import com.scott.neptune.tweetclient.command.QuoteTweetCommand;
 import com.scott.neptune.tweetclient.dto.TweetDto;
 import com.scott.neptune.tweetserver.service.IQuoteService;
 import com.scott.neptune.userclient.dto.AuthUserDto;
-import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -24,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Slf4j
 @RequiredArgsConstructor
-@Api(tags = "Quote接口")
 @RestController
 @RequestMapping("/quote")
 public class QuoteController {

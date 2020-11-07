@@ -4,9 +4,6 @@ import com.scott.neptune.common.base.BaseController;
 import com.scott.neptune.userclient.dto.AuthUserDto;
 import com.scott.neptune.userclient.dto.UserDto;
 import com.scott.neptune.userserver.service.IAvatarService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * @Author: scott
@@ -25,7 +21,6 @@ import springfox.documentation.annotations.ApiIgnore;
  */
 @Slf4j
 @RequiredArgsConstructor
-@Api(tags = "文件接口")
 @RestController
 @RequestMapping("/avatars")
 public class UserAvatarController extends BaseController {
@@ -39,10 +34,8 @@ public class UserAvatarController extends BaseController {
      * @param authUser 已登录用户
      * @return
      */
-    @ApiOperation(value = "上传头像")
-    @ApiImplicitParam(name = "file", value = "文件", required = true, paramType = "form", dataTypeClass = MultipartFile.class)
     @PostMapping
-    public ResponseEntity<UserDto> uploadAvatar(@RequestParam("file") MultipartFile file, @ApiIgnore AuthUserDto authUser) {
+    public ResponseEntity<UserDto> uploadAvatar(@RequestParam("file") MultipartFile file, AuthUserDto authUser) {
         UserDto userDto = avatarService.generateAvatar(authUser.getId(), file);
         return ResponseEntity.ok(userDto);
     }
