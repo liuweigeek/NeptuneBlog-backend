@@ -32,8 +32,6 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
         <spring-cloud.version>Hoxton.SR8</spring-cloud.version>
-        <profile.dev>dev</profile.dev>
-        <profile.prod>prod</profile.prod>
         <dockerfile-maven-plugin.version>1.4.12</dockerfile-maven-plugin.version>
         <docker.image.prefix>registry.cn-shenzhen.aliyuncs.com/neptune-blog</docker.image.prefix>
         <docker.tag>latest</docker.tag>
@@ -105,13 +103,13 @@
 
     <profiles>
         <profile>
-            <id>${profile.dev}</id>
+            <id>dev</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
         </profile>
         <profile>
-            <id>${profile.prod}</id>
+            <id>prod</id>
         </profile>
     </profiles>
 

@@ -38,7 +38,6 @@
     </dependencies>
 
     <build>
-        <finalName>${project.name}</finalName>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
@@ -66,7 +65,7 @@
 
     <profiles>
         <profile>
-            <id>${profile.prod}</id>
+            <id>prod</id>
             <build>
                 <plugins>
                     <plugin>
