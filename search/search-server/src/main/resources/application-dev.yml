@@ -10,6 +10,7 @@ spring:
     port: 5672
     username: root
     password: 12345678
+    virtual-host: /
   sleuth:
     sampler:
       probability: 1.0
