@@ -34,7 +34,7 @@
         <spring-cloud.version>Hoxton.SR8</spring-cloud.version>
         <dockerfile-maven-plugin.version>1.4.12</dockerfile-maven-plugin.version>
         <docker.image.prefix>registry.cn-shenzhen.aliyuncs.com/neptune-blog</docker.image.prefix>
-        <docker.tag>latest</docker.tag>
+        <docker.tag>${project.version}</docker.tag>
     </properties>
 
     <developers>
