@@ -15,6 +15,16 @@
     <version>1.0</version>
     <packaging>pom</packaging>
 
+    <developers>
+        <developer>
+            <id>liuweigeek</id>
+            <name>Scott Lau</name>
+            <email>liuweigeek@outlook.com</email>
+            <url>https://github.com/liuweigeek</url>
+            <timezone>8</timezone>
+        </developer>
+    </developers>
+
     <modules>
         <module>eureka-server</module>
         <module>config-server</module>
@@ -36,16 +46,6 @@
         <docker.image.prefix>registry.cn-shenzhen.aliyuncs.com/neptune-blog</docker.image.prefix>
         <docker.tag>${project.version}</docker.tag>
     </properties>
-
-    <developers>
-        <developer>
-            <id>liuweigeek</id>
-            <name>Scott Lau</name>
-            <email>liuweigeek@outlook.com</email>
-            <url>https://github.com/liuweigeek</url>
-            <timezone>8</timezone>
-        </developer>
-    </developers>
 
     <dependencies>
         <dependency>
