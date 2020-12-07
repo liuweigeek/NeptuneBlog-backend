@@ -21,9 +21,15 @@
 
 ### 中间件部署
 
-- 打开 [docs/docker/services](https://github.com/liuweigeek/NeptuneBlog-backend/tree/master/docs/Docker/services)
-  中对应版本的Docker Compose配置文件, 修改volumes为自己的本地路径，统一部署中间件
-- 执行 [docs/script/DDL.sql](https://github.com/liuweigeek/NeptuneBlog-backend/tree/master/docs/script/DDL.sql) 中的数据库初始化脚本
+打开 [docs/docker/services](https://github.com/liuweigeek/NeptuneBlog-backend/tree/master/docs/Docker/services)
+中对应版本的Docker Compose配置文件, 修改volumes为自己的本地路径，统一部署中间件
+
+### 数据库初始化
+
+执行 [docs/script/DDL.sql](https://github.com/liuweigeek/NeptuneBlog-backend/tree/master/docs/script/DDL.sql) 中的数据库初始化脚本
+
+### 启动项目
+
 - 启动eureka-server，然后依次启动其他服务
 - 启动前端项目 [NeptuneBlog-frontend](https://github.com/liuweigeek/NeptuneBlog-frontend)
   ,然后在浏览器中访问<http://localhost:4200/auth/signIn>
