@@ -1,6 +1,6 @@
 # NeptuneBlog
 
-基于Spring Cloud Netflix的MicroBlog
+基于Spring Cloud Netflix的MicroBlog, 后端使用Angular 10开发.
 
 ## 项目地址
 
@@ -22,7 +22,7 @@
 #### 中间件部署
 
 打开`docs/docker/services`
-中对应版本的Docker Compose配置文件, 修改`volumes`为自己的本地路径，统一部署中间件
+中对应版本的Docker Compose配置文件, 修改`volumes`为自己的本地路径, 统一部署中间件
 
 #### 数据库初始化
 
@@ -30,9 +30,9 @@
 
 #### 启动项目
 
-- 启动`eureka-server`，然后依次启动`authentication`、`user`、`tweet`、`search`、`api-gateway`服务
+- 启动`eureka-server`, 然后依次启动`authentication`、`user`、`tweet`、`search`、`api-gateway`服务
 - 启动前端项目 [NeptuneBlog-frontend](https://github.com/liuweigeek/NeptuneBlog-frontend)
-  ,然后在浏览器中访问<http://localhost:4200>
+  , 然后在浏览器中访问<http://localhost:4200>
 
 ## 功能模块
 
@@ -42,31 +42,31 @@
 
 #### eureka-server
 
-注册中心，使用Eureka Server
+注册中心, 使用Eureka Server
 
 #### config-server
 
-配置中心，使用Spring Cloud Config
+配置中心, 使用Spring Cloud Config
 
 #### api-gateway
 
-网关模块，使用Ribbon、Zuul和Hystrix
+网关模块, 使用Ribbon、Zuul和Hystrix
 
 #### authentication
 
-授权中心模块，使用Eureka Client、Spring Security、JWT
+授权中心模块, 使用Eureka Client、Spring Security、JWT
 
 #### user
 
-用户模块，使用Eureka Client、Spring Data JPA、MySQL
+用户模块, 使用Eureka Client、Spring Data JPA、MySQL
 
 #### tweet
 
-推文模块，使用Eureka Client、Spring Data JPA、MySQL
+推文模块, 使用Eureka Client、Spring Data JPA、MySQL
 
 #### mail
 
-邮件模块，使用Eureka Client
+邮件模块, 使用Eureka Client
 
 ## ❤️ Contributing
 
