@@ -5,6 +5,7 @@ import com.scott.neptune.authenticationclient.jwt.JwtTokenProvider;
 import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -40,6 +41,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(auth);
             } catch (JwtException | IllegalArgumentException e) {
                 log.error("无效的token: {}", claimsJws);
+                response.setStatus(HttpStatus.UNAUTHORIZED.value());
             }
         }
         filterChain.doFilter(request, response);
