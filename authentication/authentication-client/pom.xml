@@ -13,11 +13,8 @@
     <artifactId>authentication-client</artifactId>
     <packaging>jar</packaging>
 
-    <properties>
-        <jjwt.version>0.9.1</jjwt.version>
-    </properties>
-
     <dependencies>
+
         <dependency>
             <groupId>com.scott.neptune</groupId>
             <artifactId>common</artifactId>
