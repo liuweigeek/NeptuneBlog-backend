@@ -16,14 +16,9 @@ spring:
     password: 12345678
     virtual-host: /
   sleuth:
-    sampler:
-      probability: 0
-zuul:
-  #  sensitiveHeaders: "*"
-  host:
-    connect-timeout-millis: 20000
-    socket-timeout-millis: 20000
-    connection-request-timeout-millis: 20000
+    enabled: false
+  zipkin:
+    enabled: false
 hystrix:
   command:
     default:

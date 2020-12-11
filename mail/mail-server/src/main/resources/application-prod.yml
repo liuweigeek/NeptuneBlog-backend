@@ -10,9 +10,11 @@ spring:
     port: 5672
     username: root
     password: 12345678
+    virtual-host: /
   sleuth:
-    sampler:
-      probability: 0
+    enabled: false
+  zipkin:
+    enabled: false
 logging:
   level:
     org.springframework.cloud.openfeign: error

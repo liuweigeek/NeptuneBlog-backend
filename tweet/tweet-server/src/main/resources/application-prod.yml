@@ -51,8 +51,9 @@ spring:
     password: 12345678
     virtual-host: /
   sleuth:
-    sampler:
-      probability: 0
+    enabled: false
+  zipkin:
+    enabled: false
 hystrix:
   command:
     default:
