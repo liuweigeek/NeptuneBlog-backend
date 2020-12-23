@@ -11,8 +11,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: 12345678
     volumes:
-      - /Users/scott/Data/docker/mysql/conf:/etc/mysql/conf.d
-      - /Users/scott/Data/docker/mysql/data:/var/lib/mysql
+      - /home/scott/Data/docker/mysql/conf:/etc/mysql/conf.d
+      - /home/scott/Data/docker/mysql/data:/var/lib/mysql
 
   redis:
     image: redis:6.0.8
@@ -20,7 +20,7 @@ services:
     ports:
       - 6379:6379
     volumes:
-      - /Users/scott/Data/docker/redis/data:/data
+      - /home/scott/Data/docker/redis/data:/data
 
   rabbitmq:
     image: rabbitmq:3.8.9-management-alpine
@@ -32,7 +32,7 @@ services:
       - 15672:15672
       - 5672:5672
     volumes:
-      - /Users/scott/Data/docker/rabbitmq/data:/var/lib/rabbitmq/mnesia
+      - /home/scott/Data/docker/rabbitmq/data:/var/lib/rabbitmq/mnesia
     logging:
       driver: "json-file"
       options:
@@ -49,7 +49,7 @@ services:
       MINIO_ACCESS_KEY: root
       MINIO_SECRET_KEY: 12345678
     volumes:
-      - /Users/scott/Data/docker/minio/data:/data
+      - /home/scott/Data/docker/minio/data:/data
 
   zipkin:
     image: openzipkin/zipkin:2.21.7
@@ -66,7 +66,7 @@ services:
 #      MONGO_INITDB_ROOT_USERNAME: root
 #      MONGO_INITDB_ROOT_PASSWORD: 12345678
 #    volumes:
-#      - /Users/scott/Data/docker/mongo/data:/data/db
+#      - /home/scott/Data/docker/mongo/data:/data/db
 #
 #  postgres:
 #    image: postgres:13.1
@@ -78,4 +78,4 @@ services:
 #      POSTGRES_PASSWORD: 12345678
 #      PGDATA: /var/lib/postgresql/data/pgdata
 #    volumes:
-#      - /Users/scott/Data/docker/postgres/data:/var/lib/postgresql/data
+#      - /home/scott/Data/docker/postgres/data:/var/lib/postgresql/data
