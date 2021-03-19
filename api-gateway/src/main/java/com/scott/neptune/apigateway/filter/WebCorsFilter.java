@@ -8,6 +8,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * @Author: scott
@@ -19,6 +20,9 @@ import java.util.Arrays;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class WebCorsFilter extends CorsFilter {
 
+    private final static List<String> EXPOSED_HEADERS =
+            Arrays.asList("x-auth-token", "content-type", "X-Requested-With", "XMLHttpRequest");
+
     public WebCorsFilter() {
         super(configurationSource());
     }
@@ -28,7 +32,7 @@ public class WebCorsFilter extends CorsFilter {
         corsConfiguration.addAllowedOrigin("*");
         corsConfiguration.addAllowedHeader("*");
         corsConfiguration.addAllowedMethod("*");
-        corsConfiguration.setExposedHeaders(Arrays.asList("x-auth-token", "content-type", "X-Requested-With", "XMLHttpRequest"));
+        corsConfiguration.setExposedHeaders(EXPOSED_HEADERS);
         corsConfiguration.setAllowCredentials(true);
         corsConfiguration.setMaxAge(36000L);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

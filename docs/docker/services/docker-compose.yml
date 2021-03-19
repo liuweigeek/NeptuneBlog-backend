@@ -57,25 +57,25 @@ services:
     ports:
       - 9411:9411
 
-#  mongo:
-#    image: mongo:4.0-xenial
-#    container_name: mongo
-#    ports:
-#      - 27017:27017
-#    environment:
-#      MONGO_INITDB_ROOT_USERNAME: root
-#      MONGO_INITDB_ROOT_PASSWORD: 12345678
-#    volumes:
-#      - /Users/scott/Data/docker/mongo/data:/data/db
-#
-#  postgres:
-#    image: postgres:13.1
-#    container_name: postgres
-#    ports:
-#      - 5432:5432
-#    environment:
-#      POSTGRES_USER: root
-#      POSTGRES_PASSWORD: 12345678
-#      PGDATA: /var/lib/postgresql/data/pgdata
-#    volumes:
-#      - /Users/scott/Data/docker/postgres/data:/var/lib/postgresql/data
+  mongo:
+    image: mongo:4.0-xenial
+    container_name: mongo
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: 12345678
+    volumes:
+      - /Users/scott/Data/docker/mongo/data:/data/db
+
+  postgres:
+    image: postgres:13.1
+    container_name: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: 12345678
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - /Users/scott/Data/docker/postgres/data:/var/lib/postgresql/data
