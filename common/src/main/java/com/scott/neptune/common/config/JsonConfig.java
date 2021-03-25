@@ -17,6 +17,7 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 
 import java.time.format.DateTimeFormatter;
+import java.util.TimeZone;
 
 /**
  * @Author: scott
@@ -51,6 +52,7 @@ public class JsonConfig {
     public Jackson2ObjectMapperBuilderCustomizer jsonCustomizer() {
         return builder -> {
             builder.simpleDateFormat(DATE_TIME_FORMAT);
+            builder.timeZone(TimeZone.getDefault());
             builder.serializers(new LocalDateSerializer(DateTimeFormatter.ofPattern(DATE_FORMAT)));
             builder.serializers(new LocalTimeSerializer(DateTimeFormatter.ofPattern(TIME_FORMAT)));
             builder.serializers(new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)));
