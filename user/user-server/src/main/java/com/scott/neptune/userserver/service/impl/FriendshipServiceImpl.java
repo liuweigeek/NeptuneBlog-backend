@@ -19,6 +19,7 @@ import com.scott.neptune.userserver.service.IUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -54,6 +55,7 @@ public class FriendshipServiceImpl implements IFriendshipService {
      * @param friendshipDto 好友关系
      * @return 保存结果
      */
+    @CacheEvict(cacheNames = {"following:ids:all", "following:users:all"}, key = "#friendshipDto.sourceId")
     @Override
     public FriendshipDto save(FriendshipDto friendshipDto) {
 
@@ -304,6 +306,7 @@ public class FriendshipServiceImpl implements IFriendshipService {
      * @param friendshipDto 单向好友关系
      * @return 删除结果
      */
+    @CacheEvict(cacheNames = {"following:ids:all", "following:users:all"}, key = "#friendshipDto.sourceId")
     @Override
     public void delete(FriendshipDto friendshipDto) {
         try {
@@ -324,6 +327,7 @@ public class FriendshipServiceImpl implements IFriendshipService {
      * @param targetId 被关注人
      * @return
      */
+    @CacheEvict(cacheNames = {"following:ids:all", "following:users:all"}, key = "#sourceId")
     @Override
     public void delete(Long sourceId, Long targetId) {
         try {

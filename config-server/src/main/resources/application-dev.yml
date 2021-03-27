@@ -4,7 +4,7 @@ spring:
   rabbitmq:
     host: localhost
     port: 5672
-    username: scott
+    username: root
     password: 12345678
     virtual-host: /
 eureka:
