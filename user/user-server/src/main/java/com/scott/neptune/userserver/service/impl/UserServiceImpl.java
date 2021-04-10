@@ -1,6 +1,7 @@
 package com.scott.neptune.userserver.service.impl;
 
 import com.scott.neptune.common.exception.NeptuneBlogException;
+import com.scott.neptune.common.exception.RestException;
 import com.scott.neptune.userclient.dto.AuthUserDto;
 import com.scott.neptune.userclient.dto.UserDto;
 import com.scott.neptune.userserver.component.FriendshipComponent;
@@ -19,6 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -122,7 +124,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     public UserDto findUserById(Long userId, Long loginUserId, boolean includeRelations) {
         if (userId == null) {
-            throw new NeptuneBlogException("请指定要查询的用户");
+            throw new RestException("请指定要查询的用户", HttpStatus.BAD_REQUEST);
         }
         return userRepository.findOne((root, query, criteriaBuilder) -> {
             root.fetch("publicMetrics", JoinType.LEFT);
