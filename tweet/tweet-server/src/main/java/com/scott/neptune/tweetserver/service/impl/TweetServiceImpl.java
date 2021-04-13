@@ -6,7 +6,6 @@ import com.scott.neptune.tweetclient.dto.TweetDto;
 import com.scott.neptune.tweetserver.convertor.TweetConvertor;
 import com.scott.neptune.tweetserver.domain.entity.TweetEntity;
 import com.scott.neptune.tweetserver.domain.valueobject.TweetPublicMetricsValObj;
-import com.scott.neptune.tweetserver.repository.TweetPublicMetricsRepository;
 import com.scott.neptune.tweetserver.repository.TweetRepository;
 import com.scott.neptune.tweetserver.service.ITweetService;
 import com.scott.neptune.userclient.client.UserClient;
@@ -42,7 +41,6 @@ import java.util.stream.Collectors;
 public class TweetServiceImpl implements ITweetService {
 
     private final TweetRepository tweetRepository;
-    private final TweetPublicMetricsRepository tweetPublicMetricsRepository;
     private final TweetConvertor tweetConvertor;
     private final UserClient userClient;
 
@@ -57,7 +55,6 @@ public class TweetServiceImpl implements ITweetService {
     public TweetDto save(TweetDto tweetDto, Long authUserId) {
         TweetEntity tweetEntity = tweetConvertor.convertToEntity(tweetDto);
         tweetEntity.setAuthorId(authUserId);
-        tweetRepository.save(tweetEntity);
         TweetPublicMetricsValObj tweetPublicMetricsValObj = TweetPublicMetricsValObj.builder()
                 .tweet(tweetEntity)
                 .retweetCount(0)
@@ -65,8 +62,8 @@ public class TweetServiceImpl implements ITweetService {
                 .replyCount(0)
                 .likeCount(0)
                 .build();
-        tweetPublicMetricsRepository.save(tweetPublicMetricsValObj);
         tweetEntity.setPublicMetrics(tweetPublicMetricsValObj);
+        tweetRepository.save(tweetEntity);
         tweetDto = tweetConvertor.convertToDto(tweetEntity);
         UserDto author = userClient.getUserById(tweetEntity.getAuthorId());
         tweetDto.setAuthor(author);

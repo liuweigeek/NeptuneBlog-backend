@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
@@ -116,7 +117,7 @@ public class TweetEntity implements Serializable {
      * 互动统计数据
      */
     @PrimaryKeyJoinColumn
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "tweet")
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "tweet", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private TweetPublicMetricsValObj publicMetrics;
 
     /*@Transient

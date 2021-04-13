@@ -10,7 +10,6 @@ import com.scott.neptune.userserver.convertor.SimpleUserConvertor;
 import com.scott.neptune.userserver.convertor.UserConvertor;
 import com.scott.neptune.userserver.domain.entity.UserEntity;
 import com.scott.neptune.userserver.domain.valueobject.UserPublicMetricsValObj;
-import com.scott.neptune.userserver.repository.UserPublicMetricsRepository;
 import com.scott.neptune.userserver.repository.UserRepository;
 import com.scott.neptune.userserver.service.IUserService;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +44,6 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements IUserService {
 
     private final UserRepository userRepository;
-    private final UserPublicMetricsRepository userPublicMetricsRepository;
     private final UserConvertor userConvertor;
     private final SimpleUserConvertor simpleUserConvertor;
     private final AuthUserEntityConvertor authUserEntityConvertor;
@@ -102,7 +100,6 @@ public class UserServiceImpl implements IUserService {
         }
         UserEntity userEntity = userConvertor.convertToEntity(userDto);
         userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
-        userRepository.save(userEntity);
         UserPublicMetricsValObj userPublicMetrics = UserPublicMetricsValObj.builder()
                 .user(userEntity)
                 .followingCount(0)
@@ -110,8 +107,8 @@ public class UserServiceImpl implements IUserService {
                 .tweetCount(0)
                 .likedCount(0)
                 .build();
-        userPublicMetricsRepository.save(userPublicMetrics);
         userEntity.setPublicMetrics(userPublicMetrics);
+        userRepository.save(userEntity);
         return userConvertor.convertToDto(userEntity);
     }
 

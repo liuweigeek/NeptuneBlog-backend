@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -137,6 +138,6 @@ public class UserEntity implements Serializable {
      * 正在关注和关注者统计
      */
     @PrimaryKeyJoinColumn
-    @OneToOne(fetch = FetchType.LAZY, optional = false, mappedBy = "user")
+    @OneToOne(fetch = FetchType.LAZY, optional = false, mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private UserPublicMetricsValObj publicMetrics;
 }
