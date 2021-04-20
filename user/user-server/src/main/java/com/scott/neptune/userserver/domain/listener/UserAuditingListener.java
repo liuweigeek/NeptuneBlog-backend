@@ -1,6 +1,7 @@
 package com.scott.neptune.userserver.domain.listener;
 
 import com.scott.neptune.userserver.domain.entity.UserEntity;
+import com.scott.neptune.userserver.domain.valueobject.UserPublicMetricsValObj;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.PostPersist;
@@ -22,6 +23,14 @@ public class UserAuditingListener {
     @PrePersist
     public void onPreSave(UserEntity userEntity) {
         log.info("onPreSave => username: [{}]", userEntity.getUsername());
+        UserPublicMetricsValObj userPublicMetrics = UserPublicMetricsValObj.builder()
+                .user(userEntity)
+                .followingCount(0)
+                .followersCount(0)
+                .tweetCount(0)
+                .likedCount(0)
+                .build();
+        userEntity.setPublicMetrics(userPublicMetrics);
         userEntity.setCreateAt(new Date());
     }
 

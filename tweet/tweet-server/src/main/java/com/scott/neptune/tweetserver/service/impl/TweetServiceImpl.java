@@ -5,7 +5,6 @@ import com.scott.neptune.common.model.OffsetPageable;
 import com.scott.neptune.tweetclient.dto.TweetDto;
 import com.scott.neptune.tweetserver.convertor.TweetConvertor;
 import com.scott.neptune.tweetserver.domain.entity.TweetEntity;
-import com.scott.neptune.tweetserver.domain.valueobject.TweetPublicMetricsValObj;
 import com.scott.neptune.tweetserver.repository.TweetRepository;
 import com.scott.neptune.tweetserver.service.ITweetService;
 import com.scott.neptune.userclient.client.UserClient;
@@ -55,14 +54,6 @@ public class TweetServiceImpl implements ITweetService {
     public TweetDto save(TweetDto tweetDto, Long authUserId) {
         TweetEntity tweetEntity = tweetConvertor.convertToEntity(tweetDto);
         tweetEntity.setAuthorId(authUserId);
-        TweetPublicMetricsValObj tweetPublicMetricsValObj = TweetPublicMetricsValObj.builder()
-                .tweet(tweetEntity)
-                .retweetCount(0)
-                .quoteCount(0)
-                .replyCount(0)
-                .likeCount(0)
-                .build();
-        tweetEntity.setPublicMetrics(tweetPublicMetricsValObj);
         tweetRepository.save(tweetEntity);
         tweetDto = tweetConvertor.convertToDto(tweetEntity);
         UserDto author = userClient.getUserById(tweetEntity.getAuthorId());

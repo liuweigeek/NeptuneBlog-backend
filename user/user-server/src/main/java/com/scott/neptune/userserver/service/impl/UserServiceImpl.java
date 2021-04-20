@@ -9,7 +9,6 @@ import com.scott.neptune.userserver.convertor.AuthUserEntityConvertor;
 import com.scott.neptune.userserver.convertor.SimpleUserConvertor;
 import com.scott.neptune.userserver.convertor.UserConvertor;
 import com.scott.neptune.userserver.domain.entity.UserEntity;
-import com.scott.neptune.userserver.domain.valueobject.UserPublicMetricsValObj;
 import com.scott.neptune.userserver.repository.UserRepository;
 import com.scott.neptune.userserver.service.IUserService;
 import lombok.RequiredArgsConstructor;
@@ -100,14 +99,6 @@ public class UserServiceImpl implements IUserService {
         }
         UserEntity userEntity = userConvertor.convertToEntity(userDto);
         userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
-        UserPublicMetricsValObj userPublicMetrics = UserPublicMetricsValObj.builder()
-                .user(userEntity)
-                .followingCount(0)
-                .followersCount(0)
-                .tweetCount(0)
-                .likedCount(0)
-                .build();
-        userEntity.setPublicMetrics(userPublicMetrics);
         userRepository.save(userEntity);
         return userConvertor.convertToDto(userEntity);
     }

@@ -1,6 +1,7 @@
 package com.scott.neptune.tweetserver.domain.listener;
 
 import com.scott.neptune.tweetserver.domain.entity.TweetEntity;
+import com.scott.neptune.tweetserver.domain.valueobject.TweetPublicMetricsValObj;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.PostPersist;
@@ -22,6 +23,14 @@ public class TweetAuditingListener {
     @PrePersist
     public void onPreSave(TweetEntity tweetEntity) {
         log.info("onPreSave => tweet: [{}]", tweetEntity.getText());
+        TweetPublicMetricsValObj tweetPublicMetricsValObj = TweetPublicMetricsValObj.builder()
+                .tweet(tweetEntity)
+                .retweetCount(0)
+                .quoteCount(0)
+                .replyCount(0)
+                .likeCount(0)
+                .build();
+        tweetEntity.setPublicMetrics(tweetPublicMetricsValObj);
         tweetEntity.setCreateAt(new Date());
     }
 
