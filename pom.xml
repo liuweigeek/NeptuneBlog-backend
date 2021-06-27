@@ -34,7 +34,6 @@
         <module>user</module>
         <module>tweet</module>
         <module>search</module>
-        <module>mail</module>
     </modules>
 
     <properties>
@@ -44,7 +43,7 @@
         <spring-cloud.version>Hoxton.SR8</spring-cloud.version>
         <minio.version>7.1.4</minio.version>
         <thumbnailator.version>0.4.11</thumbnailator.version>
-        <lombok.version>1.18.12</lombok.version>
+        <lombok.version>1.18.20</lombok.version>
         <guava.version>29.0-jre</guava.version>
         <commons-lang3.version>3.11</commons-lang3.version>
         <commons-text.version>1.9</commons-text.version>
