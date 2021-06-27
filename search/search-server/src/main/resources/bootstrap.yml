@@ -2,22 +2,22 @@ spring:
   profiles:
     active: dev
   application:
-    name: tweet-server
+    name: search-server
   messages:
     basename: i18n/messages
   mvc:
     throw-exception-if-no-handler-found: true
   resources:
     add-mappings: false
-#  cloud:
-#    config:
-#      discovery:
-#        enabled: true
-#        service-id: config-server
-#      override-none: false
-#      fail-fast: true
-#      name: ${spring.application.name}
-#      profile: ${spring.profiles.active}
+  cloud:
+    config:
+      discovery:
+        enabled: false
+        service-id: config-server
+      override-none: false
+      fail-fast: true
+      name: ${spring.application.name}
+      profile: ${spring.profiles.active}
 eureka:
   instance:
     prefer-ip-address: true
