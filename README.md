@@ -31,7 +31,7 @@
 
 #### 启动项目
 
-- 启动`eureka-server`, 然后依次启动`authentication`、`user`、`tweet`、`search`、`api-gateway`服务
+- 启动`eureka-server`, 然后依次启动`config`、`authentication`、`user`、`tweet`、`search`、`api-gateway`服务
 - 启动前端项目 [NeptuneBlog-frontend](https://github.com/liuweigeek/NeptuneBlog-frontend)
   , 然后在浏览器中访问<http://localhost:4200>
 
