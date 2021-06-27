@@ -9,6 +9,9 @@ spring:
     multipart:
       max-file-size: 20MB
       max-request-size: 50MB
+  cloud:
+    config:
+      enabled: true
   rabbitmq:
     host: SERVER_HOST
     port: 5672

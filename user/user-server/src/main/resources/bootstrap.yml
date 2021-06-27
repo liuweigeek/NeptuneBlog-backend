@@ -12,7 +12,7 @@ spring:
   cloud:
     config:
       discovery:
-        enabled: false
+        enabled: true
         service-id: config-server
       override-none: false
       fail-fast: true

@@ -5,6 +5,9 @@ eureka:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
 spring:
+  cloud:
+    config:
+      enabled: false
   rabbitmq:
     host: localhost
     port: 5672
