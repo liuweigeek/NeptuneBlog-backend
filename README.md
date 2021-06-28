@@ -18,6 +18,10 @@
 
 ![个人资料页](./docs/images/user-profile.png)
 
+#### 移动端
+
+![移动端](./docs/images/ios-screenshot.jpg)
+
 ## 部署步骤
 
 #### 中间件部署
